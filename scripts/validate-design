@@ -27,6 +27,7 @@ EXCLUDED_PARTS = {
 }
 STD_SOURCE_DIRS = ("docs", "templates", "schemas", "scripts", "examples")
 STD_SOURCE_FILES = ("VERSION", "README.md", "THIRD_PARTY_NOTICES.md", "MIGRATION_HANDOFF.md")
+EXCLUDED_SOURCE_NAMES = {".DS_Store"}
 STATUS_LABELS = {
     "draft": "Draft", "review": "In Review", "accepted": "Approved",
     "released": "Released", "superseded": "Superseded", "retired": "Retired"
@@ -101,14 +102,44 @@ def discover(root: Path, suffix: str) -> list[Path]:
     return sorted(found)
 
 
-def expected_source_paths() -> set[str]:
-    paths = [ROOT / name for name in STD_SOURCE_FILES]
+def source_files(root: Path) -> list[Path]:
+    selectors = [*STD_SOURCE_FILES, *STD_SOURCE_DIRS]
+    try:
+        output = subprocess.run(
+            ["git", "-C", str(root), "ls-files", "-co", "--exclude-standard", "-z", "--", *selectors],
+            check=True, capture_output=True,
+        ).stdout
+        paths = []
+        for encoded_name in output.split(b"\0"):
+            if not encoded_name:
+                continue
+            path = root / encoded_name.decode("utf-8", errors="surrogateescape")
+            if path.is_file() and not path.is_symlink():
+                paths.append(path)
+        return sorted(set(paths))
+    except (OSError, subprocess.CalledProcessError):
+        pass
+
+    paths = [
+        root / name for name in STD_SOURCE_FILES
+        if (root / name).is_file() and not (root / name).is_symlink()
+    ]
     for directory in STD_SOURCE_DIRS:
-        paths.extend(
-            path for path in (ROOT / directory).rglob("*")
-            if path.is_file() and "__pycache__" not in path.parts
-        )
-    return {path.relative_to(ROOT).as_posix() for path in paths}
+        source_dir = root / directory
+        if not source_dir.is_dir() or source_dir.is_symlink():
+            continue
+        for current, child_dirs, filenames in os.walk(source_dir, followlinks=False):
+            child_dirs[:] = sorted(name for name in child_dirs if name not in EXCLUDED_PARTS)
+            base = Path(current)
+            for name in filenames:
+                path = base / name
+                if name not in EXCLUDED_SOURCE_NAMES and path.is_file() and not path.is_symlink():
+                    paths.append(path)
+    return sorted(set(paths))
+
+
+def expected_source_paths(root: Path = ROOT) -> set[str]:
+    return {path.relative_to(root).as_posix() for path in source_files(root)}
 
 
 def strip_cover_value(value: str) -> str:

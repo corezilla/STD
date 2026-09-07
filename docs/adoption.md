@@ -27,7 +27,7 @@ STD 管模板；项目管理填写后的设计事实。两者的 authority 不�
 ```json
 {
   "schema_version": "std-lock.v1",
-  "std_version": "0.1.0-draft.17",
+  "std_version": "0.1.0-draft.18",
   "source_repository": "corezilla/architecture-standards",
   "source_revision": "<full-40-character-commit-sha>",
   "source_tag": "<optional-annotated-tag>",
@@ -105,6 +105,11 @@ ignored runtime/build/data 不进入结构校验。非 Git 项目使用带默认
 `.review-decision.json` 结尾的目录不会作为文档读取。发现到的文件若无法读取，validator
 必须输出稳定的结构化诊断（例如 `markdown.read`），不得以 traceback 中止，也不得把该问题
 写入 baseline 后冒充通过。
+
+STD source manifest 的生成、独立校验和 project-root 完整性检查使用相同发现边界：Git checkout
+只纳入 tracked 与 non-ignored untracked 的普通非 symlink 来源文件；ignored 文件（包括
+`.DS_Store` 等平台 metadata）不属于可锁定来源。非 Git checkout 的 fallback 同样排除平台
+metadata、`.git`、`__pycache__` 和 symlink。
 
 机器 review decision 统一命名为 `*.review-decision.json`，并通过
 `schemas/review-decision.schema.json` 校验。终局 verdict 必须包含 reviewer、决定时间与理由；

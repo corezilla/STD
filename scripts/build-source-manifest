@@ -7,6 +7,7 @@ import argparse
 import datetime as dt
 import hashlib
 import json
+import os
 import re
 import subprocess
 from pathlib import Path
@@ -15,6 +16,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE_DIRS = ("docs", "templates", "schemas", "scripts", "examples")
 SOURCE_FILES = ("VERSION", "README.md", "THIRD_PARTY_NOTICES.md", "MIGRATION_HANDOFF.md")
+EXCLUDED_SOURCE_DIRS = {".git", "__pycache__"}
+EXCLUDED_SOURCE_NAMES = {".DS_Store"}
 
 
 def role_for(path: Path) -> str:
@@ -29,13 +32,39 @@ def role_for(path: Path) -> str:
     return "guidance"
 
 
-def source_paths(excluded: Path) -> list[Path]:
-    paths = [ROOT / name for name in SOURCE_FILES]
+def source_paths(root: Path, excluded: Path) -> list[Path]:
+    selectors = [*SOURCE_FILES, *SOURCE_DIRS]
+    try:
+        output = subprocess.run(
+            ["git", "-C", str(root), "ls-files", "-co", "--exclude-standard", "-z", "--", *selectors],
+            check=True, capture_output=True,
+        ).stdout
+        paths = []
+        for encoded_name in output.split(b"\0"):
+            if not encoded_name:
+                continue
+            path = root / encoded_name.decode("utf-8", errors="surrogateescape")
+            if path.is_file() and not path.is_symlink():
+                paths.append(path)
+        return sorted({path for path in paths if path.resolve() != excluded})
+    except (OSError, subprocess.CalledProcessError):
+        pass
+
+    paths = [
+        root / name for name in SOURCE_FILES
+        if (root / name).is_file() and not (root / name).is_symlink()
+    ]
     for directory in SOURCE_DIRS:
-        paths.extend(
-            path for path in (ROOT / directory).rglob("*")
-            if path.is_file() and "__pycache__" not in path.parts
-        )
+        source_dir = root / directory
+        if not source_dir.is_dir() or source_dir.is_symlink():
+            continue
+        for current, child_dirs, filenames in os.walk(source_dir, followlinks=False):
+            child_dirs[:] = sorted(name for name in child_dirs if name not in EXCLUDED_SOURCE_DIRS)
+            base = Path(current)
+            for name in filenames:
+                path = base / name
+                if name not in EXCLUDED_SOURCE_NAMES and path.is_file() and not path.is_symlink():
+                    paths.append(path)
     return sorted({path for path in paths if path.resolve() != excluded})
 
 
@@ -85,7 +114,7 @@ def main() -> int:
         parser.error("目标已存在；确认升级来源后使用 --force")
 
     artifacts = []
-    for path in source_paths(output):
+    for path in source_paths(ROOT, output):
         relative = path.relative_to(ROOT)
         artifacts.append({
             "path": relative.as_posix(),

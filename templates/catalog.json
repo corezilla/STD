@@ -1,5 +1,5 @@
 {
-  "catalog_version": "0.1.0-draft.17",
+  "catalog_version": "0.1.0-draft.18",
   "templates": {
     "management.project-plan": "management/project-plan.md",
     "management.tailoring": "management/tailoring-manifest.md",
