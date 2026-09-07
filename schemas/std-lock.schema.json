@@ -5,14 +5,15 @@
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "schema_version", "std_version", "source_repository", "source_revision",
+    "schema_version", "std_version", "source_repository", "source_revision", "source_tag",
     "source_manifest_path", "adopted_at", "project_profile", "enabled_domains"
   ],
   "properties": {
     "schema_version": {"const": "std-lock.v1"},
     "std_version": {"type": "string", "minLength": 1},
     "source_repository": {"type": "string", "minLength": 1},
-    "source_revision": {"type": ["string", "null"]},
+    "source_revision": {"type": ["string", "null"], "pattern": "^[a-f0-9]{40}$"},
+    "source_tag": {"type": ["string", "null"], "minLength": 1},
     "source_manifest_path": {"type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"},
     "adopted_at": {"type": "string", "format": "date"},
     "project_profile": {

@@ -33,5 +33,29 @@
     "decision_commit": {"type": ["string", "null"]},
     "conditions": {"type": "array", "items": {"type": "string"}},
     "rationale": {"type": "string"}
-  }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"verdict": {"enum": ["ACCEPTED", "AMENDMENT", "REJECTED", "BLOCKED"]}}},
+      "then": {
+        "required": ["rationale"],
+        "properties": {
+          "reviewers": {"minItems": 1},
+          "decided_at": {"type": "string", "format": "date-time"},
+          "rationale": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"verdict": {"enum": ["PENDING", "NOT_REVIEWED"]}}},
+      "then": {"properties": {"decided_at": {"const": null}}}
+    },
+    {
+      "if": {"properties": {"runtime_activation_requested": {"const": true}}},
+      "then": {
+        "required": ["runtime_activation_authority"],
+        "properties": {"runtime_activation_authority": {"type": "string", "minLength": 1}}
+      }
+    }
+  ]
 }

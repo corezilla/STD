@@ -27,9 +27,10 @@ STD 管模板；项目管理填写后的设计事实。两者的 authority 不�
 ```json
 {
   "schema_version": "std-lock.v1",
-  "std_version": "0.1.0-draft.14",
+  "std_version": "0.1.0-draft.15",
   "source_repository": "corezilla/architecture-standards",
-  "source_revision": "<immutable-tag-or-commit>",
+  "source_revision": "<full-40-character-commit-sha>",
+  "source_tag": "<optional-annotated-tag>",
   "source_manifest_path": "docs/std-source-manifest.json",
   "adopted_at": "YYYY-MM-DD",
   "project_profile": "mixed-system",
@@ -41,7 +42,7 @@ STD 管模板；项目管理填写后的设计事实。两者的 authority 不�
 `documentation-only`；`enabled_domains` 表示项目实际启用的工程域。文档 metadata 中的 `domain`
 仍描述单份文档，不得拿它替代项目 profile。
 
-`std.lock.json` 只记录采用决定和 immutable revision；`std-source-manifest.json`在迁移开始时独立锁定实际使用的模板、Schema、工具和规范 SHA-256。它不是 RAG ingestion manifest。规划阶段允许 `source_revision=null`；Migration Review Packet 获得 READY、生成候选文档或进入评审前，必须改为不可变 commit/tag，并通过机器校验。
+`std.lock.json` 只记录采用决定和 immutable revision；`std-source-manifest.json`在迁移开始时独立锁定实际使用的模板、Schema、工具和规范 SHA-256。它不是 RAG ingestion manifest。规划阶段允许 `source_revision=null`；Migration Review Packet 获得 READY、生成候选文档或进入评审前，必须改为完整 40 位 commit SHA，并通过机器校验。`HEAD`、branch 和 tag 名都不能填入 `source_revision`；可选 `source_tag` 必须是 annotated tag，并 peel 到同一个 commit。
 
 ```bash
 /Users/ben/work/STD/scripts/build-source-manifest \
@@ -57,12 +58,19 @@ tailoring manifest 和项目文档索引中记录即可。
 
 每份文档还必须有同名 `.metadata.json`，记录模板、文档版本、Owner、作者、层级、authority、
 状态、repository/path、来源哈希与模板符合方式。Markdown 首页同时显示 `docs/document-control.md` 定义的封面。
+在项目根校验中，每份 sidecar 的 `std_version` 必须等于 `std.lock.std_version`，
+`template_version` 必须等于锁定 catalog 的 `catalog_version`，且 `document_type` 必须等于
+`template_id`；不同版本或类型不得混在同一个已锁定候选中。
 
 模板符合方式只有三种：
 
 - `native`：直接按当前模板生成；`tailoring_ref` 与 `migration_map_ref` 均为 `null`。
 - `tailored`：经批准裁剪；必须填写 `tailoring_ref`。
 - `legacy-mapped`：保留既有结构并建立等价章节映射；必须填写 `migration_map_ref`。
+
+`tailoring_ref` 是同一项目内 `management.tailoring` 文档的唯一 Document ID；
+`migration_map_ref` 是项目根相对文件路径，禁止绝对路径和 `..`，且目标必须存在。上述引用只有在
+`--project-root` 模式下完成解析校验。
 
 ## 3. 新建与升级
 
@@ -90,6 +98,10 @@ Review Verdict、Document Status 和 Runtime Activation 必须分开记录，完
 
 遗留仓库可先用 `--write-baseline <file>` 固定既有结构问题，后续用 `--baseline <file>` 区分
 `new` 与 `inherited` 错误。该命令只证明 STD structural validation；项目契约和 runtime/外部依赖证据仍是独立 Gate。
+
+机器 review decision 统一命名为 `*.review-decision.json`，并通过
+`schemas/review-decision.schema.json` 校验。终局 verdict 必须包含 reviewer、决定时间与理由；
+请求 runtime activation 时还必须填写独立 activation authority。
 
 ## 5. RAG 的正确位置
 

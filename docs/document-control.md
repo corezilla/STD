@@ -52,7 +52,8 @@ Review Verdict、Document Status 和 Runtime Activation 是三个独立 Gate，�
 
 | 概念 | 取值 | 含义 |
 |---|---|---|
-| Review Verdict | `ACCEPTED / AMENDMENT / REJECTED / BLOCKED` | 对某一个固定 review packet 的审查结论 |
+| Review Record State | `PENDING / NOT_REVIEWED` | 非终局记录状态，不得触发 promotion |
+| Review Verdict | `ACCEPTED / AMENDMENT / REJECTED / BLOCKED` | 对某一个固定 review packet 的终局审查结论 |
 | Document Status | 见下表 | 文档本身的生命周期状态 |
 | Runtime Activation | `true / false` | 变更是否已获得单独授权并进入运行基线 |
 
@@ -70,9 +71,12 @@ Markdown 封面与 metadata 使用下列唯一映射：
 | `superseded` | Superseded |
 | `retired` | Retired |
 
-STD 本身尚未绑定 immutable revision 时，迁移 packet 可以获得
-`Review Verdict = ACCEPTED`，但候选文档最高保持 `review / In Review`，且
-`Runtime Activation = false`。
+STD 本身尚未绑定 immutable revision 时，仅“标准或迁移计划协调 review”可以得到
+`Review Verdict = ACCEPTED`；项目 Migration Review Packet、正式候选和文档批准队列均不得开始。
+锁定并机器核验完整 40 位 STD commit SHA 后，方可进入项目 Migration Review。
+
+终局 review decision 必须至少有一个 reviewer、非空决定时间和理由；`PENDING / NOT_REVIEWED`
+的 `decided_at` 必须为 `null`。任何 review record 都不能自行授权 Runtime Activation。
 
 ## 5. 文档状态机
 

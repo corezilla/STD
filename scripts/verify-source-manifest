@@ -51,8 +51,8 @@ def main() -> int:
         errors.append("std_version 与当前 STD 工作树不一致")
     if not isinstance(data.get("source_repository"), str) or not data["source_repository"]:
         errors.append("source_repository 必须是非空字符串")
-    if data.get("source_revision") is not None and not isinstance(data["source_revision"], str):
-        errors.append("source_revision 必须是字符串或 null")
+    if data.get("source_revision") is not None and not re.fullmatch(r"[a-f0-9]{40}", data["source_revision"]):
+        errors.append("source_revision 必须是完整 40 位小写 Git commit SHA 或 null")
     elif data.get("source_revision"):
         try:
             locked_commit = subprocess.run(
@@ -65,8 +65,34 @@ def main() -> int:
             ).stdout.strip()
             if locked_commit != checkout_commit:
                 errors.append("source_revision 与 --std-root checkout HEAD 不一致")
+            dirty = subprocess.run(
+                ["git", "-C", str(root), "status", "--porcelain", "--untracked-files=all"],
+                check=True, capture_output=True, text=True,
+            ).stdout.strip()
+            if dirty:
+                errors.append("--std-root checkout 不是 clean，不能证明 source_revision 的内容完整性")
         except (OSError, subprocess.CalledProcessError):
             errors.append("source_revision 无法在 --std-root checkout 中解析")
+    source_tag = data.get("source_tag")
+    if source_tag is not None:
+        if not isinstance(source_tag, str) or not source_tag:
+            errors.append("source_tag 必须是非空字符串或 null")
+        else:
+            try:
+                tag_type = subprocess.run(
+                    ["git", "-C", str(root), "cat-file", "-t", source_tag],
+                    check=True, capture_output=True, text=True,
+                ).stdout.strip()
+                tag_commit = subprocess.run(
+                    ["git", "-C", str(root), "rev-parse", f"{source_tag}^{{commit}}"],
+                    check=True, capture_output=True, text=True,
+                ).stdout.strip()
+                if tag_type != "tag":
+                    errors.append("source_tag 不是 annotated tag")
+                if tag_commit != data.get("source_revision"):
+                    errors.append("source_tag 没有 peel 到 source_revision")
+            except (OSError, subprocess.CalledProcessError):
+                errors.append("source_tag 无法在 --std-root checkout 中解析")
     try:
         dt.date.fromisoformat(data.get("generated_at", ""))
     except (TypeError, ValueError):

@@ -24,6 +24,8 @@ EXCLUDED_PARTS = {
     ".git", ".cache", ".local", ".venv", "__pycache__", "node_modules",
     "vendor", "third_party", "build", "dist", "DATA"
 }
+STD_SOURCE_DIRS = ("docs", "templates", "schemas", "scripts", "examples")
+STD_SOURCE_FILES = ("VERSION", "README.md", "THIRD_PARTY_NOTICES.md", "MIGRATION_HANDOFF.md")
 STATUS_LABELS = {
     "draft": "Draft", "review": "In Review", "accepted": "Approved",
     "released": "Released", "superseded": "Superseded", "retired": "Retired"
@@ -71,6 +73,16 @@ def discover(root: Path, suffix: str) -> list[Path]:
         path for path in root.rglob(f"*{suffix}")
         if not any(part in EXCLUDED_PARTS for part in path.relative_to(root).parts)
     )
+
+
+def expected_source_paths() -> set[str]:
+    paths = [ROOT / name for name in STD_SOURCE_FILES]
+    for directory in STD_SOURCE_DIRS:
+        paths.extend(
+            path for path in (ROOT / directory).rglob("*")
+            if path.is_file() and "__pycache__" not in path.parts
+        )
+    return {path.relative_to(ROOT).as_posix() for path in paths}
 
 
 def strip_cover_value(value: str) -> str:
@@ -125,7 +137,7 @@ def validate_markdown(path: Path, metadata: dict | None) -> list[dict]:
 
 
 def validate_metadata(path: Path, schema: dict, catalog: dict, project_root: Path | None,
-                      source_artifacts: dict[str, str]) -> tuple[list[dict], dict | None, Path | None]:
+                      source_artifacts: dict[str, str], lock: dict | None) -> tuple[list[dict], dict | None, Path | None]:
     errors: list[dict] = []
     try:
         data = load_json(path)
@@ -149,6 +161,16 @@ def validate_metadata(path: Path, schema: dict, catalog: dict, project_root: Pat
         if expected_hash and data.get("template_sha256") != expected_hash:
             errors.append(issue("template.hash", path, "template_sha256 与锁定模板不一致"))
 
+    if data.get("document_type") != template_id:
+        errors.append(issue("metadata.document-type-mismatch", path,
+                            "document_type 必须与 template_id 相同"))
+    if lock is not None and data.get("std_version") != lock.get("std_version"):
+        errors.append(issue("metadata.std-version-mismatch", path,
+                            "metadata.std_version 与 std.lock.std_version 不一致"))
+    if data.get("template_version") != catalog.get("catalog_version"):
+        errors.append(issue("metadata.template-version-mismatch", path,
+                            "metadata.template_version 与锁定 catalog_version 不一致"))
+
     if project_root is not None and document is not None:
         expected_path = document.resolve().relative_to(project_root.resolve()).as_posix()
         if data.get("source_path") != expected_path:
@@ -159,19 +181,22 @@ def validate_metadata(path: Path, schema: dict, catalog: dict, project_root: Pat
     return errors, data, document
 
 
-def validate_project_control(project_root: Path, require_immutable: bool) -> tuple[list[dict], dict[str, str]]:
+def validate_project_control(project_root: Path, require_immutable: bool) -> tuple[list[dict], dict[str, str], dict | None]:
     errors: list[dict] = []
     artifacts: dict[str, str] = {}
     lock_path = project_root / "docs/std.lock.json"
     if not lock_path.exists():
-        return [issue("lock.missing", lock_path, "项目根模式必须提交 docs/std.lock.json")], artifacts
+        return [issue("lock.missing", lock_path, "项目根模式必须提交 docs/std.lock.json")], artifacts, None
     try:
         lock = load_json(lock_path)
     except Exception as exc:
-        return [issue("lock.json", lock_path, f"JSON 无法解析: {exc}")], artifacts
+        return [issue("lock.json", lock_path, f"JSON 无法解析: {exc}")], artifacts, None
     errors.extend(schema_issues(lock_path, lock, load_json(ROOT / "schemas/std-lock.schema.json"), "lock.schema"))
     if require_immutable and not lock.get("source_revision"):
         errors.append(issue("lock.immutable", lock_path, "READY/正式候选必须锁定 immutable source_revision"))
+    elif require_immutable and not re.fullmatch(r"[a-f0-9]{40}", str(lock.get("source_revision", ""))):
+        errors.append(issue("lock.immutable-format", lock_path,
+                            "source_revision 必须是完整 40 位 commit SHA，不能使用 branch、HEAD 或 tag 名"))
     elif require_immutable:
         try:
             locked_commit = subprocess.run(
@@ -187,31 +212,104 @@ def validate_project_control(project_root: Path, require_immutable: bool) -> tup
                     "lock.checkout-mismatch", lock_path,
                     "validator 所在 STD checkout 与 source_revision 不是同一 commit"
                 ))
+            dirty = subprocess.run(
+                ["git", "-C", str(ROOT), "status", "--porcelain", "--untracked-files=all"],
+                check=True, capture_output=True, text=True,
+            ).stdout.strip()
+            if dirty:
+                errors.append(issue("lock.checkout-dirty", lock_path,
+                                    "validator 所在 STD checkout 必须 clean，才能证明锁定 commit 内容"))
         except (OSError, subprocess.CalledProcessError):
             errors.append(issue("lock.revision-unresolved", lock_path,
                                 "source_revision 无法在 validator 所在 STD checkout 解析"))
+        source_tag = lock.get("source_tag")
+        if source_tag:
+            try:
+                tag_type = subprocess.run(
+                    ["git", "-C", str(ROOT), "cat-file", "-t", source_tag],
+                    check=True, capture_output=True, text=True,
+                ).stdout.strip()
+                tag_commit = subprocess.run(
+                    ["git", "-C", str(ROOT), "rev-parse", f"{source_tag}^{{commit}}"],
+                    check=True, capture_output=True, text=True,
+                ).stdout.strip()
+                if tag_type != "tag":
+                    errors.append(issue("lock.tag-not-annotated", lock_path,
+                                        "source_tag 必须是 annotated tag"))
+                if tag_commit != lock.get("source_revision"):
+                    errors.append(issue("lock.tag-mismatch", lock_path,
+                                        "source_tag 没有 peel 到 source_revision"))
+            except (OSError, subprocess.CalledProcessError):
+                errors.append(issue("lock.tag-unresolved", lock_path,
+                                    "source_tag 无法在 validator 所在 STD checkout 解析"))
     manifest_rel = lock.get("source_manifest_path")
     if not isinstance(manifest_rel, str):
-        return errors, artifacts
+        return errors, artifacts, lock
     manifest_path = project_root / manifest_rel
     if not manifest_path.exists():
         errors.append(issue("source-manifest.missing", manifest_path, "找不到锁定的 source manifest"))
-        return errors, artifacts
+        return errors, artifacts, lock
     try:
         manifest = load_json(manifest_path)
     except Exception as exc:
         errors.append(issue("source-manifest.json", manifest_path, f"JSON 无法解析: {exc}"))
-        return errors, artifacts
+        return errors, artifacts, lock
     errors.extend(schema_issues(manifest_path, manifest,
                                 load_json(ROOT / "schemas/std-source-manifest.schema.json"),
                                 "source-manifest.schema"))
-    for key in ("std_version", "source_repository", "source_revision"):
+    for key in ("std_version", "source_repository", "source_revision", "source_tag"):
         if lock.get(key) != manifest.get(key):
             errors.append(issue("lock.source-mismatch", lock_path, f"{key} 与 source manifest 不一致"))
     for item in manifest.get("artifacts", []):
         if isinstance(item, dict) and isinstance(item.get("path"), str) and isinstance(item.get("sha256"), str):
             artifacts[item["path"]] = item["sha256"]
-    return errors, artifacts
+            source = ROOT / item["path"]
+            if not source.is_file():
+                errors.append(issue("source-manifest.artifact-missing", manifest_path,
+                                    f"当前 STD checkout 缺少 {item['path']}"))
+            elif hashlib.sha256(source.read_bytes()).hexdigest() != item["sha256"]:
+                errors.append(issue("source-manifest.hash-mismatch", manifest_path,
+                                    f"当前 STD checkout 内容与清单不一致: {item['path']}"))
+    catalog_path = "templates/catalog.json"
+    if catalog_path not in artifacts:
+        errors.append(issue("source-manifest.catalog-missing", manifest_path,
+                            "source manifest 必须锁定 templates/catalog.json"))
+    missing_sources = sorted(expected_source_paths() - set(artifacts))
+    if missing_sources:
+        errors.append(issue("source-manifest.incomplete", manifest_path,
+                            "source manifest 漏掉当前 STD 来源: " + ", ".join(missing_sources)))
+    return errors, artifacts, lock
+
+
+def validate_conformance_refs(records: list[tuple[Path, dict]], project_root: Path | None) -> list[dict]:
+    if project_root is None:
+        return []
+    errors: list[dict] = []
+    by_id = {data.get("document_id"): (path, data) for path, data in records}
+    for path, data in records:
+        if data.get("template_conformance") == "tailored":
+            reference = data.get("tailoring_ref")
+            target = by_id.get(reference)
+            if target is None:
+                errors.append(issue("conformance.tailoring-ref-missing", path,
+                                    f"tailoring_ref 找不到项目内 Document ID: {reference}"))
+            elif target[1].get("template_id") != "management.tailoring":
+                errors.append(issue("conformance.tailoring-ref-type", path,
+                                    "tailoring_ref 必须指向 management.tailoring 文档"))
+        if data.get("template_conformance") == "legacy-mapped":
+            reference = data.get("migration_map_ref")
+            if isinstance(reference, str):
+                target = (project_root / reference).resolve()
+                try:
+                    target.relative_to(project_root.resolve())
+                except ValueError:
+                    errors.append(issue("conformance.migration-map-escape", path,
+                                        "migration_map_ref 不能离开项目根"))
+                else:
+                    if not target.is_file():
+                        errors.append(issue("conformance.migration-map-missing", path,
+                                            f"migration_map_ref 文件不存在: {reference}"))
+    return errors
 
 
 def baseline_fingerprints(path: Path | None) -> set[str]:
@@ -248,8 +346,9 @@ def main() -> int:
     FINGERPRINT_ROOT = project_root or (roots[0] if len(roots) == 1 else None)
     errors: list[dict] = []
     source_artifacts: dict[str, str] = {}
+    lock: dict | None = None
     if project_root:
-        control_errors, source_artifacts = validate_project_control(project_root, args.require_immutable_std)
+        control_errors, source_artifacts, lock = validate_project_control(project_root, args.require_immutable_std)
         errors.extend(control_errors)
 
     catalog = load_json(ROOT / "templates/catalog.json")
@@ -257,9 +356,14 @@ def main() -> int:
     metadata_paths = sorted({path for root in roots for path in discover(root, ".metadata.json")})
     markdown_paths: set[Path] = set()
     identities: dict[str, Path] = {}
+    metadata_records: list[tuple[Path, dict]] = []
     for path in metadata_paths:
-        found, data, document = validate_metadata(path, metadata_schema, catalog, project_root, source_artifacts)
+        found, data, document = validate_metadata(
+            path, metadata_schema, catalog, project_root, source_artifacts, lock
+        )
         errors.extend(found)
+        if data:
+            metadata_records.append((path, data))
         if data and isinstance(data.get("document_id"), str):
             document_id = data["document_id"]
             if document_id in identities:
@@ -270,6 +374,17 @@ def main() -> int:
         if document:
             markdown_paths.add(document)
             errors.extend(validate_markdown(document, data))
+    errors.extend(validate_conformance_refs(metadata_records, project_root))
+
+    decision_schema = load_json(ROOT / "schemas/review-decision.schema.json")
+    decision_paths = sorted({path for root in roots for path in discover(root, ".review-decision.json")})
+    for path in decision_paths:
+        try:
+            decision = load_json(path)
+        except Exception as exc:
+            errors.append(issue("review-decision.json", path, f"JSON 无法解析: {exc}"))
+            continue
+        errors.extend(schema_issues(path, decision, decision_schema, "review-decision.schema"))
 
     if project_root:
         for path in discover(project_root, ".md"):
@@ -305,6 +420,7 @@ def main() -> int:
         "schema_version": "std-validation-result.v1", "ok": not new_errors,
         "new_error_count": len(new_errors), "inherited_error_count": len(inherited_errors),
         "checked_metadata": len(metadata_paths), "checked_markdown": len(markdown_paths),
+        "checked_decisions": len(decision_paths),
         "issues": errors,
     }
     if args.json:
@@ -321,7 +437,10 @@ def main() -> int:
             print(f"- [{item['classification']}] {item['code']} {item['path']}: {item['message']}")
         print(f"new={len(new_errors)} inherited={len(inherited_errors)}")
     else:
-        print(f"STD validation OK: metadata={len(metadata_paths)} markdown={len(markdown_paths)}")
+        print(
+            f"STD validation OK: metadata={len(metadata_paths)} "
+            f"markdown={len(markdown_paths)} decisions={len(decision_paths)}"
+        )
     return 1 if new_errors else 0
 
 

@@ -6,7 +6,7 @@
   "additionalProperties": false,
   "required": [
     "schema_version", "ok", "new_error_count", "inherited_error_count",
-    "checked_metadata", "checked_markdown", "issues"
+    "checked_metadata", "checked_markdown", "checked_decisions", "issues"
   ],
   "properties": {
     "schema_version": {"const": "std-validation-result.v1"},
@@ -15,6 +15,7 @@
     "inherited_error_count": {"type": "integer", "minimum": 0},
     "checked_metadata": {"type": "integer", "minimum": 0},
     "checked_markdown": {"type": "integer", "minimum": 0},
+    "checked_decisions": {"type": "integer", "minimum": 0},
     "issues": {
       "type": "array",
       "items": {

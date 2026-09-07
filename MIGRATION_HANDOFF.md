@@ -2,7 +2,7 @@
 
 更新时间：2026-09-07  
 STD 路径：`/Users/ben/work/STD`  
-STD 版本：`0.1.0-draft.14`  
+STD 版本：`0.1.0-draft.15`  
 适用会话：Slinky、Piko、LLMTier、HIFM
 
 ## 1. 任务目标
@@ -29,7 +29,8 @@ STD 版本：`0.1.0-draft.14`
 
 规划阶段允许项目 `std.lock.json` 的 `source_revision` 暂时为 `null`，并使用
 `docs/std-source-manifest.json`独立锁定模板、Schema、工具和规范的 SHA-256。该文件不是 RAG manifest。
-但在发出迁移 READY、生成正式候选或进入 Migration Review 前，必须锁定 STD immutable commit/tag；
+但在发出迁移 READY、生成正式候选或进入 Migration Review 前，必须锁定 STD 完整 40 位 commit SHA；
+可另记经过机器验证且 peel 到该 commit 的 annotated tag，不能用 `HEAD`、branch 或 tag 名代替 commit SHA；
 没有 immutable revision 的 packet 不得进入批准队列。
 
 三类状态必须分离：
@@ -129,7 +130,8 @@ Review Verdict = ACCEPTED
 验证必须分为三层，不得把 `validate-design` 的成功表述为完整验收：
 
 1. **STD structural validation**：所有裁剪后启用根目录中的封面/sidecar 完整性与一致性、模板
-   catalog/hash、Document ID 唯一性、路径、链接、std.lock 和来源清单。已有仓库使用 baseline
+   catalog/hash/version/type、Document ID 唯一性、conformance 引用、review decision、路径、链接、
+   std.lock 和来源清单。已有仓库使用 baseline
    区分 inherited 与 new 问题。
 2. **Project contract/schema validation**：ABI、IDL、OpenAPI、Schema、错误码、兼容性和 traceability。
 3. **Runtime/external dependency evidence**：实际依赖、恢复流程、外部系统、硬件或运行时行为证据。

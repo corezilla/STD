@@ -26,8 +26,16 @@
     "template_version": {"type": "string", "minLength": 1},
     "template_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "template_conformance": {"enum": ["native", "tailored", "legacy-mapped"]},
-    "tailoring_ref": {"type": ["string", "null"]},
-    "migration_map_ref": {"type": ["string", "null"]},
+    "tailoring_ref": {
+      "description": "项目内 management.tailoring 文档的 Document ID",
+      "type": ["string", "null"],
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+    },
+    "migration_map_ref": {
+      "description": "项目根相对的 migration map 文件路径",
+      "type": ["string", "null"],
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
     "design_level": {
       "enum": ["project", "system", "subsystem", "module", "component", "implementation-unit", "cross-level"]
     },
