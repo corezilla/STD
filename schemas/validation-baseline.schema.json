@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://corezilla.example/std/schemas/validation-baseline.schema.json",
+  "title": "STD structural validation baseline",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "generated_at", "fingerprints"],
+  "properties": {
+    "schema_version": {"const": "std-validation-baseline.v1"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "fingerprints": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+    }
+  }
+}

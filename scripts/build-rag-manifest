@@ -1,0 +1,74 @@
+#!/usr/bin/env python3
+"""为 STD 权威文档生成确定性的 RAG ingestion manifest。"""
+
+from __future__ import annotations
+
+import hashlib
+import json
+import subprocess
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+OUTPUT = ROOT / "rag" / "std-ingestion-manifest.jsonl"
+
+
+def git_revision() -> str | None:
+    try:
+        return subprocess.run(
+            ["git", "-C", str(ROOT), "rev-parse", "HEAD"],
+            check=True, capture_output=True, text=True,
+        ).stdout.strip()
+    except (OSError, subprocess.CalledProcessError):
+        return None
+
+
+def kind_for(path: Path) -> str:
+    if path.parts[0] == "templates":
+        return "std-template"
+    if path.parts[0] == "schemas":
+        return "std-schema"
+    return "std-guidance"
+
+
+def main() -> int:
+    version = (ROOT / "VERSION").read_text().strip()
+    source_commit = git_revision()
+    paths = [
+        ROOT / "README.md",
+        ROOT / "THIRD_PARTY_NOTICES.md",
+        ROOT / "MIGRATION_HANDOFF.md",
+        ROOT / "templates/catalog.json",
+        ROOT / "templates/path-policy.json"
+    ]
+    paths.extend(sorted((ROOT / "docs").rglob("*.md")))
+    paths.extend(sorted((ROOT / "templates").rglob("*.md")))
+    paths.extend(sorted((ROOT / "schemas").rglob("*.json")))
+    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+    records = []
+    for path in paths:
+        payload = path.read_bytes()
+        relative_path = path.relative_to(ROOT)
+        relative = relative_path.as_posix()
+        records.append({
+            "project": "STD",
+            "authority": "std",
+            "document_type": kind_for(relative_path),
+            "document_version": version,
+            "template_version": version,
+            "status": "draft",
+            "visibility": "organization",
+            "source_repository": "corezilla/architecture-standards",
+            "source_path": relative,
+            "source_commit": source_commit,
+            "content_sha256": hashlib.sha256(payload).hexdigest(),
+            "chunk_strategy": "markdown-heading" if path.suffix == ".md" else "json-object",
+            "supersedes": None
+        })
+    OUTPUT.write_text("".join(json.dumps(item, ensure_ascii=False, sort_keys=True) + "\n" for item in records))
+    print(f"{OUTPUT}: {len(records)} records")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

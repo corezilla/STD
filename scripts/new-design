@@ -1,0 +1,171 @@
+#!/usr/bin/env python3
+"""从固定 STD 模板生成 Markdown 文档和 metadata。"""
+
+from __future__ import annotations
+
+import argparse
+import datetime as dt
+import hashlib
+import json
+import re
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+STATUSES = {
+    "draft": "Draft", "review": "In Review", "accepted": "Approved",
+    "released": "Released", "superseded": "Superseded", "retired": "Retired"
+}
+
+
+def default_directory(template_id: str, level: str) -> Path:
+    policy = json.loads((ROOT / "templates/path-policy.json").read_text())
+    configured = policy["default_paths"][template_id]
+    if isinstance(configured, dict):
+        configured = configured.get(level)
+        if configured is None:
+            raise ValueError(f"template {template_id} 不支持 level={level}")
+    return Path(configured)
+
+
+def repository_relative(path: Path, project_root: Path | None) -> str:
+    if project_root is not None:
+        try:
+            return path.resolve().relative_to(project_root.resolve()).as_posix()
+        except ValueError:
+            pass
+    return path.as_posix()
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--project", required=True)
+    parser.add_argument("--template", required=True)
+    parser.add_argument("--name", required=True)
+    parser.add_argument("--project-root", type=Path,
+                        help="项目根目录；未给 --output 时按 STD 推荐结构自动选择目录")
+    parser.add_argument("--output", type=Path,
+                        help="显式指定输出目录；可与 --project-root 一起使用以生成仓库相对路径")
+    parser.add_argument("--title")
+    parser.add_argument("--authority")
+    parser.add_argument("--owner", required=True)
+    parser.add_argument("--author", action="append", required=True)
+    parser.add_argument("--repository", required=True)
+    parser.add_argument("--document-version", default="0.1.0-draft.1")
+    parser.add_argument("--status", choices=sorted(STATUSES), default="draft")
+    parser.add_argument("--created-date")
+    parser.add_argument("--last-modified-date")
+    parser.add_argument("--supersedes", default="none")
+    parser.add_argument("--template-conformance", choices=["native", "tailored", "legacy-mapped"],
+                        default="native")
+    parser.add_argument("--tailoring-ref")
+    parser.add_argument("--migration-map-ref")
+    parser.add_argument("--reviewed-commit")
+    parser.add_argument("--level", default="cross-level")
+    parser.add_argument("--domain", action="append", default=[])
+    args = parser.parse_args()
+
+    if args.project_root is None and args.output is None:
+        parser.error("必须提供 --project-root 或 --output")
+    if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]*", args.name):
+        parser.error("--name 必须是可作为 Document ID/文件名的字母数字、点、下划线或连字符")
+    if not re.fullmatch(r"(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z.-]+)?", args.document_version):
+        parser.error("--document-version 必须使用 SemVer，例如 0.3.0-draft.2")
+    if args.template_conformance == "tailored" and not args.tailoring_ref:
+        parser.error("tailored 文档必须提供 --tailoring-ref")
+    if args.template_conformance == "legacy-mapped" and not args.migration_map_ref:
+        parser.error("legacy-mapped 文档必须提供 --migration-map-ref")
+    if args.template_conformance == "native" and (args.tailoring_ref or args.migration_map_ref):
+        parser.error("native 文档不应提供 tailoring/migration map reference")
+
+    catalog = json.loads((ROOT / "templates/catalog.json").read_text())
+    relative = catalog["templates"].get(args.template)
+    if relative is None:
+        parser.error(f"未知 template ID: {args.template}")
+
+    project_root = args.project_root.resolve() if args.project_root else None
+    if args.output:
+        output = args.output
+    else:
+        try:
+            output = project_root / default_directory(args.template, args.level)
+        except ValueError as exc:
+            parser.error(str(exc))
+
+    template_path = ROOT / "templates" / relative
+    template_bytes = template_path.read_bytes()
+    title = args.title or args.name.replace("-", " ").replace("_", " ").title()
+    today = dt.date.today().isoformat()
+    created_at = args.created_date or today
+    last_modified_at = args.last_modified_date or today
+    for label, value in (("--created-date", created_at), ("--last-modified-date", last_modified_at)):
+        try:
+            dt.date.fromisoformat(value)
+        except ValueError:
+            parser.error(f"{label} 必须是 YYYY-MM-DD")
+
+    document_path = output / f"{args.name}.md"
+    metadata_path = output / f"{args.name}.metadata.json"
+    source_path = repository_relative(document_path, project_root)
+    std_version = (ROOT / "VERSION").read_text().strip()
+    replacements = {
+        "document_title": title, "document_id": args.name,
+        "document_version": args.document_version, "document_status": STATUSES[args.status],
+        "project": args.project, "authority": args.authority or args.project,
+        "document_owner": args.owner, "authors": ", ".join(args.author),
+        "created_at": created_at, "last_modified_at": last_modified_at,
+        "std_version": std_version, "template_id": args.template,
+        "template_conformance": args.template_conformance,
+        "tailoring_ref": args.tailoring_ref or "none",
+        "migration_map_ref": args.migration_map_ref or "none",
+        "source_repository": args.repository, "source_path": source_path,
+        "supersedes": args.supersedes, "date": last_modified_at,
+    }
+    content = template_bytes.decode()
+    for key, value in replacements.items():
+        content = content.replace("{{" + key + "}}", value)
+    unresolved = sorted(set(re.findall(r"\{\{[^}]+\}\}", content)))
+    if unresolved:
+        parser.error(f"模板仍有未解析变量: {', '.join(unresolved)}")
+
+    output.mkdir(parents=True, exist_ok=True)
+    if document_path.exists() or metadata_path.exists():
+        parser.error("目标文档或 metadata 已存在；生成器不会覆盖")
+
+    document_path.write_text(content)
+    metadata = {
+        "project": args.project,
+        "authority": args.authority or args.project,
+        "document_id": args.name,
+        "document_type": args.template,
+        "document_version": args.document_version,
+        "title": title,
+        "document_owner": args.owner,
+        "authors": args.author,
+        "std_version": std_version,
+        "template_id": args.template,
+        "template_version": catalog["catalog_version"],
+        "template_sha256": hashlib.sha256(template_bytes).hexdigest(),
+        "template_conformance": args.template_conformance,
+        "tailoring_ref": args.tailoring_ref,
+        "migration_map_ref": args.migration_map_ref,
+        "design_level": args.level,
+        "domain": args.domain or ["mixed"],
+        "status": args.status,
+        "visibility": "project",
+        "source_repository": args.repository,
+        "source_path": source_path,
+        "reviewed_commit": args.reviewed_commit,
+        "parent_document_id": None,
+        "supersedes": None if args.supersedes == "none" else args.supersedes,
+        "created_at": created_at,
+        "last_modified_at": last_modified_at
+    }
+    metadata_path.write_text(json.dumps(metadata, ensure_ascii=False, indent=2) + "\n")
+    print(document_path)
+    print(metadata_path)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

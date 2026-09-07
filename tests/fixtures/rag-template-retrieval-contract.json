@@ -1,0 +1,14 @@
+{
+  "task_id": "std::rag::smoke-retrieve",
+  "target_artifact_path": "docs/project-migration-plan.md",
+  "target_artifact_type": "std-template",
+  "retrieval_goal": "从 MIGRATION_HANDOFF.md 和 docs/adoption.md 查找关于 RAG、authority、commit 和项目事实权威的约束。",
+  "allowed_artifact_types": ["std-template", "std-guidance"],
+  "forbidden_artifact_types": [],
+  "required_context_facets": ["RAG", "authority", "commit"],
+  "allowed_stage_phases": [],
+  "rag_required": true,
+  "empty_context_policy": "fail",
+  "max_sections": 8,
+  "token_budget": 6000
+}

@@ -1,0 +1,56 @@
+<!-- STD_DOCUMENT_COVER_BEGIN -->
+# {{document_title}}
+
+| 文档字段 | 值 |
+|---|---|
+| Document ID | `{{document_id}}` |
+| Document Version | `{{document_version}}` |
+| Status | `{{document_status}}` |
+| Project | `{{project}}` |
+| Authority | `{{authority}}` |
+| Document Owner | {{document_owner}} |
+| Authors | {{authors}} |
+| Created Date | `{{created_at}}` |
+| Last Modified Date | `{{last_modified_at}}` |
+| STD Version | `{{std_version}}` |
+| Template ID | `{{template_id}}` |
+| Template Conformance | `{{template_conformance}}` |
+| Tailoring Reference | {{tailoring_ref}} |
+| Migration Map Reference | {{migration_map_ref}} |
+| Repository | `{{source_repository}}` |
+| Canonical Path | `{{source_path}}` |
+| Supersedes | {{supersedes}} |
+
+> Reviewer、Approver、Approval Date 和 Release Tag 在进入相应状态时填写。Git commit/tag 是
+> 外部不可变证据；不要在文档内容中伪造包含自身的 commit hash。
+<!-- STD_DOCUMENT_COVER_END -->
+
+## 1. Contract scope 与 authority
+
+明确机器可读 contract 和说明文档哪个是字段级权威。
+
+## 2. Operation / Message / Event Catalog
+
+| ID | Kind | Producer | Consumer | Sync/Async | Idempotency |
+|---|---|---|---|---|---|
+| <!-- TODO --> | | | | | |
+
+## 3. Request、Response、Event 与数据对象
+
+引用 OpenAPI、JSON Schema、Proto、IDL 或 ABI；禁止只给示例不给约束。
+
+## 4. 状态、错误和 blocker catalog
+
+## 5. 幂等、并发、事务与一致性
+
+## 6. Pagination、filter、ordering 与 retention
+
+## 7. 身份、权限、Secret 与多项目隔离
+
+## 8. 版本、兼容性与迁移
+
+## 9. Positive/Negative fixture 与 validator
+
+## 10. Requirement → Contract → Test traceability
+
+## 11. Activation Gate 与未决项

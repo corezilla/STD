@@ -1,0 +1,14 @@
+{
+  "task_id": "std::rag::lifecycle-smoke-retrieve",
+  "target_artifact_path": "docs/lifecycle-template-selection.md",
+  "target_artifact_type": "std-template",
+  "retrieval_goal": "从 templates/operations/user-manual.md、templates/assurance/test-plan.md 和 templates/requirements/requirements-specification.md 查找用户手册、测试计划和需求规格模板。",
+  "allowed_artifact_types": ["std-template"],
+  "forbidden_artifact_types": [],
+  "required_context_facets": ["用户", "测试", "需求"],
+  "allowed_stage_phases": [],
+  "rag_required": true,
+  "empty_context_policy": "fail",
+  "max_sections": 12,
+  "token_budget": 8000
+}

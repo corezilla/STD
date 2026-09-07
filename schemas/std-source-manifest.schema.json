@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://corezilla.example/std/schemas/std-source-manifest.schema.json",
+  "title": "STD source manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "std_version", "source_repository", "source_revision",
+    "generated_at", "artifacts"
+  ],
+  "properties": {
+    "schema_version": {"const": "std-source-manifest.v1"},
+    "std_version": {"type": "string", "minLength": 1},
+    "source_repository": {"type": "string", "minLength": 1},
+    "source_revision": {"type": ["string", "null"]},
+    "generated_at": {"type": "string", "format": "date"},
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "role", "sha256"],
+        "properties": {
+          "path": {"type": "string", "minLength": 1},
+          "role": {"enum": ["template", "schema", "tool", "example", "guidance"]},
+          "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+        }
+      }
+    }
+  }
+}

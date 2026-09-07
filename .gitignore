@@ -1,0 +1,7 @@
+.venv/
+.DS_Store
+__pycache__/
+*.pyc
+meta/
+rag/rag.sqlite3
+rag/rag.sqlite3-*

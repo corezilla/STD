@@ -1,0 +1,9 @@
+# Copy to .github/CODEOWNERS and replace placeholders with real GitHub users/teams.
+/.github/                         @repository-owner
+/docs/20_system_design/          @system-architecture-owner
+/docs/40_module_design/hardware/ @hardware-owner
+/docs/40_module_design/fpga/     @fpga-owner
+/docs/60_interfaces/             @interface-owner
+/docs/70_verification/           @verification-owner
+/docs/90_decisions/              @architecture-owner
+/docs/91_reviews/                @review-owner
