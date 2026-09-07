@@ -27,7 +27,7 @@ STD 管模板；项目管理填写后的设计事实。两者的 authority 不�
 ```json
 {
   "schema_version": "std-lock.v1",
-  "std_version": "0.1.0-draft.15",
+  "std_version": "0.1.0-draft.16",
   "source_repository": "corezilla/architecture-standards",
   "source_revision": "<full-40-character-commit-sha>",
   "source_tag": "<optional-annotated-tag>",
