@@ -106,6 +106,10 @@ ignored runtime/build/data 不进入结构校验。非 Git 项目使用带默认
 必须输出稳定的结构化诊断（例如 `markdown.read`），不得以 traceback 中止，也不得把该问题
 写入 baseline 后冒充通过。
 
+封面字段只在 `STD_DOCUMENT_COVER_BEGIN` 与 `STD_DOCUMENT_COVER_END` 标记之间解析。
+正文中的表格可以合法使用 `Status`、`Authority` 等同名列或字段，不得覆盖封面值或触发
+`cover.mismatch`。
+
 STD source manifest 的生成、独立校验和 project-root 完整性检查使用相同发现边界：Git checkout
 只纳入 tracked 与 non-ignored untracked 的普通非 symlink 来源文件；ignored 文件（包括
 `.DS_Store` 等平台 metadata）不属于可锁定来源。非 Git checkout 的 fallback 同样排除平台

@@ -55,6 +55,46 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
         self.assertEqual(issues[0]["code"], "markdown.read")
         self.assertIn("denied", issues[0]["message"])
 
+    def test_cover_fields_are_read_only_between_cover_markers(self):
+        metadata = {
+            "document_id": "example",
+            "document_version": "0.1.0-draft.1",
+            "status": "review",
+            "project": "example",
+            "authority": "example",
+            "document_owner": "Example Owner",
+            "authors": ["Example Author"],
+            "created_at": "2026-09-08",
+            "last_modified_at": "2026-09-08",
+            "std_version": "0.1.0-draft.19",
+            "template_id": "design.definition",
+            "template_conformance": "legacy-mapped",
+            "tailoring_ref": None,
+            "migration_map_ref": "docs/migration-map.json",
+            "source_repository": "example/repository",
+            "source_path": "docs/example.md",
+            "supersedes": None,
+        }
+        cover_rows = {
+            field: self.validator.expected_cover_value(field, metadata)
+            for field in self.validator.COVER_MAP
+        }
+        cover = "\n".join(f"| {field} | {value} |" for field, value in cover_rows.items())
+
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "example.md"
+            path.write_text(
+                "<!-- STD_DOCUMENT_COVER_BEGIN -->\n"
+                "# Example\n\n"
+                f"{cover}\n"
+                "<!-- STD_DOCUMENT_COVER_END -->\n\n"
+                "## Runtime result\n\n"
+                "| Status | FAIL |\n"
+            )
+            issues = self.validator.validate_markdown(path, metadata)
+
+        self.assertFalse([item for item in issues if item["code"] == "cover.mismatch"])
+
 
 class SourceManifestDiscoveryTests(unittest.TestCase):
     @classmethod

@@ -170,11 +170,18 @@ def validate_markdown(path: Path, metadata: dict | None) -> list[dict]:
         errors.append(issue("markdown.variable", path, "存在未解析模板变量"))
 
     if metadata is not None:
-        if "<!-- STD_DOCUMENT_COVER_BEGIN -->" not in text or "<!-- STD_DOCUMENT_COVER_END -->" not in text:
+        begin_marker = "<!-- STD_DOCUMENT_COVER_BEGIN -->"
+        end_marker = "<!-- STD_DOCUMENT_COVER_END -->"
+        begin = text.find(begin_marker)
+        end = text.find(end_marker, begin + len(begin_marker)) if begin >= 0 else -1
+        if begin < 0 or end < 0:
             errors.append(issue("cover.markers", path, "缺少 STD 文档封面标记"))
+            cover_text = ""
+        else:
+            cover_text = text[begin + len(begin_marker):end]
         rows = {
             key.strip(): strip_cover_value(value)
-            for key, value in re.findall(r"^\|\s*([^|]+?)\s*\|\s*([^|]*?)\s*\|\s*$", text, re.MULTILINE)
+            for key, value in re.findall(r"^\|\s*([^|]+?)\s*\|\s*([^|]*?)\s*\|\s*$", cover_text, re.MULTILINE)
         }
         for field in COVER_MAP:
             if field not in rows:

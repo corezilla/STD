@@ -1,8 +1,8 @@
 # STD 首批项目迁移 HANDOFF
 
-更新时间：2026-09-07  
+更新时间：2026-09-08
 STD 路径：`/Users/ben/work/STD`  
-STD 版本：`0.1.0-draft.18`
+STD 版本：`0.1.0-draft.19`
 
 适用会话：Slinky、Piko、LLMTier、HIFM
 

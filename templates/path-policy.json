@@ -1,5 +1,5 @@
 {
-  "policy_version": "0.1.0-draft.18",
+  "policy_version": "0.1.0-draft.19",
   "path_policy": "recommended-defaults",
   "default_paths": {
     "management.project-plan": "docs/00_management",
