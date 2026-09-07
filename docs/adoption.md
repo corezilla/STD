@@ -27,7 +27,7 @@ STD 管模板；项目管理填写后的设计事实。两者的 authority 不�
 ```json
 {
   "schema_version": "std-lock.v1",
-  "std_version": "0.1.0-draft.16",
+  "std_version": "0.1.0-draft.17",
   "source_repository": "corezilla/architecture-standards",
   "source_revision": "<full-40-character-commit-sha>",
   "source_tag": "<optional-annotated-tag>",
@@ -98,6 +98,13 @@ Review Verdict、Document Status 和 Runtime Activation 必须分开记录，完
 
 遗留仓库可先用 `--write-baseline <file>` 固定既有结构问题，后续用 `--baseline <file>` 区分
 `new` 与 `inherited` 错误。该命令只证明 STD structural validation；项目契约和 runtime/外部依赖证据仍是独立 Gate。
+
+Git 项目的 `--project-root` 发现集合为已跟踪文件及未被 `.gitignore` 排除的未跟踪文件；
+ignored runtime/build/data 不进入结构校验。非 Git 项目使用带默认目录剪枝的文件遍历。
+两种模式都只选择普通文件；名称以 `.md`、`.metadata.json` 或
+`.review-decision.json` 结尾的目录不会作为文档读取。发现到的文件若无法读取，validator
+必须输出稳定的结构化诊断（例如 `markdown.read`），不得以 traceback 中止，也不得把该问题
+写入 baseline 后冒充通过。
 
 机器 review decision 统一命名为 `*.review-decision.json`，并通过
 `schemas/review-decision.schema.json` 校验。终局 verdict 必须包含 reviewer、决定时间与理由；
