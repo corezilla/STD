@@ -241,5 +241,31 @@ class SourceManifestDiscoveryTests(unittest.TestCase):
             self.assertEqual(self.validator.expected_source_paths(root), expected)
 
 
+class RagManifestVersionTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.builder = load_script("std_build_rag_manifest", "build-rag-manifest")
+
+    def test_catalog_template_uses_its_independent_version(self):
+        catalog = {
+            "templates": {"design.system": "design/system-design.md"},
+            "template_versions": {"design.system": "2.3.4"},
+        }
+
+        self.assertEqual(
+            self.builder.versions_for(
+                "templates/design/system-design.md", "9.9.9", catalog
+            ),
+            ("2.3.4", "2.3.4"),
+        )
+
+    def test_guidance_uses_std_version(self):
+        catalog = {"templates": {}, "template_versions": {}}
+
+        self.assertEqual(
+            self.builder.versions_for("docs/versioning.md", "9.9.9", catalog),
+            ("9.9.9", "9.9.9"),
+        )
+
 if __name__ == "__main__":
     unittest.main()
