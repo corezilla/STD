@@ -1,7 +1,7 @@
 # Knowledge Base 静态站点命名与 Git 迁移 HANDOFF
 
-更新时间：2026-09-08  
-STD 路径：`/Users/ben/work/STD`  
+更新时间：2026-09-08
+STD 路径：`/Users/ben/work/STD`
 状态：可由后续会话按本 handoff 直接初始化或迁移 Knowledge Base
 
 ## 1. 目标
