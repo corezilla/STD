@@ -213,7 +213,7 @@
 │       └── tools/                 # fixture、报告、覆盖和诊断辅助工具
 ├── experiments/                   # 可复现实验manifest、runner和分析代码
 ├── models/                        # 模型或算法注册、分析和小型统计摘要
-├── web/                           # 项目网站、交互演示和可视化源码
+├── knowledge-base/                # 静态知识网站；文档、素材和站点构建配置
 ├── tools/                         # 构建、生成、检查、迁移和发布工具
 ├── third_party/                   # 第三方依赖manifest、许可证和受控patch
 └── <local-data-root>/             # 不进入Git的本地数据根
@@ -227,6 +227,11 @@
 ```
 
 编号只用于稳定排序，不表示生命周期必须线性执行。纯软件或纯硬件项目应通过 profile 裁剪不适用目录。
+
+`knowledge-base/` 默认指面向人阅读的静态知识网站，不暗示问答、RAG、向量库或外部索引服务。
+静态站点只需保留实际使用的内容、素材、站点配置和构建入口；不强制建立独立 `tests/`
+目录。最低验证是站点可构建、内部链接有效、被引用的图片和附件存在，且页面路径不重复。
+`webui/` 或 `apps/<app>/` 用于产品 Web UI，不应再用含糊的顶层 `web/` 同时表示知识库。
 
 项目采用记录使用单值 `project_profile`（`mixed-system`、`software`、`hardware-fpga` 或
 `documentation-only`）和数组 `enabled_domains`。目录存在不自动表示该 domain 已启用；以通过

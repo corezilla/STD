@@ -65,6 +65,7 @@
 ├── tools/                        # 构建、生成、检查、分析和发布工具
 ├── examples/                     # 面向用户或开发者的可运行示例
 ├── benchmarks/                   # 可复现基准场景、runner和统计方法
+├── knowledge-base/               # 可选：面向人阅读的静态知识网站
 ├── third_party/                  # 第三方依赖、许可证和受控patch
 ├── build/                        # ignored：可由源码重建的编译输出
 ├── dist/                         # ignored：打包输出，正式发布另行固化
@@ -117,6 +118,7 @@
 │   └── acceptance/               # 平台用户或客户验收自动化
 ├── deploy/                       # 平台级环境、网络、编排和IaC
 ├── experiments/                  # 可复现实验manifest、runner和分析代码
+├── knowledge-base/               # 可选：项目或产品的静态知识网站
 ├── tools/                        # 仓库级构建、生成、检查和发布工具
 ├── third_party/                  # 全仓第三方依赖、许可证和patch
 └── .local/                       # ignored：本地数据、secret和运行输出
@@ -125,7 +127,27 @@
 平台级`docs/20_system_design/mechanisms/`管理认证、授权、任务调度、消息流、重试恢复、审计、
 配额和RAG等跨服务机制。服务内部算法和类设计放在`services/<service>/docs/`，不在平台文档复制。
 
-## 4. 关键边界
+## 4. 静态知识库
+
+项目需要的若主要是可浏览的静态页面，正式名称使用 Knowledge Base，仓库或目录名使用
+`knowledge-base`；代码标识符需要时使用 `knowledge_base`。不使用顶层 `web/` 表示知识库，
+避免与 `webui/` 或 `apps/<webui>/` 的产品用户界面混淆。
+
+推荐的最小结构为：
+
+```text
+knowledge-base/
+├── docs/                         # Markdown或其他页面正文
+├── assets/                       # 图片、附件和样式素材
+├── site/                         # 按需：静态站点配置和模板
+└── README.md                     # 内容边界、本地预览和发布方法
+```
+
+问答、RAG、向量库、外部检索后端和复杂 ACL 不是该目录的默认要求；只有项目明确
+启用相应能力时才增加。纯静态知识站不强制建立独立 `tests/`；可在构建命令或 CI 中
+执行站点构建、内部链接、资源存在性和重复页面路径检查。
+
+## 5. 关键边界
 
 - `docs/70_verification/`保存测试计划和正式报告；`tests/`保存可执行测试。
 - `interfaces/`保存机器可读公共契约；consumer只引用，不复制Schema。
