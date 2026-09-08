@@ -12,8 +12,8 @@
 | Authors | {{authors}} |
 | Created Date | `{{created_at}}` |
 | Last Modified Date | `{{last_modified_at}}` |
-| STD Version | `{{std_version}}` |
 | Template ID | `{{template_id}}` |
+| Template Version | `{{template_version}}` |
 | Template Conformance | `{{template_conformance}}` |
 | Tailoring Reference | {{tailoring_ref}} |
 | Migration Map Reference | {{migration_map_ref}} |

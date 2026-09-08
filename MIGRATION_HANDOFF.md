@@ -1,8 +1,8 @@
 # STD 首批项目迁移 HANDOFF
 
-更新时间：2026-09-08
+更新时间：2026-09-09
 STD 路径：`/Users/ben/work/STD`  
-STD 版本：`0.1.0-draft.19`
+STD 版本：`0.1.0-draft.20`
 
 适用会话：Slinky、Piko、LLMTier、HIFM
 
@@ -22,9 +22,10 @@ STD 版本：`0.1.0-draft.19`
 5. `/Users/ben/work/STD/docs/repository-layout.md`；
 6. `/Users/ben/work/STD/docs/document-control.md`；
 7. `/Users/ben/work/STD/docs/github-workflow.md`；
-8. `/Users/ben/work/STD/templates/catalog.json` 与 `templates/path-policy.json`；
-9. 与当前文档类型对应的具体模板；
-10. `/Users/ben/work/STD/schemas/document-metadata.schema.json`、
+8. `/Users/ben/work/STD/docs/versioning.md` 与 `docs/coding-standard.md`；
+9. `/Users/ben/work/STD/templates/catalog.json` 与 `templates/path-policy.json`；
+10. 与当前文档类型对应的具体模板；
+11. `/Users/ben/work/STD/schemas/document-metadata.schema.json`、
     `schemas/std-lock.schema.json`、`schemas/std-source-manifest.schema.json`与
     `schemas/review-decision.schema.json`。
 
@@ -244,8 +245,9 @@ FPGA RTL 和板卡实测共享 contract，但互不冒充对方的证据。
 6. 独立 Runtime Activation 决定及其证据，如不适用则记录 `false / N/A`。
 
 每份迁移后的正式文档还必须在首页填写 Document ID、Document Version、Status、Project、
-Authority、Document Owner、Authors、Created Date、Last Modified Date、STD Version、Template ID、
-Repository、Canonical Path 和 Supersedes。迁移不得重置原始 Created Date；无法确认时应从 Git
+Authority、Document Owner、Authors、Created Date、Last Modified Date、Template ID、Template Version、
+Repository、Canonical Path 和 Supersedes。项目采用的 STD Version 只记录在项目 README 和
+`docs/std.lock.json`。迁移不得重置原始 Created Date；无法确认时应从 Git
 历史或旧文档恢复最早可验证日期，并在迁移记录中注明证据边界，不得把迁移日期伪装成创建日期。
 
 ## 10. 第二批生命周期模板

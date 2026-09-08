@@ -3,7 +3,7 @@
 STD 面向软件、硬件、固件、FPGA 和软硬件协同项目，提供项目管理、需求、系统设计、
 子系统设计、模块设计、接口契约、验证测试、评审、发布和运维所需的版本化模板。
 
-当前 `0.1.0-draft.19` 优先覆盖：
+当前 `0.1.0-draft.20` 优先覆盖：
 
 - Slinky，以及与其协作的 Piko、LLMTier；
 - HIFM，包括软件、DPU-SIM、FPGA/RTL、板卡和系统验证。
@@ -16,6 +16,8 @@ STD 面向软件、硬件、固件、FPGA 和软硬件协同项目，提供项�
 4. 项目升级模板必须显式执行并评审 diff，禁止静默跟随 STD 更新。
 5. RAG 只负责检索，不负责模板分发、版本选择或事实裁决。
 6. 系统、子系统、模块和组件使用一致的分层标识，但可选择不同领域 profile。
+7. 项目 README 和 `docs/std.lock.json` 记录项目采用的 STD 版本；STD 更新不自动推动项目升级。
+8. 每个模板独立维护 Template Version；单份文档只追踪自己采用的模板版本和哈希。
 
 ## 首版模板
 
@@ -72,6 +74,8 @@ manifest。完整接入规则见 [`docs/adoption.md`](docs/adoption.md)。
 项目可通过 `--output` 沿用既有结构，并在 tailoring 中记录。封面、版本状态和 GitHub Review 规则分别见
 [`docs/document-control.md`](docs/document-control.md) 与
 [`docs/github-workflow.md`](docs/github-workflow.md)。
+版本域、项目采用和模板独立版本见 [`docs/versioning.md`](docs/versioning.md)；
+跨语言最低编码要求见 [`docs/coding-standard.md`](docs/coding-standard.md)。
 
 ## 上游参考
 

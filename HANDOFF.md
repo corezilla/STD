@@ -7,7 +7,7 @@
 
 更新时间：2026-09-07  
 项目目录：`/Users/ben/work/STD`  
-建议仓库名称：`corezilla/architecture-standards`  
+规范仓库：`corezilla/STD`
 状态：项目启动草案，等待在独立 Codex 项目中评审和实施
 
 ## 1. 项目目标

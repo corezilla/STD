@@ -3,8 +3,10 @@
 
 from __future__ import annotations
 
+import hashlib
 import importlib.machinery
 import importlib.util
+import json
 import subprocess
 import tempfile
 import unittest
@@ -68,6 +70,7 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
             "last_modified_at": "2026-09-08",
             "std_version": "0.1.0-draft.19",
             "template_id": "design.definition",
+            "template_version": "0.1.0",
             "template_conformance": "legacy-mapped",
             "tailoring_ref": None,
             "migration_map_ref": "docs/migration-map.json",
@@ -94,6 +97,98 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
             issues = self.validator.validate_markdown(path, metadata)
 
         self.assertFalse([item for item in issues if item["code"] == "cover.mismatch"])
+
+    def test_template_versions_are_independent_and_complete(self):
+        catalog = json.loads((ROOT / "templates" / "catalog.json").read_text())
+
+        self.assertEqual(set(catalog["templates"]), set(catalog["template_versions"]))
+        for version in catalog["template_versions"].values():
+            self.assertRegex(version, r"^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$")
+
+    def test_template_covers_use_template_version_not_std_version(self):
+        catalog = json.loads((ROOT / "templates" / "catalog.json").read_text())
+
+        for relative in catalog["templates"].values():
+            content = (ROOT / "templates" / relative).read_text()
+            self.assertIn("| Template Version | `{{template_version}}` |", content)
+            self.assertNotIn("| STD Version |", content)
+
+    def test_document_std_provenance_does_not_follow_unrelated_std_changes(self):
+        catalog = json.loads((ROOT / "templates" / "catalog.json").read_text())
+        template_id = "design.system"
+        template_path = ROOT / "templates" / catalog["templates"][template_id]
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            document = root / "example.md"
+            metadata_path = root / "example.metadata.json"
+            document.write_text("# Example\n")
+            metadata_path.write_text(json.dumps({
+                "document_id": "example",
+                "document_type": template_id,
+                "std_version": "0.1.0-draft.7",
+                "template_id": template_id,
+                "template_version": catalog["template_versions"][template_id],
+                "template_sha256": hashlib.sha256(template_path.read_bytes()).hexdigest(),
+                "source_path": "example.md",
+            }))
+
+            issues, _, _ = self.validator.validate_metadata(
+                metadata_path, {}, catalog, None, {}, {"std_version": "9.9.9"}
+            )
+
+        self.assertFalse([item for item in issues if "std-version" in item["code"]])
+
+    def test_readme_adoption_is_checked_against_project_lock(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            docs = root / "docs"
+            docs.mkdir()
+            (root / "README.md").write_text(
+                "This project adopts STD `0.1.0-draft.18`.\n"
+            )
+            (docs / "std.lock.json").write_text(json.dumps({
+                "schema_version": "std-lock.v1",
+                "std_version": "0.1.0-draft.18",
+                "source_repository": "corezilla/STD",
+                "source_revision": None,
+                "source_tag": None,
+                "source_manifest_path": "docs/std-source-manifest.json",
+                "adopted_at": "2026-09-09",
+                "project_profile": "software",
+                "enabled_domains": ["software"],
+            }))
+
+            issues, _, _ = self.validator.validate_project_control(root, False)
+
+            (root / "README.md").write_text(
+                "This project adopts STD `0.1.0-draft.17`.\n"
+            )
+            mismatch, _, _ = self.validator.validate_project_control(root, False)
+
+        self.assertFalse([item for item in issues if item["code"] == "readme.std-version"])
+        self.assertTrue([item for item in mismatch if item["code"] == "readme.std-version"])
+
+    def test_new_design_renders_independent_template_version(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory)
+            subprocess.run([
+                str(ROOT / "scripts" / "new-design"),
+                "--project", "example",
+                "--template", "design.system",
+                "--name", "system-design",
+                "--output", str(output),
+                "--repository", "example/repository",
+                "--owner", "Example Owner",
+                "--author", "Example Author",
+            ], check=True, capture_output=True, text=True)
+
+            markdown = (output / "system-design.md").read_text()
+            metadata = json.loads((output / "system-design.metadata.json").read_text())
+
+        self.assertIn("| Template Version | `0.1.0` |", markdown)
+        self.assertNotIn("| STD Version |", markdown)
+        self.assertEqual(metadata["template_version"], "0.1.0")
 
 
 class SourceManifestDiscoveryTests(unittest.TestCase):

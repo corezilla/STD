@@ -82,6 +82,9 @@ def main() -> int:
     relative = catalog["templates"].get(args.template)
     if relative is None:
         parser.error(f"未知 template ID: {args.template}")
+    template_version = catalog.get("template_versions", {}).get(args.template)
+    if template_version is None:
+        parser.error(f"template ID 缺少独立版本: {args.template}")
 
     project_root = args.project_root.resolve() if args.project_root else None
     if args.output:
@@ -115,6 +118,7 @@ def main() -> int:
         "document_owner": args.owner, "authors": ", ".join(args.author),
         "created_at": created_at, "last_modified_at": last_modified_at,
         "std_version": std_version, "template_id": args.template,
+        "template_version": template_version,
         "template_conformance": args.template_conformance,
         "tailoring_ref": args.tailoring_ref or "none",
         "migration_map_ref": args.migration_map_ref or "none",
@@ -144,7 +148,7 @@ def main() -> int:
         "authors": args.author,
         "std_version": std_version,
         "template_id": args.template,
-        "template_version": catalog["catalog_version"],
+        "template_version": template_version,
         "template_sha256": hashlib.sha256(template_bytes).hexdigest(),
         "template_conformance": args.template_conformance,
         "tailoring_ref": args.tailoring_ref,

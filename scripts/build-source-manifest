@@ -103,7 +103,7 @@ def git_checkout_is_clean() -> bool:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", required=True, type=Path)
-    parser.add_argument("--source-repository", default="corezilla/architecture-standards")
+    parser.add_argument("--source-repository", default="corezilla/STD")
     parser.add_argument("--source-revision", help="完整 40 位 Git commit SHA；默认读取 STD Git HEAD")
     parser.add_argument("--source-tag", help="可选 annotated tag；必须 peel 到 source revision")
     parser.add_argument("--force", action="store_true", help="覆盖已有 source manifest")

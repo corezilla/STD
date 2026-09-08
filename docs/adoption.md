@@ -28,7 +28,7 @@ STD 管模板；项目管理填写后的设计事实。两者的 authority 不�
 {
   "schema_version": "std-lock.v1",
   "std_version": "0.1.0-draft.18",
-  "source_repository": "corezilla/architecture-standards",
+  "source_repository": "corezilla/STD",
   "source_revision": "<full-40-character-commit-sha>",
   "source_tag": "<optional-annotated-tag>",
   "source_manifest_path": "docs/std-source-manifest.json",
@@ -58,9 +58,10 @@ tailoring manifest 和项目文档索引中记录即可。
 
 每份文档还必须有同名 `.metadata.json`，记录模板、文档版本、Owner、作者、层级、authority、
 状态、repository/path、来源哈希与模板符合方式。Markdown 首页同时显示 `docs/document-control.md` 定义的封面。
-在项目根校验中，每份 sidecar 的 `std_version` 必须等于 `std.lock.std_version`，
-`template_version` 必须等于锁定 catalog 的 `catalog_version`，且 `document_type` 必须等于
-`template_id`；不同版本或类型不得混在同一个已锁定候选中。
+封面显示独立 `Template Version`，不显示项目级 `STD Version`。`metadata.std_version` 只保留文档
+创建或上次显式升级时的来源审计信息，不要求因项目 lock 或 STD 其他内容更新而改写。
+在项目根校验中，`template_version` 只与该 `template_id` 在锁定 catalog 中的独立版本比较，
+并同时核对 `template_sha256`；`document_type` 必须等于 `template_id`。
 
 模板符合方式只有三种：
 
@@ -79,7 +80,12 @@ tailoring manifest 和项目文档索引中记录即可。
   沿用项目自定义路径，同时保持封面中的 Canonical Path 为仓库相对路径。
 - 具体组件、固件产品或板卡采用Owner共置时，根据`domain_owned_path_patterns`把占位符替换为真实名称，并通过`--output`指定目标目录；生成器的无参默认只代表项目级或领域级文档。
 - 修改：只在项目仓库内修改文档实例。
-- 升级：当前通过固定新 STD revision、重新生成临时候选并人工审阅 diff；禁止直接覆盖项目内容。自动 `upgrade-template` 尚未实现，不得把它写成现有能力。
+- 升级：只在用户明确要求对齐新 STD 或新模板版本时进行。固定新 revision、重新生成临时候选并人工审阅 diff；禁止直接覆盖项目内容。自动 `upgrade-template` 尚未实现，不得把它写成现有能力。
+
+项目 README 必须在同一行显示 `STD` 和反引号包裹的当前采用版本，并与
+`docs/std.lock.json` 一致。STD 发布新版本
+不会自动改变项目的采用版本；在用户明确提出升级前，项目继续使用原锁定版本，
+日常修改不得顺便执行“最新 STD/模板”对比。
 - Review：项目 owner 审阅模板变化与项目自定义内容的合并结果。
 - 冻结：accepted/released 文档必须绑定不可变项目 commit。
 

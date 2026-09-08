@@ -16,8 +16,8 @@
 | Created Date | 是 | 首次创建日期，ISO 8601 `YYYY-MM-DD`，不可因迁移重置 |
 | Last Modified Date | 是 | 最近一次实质内容变化日期，`YYYY-MM-DD` |
 | Project Audit Timestamp | 否 | 项目审计/采集时间，ISO 8601 含秒和时区；不替代创建或修改日期 |
-| STD Version | 是 | 创建/最后升级所用 STD 版本 |
 | Template ID | 是 | `templates/catalog.json` 中的稳定 ID |
+| Template Version | 是 | 该 Template ID 独立维护的 SemVer |
 | Repository | 是 | GitHub `owner/repository` 或批准的内部仓库标识 |
 | Canonical Path | 是 | 仓库相对路径 |
 | Supersedes | 是 | 无则写 `none` |
@@ -44,7 +44,8 @@ Template Conformance、Tailoring Reference 和 Migration Map Reference 按采用
 
 示例：`0.3.0-draft.2` → `0.3.0-rc.1` → `0.3.0`。
 
-文档版本、STD template version、产品版本和 Git tag 是不同字段，不得互相代替。
+文档版本、Template Version、项目采用的 STD 版本、产品版本和 Git tag 是不同字段，
+不得互相代替。项目采用的 STD 版本在 README 和 `docs/std.lock.json` 中管理，不放入单份文档封面。
 
 ## 4. 三类状态必须分离
 

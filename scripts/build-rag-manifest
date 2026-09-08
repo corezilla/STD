@@ -58,7 +58,7 @@ def main() -> int:
             "template_version": version,
             "status": "draft",
             "visibility": "organization",
-            "source_repository": "corezilla/architecture-standards",
+            "source_repository": "corezilla/STD",
             "source_path": relative,
             "source_commit": source_commit,
             "content_sha256": hashlib.sha256(payload).hexdigest(),

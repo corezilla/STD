@@ -37,7 +37,7 @@ COVER_MAP = {
     "Status": "status", "Project": "project", "Authority": "authority",
     "Document Owner": "document_owner", "Authors": "authors",
     "Created Date": "created_at", "Last Modified Date": "last_modified_at",
-    "STD Version": "std_version", "Template ID": "template_id",
+    "Template ID": "template_id", "Template Version": "template_version",
     "Template Conformance": "template_conformance",
     "Tailoring Reference": "tailoring_ref",
     "Migration Map Reference": "migration_map_ref",
@@ -218,12 +218,16 @@ def validate_metadata(path: Path, schema: dict, catalog: dict, project_root: Pat
 
     template_id = data.get("template_id")
     relative_template = catalog["templates"].get(template_id)
+    expected_template_version = catalog.get("template_versions", {}).get(template_id)
     if relative_template is None:
         errors.append(issue("template.catalog", path, f"template_id 不在 catalog: {template_id}"))
+    elif expected_template_version is None:
+        errors.append(issue("template.version-catalog", path,
+                            f"template_id 没有独立模板版本: {template_id}"))
     else:
         template_path = f"templates/{relative_template}"
         expected_hash = source_artifacts.get(template_path)
-        if expected_hash is None and data.get("std_version") == (ROOT / "VERSION").read_text().strip():
+        if expected_hash is None and data.get("template_version") == expected_template_version:
             expected_hash = hashlib.sha256((ROOT / template_path).read_bytes()).hexdigest()
         if expected_hash and data.get("template_sha256") != expected_hash:
             errors.append(issue("template.hash", path, "template_sha256 与锁定模板不一致"))
@@ -231,12 +235,9 @@ def validate_metadata(path: Path, schema: dict, catalog: dict, project_root: Pat
     if data.get("document_type") != template_id:
         errors.append(issue("metadata.document-type-mismatch", path,
                             "document_type 必须与 template_id 相同"))
-    if lock is not None and data.get("std_version") != lock.get("std_version"):
-        errors.append(issue("metadata.std-version-mismatch", path,
-                            "metadata.std_version 与 std.lock.std_version 不一致"))
-    if data.get("template_version") != catalog.get("catalog_version"):
+    if expected_template_version is not None and data.get("template_version") != expected_template_version:
         errors.append(issue("metadata.template-version-mismatch", path,
-                            "metadata.template_version 与锁定 catalog_version 不一致"))
+                            "metadata.template_version 与该 template_id 的独立版本不一致"))
 
     if project_root is not None and document is not None:
         expected_path = document.resolve().relative_to(project_root.resolve()).as_posix()
@@ -259,6 +260,25 @@ def validate_project_control(project_root: Path, require_immutable: bool) -> tup
     except Exception as exc:
         return [issue("lock.json", lock_path, f"JSON 无法解析: {exc}")], artifacts, None
     errors.extend(schema_issues(lock_path, lock, load_json(ROOT / "schemas/std-lock.schema.json"), "lock.schema"))
+    readme_path = project_root / "README.md"
+    if not readme_path.is_file():
+        errors.append(issue("readme.missing", readme_path,
+                            "项目必须在 README.md 记录当前采用的 STD 版本"))
+    else:
+        try:
+            readme = readme_path.read_text(errors="replace")
+        except OSError as exc:
+            errors.append(issue("readme.read", readme_path, f"README 无法读取: {exc}"))
+        else:
+            std_version = lock.get("std_version")
+            adoption_line = re.compile(
+                rf"(?im)^.*\bSTD\b[^\n]*`{re.escape(str(std_version))}`[^\n]*$"
+            )
+            if not adoption_line.search(readme):
+                errors.append(issue(
+                    "readme.std-version", readme_path,
+                    "README 必须以含 STD 和反引号版本号的同一行记录 docs/std.lock.json.std_version"
+                ))
     if require_immutable and not lock.get("source_revision"):
         errors.append(issue("lock.immutable", lock_path, "READY/正式候选必须锁定 immutable source_revision"))
     elif require_immutable and not re.fullmatch(r"[a-f0-9]{40}", str(lock.get("source_revision", ""))):

@@ -1,7 +1,7 @@
 {
   "schema_version": "std-lock.v1",
-  "std_version": "0.1.0-draft.19",
-  "source_repository": "corezilla/architecture-standards",
+  "std_version": "0.1.0-draft.20",
+  "source_repository": "corezilla/STD",
   "source_revision": null,
   "source_tag": null,
   "source_manifest_path": "docs/std-source-manifest.json",
