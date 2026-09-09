@@ -45,6 +45,44 @@ backpressure 和错误路径都要能落到 RTL/约束/测试文件。示例必�
 |---|---|---|---|---|---|
 | RTL-F-001 | AXI stream packet | validate + transform | output packet | 1 beat/cycle steady state | golden vectors pass |
 
+### 1.1 继承的上级约束与落实方式
+
+<details>
+<summary>本节编写建议、规范与示例</summary>
+
+**本节目的**：把系统、板卡或父单元的固定分配接入 RTL 设计，让缓存、延迟、吞吐和功耗目标
+以及复位、背压、错误与隔离行为都有上级依据，而非由各个 block 独立承诺。
+
+**必须写清楚**：上级 Document ID、固定版本或提交、Constraint ID、决定状态及适用拓扑；
+继承预算或行为约束、单位和计量边界；本地落实/内部再分配、可自行选择/不可改变的范围，
+本地验证与系统组合验证分别覆盖什么、由谁验证、交付哪些证据。
+
+**编写规范**：用来源文档与 Constraint ID 联合定位，沿用上级 ID；来自系统、板卡和机制的
+要求分别标来源，内部细分关联父约束。固定器件、频率、数据宽度、并发、流控及最坏输入条件，
+避免以无 stall 的局部 beat/cycle 冒充整机吞吐。定位 RTL block、状态/协议、CDC 约束、buffer
+及 testbench，字段继续引用唯一机器契约；拟议分配保持拟议。无父单元时说明独立责任和直接
+需求来源，不以 N/A 隐藏缺失输入；不必另建 `design.definition` 文档来重复承接。
+
+§7、§9 给出资源与性能推导：分配含控制元数据、公共开销及余量，共享存储只计一次，不能
+每个模块都占满同一总额。说明允许的流水级数、仲裁或布局选择及不得改变的顺序、超限和
+恢复语义。§12 区分模块/顶层仿真、formal、实现报告等本地证据与驱动、板卡和外部链路参与的
+系统组合验证；局部时序收敛不能证明系统负载下满足性能或恢复要求。冲突、超额或缺失输入
+反馈原决定责任方，不静默放宽约束；上级变更只在项目明确采用后重新评估。
+
+**抽象示例**：虚构上级拟议约束 `CON-BUF-01` 给本单元同一配置下的缓存总额 8 MiB，并要求
+拥塞时背压而非覆盖未消费数据。可暂分数据 6 MiB、描述符 1 MiB、余量 1 MiB，内部队列布局
+可选但计账和超限行为不可改。本地检查占用及长时间 stall 下的不覆盖不变量；系统组合还需
+验证上游确实响应背压，并在既定超时内进入约定结果。仿真 PASS 不能代替板级协作证据；
+数值和行为仅示范写法，不代表任何产品实现。
+
+**完成条件**：继承项能从固定基线追到 RTL/约束/预算及验证，内部再分配可组合，自由度和
+反馈边界明确；本地与系统证据分开，未运行、未满足或尚未决定的项保持可见。
+
+</details>
+
+| Constraint ID / 上级基线与决定状态 | 适用条件与计量边界 | 继承预算或行为约束 | 可自行选择/不可改变 | 本地落实/内部再分配 | 本地验证与系统组合验证/责任 | 差距/变更影响/证据状态 |
+|---|---|---|---|---|---|---|
+
 ## 2. Top-level、模块与实现文件
 
 ```mermaid
@@ -91,6 +129,8 @@ flowchart LR
 
 ## 7. Memory、DMA、buffer 与一致性
 
+关联 §1.1 的 Constraint ID，解释共享存储、描述符、在途数据和余量的计账及超限行为。
+
 | Resource | Owner | Address/size | Access pattern | Alignment/order | Overflow/recovery |
 |---|---|---|---|---|---|
 | <!-- TODO --> | | | | | |
@@ -107,7 +147,8 @@ flowchart LR
 |---|---|---|---|---|---|
 | LUT | < 60% | target part | <!-- TODO --> | NOT_RUN | |
 
-注明器件、工具版本、约束、利用率假设和 evidence 等级。
+注明器件、工具版本、约束、利用率假设和 evidence 等级。关联 §1.1 的 Constraint ID，
+按相同拓扑、负载和计量边界校核内部再分配，区分本地结果与尚待系统验证的预算。
 
 ## 10. 软件模型、仿真器与 golden contract
 
@@ -121,9 +162,13 @@ flowchart LR
 
 ## 12. Verification 与验收
 
-| Function/Invariant | 方法 | 正常/边界/失败场景 | Oracle | Evidence | 状态 |
-|---|---|---|---|---|---|
-| RTL-F-001 | simulation | min/max packet + stall | golden vector | report | Planned |
+将 §1.1 的 Constraint ID 与功能/不变量一起映射到验收。本地验证覆盖 RTL、协议与实现约束；
+系统组合验证覆盖实际生产者/消费者、软件驱动、板卡及时钟/复位/流控条件，注明各方责任和
+交接证据。两类结果分开，局部 PASS 不关闭系统目标；差距返回原约束责任方。
+
+| Function/Invariant/Constraint ID | 本地/系统组合范围 | 方法 | 正常/边界/失败场景与条件 | Oracle | 验证责任 | Evidence | 状态 |
+|---|---|---|---|---|---|---|---|
+| RTL-F-001 | 本地：RTL 顶层 | simulation | min/max packet + stall | golden vector | RTL verification | NOT_RUN | Planned |
 
 覆盖 lint、CDC/RDC、仿真、formal、综合、实现、时序和板级；未运行不得写 PASS。
 

@@ -56,9 +56,10 @@ system → subsystem → module → component → implementation-unit
 | 设计对象/要交付的决定 | 首选模板 | 内容深度与上层引用 |
 |---|---|---|
 | 完整软件系统、设备或软硬件一体系统 | `design.system`，通常 `design_level=system` | 自包含系统概览、关键分工、端到端流程、实现/部署及验证；字段和单元算法引用唯一详细规格 |
-| 系统中的一个 subsystem/module/component/implementation-unit | `design.definition`，填写对应 `design_level` | 继承固定的上级约束与设计自由度，解释本单元问题/能力、结构、流程、失败及实现验证；系统背景只作必要摘要和引用 |
+| 系统中的一个 subsystem/module/component/implementation-unit | 默认 `design.definition`，硬件/FPGA 见下行专项模板；填写对应 `design_level` | 继承固定的上级约束与设计自由度，解释本单元问题/能力、结构、流程、失败及实现验证；系统背景只作必要摘要和引用 |
 | 跨多个 Owner 的行为与恢复闭环 | `design.system-mechanism` | 参与方责任、状态/协议、正常与失败流程；参与单元的实现由各自定义文档负责 |
-| 独立硬件/FPGA/数据字段规格 | 对应专项模板 | 保存该领域的详细 authority；系统文档解释其设计作用和约束 |
+| 板卡/硬件或 FPGA 单元设计 | `design.hardware` / `design.fpga` | 在专项模板 §1.1 承接固定上级约束与自由度，解释本地落实，并在 §12 区分本地与系统组合验证 |
+| 数据字段规格 | `design.data-dictionary` | 保存字段范围的详细 authority，引用所属系统/单元及契约 |
 
 `design.system` 的写作 profile 为 `software-system`、`integrated-system`、`hardware-fpga`。
 完整的 profile × 章节适用矩阵、条件触发规则和裁剪记录格式以
@@ -75,6 +76,7 @@ Document ID，并保留信息项到承载位置的映射。不得只写 N/A 或�
 
 只有确实需要独立描述跨组件机制、单一实现单元、硬件、FPGA 或数据字典时，才选择相应专项
 模板。一个文档可以引用其他领域设计，但每项责任只能有一个 authority。
+硬件、FPGA 单元使用专项模板即可完成约束承接，不必再创建 `design.definition` 文档重复同一设计。
 
 ## 3. 当前项目映射
 
@@ -110,7 +112,8 @@ Document ID，并保留信息项到承载位置的映射。不得只写 N/A 或�
 另一种结果。评审既检查系统正文单独可读，也检查其摘要与详细机制一致。已有完整流程正文
 在其他适用文档中时引用其唯一位置，不为模板再创建相同的机制文档。
 
-系统约束分配在系统模板 §5.2 汇总，机制模板 §3.1、单元模板 §1.1 分别记录承接与落实，
+系统约束分配在系统模板 §5.2 汇总，机制模板 §3.1、通用单元模板 §1.1，以及硬件/FPGA 专项
+模板 §1.1 分别记录承接与落实；专项模板 §12 把 Constraint ID 接到本地与系统组合验收。
 预算和技术推导保留在原章节。各单元提交的结果须按同一适用条件组合校核，冲突由原决定责任方
 依已有流程裁决；这是设计信息承接，不新增审批层级或工具。遇到机制未定的问题，先做章节
 预设计，必要时复用 `evaluation.technical-analysis`，选定后回写正文，不以另建文档代替决定。

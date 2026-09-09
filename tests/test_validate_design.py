@@ -332,7 +332,10 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
         self.assertIn("两种上界都不是", performance)
 
     def test_system_numbered_references_resolve_to_unique_sections(self):
-        for name in ("architecture-design.md", "design-definition.md", "system-mechanism-design.md"):
+        for name in (
+            "architecture-design.md", "design-definition.md", "system-mechanism-design.md",
+            "hardware-design.md", "fpga-design.md",
+        ):
             with self.subTest(template=name):
                 content = (ROOT / "templates/design" / name).read_text()
                 headings = re.findall(r"^#{2,4} (\d+(?:\.\d+)*)(?:\.)? ", content, re.MULTILINE)
@@ -355,6 +358,16 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
             "system-mechanism-design.md": ("### 3.1 系统约束与参与方承接", (
                 "上级基线与决定状态", "系统保证/分配", "参与方承接与自由度",
                 "流程/协议/下级落实位置", "组合验证与证据状态", "差距/变更影响/裁决责任",
+            )),
+            "hardware-design.md": ("### 1.1 继承的上级约束与落实方式", (
+                "Document ID", "上级基线与决定状态", "适用条件与测量边界", "继承预算或行为约束",
+                "可自行选择/不可改变", "本地落实/内部再分配", "本地验证与系统组合验证/责任",
+                "差距/变更影响/证据状态", "转换损耗", "公共开销", "组合校核", "裁决责任",
+            )),
+            "fpga-design.md": ("### 1.1 继承的上级约束与落实方式", (
+                "Document ID", "上级基线与决定状态", "适用条件与计量边界", "继承预算或行为约束",
+                "可自行选择/不可改变", "本地落实/内部再分配", "本地验证与系统组合验证/责任",
+                "差距/变更影响/证据状态", "RTL block", "公共开销", "共享存储", "原决定责任方",
             )),
         }
         for name, (heading, prompts) in sections.items():
@@ -382,17 +395,73 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
         self.assertIn("不凑两个虚假选项", guide)
         self.assertIn("不伪造签收", guide)
 
-    def test_constraint_handoffs_reach_verification_in_all_three_layers(self):
+    def test_constraint_handoffs_reach_verification_in_all_design_layers(self):
         for name, heading, source_section, column in (
             ("architecture-design.md", "### 14.6 验证覆盖与验收矩阵", "§5.2", "| Target/Constraint ID 与能力范围 |"),
             ("design-definition.md", "## 14. 测试与验收", "§1.1", "| Function/Rule/Constraint |"),
             ("system-mechanism-design.md", "## 14. 验证、上线与回滚", "§3.1", "| Scenario/Invariant/Constraint |"),
+            ("hardware-design.md", "## 12. Verification 与验收", "§1.1", "| Function/Requirement/Constraint ID |"),
+            ("fpga-design.md", "## 12. Verification 与验收", "§1.1", "| Function/Invariant/Constraint ID |"),
         ):
             with self.subTest(template=name):
                 content = (ROOT / "templates/design" / name).read_text()
                 verification = content.split(heading + "\n", 1)[1].split("\n## ", 1)[0]
                 for prompt in (source_section, "Constraint ID", "组合", column):
                     self.assertIn(prompt, verification)
+
+    def test_specialist_templates_keep_local_and_system_acceptance_distinct(self):
+        """Check constraint handoff prompts, not electrical or RTL correctness."""
+        for name in ("hardware-design.md", "fpga-design.md"):
+            with self.subTest(template=name):
+                content = (ROOT / "templates/design" / name).read_text()
+                self.assertIn("不必另建 `design.definition` 文档", content)
+                self.assertIn("项目明确采用后重新评估", content)
+                verification = content.split("## 12. Verification 与验收\n", 1)[1].split("\n## ", 1)[0]
+                for prompt in (
+                    "§1.1", "本地/系统组合范围", "验证责任", "两类结果分开",
+                    "局部 PASS 不关闭系统目标", "原约束责任方", "NOT_RUN",
+                ):
+                    self.assertIn(prompt, verification)
+        selection = (ROOT / "docs/template-selection.md").read_text()
+        for prompt in ("专项模板 §1.1", "专项模板 §12", "不必再创建 `design.definition`"):
+            self.assertIn(prompt, selection)
+        system = (ROOT / "templates/design/architecture-design.md").read_text().replace("\n", "")
+        self.assertIn("`design.definition` 或硬件/FPGA", system)
+        self.assertIn("不为专项设计另建通用文档", system)
+
+    def test_mechanism_retry_requires_authoritative_recovery_and_fencing(self):
+        """Prevent the unsafe example returning; this is not a distributed-system proof."""
+        content = (ROOT / "templates/design/system-mechanism-design.md").read_text()
+        self.assertNotIn("新 lease/同 generation", content)
+        self.assertNotIn("| generation matches |", content)
+        state_machine = content.split("## 7. 状态机与不变量\n", 1)[1].split("\n## ", 1)[0]
+        self.assertIn("执行/写入授权有效", state_machine)
+        recovery = content.split("## 8. 失败传播、重试与恢复\n", 1)[1].split("\n## ", 1)[0]
+        guidance, body = recovery.split("</details>", 1)
+        for label in ("本节目的", "必须写清楚", "编写规范", "抽象示例", "完成条件"):
+            self.assertIn(f"**{label}**", guidance)
+        for prompt in (
+            "结果未知并核对权威状态", "旧执行者停止或已被隔离", "满足幂等/去重条件",
+            "副作用接收方强制执行", "如何拒绝旧写入", "无法确认时保持阻塞或转人工",
+            "由唯一契约明确", "旧 Worker 恢复", "迟到结果", "新旧执行交叠",
+        ):
+            self.assertIn(prompt, guidance.replace("\n", ""))
+        for prompt in ("已有结果则不重试", "停止或隔离且幂等/去重成立", "unknown/blocked", "拒绝旧写入"):
+            self.assertIn(prompt, body)
+        verification = content.split("## 14. 验证、上线与回滚\n", 1)[1].split("\n## ", 1)[0]
+        for prompt in ("FAIL-001", "旧 Worker 恢复", "副作用不重复", "无法确认则阻塞或转人工"):
+            self.assertIn(prompt, verification)
+
+    def test_system_plan_separates_review_implementation_and_integration_gates(self):
+        system = (ROOT / "templates/design/architecture-design.md").read_text()
+        planning = system.split("## 17. 实现计划\n", 1)[1].split("\n## ", 1)[0].replace("\n", "")
+        self.assertNotIn("契约测试通过后才能并行开发两端", planning)
+        example = planning.split("**抽象示例**：", 1)[1].split("**完成条件**", 1)[0]
+        stages = ("接口语义、错误行为和测试向量完成评审后", "两端可并行实现", "分别通过契约测试后", "进入集成", "端到端验证通过后")
+        positions = [example.index(stage) for stage in stages]
+        self.assertEqual(positions, sorted(positions))
+        self.assertIn("不冒充真实生产者、消费者的实现测试", example)
+        self.assertIn("没有循环依赖", planning)
 
     def test_product_scenarios_and_manufacturing_have_design_outputs(self):
         system = (ROOT / "templates/design/architecture-design.md").read_text()
@@ -523,12 +592,14 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
                 metadata = json.loads((Path(directory) / "level-example.metadata.json").read_text())
                 self.assertEqual(metadata["design_level"], expected)
 
-    def test_generated_design_handoffs_validate_in_all_three_layers(self):
+    def test_generated_design_handoffs_validate_in_all_design_layers(self):
         catalog = json.loads((ROOT / "templates/catalog.json").read_text())
         for template_id, heading in (
             ("design.system", "**系统约束分配与下游承接**"),
             ("design.definition", "### 1.1 继承的上级约束与落实方式"),
             ("design.system-mechanism", "### 3.1 系统约束与参与方承接"),
+            ("design.hardware", "### 1.1 继承的上级约束与落实方式"),
+            ("design.fpga", "### 1.1 继承的上级约束与落实方式"),
         ):
             with self.subTest(template=template_id), tempfile.TemporaryDirectory() as directory:
                 output = Path(directory)
