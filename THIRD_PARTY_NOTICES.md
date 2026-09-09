@@ -2,7 +2,8 @@
 
 ## arc42
 
-`templates/design/system-design.md` 的十二章结构参考 arc42 v9.0。arc42 模板作者为
+`templates/design/architecture-design.md` 的十二章结构参考 arc42 v9.0，并由 STD 增加逐章
+编写建议、示例、实现计划和验证验收补充。arc42 模板作者为
 Gernot Starke 和 Peter Hruschka，模板以 CC BY-SA 4.0 发布：
 <https://arc42.org/license/>。
 

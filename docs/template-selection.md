@@ -53,11 +53,12 @@
 system → subsystem → module → component → implementation-unit
 ```
 
-系统级必须使用 `design.system`；下级默认使用 `design.definition`，再叠加 software、hardware、
-firmware 或 FPGA profile。一个文档可以引用其他领域设计，但每项责任只能有一个 authority。
+`design.system` 是默认的主设计模板，采用 arc42 v9.0 十二章结构，并在每章内提供编写建议、
+规范和示例。系统、子系统或较大模块原则上先用这一份模板，通过 metadata 的 `design_level`
+说明层级；不应自动为每个层级再生成一套文档。
 
-三个主要设计模板都必须优先回答问题、功能、页面/操作面、数据流和实现位置。章节不能只写
-架构术语或合规结论；详细编写规则及示例见 `docs/design-writing-guide.md`。
+只有确实需要独立描述跨组件机制、单一实现单元、硬件、FPGA 或数据字典时，才选择相应专项
+模板。一个文档可以引用其他领域设计，但每项责任只能有一个 authority。
 
 ## 3. 当前项目映射
 

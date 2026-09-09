@@ -124,8 +124,15 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
             self.assertIn("示例", content, template_id)
 
         system = (ROOT / "templates" / catalog["templates"]["design.system"]).read_text()
-        for heading in ("功能清单", "页面、路由与交互", "端到端数据流", "实现计划与代码变更", "验证与验收"):
+        arc42_sections = (
+            "Introduction and Goals", "Architecture Constraints", "Context and Scope",
+            "Solution Strategy", "Building Block View", "Runtime View", "Deployment View",
+            "Cross-cutting Concepts", "Architecture Decisions", "Quality Requirements",
+            "Risks and Technical Debt", "Glossary",
+        )
+        for heading in arc42_sections:
             self.assertIn(heading, system)
+        self.assertGreaterEqual(system.count("<summary>编写建议、规范与示例</summary>"), 12)
 
     def test_document_metadata_schema_excludes_project_std_version(self):
         schema = json.loads((ROOT / "schemas" / "document-metadata.schema.json").read_text())
