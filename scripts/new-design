@@ -113,6 +113,8 @@ def main() -> int:
     replacements = {
         "document_title": title, "document_id": args.name,
         "document_version": args.document_version, "document_status": STATUSES[args.status],
+        "design_level": args.level, "domain": ", ".join(args.domain or ["mixed"]),
+        "visibility": "project",
         "project": args.project, "authority": args.authority or args.project,
         "document_owner": args.owner, "authors": ", ".join(args.author),
         "created_at": created_at, "last_modified_at": last_modified_at,

@@ -124,15 +124,16 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
             self.assertIn("示例", content, template_id)
 
         system = (ROOT / "templates" / catalog["templates"]["design.system"]).read_text()
-        arc42_sections = (
-            "Introduction and Goals", "Architecture Constraints", "Context and Scope",
-            "Solution Strategy", "Building Block View", "Runtime View", "Deployment View",
-            "Cross-cutting Concepts", "Architecture Decisions", "Quality Requirements",
-            "Risks and Technical Debt", "Glossary",
+        required_sections = (
+            "文档说明", "产品应用与设计目标", "功能与需求实现概览", "总体结构",
+            "工作模式与端到端流程", "硬件实现方案", "软件实现方案",
+            "可编程逻辑与专用处理单元", "数据、描述符与存储结构", "接口与通信协议",
+            "可靠性、维护与升级", "性能、扩展与兼容性", "可测试性与验收设计",
+            "结构、热、工艺与安全设计", "实现计划", "设计决策、风险与未决项",
         )
-        for heading in arc42_sections:
+        for heading in required_sections:
             self.assertIn(heading, system)
-        self.assertGreaterEqual(system.count("<summary>编写建议、规范与示例</summary>"), 12)
+        self.assertEqual(system.count("<summary>编写建议、规范与示例</summary>"), 16)
 
     def test_document_metadata_schema_excludes_project_std_version(self):
         schema = json.loads((ROOT / "schemas" / "document-metadata.schema.json").read_text())
@@ -190,6 +191,9 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
             metadata = json.loads((output / "system-design.metadata.json").read_text())
 
         self.assertIn(f"| Template Version | `{expected_version}` |", markdown)
+        self.assertIn("| Design Level | `cross-level` |", markdown)
+        self.assertIn("| Domain | `mixed` |", markdown)
+        self.assertIn("| Visibility | `project` |", markdown)
         self.assertNotIn("| STD Version |", markdown)
         self.assertEqual(metadata["template_version"], expected_version)
         self.assertNotIn("std_version", metadata)

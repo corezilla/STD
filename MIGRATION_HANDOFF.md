@@ -2,7 +2,7 @@
 
 更新时间：2026-09-09
 STD 路径：`/Users/ben/work/STD`  
-STD 版本：`0.1.0-draft.23`
+STD 版本：`0.1.0-draft.24`
 
 适用会话：Slinky、Piko、LLMTier、HIFM
 

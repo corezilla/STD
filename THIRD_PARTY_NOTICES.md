@@ -1,15 +1,5 @@
 # 第三方来源与使用边界
 
-## arc42
-
-`templates/design/architecture-design.md` 的十二章结构参考 arc42 v9.0，并由 STD 增加逐章
-编写建议、示例、实现计划和验证验收补充。arc42 模板作者为
-Gernot Starke 和 Peter Hruschka，模板以 CC BY-SA 4.0 发布：
-<https://arc42.org/license/>。
-
-对 arc42 模板的改编应保留署名、版本和修改说明，并遵守 CC BY-SA 4.0。使用模板写成的
-项目文档内容由项目自行决定许可证。
-
 ## ISO/IEC/IEEE
 
 ISO/IEC/IEEE 15288、15289 和 42010 仅作为生命周期、信息项和架构描述的覆盖检查基准。

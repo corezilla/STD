@@ -3,7 +3,7 @@
 STD 面向软件、硬件、固件、FPGA 和软硬件协同项目，提供项目管理、需求、系统设计、
 子系统设计、模块设计、接口契约、验证测试、评审、发布和运维所需的版本化模板。
 
-当前 `0.1.0-draft.23` 优先覆盖：
+当前 `0.1.0-draft.24` 优先覆盖：
 
 - Slinky，以及与其协作的 Piko、LLMTier；
 - HIFM，包括软件、DPU-SIM、FPGA/RTL、板卡和系统验证。
@@ -80,7 +80,8 @@ manifest。完整接入规则见 [`docs/adoption.md`](docs/adoption.md)。
 
 ## 上游参考
 
-STD 的覆盖模型参考 ISO/IEC/IEEE 15288、15289 和 42010；系统架构模板参考 arc42 v9.0；
+STD 的覆盖模型参考 ISO/IEC/IEEE 15288、15289 和 42010；系统设计主模板采用面向实现的
+设备/软硬件一体设计结构。
 项目/系统/软件工程内容参考 NASA Systems Engineering Handbook 与 NASA Software
 Engineering Handbook；硬件、接口和验证文档目录参考 ECSS DRD。
 
