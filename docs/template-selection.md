@@ -14,9 +14,9 @@
 | 产品必须满足什么 | `requirements.specification` |
 | Need、Requirement、Design、Implementation 和 Test 如何闭环 | `requirements.traceability` |
 | 某项技术、平台或竞品应如何基于证据分析 | `evaluation.technical-analysis` |
-| 整体架构、上下文和关键策略 | `design.system` |
-| 一个机制如何跨多个子系统端到端工作 | `design.system-mechanism` |
-| 子系统、模块或组件如何实现职责 | `design.definition` |
+| 整个产品解决什么问题、有哪些功能/页面、整体数据如何流动和如何分解实现 | `design.system` |
+| 一个行为如何跨多个组件端到端运行、失败和恢复 | `design.system-mechanism` |
+| 一个子系统、模块或组件具体改哪些代码以及如何实现和测试 | `design.definition` |
 | 板卡/硬件如何满足电气、机械、热和制造约束 | `design.hardware` |
 | FPGA/RTL 如何实现数据面与控制面 | `design.fpga` |
 | 数据对象、字段、单位和编码如何定义 | `design.data-dictionary` |
@@ -55,6 +55,9 @@ system → subsystem → module → component → implementation-unit
 
 系统级必须使用 `design.system`；下级默认使用 `design.definition`，再叠加 software、hardware、
 firmware 或 FPGA profile。一个文档可以引用其他领域设计，但每项责任只能有一个 authority。
+
+三个主要设计模板都必须优先回答问题、功能、页面/操作面、数据流和实现位置。章节不能只写
+架构术语或合规结论；详细编写规则及示例见 `docs/design-writing-guide.md`。
 
 ## 3. 当前项目映射
 

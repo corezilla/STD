@@ -2,7 +2,7 @@
 
 更新时间：2026-09-09
 STD 路径：`/Users/ben/work/STD`  
-STD 版本：`0.1.0-draft.21`
+STD 版本：`0.1.0-draft.22`
 
 适用会话：Slinky、Piko、LLMTier、HIFM
 
@@ -22,7 +22,8 @@ STD 版本：`0.1.0-draft.21`
 5. `/Users/ben/work/STD/docs/repository-layout.md`；
 6. `/Users/ben/work/STD/docs/document-control.md`；
 7. `/Users/ben/work/STD/docs/github-workflow.md`；
-8. `/Users/ben/work/STD/docs/versioning.md` 与 `docs/coding-standard.md`；
+8. `/Users/ben/work/STD/docs/versioning.md`、`docs/coding-standard.md` 与
+   `docs/design-writing-guide.md`；
 9. `/Users/ben/work/STD/templates/catalog.json` 与 `templates/path-policy.json`；
 10. 与当前文档类型对应的具体模板；
 11. `/Users/ben/work/STD/schemas/document-metadata.schema.json`、

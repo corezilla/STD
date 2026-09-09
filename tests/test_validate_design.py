@@ -68,7 +68,7 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
             "created_at": "2026-09-08",
             "last_modified_at": "2026-09-08",
             "template_id": "design.definition",
-            "template_version": "0.1.0",
+            "template_version": "1.0.0",
             "template_conformance": "legacy-mapped",
             "tailoring_ref": None,
             "migration_map_ref": "docs/migration-map.json",
@@ -111,6 +111,22 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
             self.assertIn("| Template Version | `{{template_version}}` |", content)
             self.assertNotIn("| STD Version |", content)
 
+    def test_design_templates_include_guidance_examples_and_implementation_content(self):
+        catalog = json.loads((ROOT / "templates" / "catalog.json").read_text())
+        design_ids = [
+            "design.system", "design.system-mechanism", "design.definition",
+            "design.hardware", "design.fpga", "design.data-dictionary",
+        ]
+
+        for template_id in design_ids:
+            content = (ROOT / "templates" / catalog["templates"][template_id]).read_text()
+            self.assertIn("编写建议", content, template_id)
+            self.assertIn("示例", content, template_id)
+
+        system = (ROOT / "templates" / catalog["templates"]["design.system"]).read_text()
+        for heading in ("功能清单", "页面、路由与交互", "端到端数据流", "实现计划与代码变更", "验证与验收"):
+            self.assertIn(heading, system)
+
     def test_document_metadata_schema_excludes_project_std_version(self):
         schema = json.loads((ROOT / "schemas" / "document-metadata.schema.json").read_text())
 
@@ -148,6 +164,8 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
         self.assertTrue([item for item in mismatch if item["code"] == "readme.std-version"])
 
     def test_new_design_renders_independent_template_version(self):
+        catalog = json.loads((ROOT / "templates" / "catalog.json").read_text())
+        expected_version = catalog["template_versions"]["design.system"]
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory)
             subprocess.run([
@@ -164,9 +182,9 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
             markdown = (output / "system-design.md").read_text()
             metadata = json.loads((output / "system-design.metadata.json").read_text())
 
-        self.assertIn("| Template Version | `0.1.0` |", markdown)
+        self.assertIn(f"| Template Version | `{expected_version}` |", markdown)
         self.assertNotIn("| STD Version |", markdown)
-        self.assertEqual(metadata["template_version"], "0.1.0")
+        self.assertEqual(metadata["template_version"], expected_version)
         self.assertNotIn("std_version", metadata)
 
 

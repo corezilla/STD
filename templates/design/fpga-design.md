@@ -25,36 +25,110 @@
 > 外部不可变证据；不要在文档内容中伪造包含自身的 commit hash。
 <!-- STD_DOCUMENT_COVER_END -->
 
-## 1. 目标、范围与输入冻结
+<!--
+编写建议：先写可观察功能与完整数据路径，再分解 RTL block。每个接口、clock domain、buffer、
+backpressure 和错误路径都要能落到 RTL/约束/测试文件。示例必须替换。
+编写规范见 docs/design-writing-guide.md。
+-->
 
-列出系统需求、接口/ABI、器件与板卡约束，以及输入的冻结状态。
+## 1. 用途、功能与输入冻结
 
-## 2. 设计 authority 与架构不变量
+| 项目 | 内容 |
+|---|---|
+| 使用场景 | <!-- TODO --> |
+| 要解决的问题 | <!-- TODO --> |
+| 目标器件/板卡 | <!-- TODO --> |
+| 输入契约 | <!-- API/ABI/寄存器/数据格式 --> |
+| 成功条件 | <!-- TODO --> |
 
-## 3. Top-level、clock domain 与模块 owner
+| Function ID | 输入 | RTL 行为 | 输出 | 时序/吞吐 | 验收条件 |
+|---|---|---|---|---|---|
+| RTL-F-001 | AXI stream packet | validate + transform | output packet | 1 beat/cycle steady state | golden vectors pass |
 
-## 4. 数据面、控制面与主运行流
+## 2. Top-level、模块与实现文件
 
-## 5. Host/Device Interface、CSR 与寄存器
+```mermaid
+flowchart LR
+    H[Host Interface] --> Q[Input Queue]
+    Q --> C[Compute Pipeline]
+    C --> O[Output Queue]
+    R[CSR] --> C
+```
 
-## 6. 内部协议、队列、ordering 与 backpressure
+| Block ID | RTL block | 职责 | Clock/Reset | 输入/输出 | Source path | Owner |
+|---|---|---|---|---|---|---|
+| B-001 | `input_queue` | 缓冲并施加 backpressure | core_clk/core_rst_n | AXI-S | `rtl/input_queue.sv` | RTL |
 
-## 7. Clock、Reset、CDC/RDC 与时序约束
+## 3. 数据面端到端流程
 
-## 8. Memory、DMA、buffer 与一致性
+| Step | 数据格式 | Producer → Consumer | 处理 | Buffer/latency | 错误结果 |
+|---:|---|---|---|---|---|
+| 1 | InputBeat | Host IF → Queue | framing check | FIFO / 2 cycles | error counter |
 
-## 9. 资源预算、频率、吞吐、延迟与功耗
+说明 packet/transaction 的进入、变换、存储和输出；提供典型和边界示例向量。
 
-所有预算注明器件、工具版本、约束、利用率假设和证据等级。
+## 4. 控制面、CSR 与软件交互
 
-## 10. 错误、隔离、恢复与可观测性
+| Register/Command | Writer | Effect | Readback | Illegal access | Authority |
+|---|---|---|---|---|---|
+| `CONTROL.start` | Driver | start accepted job | busy/status | ignored + error | register spec |
 
-## 11. 仿真、形式验证、综合、实现和板级验证
+描述软件从配置、启动、轮询/中断到完成或恢复的完整流程。
 
-## 12. 软件模型/仿真器对齐与校准
+## 5. 内部协议、状态机和 backpressure
 
-定义共同 contract、golden reference、误差口径和板卡实测回填方式。
+| State | Event/Guard | Next | Output/action | timeout/error |
+|---|---|---|---|---|
+| IDLE | start && configured | RUN | accept input | config error |
 
-## 13. Platform Profile 与可移植边界
+明确 valid/ready、ordering、queue depth、arbitration、fence 和资源耗尽行为。
 
-## 14. 实现状态、变更控制与 Review Gate
+## 6. Clock、Reset 与 CDC/RDC
+
+| Domain | Frequency/source | Reset | Crossing | CDC primitive/proof | Constraint |
+|---|---|---|---|---|---|
+| core_clk | 300 MHz PLL | sync active-low | host→core | async FIFO | `constraints.xdc` |
+
+## 7. Memory、DMA、buffer 与一致性
+
+| Resource | Owner | Address/size | Access pattern | Alignment/order | Overflow/recovery |
+|---|---|---|---|---|---|
+| <!-- TODO --> | | | | | |
+
+## 8. 错误、隔离、恢复与可观测性
+
+| Failure | Detection | Containment | CSR/interrupt/counter | Recovery | Data validity |
+|---|---|---|---|---|---|
+| malformed packet | header check | drop current packet | ERR_FORMAT + counter | next packet | output absent |
+
+## 9. 资源、频率、延迟、吞吐与功耗预算
+
+| Metric | Target | Condition/topology | Estimate | Post-implementation | Margin |
+|---|---|---|---|---|---|
+| LUT | < 60% | target part | <!-- TODO --> | NOT_RUN | |
+
+注明器件、工具版本、约束、利用率假设和 evidence 等级。
+
+## 10. 软件模型、仿真器与 golden contract
+
+定义共同输入输出、bit-exact/tolerance 规则、错误语义、测试向量和实测校准方式。
+
+## 11. 实现计划与交付物
+
+| 顺序 | 任务 | RTL/constraint/test path | 依赖 | 完成条件 |
+|---:|---|---|---|---|
+| 1 | 输入队列 | `rtl/input_queue.sv`、`tb/input_queue_tb.sv` | interface approved | lint + unit pass |
+
+## 12. Verification 与验收
+
+| Function/Invariant | 方法 | 正常/边界/失败场景 | Oracle | Evidence | 状态 |
+|---|---|---|---|---|---|
+| RTL-F-001 | simulation | min/max packet + stall | golden vector | report | Planned |
+
+覆盖 lint、CDC/RDC、仿真、formal、综合、实现、时序和板级；未运行不得写 PASS。
+
+## 13. Platform Profile、风险与未决问题
+
+| ID | 平台差异/问题 | 影响 | Owner | 关闭证据/Gate | 状态 |
+|---|---|---|---|---|---|
+| <!-- TODO --> | | | | | |

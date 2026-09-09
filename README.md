@@ -3,7 +3,7 @@
 STD 面向软件、硬件、固件、FPGA 和软硬件协同项目，提供项目管理、需求、系统设计、
 子系统设计、模块设计、接口契约、验证测试、评审、发布和运维所需的版本化模板。
 
-当前 `0.1.0-draft.21` 优先覆盖：
+当前 `0.1.0-draft.22` 优先覆盖：
 
 - Slinky，以及与其协作的 Piko、LLMTier；
 - HIFM，包括软件、DPU-SIM、FPGA/RTL、板卡和系统验证。
@@ -75,7 +75,8 @@ manifest。完整接入规则见 [`docs/adoption.md`](docs/adoption.md)。
 [`docs/document-control.md`](docs/document-control.md) 与
 [`docs/github-workflow.md`](docs/github-workflow.md)。
 版本域、项目采用和模板独立版本见 [`docs/versioning.md`](docs/versioning.md)；
-跨语言最低编码要求见 [`docs/coding-standard.md`](docs/coding-standard.md)。
+跨语言最低编码要求见 [`docs/coding-standard.md`](docs/coding-standard.md)；
+面向实现的设计文档写法和质量检查见 [`docs/design-writing-guide.md`](docs/design-writing-guide.md)。
 
 ## 上游参考
 
