@@ -135,6 +135,27 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
             self.assertIn(heading, system)
         self.assertEqual(system.count("<summary>编写建议、规范与示例</summary>"), 16)
 
+        lines = system.splitlines()
+        headings = [
+            index for index, line in enumerate(lines)
+            if line.startswith(("## ", "### ", "#### "))
+        ]
+        self.assertGreater(len(headings), 16)
+        for index in headings:
+            cursor = index + 1
+            while cursor < len(lines) and not lines[cursor].strip():
+                cursor += 1
+            self.assertEqual(lines[cursor].strip(), "<details>", lines[index])
+
+            closing = lines.index("</details>", cursor + 1)
+            guidance = "\n".join(lines[cursor:closing + 1])
+            self.assertTrue(
+                "**本章目的**" in guidance or "**本节目的**" in guidance,
+                lines[index],
+            )
+            for required in ("**必须写清楚**", "**编写规范**", "**抽象示例**"):
+                self.assertIn(required, guidance, lines[index])
+
     def test_document_metadata_schema_excludes_project_std_version(self):
         schema = json.loads((ROOT / "schemas" / "document-metadata.schema.json").read_text())
 
