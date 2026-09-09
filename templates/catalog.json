@@ -62,7 +62,7 @@
     "requirements.specification": "0.1.0",
     "requirements.traceability": "0.1.0",
     "evaluation.technical-analysis": "0.1.0",
-    "design.system": "4.0.0",
+    "design.system": "5.0.0",
     "design.system-mechanism": "1.0.0",
     "design.definition": "1.0.0",
     "design.hardware": "1.0.0",
