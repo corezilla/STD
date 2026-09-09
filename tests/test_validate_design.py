@@ -3,7 +3,6 @@
 
 from __future__ import annotations
 
-import hashlib
 import importlib.machinery
 import importlib.util
 import json
@@ -68,7 +67,6 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
             "authors": ["Example Author"],
             "created_at": "2026-09-08",
             "last_modified_at": "2026-09-08",
-            "std_version": "0.1.0-draft.19",
             "template_id": "design.definition",
             "template_version": "0.1.0",
             "template_conformance": "legacy-mapped",
@@ -113,31 +111,11 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
             self.assertIn("| Template Version | `{{template_version}}` |", content)
             self.assertNotIn("| STD Version |", content)
 
-    def test_document_std_provenance_does_not_follow_unrelated_std_changes(self):
-        catalog = json.loads((ROOT / "templates" / "catalog.json").read_text())
-        template_id = "design.system"
-        template_path = ROOT / "templates" / catalog["templates"][template_id]
+    def test_document_metadata_schema_excludes_project_std_version(self):
+        schema = json.loads((ROOT / "schemas" / "document-metadata.schema.json").read_text())
 
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            document = root / "example.md"
-            metadata_path = root / "example.metadata.json"
-            document.write_text("# Example\n")
-            metadata_path.write_text(json.dumps({
-                "document_id": "example",
-                "document_type": template_id,
-                "std_version": "0.1.0-draft.7",
-                "template_id": template_id,
-                "template_version": catalog["template_versions"][template_id],
-                "template_sha256": hashlib.sha256(template_path.read_bytes()).hexdigest(),
-                "source_path": "example.md",
-            }))
-
-            issues, _, _ = self.validator.validate_metadata(
-                metadata_path, {}, catalog, None, {}, {"std_version": "9.9.9"}
-            )
-
-        self.assertFalse([item for item in issues if "std-version" in item["code"]])
+        self.assertNotIn("std_version", schema["required"])
+        self.assertNotIn("std_version", schema["properties"])
 
     def test_readme_adoption_is_checked_against_project_lock(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -189,6 +167,7 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
         self.assertIn("| Template Version | `0.1.0` |", markdown)
         self.assertNotIn("| STD Version |", markdown)
         self.assertEqual(metadata["template_version"], "0.1.0")
+        self.assertNotIn("std_version", metadata)
 
 
 class SourceManifestDiscoveryTests(unittest.TestCase):

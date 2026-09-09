@@ -45,7 +45,8 @@ Template Conformance、Tailoring Reference 和 Migration Map Reference 按采用
 示例：`0.3.0-draft.2` → `0.3.0-rc.1` → `0.3.0`。
 
 文档版本、Template Version、项目采用的 STD 版本、产品版本和 Git tag 是不同字段，
-不得互相代替。项目采用的 STD 版本在 README 和 `docs/std.lock.json` 中管理，不放入单份文档封面。
+不得互相代替。项目采用的 STD 版本在 README 和 `docs/std.lock.json` 中管理，不放入单份文档
+封面或 sidecar metadata。
 
 ## 4. 三类状态必须分离
 

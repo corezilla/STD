@@ -110,14 +110,13 @@ def main() -> int:
     document_path = output / f"{args.name}.md"
     metadata_path = output / f"{args.name}.metadata.json"
     source_path = repository_relative(document_path, project_root)
-    std_version = (ROOT / "VERSION").read_text().strip()
     replacements = {
         "document_title": title, "document_id": args.name,
         "document_version": args.document_version, "document_status": STATUSES[args.status],
         "project": args.project, "authority": args.authority or args.project,
         "document_owner": args.owner, "authors": ", ".join(args.author),
         "created_at": created_at, "last_modified_at": last_modified_at,
-        "std_version": std_version, "template_id": args.template,
+        "template_id": args.template,
         "template_version": template_version,
         "template_conformance": args.template_conformance,
         "tailoring_ref": args.tailoring_ref or "none",
@@ -146,7 +145,6 @@ def main() -> int:
         "title": title,
         "document_owner": args.owner,
         "authors": args.author,
-        "std_version": std_version,
         "template_id": args.template,
         "template_version": template_version,
         "template_sha256": hashlib.sha256(template_bytes).hexdigest(),

@@ -204,7 +204,7 @@ def validate_markdown(path: Path, metadata: dict | None) -> list[dict]:
 
 
 def validate_metadata(path: Path, schema: dict, catalog: dict, project_root: Path | None,
-                      source_artifacts: dict[str, str], lock: dict | None) -> tuple[list[dict], dict | None, Path | None]:
+                      source_artifacts: dict[str, str]) -> tuple[list[dict], dict | None, Path | None]:
     errors: list[dict] = []
     try:
         data = load_json(path)
@@ -446,7 +446,7 @@ def main() -> int:
     metadata_records: list[tuple[Path, dict]] = []
     for path in metadata_paths:
         found, data, document = validate_metadata(
-            path, metadata_schema, catalog, project_root, source_artifacts, lock
+            path, metadata_schema, catalog, project_root, source_artifacts
         )
         errors.extend(found)
         if data:

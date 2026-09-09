@@ -54,6 +54,9 @@ STD upgrades are performed only when explicitly requested by the user.
 - 封面：`Template ID` 和 `Template Version`；
 - sidecar：`template_id`、`template_version` 和 `template_sha256`。
 
+单文档封面和 sidecar 都不得保存 `std_version`。项目级 STD 来源只在 README、
+`docs/std.lock.json` 和来源清单中固定。
+
 `template_sha256` 锁定精确 bytes，Template Version 表达语义版本，两者都要保留。
 
 ## 5. 文档版本

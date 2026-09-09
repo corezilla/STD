@@ -58,8 +58,8 @@ tailoring manifest 和项目文档索引中记录即可。
 
 每份文档还必须有同名 `.metadata.json`，记录模板、文档版本、Owner、作者、层级、authority、
 状态、repository/path、来源哈希与模板符合方式。Markdown 首页同时显示 `docs/document-control.md` 定义的封面。
-封面显示独立 `Template Version`，不显示项目级 `STD Version`。`metadata.std_version` 只保留文档
-创建或上次显式升级时的来源审计信息，不要求因项目 lock 或 STD 其他内容更新而改写。
+封面显示独立 `Template Version`，不显示项目级 `STD Version`。单文档 metadata 也不保存
+`std_version`；项目采用的 STD 版本只由 README 和 `docs/std.lock.json` 管理。
 在项目根校验中，`template_version` 只与该 `template_id` 在锁定 catalog 中的独立版本比较，
 并同时核对 `template_sha256`；`document_type` 必须等于 `template_id`。
 
