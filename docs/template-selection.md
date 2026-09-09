@@ -47,16 +47,31 @@
 
 ## 2. 分层设计
 
-`design.definition` 通过 metadata 的 `design_level` 支持：
+按设计对象和责任范围选择模板，`design_level` 记录该对象在层级中的位置：
 
 ```text
 system → subsystem → module → component → implementation-unit
 ```
 
-`design.system` 是默认的主设计模板，采用面向实现的设备/软硬件一体设计结构，并在每章内提供
-编写建议、规范与示例。模板从应用环境和功能出发，进一步说明总体结构、工作模式、数据流、
-硬件/软件/专用处理实现、接口、可靠性、测试和实现计划。系统、子系统或较大模块原则上先用
-这一份模板，通过 metadata 的 `design_level` 说明层级；不应自动为每个层级再生成一套文档。
+| 设计对象/要交付的决定 | 首选模板 | 内容深度与上层引用 |
+|---|---|---|
+| 完整软件系统、设备或软硬件一体系统 | `design.system`，通常 `design_level=system` | 自包含系统概览、关键分工、端到端流程、实现/部署及验证；字段和单元算法引用唯一详细规格 |
+| 系统中的一个 subsystem/module/component/implementation-unit | `design.definition`，填写对应 `design_level` | 本单元的问题/能力、外部边界、内部结构与路径、流程/状态、失败、安全、实现与验收；系统背景只作必要摘要和引用 |
+| 跨多个 Owner 的行为与恢复闭环 | `design.system-mechanism` | 参与方责任、状态/协议、正常与失败流程；参与单元的实现由各自定义文档负责 |
+| 独立硬件/FPGA/数据字段规格 | 对应专项模板 | 保存该领域的详细 authority；系统文档解释其设计作用和约束 |
+
+`design.system` 的写作 profile 为 `software-system`、`integrated-system`、`hardware-fpga`。
+完整的 profile × 章节适用矩阵、条件触发规则和裁剪记录格式以
+[`architecture-design.md` §1.4](../templates/design/architecture-design.md) 为准。这些写作 profile
+不改变项目 lock 的 `project_profile` 枚举。子系统/模块不是从系统模板随意删出一个较短版本。
+
+如果一个名为“子系统”的对象本身是独立交付的完整系统，可采用 `design.system`，但必须在
+§1.2 说明独立系统边界、消费方和上级关系；`cross-level` 需说明下钻目的和深度，不得复制下级
+规格成为第二份 authority。模板生成器只产生草稿，profile 和裁剪决定仍由作者填写及 Reviewer 核验。
+
+条件成立的章节必需；条件不成立时记录理由和 `management.tailoring` 中的决定与批准证据。
+省略/合并章节时使用 `template_conformance=tailored`，`tailoring_ref` 指向该裁剪文档的
+Document ID，并保留信息项到承载位置的映射。不得只写 N/A 或跳过难以完成的设计。
 
 只有确实需要独立描述跨组件机制、单一实现单元、硬件、FPGA 或数据字典时，才选择相应专项
 模板。一个文档可以引用其他领域设计，但每项责任只能有一个 authority。
@@ -76,7 +91,7 @@ system → subsystem → module → component → implementation-unit
 - `test-report`：一次或一组实际执行结果。
 - `acceptance-*`：客户/产品 authority 的正式验收决定。
 
-这些文档可以按 tailoring 合并，但 metadata 和章节映射必须保留。
+这些文档可以按已批准的 tailoring 合并，但 metadata 和章节映射必须保留。
 
 ## 5. 系统设计与机制设计的边界
 

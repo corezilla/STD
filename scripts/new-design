@@ -61,9 +61,11 @@ def main() -> int:
     parser.add_argument("--tailoring-ref")
     parser.add_argument("--migration-map-ref")
     parser.add_argument("--reviewed-commit")
-    parser.add_argument("--level", default="cross-level")
+    parser.add_argument("--level", help="设计层级；design.system 默认 system，其他模板默认 cross-level")
     parser.add_argument("--domain", action="append", default=[])
     args = parser.parse_args()
+    if args.level is None:
+        args.level = "system" if args.template == "design.system" else "cross-level"
 
     if args.project_root is None and args.output is None:
         parser.error("必须提供 --project-root 或 --output")

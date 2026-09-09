@@ -125,35 +125,38 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
 
         system = (ROOT / "templates" / catalog["templates"]["design.system"]).read_text()
         required_sections = (
-            "文档说明", "产品应用与设计目标", "功能与需求实现概览", "总体结构",
+            "文档说明", "系统概览", "产品应用与设计目标", "功能与需求实现概览", "总体结构",
             "工作模式与端到端流程", "硬件实现方案", "软件实现方案",
             "可编程逻辑与专用处理单元", "数据、描述符与存储结构", "接口与通信协议",
             "可靠性、维护与升级", "性能、扩展与兼容性", "可测试性与验收设计",
-            "结构、热、工艺与安全设计", "实现计划", "设计决策、风险与未决项",
+            "信息安全架构", "结构、热、工艺与安全设计", "实现计划", "设计决策、风险与未决项",
         )
         for heading in required_sections:
             self.assertIn(heading, system)
-        self.assertEqual(system.count("<summary>编写建议、规范与示例</summary>"), 16)
+        self.assertEqual(system.count("<summary>编写建议、规范与示例</summary>"), len(required_sections))
 
         lines = system.splitlines()
         headings = [
             index for index, line in enumerate(lines)
             if line.startswith(("## ", "### ", "#### "))
         ]
-        self.assertGreater(len(headings), 16)
-        for index in headings:
+        self.assertGreater(len(headings), len(required_sections))
+        for position, index in enumerate(headings):
+            next_heading = headings[position + 1] if position + 1 < len(headings) else len(lines)
             cursor = index + 1
             while cursor < len(lines) and not lines[cursor].strip():
                 cursor += 1
+            self.assertLess(cursor, next_heading, lines[index])
             self.assertEqual(lines[cursor].strip(), "<details>", lines[index])
 
             closing = lines.index("</details>", cursor + 1)
+            self.assertLess(closing, next_heading, lines[index])
             guidance = "\n".join(lines[cursor:closing + 1])
             self.assertTrue(
                 "**本章目的**" in guidance or "**本节目的**" in guidance,
                 lines[index],
             )
-            for required in ("**必须写清楚**", "**编写规范**", "**抽象示例**"):
+            for required in ("**必须写清楚**", "**编写规范**", "**抽象示例**", "**完成条件**"):
                 self.assertIn(required, guidance, lines[index])
 
     def test_document_metadata_schema_excludes_project_std_version(self):
@@ -212,12 +215,32 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
             metadata = json.loads((output / "system-design.metadata.json").read_text())
 
         self.assertIn(f"| Template Version | `{expected_version}` |", markdown)
-        self.assertIn("| Design Level | `cross-level` |", markdown)
+        self.assertIn("| Design Level | `system` |", markdown)
         self.assertIn("| Domain | `mixed` |", markdown)
         self.assertIn("| Visibility | `project` |", markdown)
         self.assertNotIn("| STD Version |", markdown)
         self.assertEqual(metadata["template_version"], expected_version)
+        self.assertEqual(metadata["design_level"], "system")
         self.assertNotIn("std_version", metadata)
+
+    def test_new_design_preserves_explicit_level_and_other_template_default(self):
+        for template_id, level, expected in (
+            ("design.system", "cross-level", "cross-level"),
+            ("design.definition", "module", "module"),
+            ("design.system-mechanism", None, "cross-level"),
+        ):
+            with self.subTest(template=template_id, level=level), tempfile.TemporaryDirectory() as directory:
+                command = [
+                    str(ROOT / "scripts" / "new-design"), "--project", "example",
+                    "--template", template_id, "--name", "level-example", "--output", directory,
+                    "--repository", "example/repository", "--owner", "Example Owner",
+                    "--author", "Example Author",
+                ]
+                if level is not None:
+                    command.extend(["--level", level])
+                subprocess.run(command, check=True, capture_output=True, text=True)
+                metadata = json.loads((Path(directory) / "level-example.metadata.json").read_text())
+                self.assertEqual(metadata["design_level"], expected)
 
 
 class SourceManifestDiscoveryTests(unittest.TestCase):

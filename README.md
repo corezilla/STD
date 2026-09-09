@@ -3,7 +3,7 @@
 STD 面向软件、硬件、固件、FPGA 和软硬件协同项目，提供项目管理、需求、系统设计、
 子系统设计、模块设计、接口契约、验证测试、评审、发布和运维所需的版本化模板。
 
-当前 `0.1.0-draft.25` 优先覆盖：
+当前 `0.1.0-draft.26` 优先覆盖：
 
 - Slinky，以及与其协作的 Piko、LLMTier；
 - HIFM，包括软件、DPU-SIM、FPGA/RTL、板卡和系统验证。
@@ -77,6 +77,12 @@ manifest。完整接入规则见 [`docs/adoption.md`](docs/adoption.md)。
 版本域、项目采用和模板独立版本见 [`docs/versioning.md`](docs/versioning.md)；
 跨语言最低编码要求见 [`docs/coding-standard.md`](docs/coding-standard.md)；
 面向实现的设计文档写法和质量检查见 [`docs/design-writing-guide.md`](docs/design-writing-guide.md)。
+系统设计的概览、适用性、状态/证据、图和信息安全写法及正反例见
+[`docs/architecture-design-authoring-guide.md`](docs/architecture-design-authoring-guide.md)。
+
+本版 `design.system` 为 `4.0.0`：必需的系统概览和新增信息安全架构使章节编号与内容要求发生变化。
+模板保留每节可折叠的段落式指导，并增加完成条件；生成器默认将系统文档层级设为 `system`。
+已采用旧版的项目继续使用原版本，只有用户要求升级时才评估章节映射与内容差异。
 
 ## 上游参考
 
