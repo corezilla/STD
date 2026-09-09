@@ -332,12 +332,102 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
         self.assertIn("两种上界都不是", performance)
 
     def test_system_numbered_references_resolve_to_unique_sections(self):
+        for name in ("architecture-design.md", "design-definition.md", "system-mechanism-design.md"):
+            with self.subTest(template=name):
+                content = (ROOT / "templates/design" / name).read_text()
+                headings = re.findall(r"^#{2,4} (\d+(?:\.\d+)*)(?:\.)? ", content, re.MULTILINE)
+                self.assertEqual(len(headings), len(set(headings)))
+                references = set(re.findall(r"§(\d+(?:\.\d+)*)", content))
+                self.assertTrue(references)
+                self.assertEqual(references - set(headings), set())
+
+    def test_design_constraint_handoffs_have_sources_freedom_and_composition(self):
+        """Guard both ends of the handoff, not whether a filled design satisfies it."""
+        sections = {
+            "architecture-design.md": ("### 5.2 组成与职责", (
+                "来源基线与决定状态", "适用条件", "承接单元/Owner", "分配预算或行为保证",
+                "下游可自行决定/不可改变", "组合校核", "变更影响/裁决责任", "共享项", "待承接/待验证",
+            )),
+            "design-definition.md": ("### 1.1 继承的上级约束与落实方式", (
+                "上级基线与决定状态", "继承预算或行为保证", "可自行选择/不可改变",
+                "本地落实/内部再分配", "验证方法与结果/证据", "差距/变更影响/反馈责任", "组合校核",
+            )),
+            "system-mechanism-design.md": ("### 3.1 系统约束与参与方承接", (
+                "上级基线与决定状态", "系统保证/分配", "参与方承接与自由度",
+                "流程/协议/下级落实位置", "组合验证与证据状态", "差距/变更影响/裁决责任",
+            )),
+        }
+        for name, (heading, prompts) in sections.items():
+            with self.subTest(template=name):
+                content = (ROOT / "templates/design" / name).read_text()
+                section = re.split(r"\n#{2,3} ", content.split(heading + "\n", 1)[1], maxsplit=1)[0]
+                guidance, body = section.split("</details>", 1)
+                for label in ("本节目的", "必须写清楚", "编写规范", "抽象示例", "完成条件"):
+                    self.assertIn(f"**{label}**", guidance)
+                self.assertIn("| Constraint ID /", body)
+                for prompt in prompts:
+                    self.assertIn(prompt, section)
+
+    def test_design_predesign_requires_resolution_and_writeback_not_just_pending(self):
+        for name in ("architecture-design.md", "design-definition.md", "system-mechanism-design.md"):
+            with self.subTest(template=name):
+                content = (ROOT / "templates/design" / name).read_text().replace("\n", "")
+                for prompt in ("预设计", "evaluation.technical-analysis", "约束", "选项", "推演", "推荐", "代价", "回写", "未实现", "未实测"):
+                    self.assertTrue(prompt in content, f"Missing authoring prompt {prompt!r} in {name}")
+                self.assertIn("不能判", content)
+                self.assertIn("可继续", content)
+                self.assertIn("口号", content)
+        guide = (ROOT / "docs/architecture-design-authoring-guide.md").read_text()
+        self.assertIn("## 11. 从章节预设计到下游承接", guide)
+        self.assertIn("不凑两个虚假选项", guide)
+        self.assertIn("不伪造签收", guide)
+
+    def test_constraint_handoffs_reach_verification_in_all_three_layers(self):
+        for name, heading, source_section, column in (
+            ("architecture-design.md", "### 14.6 验证覆盖与验收矩阵", "§5.2", "| Target/Constraint ID 与能力范围 |"),
+            ("design-definition.md", "## 14. 测试与验收", "§1.1", "| Function/Rule/Constraint |"),
+            ("system-mechanism-design.md", "## 14. 验证、上线与回滚", "§3.1", "| Scenario/Invariant/Constraint |"),
+        ):
+            with self.subTest(template=name):
+                content = (ROOT / "templates/design" / name).read_text()
+                verification = content.split(heading + "\n", 1)[1].split("\n## ", 1)[0]
+                for prompt in (source_section, "Constraint ID", "组合", column):
+                    self.assertIn(prompt, verification)
+
+    def test_product_scenarios_and_manufacturing_have_design_outputs(self):
         system = (ROOT / "templates/design/architecture-design.md").read_text()
-        headings = re.findall(r"^#{2,4} (\d+(?:\.\d+)*)(?:\.)? ", system, re.MULTILINE)
-        self.assertEqual(len(headings), len(set(headings)))
-        references = set(re.findall(r"§(\d+(?:\.\d+)*)", system))
-        self.assertTrue(references)
-        self.assertEqual(references - set(headings), set())
+        for heading, prompts in {
+            "### 3.2 用户与使用场景": (
+                "客户类别", "实际使用者", "主要业务任务", "部署及维护条件",
+                "维护操作不能代替", "固定场景", "隔离", "可靠性",
+            ),
+            "### 16.3 工艺与制造测试": (
+                "缺陷", "输入位置与方法", "观测/判定及未覆盖", "装配前", "装配后",
+                "测试点", "烧录", "校准", "原理图", "PCB", "结构", "固件",
+                "工装异常", "返修重测", "Constraint ID", "出厂禁用",
+            ),
+        }.items():
+            with self.subTest(section=heading):
+                section = system.split(heading + "\n", 1)[1].split("\n### ", 1)[0]
+                for prompt in prompts:
+                    self.assertIn(prompt, section)
+
+    def test_system_mechanism_selection_preserves_readable_summary_and_unique_detail(self):
+        paths = (
+            "docs/template-selection.md", "docs/design-writing-guide.md",
+            "docs/architecture-design-authoring-guide.md", "templates/design/architecture-design.md",
+            "templates/design/system-mechanism-design.md",
+        )
+        for path in paths:
+            with self.subTest(path=path):
+                content = (ROOT / path).read_text().replace("\n", "")
+                for prompt in ("端到端原理", "关键阶段", "系统级约束", "代表失败", "详细状态转换", "协议", "Constraint ID"):
+                    self.assertTrue(prompt in content, f"Missing boundary prompt {prompt!r} in {path}")
+        selection = (ROOT / "docs/template-selection.md").read_text()
+        self.assertNotIn("保存系统全景、子系统分解、全局策略和机制目录。", selection)
+        self.assertIn("系统模板 §5.2", selection)
+        self.assertIn("机制模板 §3.1", selection)
+        self.assertIn("单元模板 §1.1", selection)
 
     def test_readme_adoption_is_checked_against_project_lock(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -432,6 +522,37 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
                 subprocess.run(command, check=True, capture_output=True, text=True)
                 metadata = json.loads((Path(directory) / "level-example.metadata.json").read_text())
                 self.assertEqual(metadata["design_level"], expected)
+
+    def test_generated_design_handoffs_validate_in_all_three_layers(self):
+        catalog = json.loads((ROOT / "templates/catalog.json").read_text())
+        for template_id, heading in (
+            ("design.system", "**系统约束分配与下游承接**"),
+            ("design.definition", "### 1.1 继承的上级约束与落实方式"),
+            ("design.system-mechanism", "### 3.1 系统约束与参与方承接"),
+        ):
+            with self.subTest(template=template_id), tempfile.TemporaryDirectory() as directory:
+                output = Path(directory)
+                subprocess.run([
+                    str(ROOT / "scripts/new-design"), "--project", "example", "--template", template_id,
+                    "--name", "handoff-design", "--output", directory, "--repository", "example/repository",
+                    "--owner", "Example Owner", "--author", "Example Author",
+                ], check=True, capture_output=True, text=True)
+                content = (output / "handoff-design.md").read_text()
+                metadata = json.loads((output / "handoff-design.metadata.json").read_text())
+                self.assertIn(heading, content)
+                self.assertIn("| Constraint ID /", content)
+                self.assertNotIn("{{", content)
+                self.assertEqual(metadata["template_version"], catalog["template_versions"][template_id])
+                template = ROOT / "templates" / catalog["templates"][template_id]
+                self.assertEqual(metadata["template_sha256"], hashlib.sha256(template.read_bytes()).hexdigest())
+                result = subprocess.run([
+                    str(ROOT / "scripts/validate-design"), directory, "--json",
+                ], capture_output=True, text=True)
+                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+                report = json.loads(result.stdout)
+                self.assertEqual(report["issues"], [])
+                self.assertEqual(report["checked_markdown"], 1)
+                self.assertEqual(report["checked_metadata"], 1)
 
 
 class SourceManifestDiscoveryTests(unittest.TestCase):
