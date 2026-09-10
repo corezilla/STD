@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="620" viewBox="0 0 1280 620" role="img" aria-labelledby="title description">
+  <title id="title">图像采集系统架构</title>
+  <desc id="description">原创虚构教学示例 EX-ARCH-01，基线 EX-CAP-01，Target / Planned / NOT_RUN。以包含关系展示工业相机、工控机和显示器；工控机软件层展示配套驱动及客户检测应用，硬件层仅展示与本产品有关的图像采集卡，不展开任何单元内部结构。蓝色为产品提供，灰色为客户提供。此图只展示系统主要组成与层次，不表达数据流、时序或完整物料清单。</desc>
+  <style>
+    text { font-family: 'PingFang SC', 'Noto Sans CJK SC', sans-serif; fill: #17324c; }
+    .title { font-size: 34px; font-weight: 650; }
+    .group { font-size: 27px; font-weight: 600; }
+    .layer { font-size: 23px; font-weight: 550; fill: #52677d; }
+    .name { font-size: 26px; font-weight: 600; text-anchor: middle; }
+    .part { font-size: 23px; font-weight: 550; text-anchor: middle; }
+    .legend { font-size: 21px; fill: #52677d; }
+    .white { fill: white; }
+  </style>
+  <rect width="1280" height="620" fill="#f8fafc"/>
+  <text x="32" y="60" class="title">图像采集系统架构</text>
+  <rect x="875" y="39" width="22" height="22" rx="4" fill="#176397"/>
+  <text x="909" y="59" class="legend">产品提供</text>
+  <rect x="1050" y="39" width="22" height="22" rx="4" fill="#d7e0e9" stroke="#9aabba"/>
+  <text x="1084" y="59" class="legend">客户提供</text>
+
+  <g id="capture-environment">
+    <rect x="32" y="108" width="1216" height="482" rx="18" fill="#ffffff" stroke="#c5d1dd" stroke-width="2"/>
+    <text x="58" y="148" class="group">采集与检测环境</text>
+    <g id="camera">
+      <rect x="58" y="306" width="168" height="98" rx="12" fill="#d7e0e9" stroke="#9aabba"/>
+      <text x="142" y="366" class="name">工业相机</text>
+    </g>
+    <g id="host">
+      <rect x="266" y="180" width="748" height="380" rx="16" fill="#eef2f6" stroke="#9aabba" stroke-width="2"/>
+      <text x="290" y="220" class="group">工控机</text>
+      <g id="software-layer">
+        <rect x="290" y="246" width="700" height="140" rx="12" fill="#ffffff" stroke="#c5d1dd"/>
+        <text x="312" y="280" class="layer">软件层</text>
+        <g id="driver">
+          <rect x="314" y="299" width="302" height="64" rx="9" fill="#176397"/>
+          <text x="465" y="340" class="name white">配套驱动</text>
+        </g>
+        <g id="application">
+          <rect x="658" y="299" width="308" height="64" rx="9" fill="#d7e0e9" stroke="#9aabba"/>
+          <text x="812" y="340" class="name">检测应用</text>
+        </g>
+      </g>
+      <g id="hardware-layer">
+        <rect x="290" y="406" width="700" height="130" rx="12" fill="#ffffff" stroke="#c5d1dd"/>
+        <text x="312" y="440" class="layer">硬件层</text>
+        <g id="capture-card">
+          <rect x="314" y="458" width="652" height="56" rx="9" fill="#176397"/>
+          <text x="640" y="495" class="name white">图像采集卡</text>
+        </g>
+      </g>
+    </g>
+    <g id="display">
+      <rect x="1054" y="306" width="168" height="98" rx="12" fill="#d7e0e9" stroke="#9aabba"/>
+      <text x="1138" y="366" class="name">显示器</text>
+    </g>
+  </g>
+</svg>

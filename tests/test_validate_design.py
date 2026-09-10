@@ -11,6 +11,7 @@ import re
 import subprocess
 import tempfile
 import unittest
+import xml.etree.ElementTree as ET
 from pathlib import Path
 from unittest import mock
 
@@ -105,6 +106,96 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
         for version in catalog["template_versions"].values():
             self.assertRegex(version, r"^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$")
 
+    def test_compact_cover_and_end_control_are_validated_together(self):
+        fields = self.validator.COMPACT_COVER_FIELDS
+        metadata = {key: "example" for key in self.validator.COVER_MAP.values()}
+        metadata.update(status="draft", authors=["Example Author"])
+        rows = {
+            field: f"| {field} | {self.validator.expected_cover_value(field, metadata)} |"
+            for field in self.validator.COVER_MAP
+        }
+        front = "\n".join(rows[field] for field in rows if field in fields)
+        back = "\n".join(rows[field] for field in rows if field not in fields)
+        cover = f"<!-- STD_DOCUMENT_COVER_BEGIN -->\n# Example\n{front}\n<!-- STD_DOCUMENT_COVER_END -->"
+        control = f"<!-- STD_DOCUMENT_CONTROL_BEGIN -->\n{back}\n<!-- STD_DOCUMENT_CONTROL_END -->"
+        document = f"{cover}\n\n## Design\n\n| Status | FAIL |\n\n## Control\n\n{control}\n"
+        cases = [
+            ("valid", document, None),
+            ("missing-field", document.replace(rows["Authors"], ""), "cover.missing"),
+            ("mismatch", document.replace(rows["Authors"], "| Authors | Wrong |"), "cover.mismatch"),
+            ("duplicate", document.replace(back, rows["Status"] + "\n" + back), "cover.duplicate"),
+            ("missing-end", document.replace("<!-- STD_DOCUMENT_CONTROL_END -->", ""), "cover.markers"),
+            ("repeated-block", document + control, "cover.markers"),
+            ("reversed", document.replace(control, "<!-- STD_DOCUMENT_CONTROL_END -->\n" + back + "\n<!-- STD_DOCUMENT_CONTROL_BEGIN -->"), "cover.markers"),
+            ("nested", cover.replace("<!-- STD_DOCUMENT_COVER_END -->", control + "\n<!-- STD_DOCUMENT_COVER_END -->"), "cover.markers"),
+            ("missing-front-field", document.replace(rows["Template ID"], "").replace(back, rows["Template ID"] + "\n" + back), "cover.missing"),
+            ("body-cannot-supply-control", cover + "\n" + back, "cover.missing"),
+        ]
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "example.md"
+            for name, content, expected_code in cases:
+                with self.subTest(case=name):
+                    path.write_text(content)
+                    issues = self.validator.validate_markdown(path, metadata)
+                    if expected_code is None:
+                        self.assertEqual(issues, [])
+                    else:
+                        self.assertIn(expected_code, [item["code"] for item in issues])
+
+    def test_system_markdown_opening_is_short_and_control_is_at_end(self):
+        system = (ROOT / "templates/design/architecture-design.md").read_text()
+        front, body = system.split("<!-- STD_DOCUMENT_COVER_END -->", 1)
+        expected = {
+            "Document ID", "Document Version", "Status", "Project", "Document Owner",
+            "Last Modified Date", "Template ID", "Template Version",
+        }
+        fields = set(re.findall(r"^\| ([^|]+?) \|", front, re.MULTILINE)) - {"文档字段"}
+        self.assertEqual(fields, expected)
+        self.assertEqual(fields, self.validator.COMPACT_COVER_FIELDS)
+        self.assertLessEqual(len(front.splitlines()), 14)
+        self.assertTrue(body.lstrip().startswith("## 1. 文档说明\n"))
+        headings = re.findall(r"^#{2,3} (.+)$", system, re.MULTILINE)
+        self.assertEqual(headings[:4], [
+            "1. 文档说明", "1.1 目的与读者", "1.2 范围、非目标与设计层级", "2. 产品应用与设计目标",
+        ])
+        self.assertLess(system.index("## 2. 产品应用"), system.index("## 3. 系统概览"))
+        for heading in (
+            "## 附录 A.", "### A.1 修订记录", "### A.2 目录、表目录与图目录",
+            "## 附录 B.", "### B.1 参考资料与术语", "### B.2 适用 profile 与章节裁剪",
+            "### B.3 适用基线、视图状态与证据规则", "### B.4 设计约束与关键假设", "## 附录 C.",
+        ):
+            self.assertGreater(system.index(heading), system.index("## 18."))
+        self.assertNotRegex(system, r"§1\.[3-6]|### 1\.[3-6]|FIG-3-1")
+        self.assertIn("EX-SCENE-01｜流水线视觉检测的逻辑应用场景", system)
+
+    def test_cover_sync_preserves_both_system_blocks_and_other_templates(self):
+        sync = load_script("std_sync_covers", "sync-template-covers")
+        cover = (ROOT / "templates/_shared/document-cover.md").read_text().strip()
+        front, back = sync.split_cover(cover)
+        system = (ROOT / "templates/design/architecture-design.md").read_text()
+        self.assertIn(front, system)
+        self.assertIn(back, system)
+        self.assertEqual(sync.COMPACT_FIELDS, self.validator.COMPACT_COVER_FIELDS)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "templates/_shared").mkdir(parents=True)
+            (root / "templates/_shared/document-cover.md").write_text(cover)
+            (root / "templates/catalog.json").write_text(json.dumps({
+                "templates": {"design.system": "system.md", "design.hardware": "hardware.md"},
+            }))
+            hardware = (ROOT / "templates/design/hardware-design.md").read_text()
+            system_path, hardware_path = root / "templates/system.md", root / "templates/hardware.md"
+            system_path.write_text(system)
+            hardware_path.write_text(hardware)
+            with mock.patch.object(sync, "ROOT", root):
+                sync.main()
+                self.assertEqual(system_path.read_text(), system)
+                self.assertEqual(hardware_path.read_text(), hardware)
+                system_path.write_text(system.replace("| Authors | {{authors}} |", "| Authors | stale |"))
+                sync.main()
+                self.assertEqual(system_path.read_text(), system)
+                self.assertEqual(hardware_path.read_text(), hardware)
+
     def test_template_covers_use_template_version_not_std_version(self):
         catalog = json.loads((ROOT / "templates" / "catalog.json").read_text())
 
@@ -148,6 +239,12 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
             cursor = index + 1
             while cursor < len(lines) and not lines[cursor].strip():
                 cursor += 1
+            if lines[cursor].strip() == "<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->":
+                sample_end = lines.index("<!-- STD_TEMPLATE_EXAMPLE_END -->", cursor + 1)
+                self.assertLess(sample_end, next_heading, lines[index])
+                cursor = sample_end + 1
+                while cursor < len(lines) and not lines[cursor].strip():
+                    cursor += 1
             self.assertLess(cursor, next_heading, lines[index])
             self.assertEqual(lines[cursor].strip(), "<details>", lines[index])
 
@@ -166,6 +263,86 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
 
         self.assertNotIn("std_version", schema["required"])
         self.assertNotIn("std_version", schema["properties"])
+
+    def test_system_application_scene_has_environment_user_and_task(self):
+        template = ROOT / "templates/design/architecture-design.md"
+        section = template.read_text().split("### 2.3 应用环境与系统边界\n", 1)[1].split("### 2.4", 1)[0]
+        sample = section.split("<!-- STD_TEMPLATE_EXAMPLE_END -->", 1)[0]
+        self.assertNotIn("<details>", sample)
+        image_match = re.search(r"!\[[^]]+\]\(([^)]+)\)", sample)
+        self.assertIsNotNone(image_match)
+        self.assertLess(image_match.start(), sample.index("*EX-SCENE-01｜"))
+        self.assertLess(sample.index("*EX-SCENE-01｜"), sample.index("工厂在自动流水线"))
+        self.assertLess(sample.index("工厂在自动流水线"), sample.index("**怎样借鉴这页**"))
+        for term in ("客户提供", "PCIe", "不承担", "供电和散热", "虚构", "NOT_RUN",
+                     "操作人员坐在工作台前", "桌面显示器", "不新增自动剔除", "使用任务",
+                     "逻辑应用场景", "不表示实际距离", "简化人形"):
+            self.assertIn(term, sample)
+        image_path = (template.parent / image_match[1]).resolve()
+        self.assertTrue(image_path.is_relative_to(ROOT))
+        png = image_path.read_bytes()
+        self.assertTrue(png.startswith(b"\x89PNG\r\n\x1a\n"))
+        self.assertEqual(image_path.name, "application-scene-logical.png")
+        # Preserve the exact application-scene asset selected by the user.
+        self.assertEqual(hashlib.sha256(png).hexdigest(), "35042b31c8150da9ca816b40e0924f084e71f6f06e606d4da605162ceadd3225")
+        self.assertGreater(int.from_bytes(png[16:20], "big"), 1000)
+        self.assertTrue(image_path.with_suffix(".prompt.md").is_file())
+
+    def test_system_architecture_sample_stays_at_system_composition_level(self):
+        """Check the teaching scaffold and assets, not engineering correctness."""
+        template = ROOT / "templates/design/architecture-design.md"
+        section = template.read_text().split("### 5.1 系统功能框图\n", 1)[1].split("### 5.2", 1)[0]
+        sample = section.split("<!-- STD_TEMPLATE_EXAMPLE_END -->", 1)[0]
+        self.assertNotIn("<details>", sample)
+        image_match = re.search(r"!\[[^]]+\]\(([^)]+)\)", sample)
+        self.assertIsNotNone(image_match)
+        self.assertLess(image_match.start(), sample.index("*EX-ARCH-01｜"))
+        self.assertLess(sample.index("*EX-ARCH-01｜"), sample.index("系统由工业相机"))
+        self.assertLess(sample.index("系统由工业相机"), sample.index("**怎样借鉴这页**"))
+        for term in ("主机", "配套驱动", "逻辑层次", "下级设计", "短名称", "Owner",
+                     "不把原理段落", "Target / Planned / NOT_RUN"):
+            self.assertIn(term, sample)
+        image_path = (template.parent / image_match[1]).resolve()
+        self.assertTrue(image_path.is_relative_to(ROOT))
+        png = image_path.read_bytes()
+        self.assertTrue(png.startswith(b"\x89PNG\r\n\x1a\n"))
+        self.assertEqual(image_path.name, "system-architecture-light.png")
+        # The user-selected architecture image is unchanged by the scene/roles update.
+        self.assertEqual(hashlib.sha256(png).hexdigest(), "92ad577a8426935dcbee47d24a0642696b3ee851a840ac3ed686657f53c7925e")
+        for connection in ("采集接口", "PCIe", "驱动 API", "显示输出"):
+            self.assertIn(connection, sample)
+        self.assertGreater(int.from_bytes(png[16:20], "big"), 1000)
+        self.assertTrue(image_path.with_suffix(".prompt.md").is_file())
+        svg = (image_path.parent / "system-architecture.svg").read_text()
+        self.assertIn('viewBox="0 0 1280 620"', svg)
+        self.assertNotIn("<script", svg)
+        self.assertNotIn("<image", svg)
+        for term in ("工业相机", "图像采集卡", "检测应用", "配套驱动", "显示器", "软件层", "硬件层"):
+            self.assertIn(term, svg)
+        for detail in ("DMA", "接收与校验", "卡上配置与状态", "IF-01"):
+            self.assertNotIn(detail, svg)
+        parsed = ET.fromstring(svg)
+        ns = {"s": "http://www.w3.org/2000/svg"}
+        self.assertIsNotNone(parsed.find('.//s:g[@id="host"]/s:g[@id="software-layer"]/s:g[@id="driver"]', ns))
+        card = parsed.find('.//s:g[@id="host"]/s:g[@id="hardware-layer"]/s:g[@id="capture-card"]', ns)
+        self.assertIsNotNone(card)
+        self.assertEqual(card.findall("s:g", ns), [])
+
+    def test_architecture_is_followed_by_each_component_responsibility(self):
+        """Protect the readable example, not a claim about engineering completeness."""
+        system = (ROOT / "templates/design/architecture-design.md").read_text()
+        section = system.split("### 5.2 组成与职责\n", 1)[1].split("### 5.3", 1)[0]
+        sample = section.split("<!-- STD_TEMPLATE_EXAMPLE_END -->", 1)[0]
+        self.assertNotIn("<details>", sample)
+        self.assertIn("以下接续 EX-ARCH-01", sample)
+        self.assertEqual(re.findall(r"^\*\*([^*]+)\*\*：", sample, re.MULTILINE)[:6], [
+            "工业相机", "图像采集卡", "工控机", "配套驱动", "检测应用", "显示器",
+        ])
+        for term in ("图像", "输入", "运行环境", "接口", "不负责", "不承担", "采集卡设计", "职责"):
+            self.assertIn(term, sample)
+        self.assertNotIn("| Block ID", sample)
+        self.assertNotIn("DMA", sample)
+        self.assertIn("**逐组件职责说明**", section.split("</details>", 1)[1])
 
     def test_system_repeatable_units_have_narrative_slots_outside_help(self):
         """Protect the authoring scaffold, not a claim about design quality."""
@@ -193,7 +370,7 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
                     self.assertIn(f"**{slot}**", body)
 
         self.assertEqual(system.count("<details>"), system.count("</details>"))
-        # The existing chapter-level applicability matrix must retain its numbering.
+        # Keep the eighteen main chapters; document-control appendices are unnumbered.
         chapters = [line for line in system.splitlines() if line.startswith("## ")]
         numbered = [line.split(" ", 2)[1] for line in chapters if line.split(" ", 2)[1][0].isdigit()]
         self.assertEqual(numbered, [f"{number}." for number in range(1, 19)])
@@ -338,9 +515,9 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
         ):
             with self.subTest(template=name):
                 content = (ROOT / "templates/design" / name).read_text()
-                headings = re.findall(r"^#{2,4} (\d+(?:\.\d+)*)(?:\.)? ", content, re.MULTILINE)
+                headings = re.findall(r"^#{2,4} (?:附录 )?((?:\d+|[A-C])(?:\.\d+)*)(?:\.)? ", content, re.MULTILINE)
                 self.assertEqual(len(headings), len(set(headings)))
-                references = set(re.findall(r"§(\d+(?:\.\d+)*)", content))
+                references = set(re.findall(r"§((?:\d+|[A-C])(?:\.\d+)*)", content))
                 self.assertTrue(references)
                 self.assertEqual(references - set(headings), set())
 
@@ -466,7 +643,7 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
     def test_product_scenarios_and_manufacturing_have_design_outputs(self):
         system = (ROOT / "templates/design/architecture-design.md").read_text()
         for heading, prompts in {
-            "### 3.2 用户与使用场景": (
+            "### 2.2 用户与使用场景": (
                 "客户类别", "实际使用者", "主要业务任务", "部署及维护条件",
                 "维护操作不能代替", "固定场景", "隔离", "可靠性",
             ),
@@ -566,6 +743,15 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
         self.assertEqual(metadata["design_level"], "system")
         self.assertNotIn("std_version", metadata)
         self.assertNotIn("{{", markdown)
+        self.assertNotIn("STD_TEMPLATE_EXAMPLE", markdown)
+        self.assertNotIn("EX-DEPLOY-01", markdown)
+        self.assertNotIn("EX-SCENE-01", markdown)
+        self.assertNotIn("EX-ARCH-01", markdown)
+        self.assertNotIn("../../docs/assets/", markdown)
+        self.assertIn("### 2.3 应用环境与系统边界", markdown)
+        self.assertIn("提供逻辑应用场景/上下文图、上下游及责任边界", markdown)
+        self.assertIn("填入项目系统架构图", markdown)
+        self.assertIn("**逐组件职责说明**", markdown)
         self.assertIn("#### MODE-XXX：模式名称", markdown)
         self.assertIn("#### BLK-XXX：模块名称", markdown)
         self.assertIn("## 6. 重要过程", markdown)

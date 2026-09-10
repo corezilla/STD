@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800" viewBox="0 0 1280 800" role="img" aria-labelledby="title description">
+  <title id="title">EX-DEPLOY-01 同机安装：把采集卡装进现有工控机</title>
+  <desc id="description">原创虚构教学样例，Target / Planned / NOT_RUN。原有工业相机经相机链路连接新增采集卡，卡安装在原有工控机的 PCIe 插槽中，经 PCIe 将图像交给主机内存，由原有 CPU 上的检测软件处理。操作员通过原有显示器查看结果。蓝色与新增文字表示本例产品，灰色表示客户原有设备；外观、端口和板形均为示意，不是工程规格。</desc>
+  <defs>
+    <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f7fb"/><stop offset="1" stop-color="#dbe3ed"/></linearGradient>
+    <linearGradient id="board" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2075af"/><stop offset="1" stop-color="#14527f"/></linearGradient>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L9 5 L0 10Z" fill="#087daf"/></marker>
+    <marker id="gray-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L9 5 L0 10Z" fill="#566b82"/></marker>
+    <style>
+      text { font-family: 'PingFang SC', 'Noto Sans CJK SC', sans-serif; fill: #172f48; }
+      .heading { font-size: 36px; font-weight: 600; }
+      .label { font-size: 26px; font-weight: 600; }
+      .note { font-size: 23px; }
+      .small { font-size: 20px; fill: #52677d; }
+      .white { fill: #ffffff; }
+      .flow { stroke: #087daf; stroke-width: 5; fill: none; marker-end: url(#arrow); }
+    </style>
+  </defs>
+  <rect width="1280" height="800" fill="#f8fafc"/>
+  <text x="42" y="58" class="heading">同机安装：把采集卡装进现有工控机</text>
+  <text x="44" y="96" class="small">EX-DEPLOY-01 · 原创虚构教学样例 · Target / Planned / NOT_RUN</text>
+  <line x1="44" y1="121" x2="1236" y2="121" stroke="#d8e1eb"/>
+
+  <!-- Customer-owned camera and production line. -->
+  <text x="60" y="206" class="label">原有工业相机</text>
+  <path d="M80 252 L113 233 H243 L211 252Z" fill="#d6e0e9" stroke="#75889b" stroke-width="2"/>
+  <path d="M211 252 L243 233 V331 L211 351Z" fill="#a9b9c9" stroke="#75889b" stroke-width="2"/>
+  <rect x="80" y="252" width="131" height="99" rx="6" fill="url(#metal)" stroke="#75889b" stroke-width="2"/>
+  <rect x="119" y="282" width="106" height="46" rx="19" fill="#405367"/>
+  <ellipse cx="124" cy="305" rx="24" ry="31" fill="#aab9c7" stroke="#5d7185" stroke-width="3"/>
+  <ellipse cx="121" cy="305" rx="15" ry="21" fill="#203e56"/>
+  <ellipse cx="117" cy="299" rx="5" ry="8" fill="#6cabbc"/>
+  <path d="M163 353 V394 H198" stroke="#8599ac" stroke-width="10" fill="none"/>
+  <rect x="64" y="424" width="224" height="34" rx="16" fill="#cbd6e2" stroke="#879aae" stroke-width="2"/>
+  <path d="M87 459 V485 M261 459 V485" stroke="#879aae" stroke-width="7"/>
+  <rect x="91" y="386" width="37" height="35" rx="3" fill="#e8edf3" stroke="#8a9bac" stroke-width="2"/>
+  <rect x="155" y="386" width="37" height="35" rx="3" fill="#e8edf3" stroke="#8a9bac" stroke-width="2"/>
+  <rect x="219" y="386" width="37" height="35" rx="3" fill="#e8edf3" stroke="#8a9bac" stroke-width="2"/>
+  <text x="67" y="522" class="note">拍摄产线产品</text>
+
+  <!-- Cutaway chassis: installation, not a second abstract module diagram. -->
+  <text x="510" y="178" class="label">原有工控机 · 机盖打开示意</text>
+  <path d="M452 206 H1152 L1212 249 H512Z" fill="#e1e8f0" stroke="#8d9fb0" stroke-width="2"/>
+  <path d="M1152 206 L1212 249 V637 L1152 595Z" fill="#bdcbd9" stroke="#8d9fb0" stroke-width="2"/>
+  <rect x="452" y="206" width="700" height="389" rx="8" fill="#ffffff" stroke="#8d9fb0" stroke-width="2"/>
+  <path d="M452 595 H1152 L1212 637 H512Z" fill="url(#metal)" stroke="#8d9fb0" stroke-width="2"/>
+  <path d="M512 637 H1212 V675 H512Z" fill="#d2dce7" stroke="#8d9fb0" stroke-width="2"/>
+  <circle cx="546" cy="656" r="6" fill="#6d8499"/>
+  <path d="M1080 648 V665 M1092 648 V665 M1104 648 V665 M1116 648 V665 M1128 648 V665 M1140 648 V665 M1152 648 V665 M1164 648 V665" stroke="#8fa1b3" stroke-width="4"/>
+  <text x="573" y="663" class="small">机箱 / 主板 / 电源均由客户提供</text>
+
+  <!-- Host motherboard, CPU and memory remain customer-owned. -->
+  <rect x="838" y="265" width="273" height="281" rx="8" fill="#e9eff1" stroke="#9aadae" stroke-width="2"/>
+  <text x="882" y="299" class="note">原有 CPU / 内存</text>
+  <rect x="886" y="345" width="93" height="88" rx="5" fill="#718195" stroke="#475b70" stroke-width="3"/>
+  <rect x="899" y="358" width="67" height="62" fill="#aebdcb" stroke="#dfe7ed" stroke-width="2"/>
+  <path d="M893 337 V347 M910 337 V347 M927 337 V347 M944 337 V347 M961 337 V347 M893 433 V443 M910 433 V443 M927 433 V443 M944 433 V443 M961 433 V443" stroke="#899baa" stroke-width="4"/>
+  <rect x="1002" y="340" width="28" height="108" rx="3" fill="#768f85"/>
+  <rect x="1042" y="340" width="28" height="108" rx="3" fill="#768f85"/>
+  <path d="M1008 350 V437 M1023 350 V437 M1048 350 V437 M1063 350 V437" stroke="#b9cec2" stroke-width="5"/>
+  <text x="889" y="483" class="label">检测软件</text>
+  <text x="874" y="519" class="small">在原有主机上执行</text>
+
+  <!-- Product board, bracket and edge connector. -->
+  <path d="M487 299 H508 V528 H487" fill="#b5c2cf" stroke="#778c9e" stroke-width="3"/>
+  <rect x="507" y="301" width="261" height="226" rx="6" fill="url(#board)" stroke="#124e77" stroke-width="3"/>
+  <rect x="486" y="340" width="33" height="40" rx="3" fill="#b9d8e7" stroke="#14618c" stroke-width="3"/>
+  <rect x="548" y="327" width="177" height="38" rx="5" fill="#e4f5ff"/>
+  <text x="565" y="355" class="label" style="fill:#095a89">新增采集卡</text>
+  <rect x="558" y="393" width="94" height="73" rx="4" fill="#0c3d60" stroke="#76a6c4" stroke-width="2"/>
+  <path d="M668 396 H721 V415 H692 V449 H727 M554 478 H694 V495 M536 388 V462" stroke="#74b8d6" stroke-width="3" fill="none"/>
+  <text x="558" y="501" class="note white">接收 / 缓存图像</text>
+  <rect x="548" y="527" width="169" height="17" fill="#d6b57b"/>
+  <path d="M558 528 V542 M573 528 V542 M588 528 V542 M603 528 V542 M618 528 V542 M633 528 V542 M648 528 V542 M663 528 V542 M678 528 V542 M693 528 V542 M708 528 V542" stroke="#fff0cc" stroke-width="3"/>
+  <rect x="533" y="545" width="199" height="13" rx="3" fill="#536779"/>
+  <text x="537" y="586" class="note">装入 PCIe 插槽</text>
+
+  <!-- Data crosses the enclosure at the card connector. -->
+  <path d="M243 359 H480" class="flow"/>
+  <text x="267" y="308" class="note">相机链路</text>
+  <text x="267" y="339" class="small">图像输入 →</text>
+  <path d="M768 389 H833" class="flow"/>
+  <text x="803" y="362" class="small" text-anchor="middle">PCIe</text>
+  <text x="803" y="422" class="small" text-anchor="middle">图像帧</text>
+
+  <!-- Results use the host's existing display path, not the capture card. -->
+  <rect x="68" y="570" width="209" height="118" rx="8" fill="#526578"/>
+  <rect x="79" y="581" width="187" height="92" rx="3" fill="#eef5fa"/>
+  <rect x="92" y="595" width="42" height="51" rx="4" fill="#cfdfeb"/>
+  <path d="M150 602 H246 M150 622 H238 M150 642 H219" stroke="#8aa5bb" stroke-width="5"/>
+  <path d="M159 688 V710 H204 M137 713 H209" stroke="#6c8094" stroke-width="8" fill="none"/>
+  <path d="M452 583 V632 H284" stroke="#566b82" stroke-width="4" fill="none" marker-end="url(#gray-arrow)"/>
+  <text x="301" y="597" class="small">主机显示接口</text>
+  <text x="64" y="747" class="note">操作员查看检测结果</text>
+
+  <rect x="518" y="715" width="20" height="20" fill="#1d6c9d"/>
+  <text x="548" y="734" class="small">本例新增产品</text>
+  <rect x="745" y="715" width="20" height="20" fill="#c6d2df"/>
+  <text x="775" y="734" class="small">客户原有设备</text>
+  <text x="518" y="774" class="small">安装关系示意；不是处理时序、接插件规格或已实现证据。</text>
+</svg>

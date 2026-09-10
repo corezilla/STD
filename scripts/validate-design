@@ -44,6 +44,10 @@ COVER_MAP = {
     "Repository": "source_repository", "Canonical Path": "source_path",
     "Supersedes": "supersedes",
 }
+COMPACT_COVER_FIELDS = {
+    "Document ID", "Document Version", "Status", "Project", "Document Owner",
+    "Last Modified Date", "Template ID", "Template Version",
+}
 
 
 def load_json(path: Path):
@@ -170,22 +174,45 @@ def validate_markdown(path: Path, metadata: dict | None) -> list[dict]:
         errors.append(issue("markdown.variable", path, "存在未解析模板变量"))
 
     if metadata is not None:
-        begin_marker = "<!-- STD_DOCUMENT_COVER_BEGIN -->"
-        end_marker = "<!-- STD_DOCUMENT_COVER_END -->"
-        begin = text.find(begin_marker)
-        end = text.find(end_marker, begin + len(begin_marker)) if begin >= 0 else -1
-        if begin < 0 or end < 0:
-            errors.append(issue("cover.markers", path, "缺少 STD 文档封面标记"))
-            cover_text = ""
-        else:
-            cover_text = text[begin + len(begin_marker):end]
-        rows = {
-            key.strip(): strip_cover_value(value)
-            for key, value in re.findall(r"^\|\s*([^|]+?)\s*\|\s*([^|]*?)\s*\|\s*$", cover_text, re.MULTILINE)
-        }
+        # Accept the legacy full cover, or a short cover plus a bounded end block.
+        # Never collect identity rows from arbitrary design/example tables.
+        blocks: dict[str, str] = {}
+        cover_end = -1
+        for kind in ("COVER", "CONTROL"):
+            begin_marker = f"<!-- STD_DOCUMENT_{kind}_BEGIN -->"
+            end_marker = f"<!-- STD_DOCUMENT_{kind}_END -->"
+            if kind == "CONTROL" and begin_marker not in text and end_marker not in text:
+                continue
+            begin, end = text.find(begin_marker), text.find(end_marker)
+            if (text.count(begin_marker) != 1 or text.count(end_marker) != 1
+                    or end <= begin):
+                errors.append(issue("cover.markers", path, f"{kind} 标记缺失、重复或顺序错误"))
+                continue
+            if kind == "COVER":
+                cover_end = end + len(end_marker)
+            elif cover_end < 0 or begin < cover_end:
+                errors.append(issue("cover.markers", path, "文末控制信息必须位于封面之后且不能嵌套"))
+                continue
+            blocks[kind] = text[begin + len(begin_marker):end]
+
+        rows: dict[str, str] = {}
+        front_fields: set[str] = set()
+        for kind, block in blocks.items():
+            for key, value in re.findall(r"^\|\s*([^|]+?)\s*\|\s*([^|]*?)\s*\|\s*$", block, re.MULTILINE):
+                field = key.strip()
+                if field not in COVER_MAP:
+                    continue
+                if kind == "COVER":
+                    front_fields.add(field)
+                if field in rows:
+                    errors.append(issue("cover.duplicate", path, f"控制字段重复: {field}"))
+                rows[field] = strip_cover_value(value)
+        if "CONTROL" in blocks:
+            for field in sorted(COMPACT_COVER_FIELDS - front_fields):
+                errors.append(issue("cover.missing", path, f"短封面缺少必要字段 {field}"))
         for field in COVER_MAP:
             if field not in rows:
-                errors.append(issue("cover.missing", path, f"封面缺少字段 {field}"))
+                errors.append(issue("cover.missing", path, f"封面/文末控制信息缺少字段 {field}"))
                 continue
             expected = expected_cover_value(field, metadata)
             if rows[field] != expected:

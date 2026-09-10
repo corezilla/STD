@@ -129,6 +129,18 @@ def main() -> int:
         "supersedes": args.supersedes, "date": last_modified_at,
     }
     content = template_bytes.decode()
+    # Visible teaching samples belong to the STD template, not the new project's
+    # design or asset tree. Keep its writing slots/help, but omit marked samples.
+    example_begin = "<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->"
+    example_end = "<!-- STD_TEMPLATE_EXAMPLE_END -->"
+    if content.count(example_begin) != content.count(example_end):
+        parser.error("模板教学样板标记不完整")
+    content = re.sub(
+        re.escape(example_begin) + r".*?" + re.escape(example_end) + r"\n?",
+        "", content, flags=re.DOTALL,
+    )
+    if example_begin in content or example_end in content:
+        parser.error("模板教学样板标记顺序错误")
     for key, value in replacements.items():
         content = content.replace("{{" + key + "}}", value)
     unresolved = sorted(set(re.findall(r"\{\{[^}]+\}\}", content)))

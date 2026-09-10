@@ -63,7 +63,7 @@ system → subsystem → module → component → implementation-unit
 
 `design.system` 的写作 profile 为 `software-system`、`integrated-system`、`hardware-fpga`。
 完整的 profile × 章节适用矩阵、条件触发规则和裁剪记录格式以
-[`architecture-design.md` §1.4](../templates/design/architecture-design.md) 为准。这些写作 profile
+[`architecture-design.md` §B.2](../templates/design/architecture-design.md) 为准。这些写作 profile
 不改变项目 lock 的 `project_profile` 枚举。子系统/模块不是从系统模板随意删出一个较短版本。
 
 如果一个名为“子系统”的对象本身是独立交付的完整系统，可采用 `design.system`，但必须在

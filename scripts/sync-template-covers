@@ -11,6 +11,28 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 BEGIN = "<!-- STD_DOCUMENT_COVER_BEGIN -->"
 END = "<!-- STD_DOCUMENT_COVER_END -->"
+CONTROL_BEGIN = "<!-- STD_DOCUMENT_CONTROL_BEGIN -->"
+CONTROL_END = "<!-- STD_DOCUMENT_CONTROL_END -->"
+COMPACT_FIELDS = {
+    "Document ID", "Document Version", "Status", "Project", "Document Owner",
+    "Last Modified Date", "Template ID", "Template Version",
+}
+
+
+def split_cover(cover: str) -> tuple[str, str]:
+    """Derive both display blocks from the same shared field source."""
+    front = [BEGIN, "# {{document_title}}", "", "| 文档字段 | 值 |", "|---|---|"]
+    back = [CONTROL_BEGIN, "| 文档字段 | 值 |", "|---|---|"]
+    notes = []
+    for line in cover.splitlines():
+        match = re.match(r"^\| ([^|]+?) \|", line)
+        if match and match[1] != "文档字段":
+            (front if match[1] in COMPACT_FIELDS else back).append(line)
+        elif line.startswith(">"):
+            notes.append(line)
+    front.append(END)
+    back.extend(["", *notes, CONTROL_END])
+    return "\n".join(front), "\n".join(back)
 
 
 def main() -> int:
@@ -19,17 +41,32 @@ def main() -> int:
     changed = 0
     for relative in catalog["templates"].values():
         path = ROOT / "templates" / relative
-        text = path.read_text()
+        original = path.read_text()
+        text = original
+        selected_cover = cover
+        if CONTROL_BEGIN in text or CONTROL_END in text:
+            if text.count(BEGIN) != 1 or text.count(END) != 1:
+                raise RuntimeError(f"短封面标记不唯一或不完整: {path}")
+            if text.count(CONTROL_BEGIN) != 1 or text.count(CONTROL_END) != 1:
+                raise RuntimeError(f"文末控制信息标记不唯一或不完整: {path}")
+            if not (text.index(BEGIN) < text.index(END)
+                    < text.index(CONTROL_BEGIN) < text.index(CONTROL_END)):
+                raise RuntimeError(f"短封面与文末控制信息顺序错误: {path}")
+            selected_cover, control = split_cover(cover)
+            pattern = re.compile(re.escape(CONTROL_BEGIN) + r".*?" + re.escape(CONTROL_END), re.DOTALL)
+            text, count = pattern.subn(lambda match: control, text, count=1)
+            if count != 1:
+                raise RuntimeError(f"无法更新文末控制信息: {path}")
         if BEGIN in text:
             pattern = re.compile(re.escape(BEGIN) + r".*?" + re.escape(END), re.DOTALL)
-            updated, count = pattern.subn(cover, text, count=1)
+            updated, count = pattern.subn(lambda match: selected_cover, text, count=1)
             if count != 1:
                 raise RuntimeError(f"无法更新封面: {path}")
         else:
             updated, count = re.subn(r"\A#\s+\{\{document_title\}\}\s*", cover + "\n\n", text, count=1)
             if count != 1:
                 raise RuntimeError(f"模板没有标准一级标题: {path}")
-        if updated != text:
+        if updated != original:
             path.write_text(updated)
             changed += 1
     print(f"synchronized {len(catalog['templates'])} templates; changed {changed}")

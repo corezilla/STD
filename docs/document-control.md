@@ -2,7 +2,11 @@
 
 ## 1. 文档封面
 
-每份 Markdown 正式文档必须在一级标题后显示以下字段；不能只存在 sidecar metadata：
+每份 Markdown 正式文档必须在文内显示以下控制字段，不能只存在 sidecar metadata。
+Markdown 不必照搬 Word 的长封面：模板可以将控制信息分为“短封面＋文末文档控制附录”。
+短封面在一级标题后仅显示 Document ID、Document Version、Status、Project、Document Owner、
+Last Modified Date、Template ID、Template Version 八项；其余字段在文末维护，不删除。
+旧模板的完整封面仍有效，不要求已有项目主动改版。
 
 | 字段 | 必填 | 规则 |
 |---|---|---|
@@ -24,6 +28,15 @@
 
 Reviewer、Approver、Approval Date 和 Release Tag 在进入 Review/Approved/Released 时填写。
 Template Conformance、Tailoring Reference 和 Migration Map Reference 按采用规范填写并与 sidecar 一致。
+
+短封面保留原 `STD_DOCUMENT_COVER_BEGIN/END` 标记；文末字段放在
+`STD_DOCUMENT_CONTROL_BEGIN/END` 标记内。每组标记唯一、闭合且不嵌套；每项控制字段只在
+这两个受控块之一维护。校验器核对两处合计的完整字段及其与 sidecar 的一致性，不从任意正文
+或教学表格补取缺失字段。只有支持该布局的模板版本才生成短封面，不把旧版字段直接删掉。
+
+`design.system` 自 6.0.0 起在附录 A 维护其余控制字段、设计属性、修订和长目录；附录 B 保存
+设计输入与适用性，附录 C 保存写作方法和交付检查。前移/后移只是展示调整，重要约束仍须在
+发生作用的正文处解释。其他模板暂保留原布局，只有各自实际改版时才调整。
 
 ## 2. 作者、Owner、Reviewer 和 Approver
 
@@ -107,7 +120,7 @@ Draft → In Review → Approved → Released → Superseded → Retired
 文档无法在自己的内容中可靠记录“包含自己的 commit hash”，因为写入 hash 会产生新 commit。
 因此：
 
-- 封面记录 Repository、Canonical Path、Document Version 和 Release Tag；
+- 文内控制信息记录 Repository、Canonical Path、Document Version 和 Release Tag；短封面布局中按上述分工放置；
 - 候选文档 sidecar 可记录实际被评审的 `reviewed_commit`；内容变化后必须重新评审；
 - merge 后由 publication/RAG manifest 记录不可变 canonical publication commit；
 - Released 文档通过 signed/annotated tag 或 GitHub Release 绑定 commit；
