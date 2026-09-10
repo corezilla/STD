@@ -328,6 +328,125 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
         self.assertIsNotNone(card)
         self.assertEqual(card.findall("s:g", ns), [])
 
+    def test_software_architecture_example_stays_logical_and_has_roles(self):
+        template = ROOT / "templates/design/architecture-design.md"
+        section = template.read_text().split("### 8.1 软件架构\n", 1)[1].split("### 8.2", 1)[0]
+        sample = section.split("<!-- STD_TEMPLATE_EXAMPLE_END -->", 1)[0]
+        self.assertNotIn("<details>", sample)
+        image_match = re.search(r"!\[[^]]+\]\(([^)]+)\)", sample)
+        self.assertIsNotNone(image_match)
+        self.assertLess(image_match.start(), sample.index("*EX-SW-01｜"))
+        for term in ("操作界面", "检测流程", "图像分析", "驱动 API", "设备管理", "采集控制",
+                     "图像交付", "状态读取", "不是进程", "不是一条依次执行", "NOT_RUN", "§8.6",
+                     "应用层", "驱动层", "定制操作系统（按需）", "普通操作系统不在本软件组成图", "删除整个底层",
+                     "无图标、无连接线", "层底色用浅色", "调用关系和数据流另图表达"):
+            self.assertIn(term, sample)
+        image_path = (template.parent / image_match[1]).resolve()
+        self.assertTrue(image_path.is_relative_to(ROOT))
+        self.assertEqual(image_path, ROOT / "templates/diagrams/software-layered-architecture.svg")
+        svg = ET.parse(image_path).getroot()
+        ns = {"s": "http://www.w3.org/2000/svg"}
+        self.assertEqual(svg.attrib["viewBox"], "0 0 1344 720")
+        self.assertIsNotNone(svg.find("s:title", ns))
+        self.assertIsNotNone(svg.find("s:desc", ns))
+        for tag in ("script", "image", "foreignObject", "line", "polyline", "polygon", "path", "use"):
+            self.assertEqual(svg.findall(f".//s:{tag}", ns), [], tag)
+        ids = [node.attrib["id"] for node in svg.iter() if "id" in node.attrib]
+        self.assertEqual(len(ids), len(set(ids)))
+        for group, expected in (
+            ("application-layer", {"operator-interface", "inspection-workflow", "image-analysis"}),
+            ("driver-layer", {"driver-api", "device-management", "acquisition-control", "image-delivery", "status-readout"}),
+            ("system-customization-layer", {"custom-operating-system"}),
+        ):
+            layer = svg.find(f'.//s:g[@id="{group}"]', ns)
+            self.assertIsNotNone(layer)
+            modules = {node.attrib["id"] for node in layer.findall(".//s:g", ns)
+                       if node.find('s:text[@class="module-label"]', ns) is not None}
+            self.assertEqual(modules, expected)
+            self.assertIsNotNone(layer.find('s:text[@class="layer-label"]', ns))
+        style = svg.find("s:defs/s:style", ns).text
+        for selector in (".neutral .layer-panel", ".neutral .module", ".accent .layer-panel", ".accent .module",
+                         ".module-label", ".layer-label", ".accent .interface"):
+            self.assertIn(selector, style)
+        visible_labels = ["".join(node.itertext()) for node in svg.findall(".//s:text", ns)]
+        for removed_label in ("客户检测应用", "配套驱动", "系统支撑层", "操作系统 / 设备接口"):
+            self.assertNotIn(removed_label, visible_labels)
+        self.assertIn("系统定制层", visible_labels)
+        self.assertIn("定制操作系统（按需）", visible_labels)
+        self.assertIn("不是本采集案例已确定的组成", svg.find("s:desc", ns).text)
+        self.assertNotIn("@import", style)
+        self.assertNotRegex(style, r"url\(\s*[^#]")
+        self.assertTrue(image_path.with_name("README.md").is_file())
+        self.assertIn("可复用 SVG 模板", sample)
+
+    def assert_approved_native_diagram(self, image_path, name, svg_sha, png_sha, dimensions):
+        self.assertEqual(image_path, ROOT / f"templates/diagrams/{name}.svg")
+        self.assertEqual(hashlib.sha256(image_path.read_bytes()).hexdigest(), svg_sha)
+        svg = ET.parse(image_path).getroot()
+        ns = {"s": "http://www.w3.org/2000/svg"}
+        self.assertIsNotNone(svg.find("s:title", ns))
+        self.assertIsNotNone(svg.find("s:desc", ns))
+        for tag in ("script", "image", "foreignObject", "use"):
+            self.assertEqual(svg.findall(f".//s:{tag}", ns), [], tag)
+        ids = [node.attrib["id"] for node in svg.iter() if "id" in node.attrib]
+        self.assertEqual(len(ids), len(set(ids)))
+        png = (ROOT / f"docs/assets/system-design-authoring/{name}.png").read_bytes()
+        self.assertTrue(png.startswith(b"\x89PNG\r\n\x1a\n"))
+        self.assertEqual(hashlib.sha256(png).hexdigest(), png_sha)
+        self.assertEqual((int.from_bytes(png[16:20], "big"), int.from_bytes(png[20:24], "big")), dimensions)
+        return svg, ns
+
+    def test_board_layout_example_keeps_approved_image_and_layout_boundary(self):
+        template = ROOT / "templates/design/architecture-design.md"
+        section = template.read_text().split("### 7.1 硬件架构与板卡组成\n", 1)[1].split("### 7.2", 1)[0]
+        sample = section.split("<!-- STD_TEMPLATE_EXAMPLE_END -->", 1)[0]
+        self.assertNotIn("<details>", sample)
+        image = re.search(r"!\[[^]]+\]\(([^)]+)\)", sample)
+        self.assertIsNotNone(image)
+        self.assertLess(image.start(), sample.index("*EX-HW-01｜"))
+        for term in ("EX-CAP-FPGA-01", "Target / Planned / NOT_RUN", "不是 PCB 走线", "教学假设",
+                     "相机接口及接口适配与保护", "**FPGA**", "**帧缓存**", "**配置 Flash**", "**参考时钟**",
+                     "**电源区**", "**JTAG 调试接口**", "**PCIe 板边接口**", "§9.1", "SI/PI"):
+            self.assertIn(term, sample)
+        svg, ns = self.assert_approved_native_diagram(
+            (template.parent / image[1]).resolve(), "board-top-layout",
+            "90ad9801671ec87d2794454a34616381bdadcf10b7d4961383b3984d7e8043fb",
+            "92b3624a634dc8b688cc37dcb595ef125f75a67d6acc9b22c63f5165d20634ed", (2880, 1760),
+        )
+        for group in ("pcb-outline", "camera-connector", "input-adaptation", "fpga-device", "frame-memory",
+                      "configuration-flash", "reference-clock", "power-region", "debug-connector", "host-board-edge"):
+            self.assertIsNotNone(svg.find(f'.//s:g[@id="{group}"]', ns), group)
+        fpga = svg.find('.//s:g[@id="fpga-device"]', ns)
+        self.assertEqual(fpga.findall("s:g", ns), [])  # One device, not a nested RTL diagram.
+
+    def test_fpga_program_example_keeps_approved_image_and_logic_boundary(self):
+        template = ROOT / "templates/design/architecture-design.md"
+        section = template.read_text().split("### 9.1 内部模块框图\n", 1)[1].split("### 9.2", 1)[0]
+        sample = section.split("<!-- STD_TEMPLATE_EXAMPLE_END -->", 1)[0]
+        self.assertNotIn("<details>", sample)
+        image = re.search(r"!\[[^]]+\]\(([^)]+)\)", sample)
+        self.assertIsNotNone(image)
+        self.assertLess(image.start(), sample.index("*EX-FPGA-01｜"))
+        for term in ("EX-CAP-FPGA-01", "Target / Planned / NOT_RUN", "不是 FPGA 芯片内部资源", "接口边界",
+                     "**输入解析**", "**帧组装**", "**帧队列**", "**传输调度**", "**采集控制**",
+                     "**配置寄存器**", "**状态与错误统计**", "**复位与初始化**", "**调试与自检**",
+                     "存储访问/控制器", "集成 IP", "不能仅凭本图宣称设计已经闭合"):
+            self.assertIn(term, sample)
+        svg, ns = self.assert_approved_native_diagram(
+            (template.parent / image[1]).resolve(), "fpga-program-architecture",
+            "ffe4b0fa19bdf7a82b7f9b11a74825a6da2f94c94a286b5d497acfc37701f9fa",
+            "9627b7ecb92e7a1b9d0ff219fbf147ec3648a7d8ce2167488ac6f296a74997db", (2880, 1720),
+        )
+        own_rtl = svg.find('.//s:g[@id="own-rtl"]', ns)
+        self.assertIsNotNone(own_rtl)
+        for group in ("input-parser", "frame-assembler", "frame-queue", "transfer-scheduler",
+                      "acquisition-controller", "configuration-registers", "status-error-counters",
+                      "reset-initialization", "debug-self-test"):
+            self.assertIsNotNone(own_rtl.find(f's:g[@id="{group}"]', ns), group)
+        for boundary in ("input-boundary", "output-boundary"):
+            self.assertIsNotNone(svg.find(f's:g[@id="{boundary}"]', ns))
+            self.assertIsNone(own_rtl.find(f'.//s:g[@id="{boundary}"]', ns))
+
     def test_architecture_is_followed_by_each_component_responsibility(self):
         """Protect the readable example, not a claim about engineering completeness."""
         system = (ROOT / "templates/design/architecture-design.md").read_text()
@@ -747,7 +866,12 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
         self.assertNotIn("EX-DEPLOY-01", markdown)
         self.assertNotIn("EX-SCENE-01", markdown)
         self.assertNotIn("EX-ARCH-01", markdown)
+        self.assertNotIn("EX-SW-01", markdown)
+        self.assertNotIn("EX-HW-01", markdown)
+        self.assertNotIn("EX-FPGA-01", markdown)
+        self.assertNotIn("EX-CAP-FPGA-01", markdown)
         self.assertNotIn("../../docs/assets/", markdown)
+        self.assertNotIn("../diagrams/", markdown)
         self.assertIn("### 2.3 应用环境与系统边界", markdown)
         self.assertIn("提供逻辑应用场景/上下文图、上下游及责任边界", markdown)
         self.assertIn("填入项目系统架构图", markdown)

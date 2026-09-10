@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="880" viewBox="0 0 1440 880" role="img" aria-labelledby="title description">
+  <title id="title">采集板卡顶层布局</title>
+  <desc id="description">自研采集板卡顶层布局的虚构教学示例。左侧为相机连接器和接口适配保护区，中央为运行自研逻辑的 FPGA，右侧为示例 DDR 帧缓存，右边缘为供电和电源区，上部为参考时钟与配置 Flash，下部为调试连接器与 PCIe 板边接口。器件组合和位置均为教学假设，不是芯片内部架构，不是 PCB 放置或布线依据，不声明实际规格、尺寸、信号完整性、功耗或热设计已完成。Target，Planned，NOT_RUN。</desc>
+  <defs>
+    <style>
+      text { font-family:'PingFang SC','Noto Sans CJK SC','Microsoft YaHei',sans-serif; fill:#14263f; }
+      .title { font-size:36px; font-weight:600; }
+      .subtitle { font-size:21px; fill:#586e87; }
+      .status { font-size:17px; fill:#586e87; text-anchor:end; }
+      .label { font-size:25px; font-weight:500; text-anchor:middle; }
+      .small { font-size:20px; fill:#4b6585; text-anchor:middle; }
+      .board { fill:#edf4fc; stroke:#9fb9d7; stroke-width:2; }
+      .part { fill:#d4dfe9; stroke:#a4b5c8; stroke-width:1.5; filter:url(#shadow); }
+      .main { fill:#a8ccf4; stroke:#659cda; stroke-width:2; filter:url(#shadow); }
+      .connector { fill:#c9d5e2; stroke:#93a6bd; stroke-width:1.5; }
+      .power-zone { fill:#f5f7fa; stroke:#b4c3d5; stroke-width:1.5; stroke-dasharray:7 5; }
+      .link { fill:none; stroke:#7399c7; stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round; }
+      .minor-link { fill:none; stroke:#9baec5; stroke-width:2; stroke-linejoin:round; }
+      .footnote { font-size:19px; fill:#586e87; }
+    </style>
+    <filter id="shadow" x="-10%" y="-20%" width="120%" height="150%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#243f60" flood-opacity="0.08"/>
+    </filter>
+    <pattern id="edge-contacts" width="16" height="42" patternUnits="userSpaceOnUse">
+      <rect width="11" height="42" x="2" fill="#aab9ca"/>
+    </pattern>
+  </defs>
+  <rect width="1440" height="880" fill="#fff"/>
+  <text class="title" x="64" y="68">采集板卡顶层布局</text>
+  <text class="subtitle" x="64" y="108">自研板卡 · 器件与功能区俯视示意</text>
+  <text class="status" x="1376" y="66">教学示例 · Target / Planned</text>
+
+  <g id="pcb-outline">
+    <rect class="board" x="112" y="176" width="1232" height="552" rx="22"/>
+    <rect x="76" y="176" width="28" height="552" rx="9" fill="#dde5ee" stroke="#a9b8cb" stroke-width="1.5"/>
+    <g fill="#fff" stroke="#b1c2d5" stroke-width="2">
+      <circle cx="148" cy="212" r="10"/>
+      <circle cx="1308" cy="212" r="10"/>
+      <circle cx="148" cy="692" r="10"/>
+      <circle cx="1308" cy="692" r="10"/>
+    </g>
+  </g>
+
+  <!-- 仅表示关键接口关系，不表示 PCB 走线或已验证的器件位置。 -->
+  <g id="functional-connections">
+    <path class="link" d="M224 430 H278 M442 430 H510 M786 430 H864"/>
+    <path class="minor-link" d="M608 290 V322"/>
+    <path class="minor-link" d="M384 290 V306 H552 V322"/>
+    <path class="minor-link" d="M552 538 V572 H390 V600"/>
+    <path class="link" d="M700 538 V626 H817 V674"/>
+    <path class="minor-link" d="M1288 616 H1230 V568"/>
+  </g>
+
+  <g id="camera-connector">
+    <rect class="connector" x="84" y="366" width="140" height="128" rx="9"/>
+    <text class="label" x="154" y="423"><tspan x="154">相机</tspan><tspan x="154" dy="34">接口</tspan></text>
+  </g>
+  <g id="input-adaptation">
+    <rect class="part" x="278" y="372" width="164" height="116" rx="10"/>
+    <text class="label" x="360" y="422"><tspan x="360">接口适配</tspan><tspan x="360" dy="34">与保护</tspan></text>
+  </g>
+  <g id="fpga-device">
+    <rect class="main" x="510" y="322" width="276" height="216" rx="12"/>
+    <rect x="526" y="338" width="244" height="184" rx="6" fill="none" stroke="#88afdc" stroke-width="1"/>
+    <text x="648" y="420" font-size="42" font-weight="600" text-anchor="middle">FPGA</text>
+    <text class="small" x="648" y="462">运行自研逻辑</text>
+  </g>
+  <g id="frame-memory">
+    <rect class="part" x="864" y="382" width="240" height="96" rx="10"/>
+    <text class="label" x="984" y="422">帧缓存</text>
+    <text class="small" x="984" y="455">DDR（示例）</text>
+  </g>
+  <g id="configuration-flash">
+    <rect class="part" x="520" y="208" width="176" height="82" rx="10"/>
+    <text class="label" x="608" y="259">配置 Flash</text>
+  </g>
+  <g id="reference-clock">
+    <rect class="part" x="298" y="224" width="172" height="66" rx="10"/>
+    <text class="label" x="384" y="266">参考时钟</text>
+  </g>
+
+  <g id="power-region">
+    <rect class="power-zone" x="1148" y="244" width="164" height="324" rx="12"/>
+    <text class="label" x="1230" y="279">电源区</text>
+    <rect class="part" x="1166" y="302" width="128" height="66" rx="8"/>
+    <text class="small" x="1230" y="342">输入保护</text>
+    <rect class="part" x="1166" y="388" width="128" height="66" rx="8"/>
+    <text class="small" x="1230" y="428">电源转换</text>
+    <rect class="part" x="1166" y="474" width="128" height="66" rx="8"/>
+    <text class="small" x="1230" y="514">电源监测</text>
+  </g>
+  <g id="power-connector">
+    <rect class="connector" x="1288" y="574" width="96" height="84" rx="8"/>
+    <text class="label" x="1336" y="625">供电</text>
+  </g>
+  <g id="debug-connector">
+    <rect class="connector" x="300" y="600" width="180" height="64" rx="8"/>
+    <text class="label" x="390" y="641">JTAG 调试</text>
+  </g>
+  <g id="host-board-edge">
+    <text class="label" x="817" y="655">PCIe 板边接口</text>
+    <rect class="connector" x="662" y="674" width="310" height="82" rx="5"/>
+    <rect x="674" y="714" width="286" height="42" fill="url(#edge-contacts)"/>
+  </g>
+
+  <text class="footnote" x="112" y="803">器件组合与位置均为教学假设；细线表示接口联系，不是 PCB 走线。</text>
+  <text class="footnote" x="112" y="837">实际布局须依据接口位置、封装、电源、信号完整性与散热约束确定。</text>
+</svg>
