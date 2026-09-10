@@ -7,10 +7,10 @@
 |---|---|---|---|
 | EX-SCENE-01 | [逻辑应用场景图](application-scene-logical.png)、[生成记录](application-scene-logical.prompt.md) | 系统模板 §2.3：相机采集流水线图像，工控机处理，简化人形坐在桌前查看结果；不表示实际部署 | 虚构 Target / Planned / NOT_RUN |
 | EX-DEPLOY-01 | [展示图](deployment-in-host.png)、[可编辑源](deployment-in-host.svg) | 原有同机安装样板，保留作部署细节参考，不再作为 §2.3 的主场景图 | 虚构 Target / Planned / NOT_RUN |
-| EX-ARCH-01 | [轻量架构图](system-architecture-light.png)、[生成提示词](system-architecture-light.prompt.md)；另存[简洁框图](system-architecture.png)及其[SVG 源](system-architecture.svg) | 系统模板 §5.1：系统主要组成、软硬件层次与四组主要连接；不展开子系统内部 | 虚构 Target / Planned / NOT_RUN |
-| EX-SW-01 | [可复用 SVG](../../../templates/diagrams/software-layered-architecture.svg)、[编辑说明](../../../templates/diagrams/README.md)；保留[PNG 视觉参考](software-architecture.png)与[生成提示词](software-architecture.prompt.md) | 系统模板 §8.1：无图标、无连接线，左侧层次名称与右侧模块分组说明组成 | 虚构 Target / Planned / NOT_RUN |
-| EX-HW-01 | [板卡顶层布局](board-top-layout.png)、[SVG 源](../../../templates/diagrams/board-top-layout.svg) | 系统模板 §7.1：自研板卡器件与功能区俯视布局，不是实际 PCB 布线 | 虚构 Target / Planned / NOT_RUN |
-| EX-FPGA-01 | [FPGA 程序架构](fpga-program-architecture.png)、[SVG 源](../../../templates/diagrams/fpga-program-architecture.svg) | 系统模板 §9.1：自研逻辑模块和主数据路径，不是 FPGA 芯片资源架构 | 虚构 Target / Planned / NOT_RUN |
+| EX-ARCH-01 | [轻量架构图](system-architecture-light.png)、[生成提示词](system-architecture-light.prompt.md)；另存[简洁框图](system-architecture.png)及其[SVG 源](system-architecture.svg) | 系统模板 §3.1：系统主要组成、软硬件层次与四组主要连接；不展开子系统内部 | 虚构 Target / Planned / NOT_RUN |
+| EX-SW-01 | [可复用 SVG](../../../templates/diagrams/software-layered-architecture.svg)、[编辑说明](../../../templates/diagrams/README.md)；保留[PNG 视觉参考](software-architecture.png)与[生成提示词](software-architecture.prompt.md) | 系统模板 §7.1：无图标、无连接线，左侧层次名称与右侧模块分组说明组成 | 虚构 Target / Planned / NOT_RUN |
+| EX-HW-01 | [板卡顶层布局](board-top-layout.png)、[SVG 源](../../../templates/diagrams/board-top-layout.svg) | 系统模板 §6.1：自研板卡器件与功能区俯视布局，不是实际 PCB 布线 | 虚构 Target / Planned / NOT_RUN |
+| EX-FPGA-01 | [FPGA 程序架构](fpga-program-architecture.png)、[SVG 源](../../../templates/diagrams/fpga-program-architecture.svg) | 系统模板 §8.1：自研逻辑模块和主数据路径，不是 FPGA 芯片资源架构 | 虚构 Target / Planned / NOT_RUN |
 | FIG-EX-01 / EX-RPT-01 | [可编辑逻辑上下文图](context-example.svg) | AI 指南 §8.2：报告服务的产品内外职责与交接；不是物理部署样板 | 原有虚构示例，非产品事实 |
 
 ## EX-SCENE-01 的教学假定和边界
@@ -45,10 +45,10 @@ PCIe／设备访问、驱动 API、显示输出四组关系；软件层不是额
 不是逐帧数据路径、电气图或执行时序。外形和端口不能作为工程依据。
 保留的简洁框图只表现包含关系；旧 `system-architecture-rendered.png` 及其提示词作为
 风格比较稿保留，不再由模板和 AI 指南引用。
-完整图文只维护在[系统模板 §5.1](../../../templates/design/architecture-design.md)。
+完整图文只维护在[系统模板 §3.1](../../../templates/design/architecture-design.md)。
 
 用户本轮确认采用轻量架构图，图像保持不变；附件与仓库图片的解码像素一致（1774 × 887）。
-§5.2 紧接图逐一描述相机、采集卡、工控机、驱动、检测应用和显示器的职责，图片不再承担
+§3.2 紧接图逐一描述相机、采集卡、工控机、驱动、检测应用和显示器的职责，图片不再承担
 这些文字说明，也不因补充职责而下钻内部结构。
 
 两幅主图分别说明“谁在什么场景下使用”和“由什么组成、怎样连接”。当前已补充这两类样板，
@@ -67,8 +67,8 @@ PCIe／设备访问、驱动 API、显示输出四组关系；软件层不是额
 组成；普通操作系统只记作运行环境，不在图中展开。仅实际定制或改造系统时保留该层，
 替换具体名称并描述修改职责；否则删除。硬件接口不放进软件层，实际 Boot/BSP 等按软件职责
 单独命名。图像生命周期、并发、失败传播与部署仍需正式设计确定。
-完整图文维护在[系统模板 §8.1](../../../templates/design/architecture-design.md)。板卡与 FPGA 程序
-图分别维护在 §7.1、§9.1，软件图不能替代它们。
+完整图文维护在[系统模板 §7.1](../../../templates/design/architecture-design.md)。板卡与 FPGA 程序
+图分别维护在 §6.1、§8.1，软件图不能替代它们。
 
 ## EX-HW-01 与 EX-FPGA-01 的教学假定和边界
 

@@ -4,9 +4,9 @@
 
 | 图形模板 | 系统模板位置 | 讲述任务 |
 |---|---|---|
-| [软件分层架构](software-layered-architecture.svg) | §8.1 | 软件层次与模块组成，不用图标或连接线 |
-| [FPGA 程序顶层架构](fpga-program-architecture.svg) | §9.1 | 自研程序逻辑和主数据路径，不是芯片资源架构 |
-| [板卡顶层布局](board-top-layout.svg) | §7.1 | 自研板卡器件和功能区的位置关系，不是实际 PCB 布线 |
+| [软件分层架构](software-layered-architecture.svg) | §7.1 | 软件层次与模块组成，不用图标或连接线 |
+| [FPGA 程序顶层架构](fpga-program-architecture.svg) | §8.1 | 自研程序逻辑和主数据路径，不是芯片资源架构 |
+| [板卡顶层布局](board-top-layout.svg) | §6.1 | 自研板卡器件和功能区的位置关系，不是实际 PCB 布线 |
 
 FPGA 与板卡图的 PNG 位于[共享资产目录](../../docs/assets/system-design-authoring/README.md)，
 是已确认 SVG 的导出展示图，不是另一份可独立修改的设计源。
@@ -19,7 +19,7 @@ EX-SW-01 的虚构软件示例。它只表达层次和组成：左侧层名、�
 层名只在左侧显示，不在面板内再写“客户检测应用”“配套驱动”等重复标题。
 
 这是普通 SVG 文件，不是新的文档类型；不需要 JSON 配置、生成器或个人 Codex 技能。
-系统模板 §8.1 直接引用它，因此样式和展示只有这一份 SVG 来源。原有生成式 PNG 保留为
+系统模板 §7.1 直接引用它，因此样式和展示只有这一份 SVG 来源。原有生成式 PNG 保留为
 [视觉参考](../../docs/assets/system-design-authoring/software-architecture.png)，不是本 SVG 的导出图。
 
 ### 怎样复用

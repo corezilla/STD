@@ -164,9 +164,123 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
             "## 附录 B.", "### B.1 参考资料与术语", "### B.2 适用 profile 与章节裁剪",
             "### B.3 适用基线、视图状态与证据规则", "### B.4 设计约束与关键假设", "## 附录 C.",
         ):
-            self.assertGreater(system.index(heading), system.index("## 18."))
-        self.assertNotRegex(system, r"§1\.[3-6]|### 1\.[3-6]|FIG-3-1")
+            self.assertGreater(system.index(heading), system.index("## 17."))
+        self.assertNotRegex(system, r"§1\.[3-6]|### 1\.[3-6]")
         self.assertIn("EX-SCENE-01｜流水线视觉检测的逻辑应用场景", system)
+
+    def test_system_outline_matches_adopted_product_first_structure(self):
+        # Freeze the agreed generic outline; CI must not depend on a project checkout.
+        system = (ROOT / "templates/design/architecture-design.md").read_text()
+        expected = """1. 文档说明
+1.1 目的与读者
+1.2 范围、非目标与设计层级
+2. 产品应用与设计目标
+2.1 问题与业务背景
+2.2 用户与使用场景
+2.3 应用环境与系统边界
+2.4 设计目标与成功条件
+3. 系统概览
+3.1 系统架构
+3.2 组成与职责
+3.3 物理与逻辑对应关系
+4. 功能与需求实现概览
+4.1 功能总表
+4.2 关键功能原理与边界
+4.3 需求追溯
+5. 重要过程
+5.1 重要过程总览与工作模式
+5.2 一次业务处理怎样完成
+5.3 系统启动过程
+5.4 配置加载与生效过程
+5.5 停止与重启过程
+5.6 异常、过载与恢复过程
+5.7 模式切换与状态迁移
+6. 硬件实现方案
+6.1 硬件架构与板卡组成
+6.2 板间与器件接口
+6.3 时钟、复位、电源与信号完整性
+6.4 器件选型与容量依据
+6.5 硬件可靠性与开发平台
+7. 软件实现方案
+7.1 软件架构
+7.2 模块设计与代码映射
+7.3 通信、配置与状态管理
+7.4 页面与交互（如适用）
+7.5 软件可靠性与开发平台
+7.6 部署与运行环境
+8. 可编程逻辑与专用处理单元
+8.1 内部模块框图
+8.2 模块处理说明
+8.3 时序、资源与跨域设计
+8.4 开发、仿真与调试平台
+9. 数据、描述符与存储结构
+9.1 业务数据流
+9.2 描述符与元数据流
+9.3 状态表、缓存与持久化
+9.4 容量与带宽计算
+10. 接口与通信协议
+10.1 接口总表
+10.2 数据面接口
+10.3 控制与管理接口
+10.4 维护与调试接口
+11. 可靠性、维护与升级
+11.1 故障模型与可靠性机制
+11.2 运行统计、日志与故障定位
+11.3 升级与回滚
+12. 性能、扩展与兼容性
+12.1 性能模型与预算
+12.2 瓶颈与资源余量
+12.3 扩容方案与兼容矩阵
+13. 可测试性与验收设计
+13.1 主要测试方法与结果判定
+13.2 测试控制、故障注入与恢复验证
+13.3 测试环境的快速部署与复位
+13.4 并发测试与环境隔离
+13.5 自动化执行与复现
+13.6 验证覆盖与验收矩阵
+14. 信息安全架构
+14.1 资产、入口与信任边界
+14.2 身份认证与授权
+14.3 密钥、凭据与敏感数据
+14.4 控制面、管理面与调试面防护
+14.5 启动、升级、回滚与供应链信任
+14.6 威胁、审计与安全验证
+15. 结构、热、工艺与安全设计
+15.1 结构与造型
+15.2 功耗与热设计
+15.3 工艺与制造测试
+15.4 安全与电磁兼容
+16. 实现计划
+17. 设计决策、风险与未决项
+17.1 设计决策
+17.2 下级详细设计与验收任务
+附录 A. 文档控制与导航
+A.1 修订记录
+A.2 目录、表目录与图目录
+附录 B. 设计输入与适用性
+B.1 参考资料与术语
+B.2 适用 profile 与章节裁剪
+B.3 适用基线、视图状态与证据规则
+B.4 设计约束与关键假设
+附录 C. 编写与交付检查""".splitlines()
+        self.assertEqual(re.findall(r"^#{2,3} (.+)$", system, re.MULTILINE), expected)
+        catalog = json.loads((ROOT / "templates/catalog.json").read_text())
+        self.assertEqual(catalog["template_versions"]["design.system"], "7.0.0")
+
+    def test_system_reordering_keeps_business_preconditions_and_risk_handoff(self):
+        system = (ROOT / "templates/design/architecture-design.md").read_text()
+        business = system.split("### 5.2 一次业务处理怎样完成\n", 1)[1].split("\n### ", 1)[0]
+        guidance, body = business.split("</details>", 1)
+        for term in ("就绪、准入和配置前提", "§5.3", "§5.4", "§5.5", "§5.6", "§5.7"):
+            self.assertIn(term, guidance)
+        self.assertIn("**业务主线与结果边界**", body)
+        handoff = system.split("### 17.2 下级详细设计与验收任务\n", 1)[1].split("\n## ", 1)[0]
+        for term in ("§3.2", "§13.6", "§16", "Constraint ID", "预设计", "技术债",
+                     "本地与系统组合验收", "机制未定不判设计完成", "具体下一步", "关闭证据/Gate"):
+            self.assertIn(term, handoff)
+        guidance, body = handoff.split("</details>", 1)
+        self.assertIn("**下级详细设计与验收任务**", body)
+        self.assertIn("**关联风险、技术债与未决项**", body)
 
     def test_cover_sync_preserves_both_system_blocks_and_other_templates(self):
         sync = load_script("std_sync_covers", "sync-template-covers")
@@ -218,7 +332,7 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
 
         system = (ROOT / "templates" / catalog["templates"]["design.system"]).read_text()
         required_sections = (
-            "文档说明", "系统概览", "产品应用与设计目标", "功能与需求实现概览", "总体结构",
+            "文档说明", "系统概览", "产品应用与设计目标", "功能与需求实现概览",
             "重要过程", "硬件实现方案", "软件实现方案",
             "可编程逻辑与专用处理单元", "数据、描述符与存储结构", "接口与通信协议",
             "可靠性、维护与升级", "性能、扩展与兼容性", "可测试性与验收设计",
@@ -291,7 +405,7 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
     def test_system_architecture_sample_stays_at_system_composition_level(self):
         """Check the teaching scaffold and assets, not engineering correctness."""
         template = ROOT / "templates/design/architecture-design.md"
-        section = template.read_text().split("### 5.1 系统功能框图\n", 1)[1].split("### 5.2", 1)[0]
+        section = template.read_text().split("### 3.1 系统架构\n", 1)[1].split("### 3.2", 1)[0]
         sample = section.split("<!-- STD_TEMPLATE_EXAMPLE_END -->", 1)[0]
         self.assertNotIn("<details>", sample)
         image_match = re.search(r"!\[[^]]+\]\(([^)]+)\)", sample)
@@ -330,14 +444,14 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
 
     def test_software_architecture_example_stays_logical_and_has_roles(self):
         template = ROOT / "templates/design/architecture-design.md"
-        section = template.read_text().split("### 8.1 软件架构\n", 1)[1].split("### 8.2", 1)[0]
+        section = template.read_text().split("### 7.1 软件架构\n", 1)[1].split("### 7.2", 1)[0]
         sample = section.split("<!-- STD_TEMPLATE_EXAMPLE_END -->", 1)[0]
         self.assertNotIn("<details>", sample)
         image_match = re.search(r"!\[[^]]+\]\(([^)]+)\)", sample)
         self.assertIsNotNone(image_match)
         self.assertLess(image_match.start(), sample.index("*EX-SW-01｜"))
         for term in ("操作界面", "检测流程", "图像分析", "驱动 API", "设备管理", "采集控制",
-                     "图像交付", "状态读取", "不是进程", "不是一条依次执行", "NOT_RUN", "§8.6",
+                     "图像交付", "状态读取", "不是进程", "不是一条依次执行", "NOT_RUN", "§7.6",
                      "应用层", "驱动层", "定制操作系统（按需）", "普通操作系统不在本软件组成图", "删除整个底层",
                      "无图标、无连接线", "层底色用浅色", "调用关系和数据流另图表达"):
             self.assertIn(term, sample)
@@ -429,7 +543,7 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
                             "design.fpga", "design.system-mechanism"):
             row = next(line for line in table.splitlines() if f"`{template_id}`" in line)
             self.assertIn(catalog["template_versions"][template_id], row.split("|")[2])
-        self.assertRegex(guide, r"本版模板与图件核对基线：STD commit `[0-9a-f]{40}`")
+        self.assertRegex(guide, r"本轮修订输入基线：STD commit `[0-9a-f]{40}`")
         self.assertNotIn("复核本版方法仍以页首固定 commit 为准", guide)
 
     def test_ai_guide_separates_review_scope_asset_kinds_and_states(self):
@@ -472,7 +586,7 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
 
     def test_board_layout_example_keeps_approved_image_and_layout_boundary(self):
         template = ROOT / "templates/design/architecture-design.md"
-        section = template.read_text().split("### 7.1 硬件架构与板卡组成\n", 1)[1].split("### 7.2", 1)[0]
+        section = template.read_text().split("### 6.1 硬件架构与板卡组成\n", 1)[1].split("### 6.2", 1)[0]
         sample = section.split("<!-- STD_TEMPLATE_EXAMPLE_END -->", 1)[0]
         self.assertNotIn("<details>", sample)
         image = re.search(r"!\[[^]]+\]\(([^)]+)\)", sample)
@@ -480,7 +594,7 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
         self.assertLess(image.start(), sample.index("*EX-HW-01｜"))
         for term in ("EX-CAP-FPGA-01", "Target / Planned / NOT_RUN", "不是 PCB 走线", "教学假设",
                      "相机接口及接口适配与保护", "**FPGA**", "**帧缓存**", "**配置 Flash**", "**参考时钟**",
-                     "**电源区**", "**JTAG 调试接口**", "**PCIe 板边接口**", "§9.1", "SI/PI"):
+                     "**电源区**", "**JTAG 调试接口**", "**PCIe 板边接口**", "§8.1", "SI/PI"):
             self.assertIn(term, sample)
         svg, ns = self.assert_approved_native_diagram(
             (template.parent / image[1]).resolve(), "board-top-layout",
@@ -495,7 +609,7 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
 
     def test_fpga_program_example_keeps_approved_image_and_logic_boundary(self):
         template = ROOT / "templates/design/architecture-design.md"
-        section = template.read_text().split("### 9.1 内部模块框图\n", 1)[1].split("### 9.2", 1)[0]
+        section = template.read_text().split("### 8.1 内部模块框图\n", 1)[1].split("### 8.2", 1)[0]
         sample = section.split("<!-- STD_TEMPLATE_EXAMPLE_END -->", 1)[0]
         self.assertNotIn("<details>", sample)
         image = re.search(r"!\[[^]]+\]\(([^)]+)\)", sample)
@@ -524,7 +638,7 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
     def test_architecture_is_followed_by_each_component_responsibility(self):
         """Protect the readable example, not a claim about engineering completeness."""
         system = (ROOT / "templates/design/architecture-design.md").read_text()
-        section = system.split("### 5.2 组成与职责\n", 1)[1].split("### 5.3", 1)[0]
+        section = system.split("### 3.2 组成与职责\n", 1)[1].split("### 3.3", 1)[0]
         sample = section.split("<!-- STD_TEMPLATE_EXAMPLE_END -->", 1)[0]
         self.assertNotIn("<details>", sample)
         self.assertIn("以下接续 EX-ARCH-01", sample)
@@ -563,33 +677,33 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
                     self.assertIn(f"**{slot}**", body)
 
         self.assertEqual(system.count("<details>"), system.count("</details>"))
-        # Keep the eighteen main chapters; document-control appendices are unnumbered.
+        # Keep the seventeen main chapters; document-control appendices are unnumbered.
         chapters = [line for line in system.splitlines() if line.startswith("## ")]
         numbered = [line.split(" ", 2)[1] for line in chapters if line.split(" ", 2)[1][0].isdigit()]
-        self.assertEqual(numbered, [f"{number}." for number in range(1, 19)])
+        self.assertEqual(numbered, [f"{number}." for number in range(1, 18)])
 
     def test_system_testability_keeps_maintenance_and_debug_boundaries(self):
         system = (ROOT / "templates/design/architecture-design.md").read_text()
-        testing = system.split("## 14. 可测试性与验收设计\n", 1)[1].split("\n## ", 1)[0]
+        testing = system.split("## 13. 可测试性与验收设计\n", 1)[1].split("\n## ", 1)[0]
         headings = [line for line in testing.splitlines() if line.startswith("### ")]
         self.assertEqual(headings, [
-            "### 14.1 主要测试方法与结果判定",
-            "### 14.2 测试控制、故障注入与恢复验证",
-            "### 14.3 测试环境的快速部署与复位",
-            "### 14.4 并发测试与环境隔离",
-            "### 14.5 自动化执行与复现",
-            "### 14.6 验证覆盖与验收矩阵",
+            "### 13.1 主要测试方法与结果判定",
+            "### 13.2 测试控制、故障注入与恢复验证",
+            "### 13.3 测试环境的快速部署与复位",
+            "### 13.4 并发测试与环境隔离",
+            "### 13.5 自动化执行与复现",
+            "### 13.6 验证覆盖与验收矩阵",
         ])
-        maintenance = system.split("## 12. 可靠性、维护与升级\n", 1)[1].split("\n## ", 1)[0]
-        self.assertIn("### 12.2 运行统计、日志与故障定位", maintenance)
-        self.assertIn("#### 12.2.1 自检与诊断设计", maintenance)
-        self.assertIn("### 12.3 升级与回滚", maintenance)
+        maintenance = system.split("## 11. 可靠性、维护与升级\n", 1)[1].split("\n## ", 1)[0]
+        self.assertIn("### 11.2 运行统计、日志与故障定位", maintenance)
+        self.assertIn("#### 11.2.1 自检与诊断设计", maintenance)
+        self.assertIn("### 11.3 升级与回滚", maintenance)
         self.assertNotIn("### 12.4", maintenance)
         self.assertLess(
-            maintenance.index("#### 12.2.1 自检与诊断设计"),
-            maintenance.index("### 12.3 升级与回滚"),
+            maintenance.index("#### 11.2.1 自检与诊断设计"),
+            maintenance.index("### 11.3 升级与回滚"),
         )
-        debugging = system.split("### 11.4 维护与调试接口\n", 1)[1].split("\n## ", 1)[0]
+        debugging = system.split("### 10.4 维护与调试接口\n", 1)[1].split("\n## ", 1)[0]
         self.assertIn("替代依赖/旁路/环回", debugging)
         self.assertIn("指示灯", debugging)
         self.assertIn("责任模块", debugging)
@@ -601,28 +715,28 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
         ):
             self.assertIn(required, debugging)
         self.assertIn("统计口径", maintenance)
-        self.assertIn("§14.4", debugging)
-        self.assertIn("§12.2", testing)
-        self.assertIn("§12.2.1", testing)
-        self.assertIn("§11.4", testing)
+        self.assertIn("§13.4", debugging)
+        self.assertIn("§11.2", testing)
+        self.assertIn("§11.2.1", testing)
+        self.assertIn("§10.4", testing)
 
     def test_system_engineering_guidance_retains_decision_and_failure_scaffolds(self):
         """Guard required authoring prompts; humans still review design correctness."""
         system = (ROOT / "templates/design/architecture-design.md").read_text()
         prompts = {
-            "5.3 物理与逻辑对应关系": ("故障类型", "共享", "进程退出", "共同故障"),
-            "6.6 异常、过载与恢复过程": ("在途对象", "结果未知", "权威结果", "人工处置"),
-            "7.3 时钟、复位、电源与信号完整性": ("就绪信号", "等待上限", "运行中失锁", "通道预算"),
-            "8.3 通信、配置与状态管理": (
+            "3.3 物理与逻辑对应关系": ("故障类型", "共享", "进程退出", "共同故障"),
+            "5.6 异常、过载与恢复过程": ("在途对象", "结果未知", "权威结果", "人工处置"),
+            "6.3 时钟、复位、电源与信号完整性": ("就绪信号", "等待上限", "运行中失锁", "通道预算"),
+            "7.3 通信、配置与状态管理": (
                 "发布点", "部分目标失败", "多进程", "重启结果", "进程内副本", "持久化版本的保留与删除",
             ),
-            "8.4 页面与交互（如适用）": ("线框图", "结果未知", "取消", "刷新", "服务端授权"),
-            "9.3 时序、资源与跨域设计": ("单侧复位", "数据与描述符", "在途数据", "业务恢复"),
-            "11.3 控制与管理接口": ("调用位置", "部分成功", "响应丢失", "无法查到结果"),
-            "12.1 故障模型与可靠性机制": ("共同失效点", "误判", "保护机制自身失效", "选择理由"),
-            "12.3 升级与回滚": ("不可逆点", "控制者中途退出", "旧版无法读取", "逐阶段失败"),
-            "13.1 性能模型与预算": ("共享资源", "吞吐上界", "排队", "内存峰值", "可复算推导"),
-            "16.2 功耗与热设计": ("转换损耗", "传感器失效", "回差", "状态转换", "负载限制"),
+            "7.4 页面与交互（如适用）": ("线框图", "结果未知", "取消", "刷新", "服务端授权"),
+            "8.3 时序、资源与跨域设计": ("单侧复位", "数据与描述符", "在途数据", "业务恢复"),
+            "10.3 控制与管理接口": ("调用位置", "部分成功", "响应丢失", "无法查到结果"),
+            "11.1 故障模型与可靠性机制": ("共同失效点", "误判", "保护机制自身失效", "选择理由"),
+            "11.3 升级与回滚": ("不可逆点", "控制者中途退出", "旧版无法读取", "逐阶段失败"),
+            "12.1 性能模型与预算": ("共享资源", "吞吐上界", "排队", "内存峰值", "可复算推导"),
+            "15.2 功耗与热设计": ("转换损耗", "传感器失效", "回差", "状态转换", "负载限制"),
         }
         for heading, required in prompts.items():
             with self.subTest(section=heading):
@@ -634,31 +748,31 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
     def test_system_important_processes_cover_lifecycle_and_data_plane(self):
         """Keep lifecycle guidance and its narrative slots in the generated scaffold."""
         system = (ROOT / "templates/design/architecture-design.md").read_text()
-        processes = system.split("## 6. 重要过程\n", 1)[1].split("\n## ", 1)[0]
+        processes = system.split("## 5. 重要过程\n", 1)[1].split("\n## ", 1)[0]
         self.assertEqual(
             [line for line in processes.splitlines() if line.startswith("### ")],
             [
-                "### 6.1 重要过程总览与工作模式",
-                "### 6.2 系统启动过程",
-                "### 6.3 配置加载与生效过程",
-                "### 6.4 数据平面处理过程",
-                "### 6.5 停止与重启过程",
-                "### 6.6 异常、过载与恢复过程",
-                "### 6.7 模式切换与状态迁移",
+                "### 5.1 重要过程总览与工作模式",
+                "### 5.2 一次业务处理怎样完成",
+                "### 5.3 系统启动过程",
+                "### 5.4 配置加载与生效过程",
+                "### 5.5 停止与重启过程",
+                "### 5.6 异常、过载与恢复过程",
+                "### 5.7 模式切换与状态迁移",
             ],
         )
         self.assertIn("| Process ID |", processes)
         self.assertIn("#### MODE-XXX：模式名称", processes)
         prompts_and_slots = {
-            "6.2 系统启动过程": (
+            "5.3 系统启动过程": (
                 ("执行方", "超时", "部分启动失败", "并发启动", "旧执行者", "所有启动入口", "平台自动启动"),
                 ("启动流程与就绪判据", "启动失败与再次启动"),
             ),
-            "6.3 配置加载与生效过程": (
+            "5.4 配置加载与生效过程": (
                 ("初始配置", "重启生效", "在途任务", "保存成功", "超时", "静默采用"),
                 ("配置来源、加载与生效时序", "并发、失败与恢复分支"),
             ),
-            "6.5 停止与重启过程": (
+            "5.5 停止与重启过程": (
                 ("入口与权限", "在途任务", "强制停止", "结果未知", "临时资源", "排空超时"),
                 ("停止、资源释放与重启时序",),
             ),
@@ -674,18 +788,18 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
 
     def test_system_process_cross_references_follow_new_section_numbers(self):
         system = (ROOT / "templates/design/architecture-design.md").read_text()
-        data_plane = system.split("### 6.4 数据平面处理过程\n", 1)[1].split("</details>", 1)[0]
-        for target in ("§6.1", "§6.2", "§6.3", "§6.5", "§6.6", "§6.7"):
+        data_plane = system.split("### 5.2 一次业务处理怎样完成\n", 1)[1].split("</details>", 1)[0]
+        for target in ("§5.1", "§5.3", "§5.4", "§5.5", "§5.6", "§5.7"):
             self.assertIn(target, data_plane)
-        reliability = system.split("### 12.1 故障模型与可靠性机制\n", 1)[1].split("</details>", 1)[0]
-        self.assertIn("通过 Failure ID 引用 §6.6", reliability)
-        self.assertNotIn("§6.3", reliability)
+        reliability = system.split("### 11.1 故障模型与可靠性机制\n", 1)[1].split("</details>", 1)[0]
+        self.assertIn("通过 Failure ID 引用 §5.6", reliability)
+        self.assertNotIn("§5.4", reliability)
         self.assertNotIn("## 6. 工作模式与端到端流程", system)
         self.assertNotIn("### 6.2 正常数据流", system)
-        hardware_startup = system.split("### 7.3 时钟、复位、电源与信号完整性\n", 1)[1].split("</details>", 1)[0]
-        self.assertIn("由 §6.2 串入完整系统启动过程", hardware_startup)
-        configuration = system.split("### 8.3 通信、配置与状态管理\n", 1)[1].split("</details>", 1)[0]
-        self.assertIn("§6.3 的 Process ID", configuration)
+        hardware_startup = system.split("### 6.3 时钟、复位、电源与信号完整性\n", 1)[1].split("</details>", 1)[0]
+        self.assertIn("由 §5.3 串入完整系统启动过程", hardware_startup)
+        configuration = system.split("### 7.3 通信、配置与状态管理\n", 1)[1].split("</details>", 1)[0]
+        self.assertIn("§5.4 的 Process ID", configuration)
 
     def test_system_examples_do_not_claim_unconditional_isolation_or_throughput(self):
         system = (ROOT / "templates/design/architecture-design.md").read_text()
@@ -695,7 +809,7 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
         self.assertNotIn(
             "持续吞吐支持值取输入链路、处理流水、存储和输出四阶段能力的最小值。", system,
         )
-        performance = system.split("### 13.1 性能模型与预算\n", 1)[1].split("</details>", 1)[0]
+        performance = system.split("### 12.1 性能模型与预算\n", 1)[1].split("</details>", 1)[0]
         self.assertIn("资源独立或共享影响已计入", performance)
         self.assertIn("不能直接当作支持承诺", performance)
         self.assertIn("50 requests/s", performance)
@@ -717,7 +831,7 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
     def test_design_constraint_handoffs_have_sources_freedom_and_composition(self):
         """Guard both ends of the handoff, not whether a filled design satisfies it."""
         sections = {
-            "architecture-design.md": ("### 5.2 组成与职责", (
+            "architecture-design.md": ("### 3.2 组成与职责", (
                 "来源基线与决定状态", "适用条件", "承接单元/Owner", "分配预算或行为保证",
                 "下游可自行决定/不可改变", "组合校核", "变更影响/裁决责任", "共享项", "待承接/待验证",
             )),
@@ -767,7 +881,7 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
 
     def test_constraint_handoffs_reach_verification_in_all_design_layers(self):
         for name, heading, source_section, column in (
-            ("architecture-design.md", "### 14.6 验证覆盖与验收矩阵", "§5.2", "| Target/Constraint ID 与能力范围 |"),
+            ("architecture-design.md", "### 13.6 验证覆盖与验收矩阵", "§3.2", "| Target/Constraint ID 与能力范围 |"),
             ("design-definition.md", "## 14. 测试与验收", "§1.1", "| Function/Rule/Constraint |"),
             ("system-mechanism-design.md", "## 14. 验证、上线与回滚", "§3.1", "| Scenario/Invariant/Constraint |"),
             ("hardware-design.md", "## 12. Verification 与验收", "§1.1", "| Function/Requirement/Constraint ID |"),
@@ -824,7 +938,7 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
 
     def test_system_plan_separates_review_implementation_and_integration_gates(self):
         system = (ROOT / "templates/design/architecture-design.md").read_text()
-        planning = system.split("## 17. 实现计划\n", 1)[1].split("\n## ", 1)[0].replace("\n", "")
+        planning = system.split("## 16. 实现计划\n", 1)[1].split("\n## ", 1)[0].replace("\n", "")
         self.assertNotIn("契约测试通过后才能并行开发两端", planning)
         example = planning.split("**抽象示例**：", 1)[1].split("**完成条件**", 1)[0]
         stages = ("接口语义、错误行为和测试向量完成评审后", "两端可并行实现", "分别通过契约测试后", "进入集成", "端到端验证通过后")
@@ -840,7 +954,7 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
                 "客户类别", "实际使用者", "主要业务任务", "部署及维护条件",
                 "维护操作不能代替", "固定场景", "隔离", "可靠性",
             ),
-            "### 16.3 工艺与制造测试": (
+            "### 15.3 工艺与制造测试": (
                 "缺陷", "输入位置与方法", "观测/判定及未覆盖", "装配前", "装配后",
                 "测试点", "烧录", "校准", "原理图", "PCB", "结构", "固件",
                 "工装异常", "返修重测", "Constraint ID", "出厂禁用",
@@ -864,7 +978,7 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
                     self.assertTrue(prompt in content, f"Missing boundary prompt {prompt!r} in {path}")
         selection = (ROOT / "docs/template-selection.md").read_text()
         self.assertNotIn("保存系统全景、子系统分解、全局策略和机制目录。", selection)
-        self.assertIn("系统模板 §5.2", selection)
+        self.assertIn("系统模板 §3.2", selection)
         self.assertIn("机制模板 §3.1", selection)
         self.assertIn("单元模板 §1.1", selection)
 
@@ -952,10 +1066,10 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
         self.assertIn("**逐组件职责说明**", markdown)
         self.assertIn("#### MODE-XXX：模式名称", markdown)
         self.assertIn("#### BLK-XXX：模块名称", markdown)
-        self.assertIn("## 6. 重要过程", markdown)
-        self.assertIn("### 6.2 系统启动过程", markdown)
-        self.assertIn("### 6.3 配置加载与生效过程", markdown)
-        self.assertIn("### 6.4 数据平面处理过程", markdown)
+        self.assertIn("## 5. 重要过程", markdown)
+        self.assertIn("### 5.3 系统启动过程", markdown)
+        self.assertIn("### 5.4 配置加载与生效过程", markdown)
+        self.assertIn("### 5.2 一次业务处理怎样完成", markdown)
 
     def test_new_design_preserves_explicit_level_and_other_template_default(self):
         for template_id, level, expected in (
