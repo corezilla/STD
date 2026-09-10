@@ -82,8 +82,12 @@ manifest。完整接入规则见 [`docs/adoption.md`](docs/adoption.md)。
 [`docs/architecture-design-authoring-guide.md`](docs/architecture-design-authoring-guide.md)。
 AI Agent 的任务计划、输入核查、章节预设计、分步成文、绘图验收和长任务续写方法见
 [`docs/ai-system-design-authoring-guide.md`](docs/ai-system-design-authoring-guide.md)。
-这是从 HIFM v0.3 迁入的通用执行指南（`0.3.1-draft.9`，待完整写作任务验证），不是新模板，
+这是从 HIFM v0.3 迁入的通用执行指南（`0.3.1-draft.11`，待完整写作任务验证），不是新模板，
 不改变项目已采用的 STD/模板版本，也不自动授权提交、发布或运行。
+指南 §7.9 说明 Agent 如何选择场景/系统/软件/FPGA/板卡图样式，复用 SVG、替换项目内容、
+调整排版和连接、落入正文并检查实际渲染；样式复用不等于采用示例设计。
+局部修订只检查受影响内容和直接依赖，不重跑完整写作流程；原生图源与生成式插画分别维护，
+架构视图、实现状态和验证结果分别记录。
 
 当前工作区的 `design.system` 为待发布的 `6.4.0`：沿用 `6.0.0` 的 Markdown 短封面，正文前仅保留八项
 必要控制字段；其余控制信息、修订和长目录在附录 A。§1 只保留 1.1 目的与读者、1.2 范围；

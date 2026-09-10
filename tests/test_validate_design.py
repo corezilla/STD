@@ -379,6 +379,80 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
         self.assertTrue(image_path.with_name("README.md").is_file())
         self.assertIn("可复用 SVG 模板", sample)
 
+    def test_ai_guide_reuse_instructions_match_native_svg_sources(self):
+        """Keep copy/edit examples usable; this does not certify design quality."""
+        guide_path = ROOT / "docs/ai-system-design-authoring-guide.md"
+        guide = guide_path.read_text()
+        section = guide.split("### 7.9 Agent 如何直接复用 STD 图形样式\n", 1)[1].split("## 8.", 1)[0]
+        ns = {"s": "http://www.w3.org/2000/svg"}
+        edit_targets = {
+            "software-layered-architecture": ("application-layer", "driver-layer", "system-customization-layer"),
+            "fpga-program-architecture": ("own-rtl", "input-boundary", "output-boundary", "main-data-direction"),
+            "board-top-layout": ("pcb-outline", "fpga-device", "power-region", "functional-connections"),
+        }
+        for name, ids in edit_targets.items():
+            relative = f"../templates/diagrams/{name}.svg"
+            self.assertIn(f"]({relative})", section)
+            svg = ET.parse(guide_path.parent / relative).getroot()
+            for group_id in ids:
+                self.assertIn(f"`{group_id}`", section)
+                self.assertIsNotNone(svg.find(f'.//s:g[@id="{group_id}"]', ns))
+
+        # The documented fragment replaces a module in the existing style scope.
+        fragment = re.search(r"```xml\n(.*?)\n```", section, re.S)
+        self.assertIsNotNone(fragment)
+        module = ET.fromstring(f'<svg xmlns="{ns["s"]}">{fragment[1]}</svg>')[0]
+        svg = ET.parse(ROOT / "templates/diagrams/software-layered-architecture.svg").getroot()
+        layer = svg.find('.//s:g[@id="driver-layer"]', ns)
+        self.assertEqual(layer.attrib["class"], "accent")
+        parent = layer.find('s:g[@id="product-driver"]', ns)
+        old_module = parent.find('s:g[@id="device-management"]', ns)
+        self.assertEqual(module.attrib["transform"], old_module.attrib["transform"])
+        parent.remove(old_module)
+        parent.append(module)
+        ids = [node.attrib["id"] for node in svg.iter() if "id" in node.attrib]
+        self.assertEqual(len(ids), len(set(ids)))
+        width = int(module.find("s:rect", ns).attrib["width"])
+        self.assertEqual(width, (1032 - 24 * (4 - 1)) / 4)
+        for label in module.findall("s:text/s:tspan", ns):
+            self.assertEqual(int(label.attrib["x"]), width / 2)
+        self.assertIn("按 §7.9 选用已有图形样式", guide.split("## 14.", 1)[1])
+
+    def test_ai_guide_template_mapping_and_readme_version_agree(self):
+        guide = (ROOT / "docs/ai-system-design-authoring-guide.md").read_text()
+        readme = (ROOT / "README.md").read_text()
+        catalog = json.loads((ROOT / "templates/catalog.json").read_text())
+        version = re.search(r"^版本：([^ ·]+)", guide, re.M)[1]
+        self.assertIn(f"`{version}`", readme)
+        table = guide.split("| 方法来源 | 本版核对版本 |", 1)[1].split("\n\n", 1)[0]
+        for template_id in ("design.system", "design.definition", "design.hardware",
+                            "design.fpga", "design.system-mechanism"):
+            row = next(line for line in table.splitlines() if f"`{template_id}`" in line)
+            self.assertIn(catalog["template_versions"][template_id], row.split("|")[2])
+        self.assertRegex(guide, r"本版模板与图件核对基线：STD commit `[0-9a-f]{40}`")
+        self.assertNotIn("复核本版方法仍以页首固定 commit 为准", guide)
+
+    def test_ai_guide_separates_review_scope_asset_kinds_and_states(self):
+        """Guard against contradictory workflow wording, not content approval."""
+        guide = (ROOT / "docs/ai-system-design-authoring-guide.md").read_text()
+        scope = guide.split("### 4.1", 1)[1].split("### 4.2", 1)[0]
+        self.assertIn("不重跑 S0～S7", scope)
+        self.assertIn("直接依赖", scope)
+        self.assertIn("完成条件后交付", scope)
+        state = guide.split("### 9.1", 1)[1].split("### 9.2", 1)[0]
+        template = (ROOT / "templates/design/architecture-design.md").read_text()
+        for vocabulary in ("Current / Target / Transitional", "Planned / Partial / Implemented",
+                           "NOT_RUN / BLOCKED / FAIL / PARTIAL / Verified"):
+            self.assertIn(f"`{vocabulary}`", state)
+            self.assertIn(f"`{vocabulary}`", template)
+        self.assertNotIn("Planned / Implemented / Verified", guide)
+        assets = guide.split("### 7.3", 1)[1].split("### 7.4", 1)[0]
+        for text in ("原生工程图保留", "生成式插画保留原始位图", "不存在的 SVG/三维源"):
+            self.assertIn(text, assets)
+        entry = guide.split("## 14.", 1)[1].split("## 15.", 1)[0]
+        for text in ("局部任务不重跑", "既有合格图不强制换格式", "实现和验证状态分开填写"):
+            self.assertIn(text, entry)
+
     def assert_approved_native_diagram(self, image_path, name, svg_sha, png_sha, dimensions):
         self.assertEqual(image_path, ROOT / f"templates/diagrams/{name}.svg")
         self.assertEqual(hashlib.sha256(image_path.read_bytes()).hexdigest(), svg_sha)
