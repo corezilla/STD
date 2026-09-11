@@ -223,6 +223,10 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
 10.2 数据面接口
 10.3 控制与管理接口
 10.4 维护与调试接口
+10.5 公共数据结构与编码
+10.6 硬件连接与项目选项
+10.7 配置与启动环境接口
+10.8 接口组合与兼容性
 11. 可靠性、维护与升级
 11.1 故障模型与可靠性机制
 11.2 运行统计、日志与故障定位
@@ -265,7 +269,7 @@ B.4 设计约束与关键假设
 附录 C. 编写与交付检查""".splitlines()
         self.assertEqual(re.findall(r"^#{2,3} (.+)$", system, re.MULTILINE), expected)
         catalog = json.loads((ROOT / "templates/catalog.json").read_text())
-        self.assertEqual(catalog["template_versions"]["design.system"], "7.0.0")
+        self.assertEqual(catalog["template_versions"]["design.system"], "8.0.0")
 
     def test_system_reordering_keeps_business_preconditions_and_risk_handoff(self):
         system = (ROOT / "templates/design/architecture-design.md").read_text()
@@ -345,7 +349,7 @@ B.4 设计约束与关键假设
         lines = system.splitlines()
         headings = [
             index for index, line in enumerate(lines)
-            if line.startswith(("## ", "### ", "#### "))
+            if line.startswith(("## ", "### ", "#### ", "##### "))
         ]
         self.assertGreater(len(headings), len(required_sections))
         for position, index in enumerate(headings):
@@ -371,6 +375,105 @@ B.4 设计约束与关键假设
             )
             for required in ("**必须写清楚**", "**编写规范**", "**抽象示例**", "**完成条件**"):
                 self.assertIn(required, guidance, lines[index])
+
+    def test_system_executable_subsections_have_guidance_and_body_slots(self):
+        """Check reusable scaffold coverage, not whether a real design is correct."""
+        system = (ROOT / "templates/design/architecture-design.md").read_text()
+        expected = {
+            "3.3.1": "对象身份与拓扑", "3.3.2": "管理诊断访问与共享故障域",
+            "5.1.1": "跨组件操作与统筹", "5.1.2": "参与方确认与异常收敛",
+            "10.2.1": "单项操作与消息定义", "10.4.1": "用户命令逐项定义",
+            "10.5": "公共数据结构与编码", "10.6": "硬件连接与项目选项",
+            "10.7": "配置与启动环境接口", "10.8": "接口组合与兼容性",
+            "11.2.1.1": "检查项目与适用范围", "11.2.1.2": "依赖顺序与路径覆盖",
+            "11.2.1.3": "结果汇总与退出恢复", "11.2.2": "指标与日志契约",
+            "11.2.3": "跨组件关联、时间与快照",
+            "13.2.1": "测试控制点与确认协议", "13.2.2": "支持范围与清理恢复",
+        }
+        for number, title in expected.items():
+            with self.subTest(section=number):
+                marker = "#" * (number.count(".") + 2) + f" {number} {title}\n"
+                self.assertEqual(system.count(marker), 1)
+                section = re.split(r"\n#{2,5} ", system.split(marker, 1)[1], maxsplit=1)[0]
+                help_text, body = section.split("</details>", 1)
+                for label in ("本节目的", "必须写清楚", "编写规范", "抽象示例", "完成条件"):
+                    self.assertIn(f"**{label}**", help_text)
+                advice = help_text.split("**编写规范**：", 1)[1].split("**抽象示例**", 1)[0]
+                self.assertGreater(len(advice.strip()), 100)
+                self.assertTrue(body.strip().startswith(("|", "<!--")), title)
+        tailoring = system.split("### B.2", 1)[1].split("### B.3", 1)[0]
+        for condition in ("§10.6", "纯软件", "单组件", "不新增通用平台", "不能因机制尚未实现"):
+            self.assertIn(condition, tailoring)
+
+    def test_shared_contracts_and_runtime_coordination_are_not_deferred(self):
+        system = (ROOT / "templates/design/architecture-design.md").read_text().replace("\n", "")
+        mechanism = (ROOT / "templates/design/system-mechanism-design.md").read_text().replace("\n", "")
+        for term in ("Document Owner 不等于运行时统筹者", "参数全集", "没有机器源",
+                     "不手工维护第二份真相", "系统协作方案未定", "实际技术条款已核对"):
+            self.assertTrue(term in system, f"Missing system rule: {term}")
+        for term in ("运行时统筹与确认责任", "总体成功判据", "部分完成", "统筹者退出",
+                     "公共字段", "全部提供方和消费者", "不能断言任务不存在"):
+            self.assertIn(term, mechanism)
+        for path in ("docs/ai-system-design-authoring-guide.md",
+                     "docs/design-writing-guide.md", "docs/architecture-design-authoring-guide.md"):
+            content = (ROOT / path).read_text().replace("\n", "")
+            self.assertNotIn("参数全集仍由唯一的下级定义维护", content)
+            self.assertNotIn("参数全集及实现细节才由下级承接", content)
+            self.assertIn("公共", content)
+            self.assertIn("完整", content)
+
+    def test_ai_guide_capability_work_packages_distinguish_design_from_execution(self):
+        guide = (ROOT / "docs/ai-system-design-authoring-guide.md").read_text()
+        package = guide.split("### 4.8", 1)[1].split("## 5.", 1)[0].replace("\n", "")
+        for term in ("适用条件", "通用", "虚构", "已有局部技术定义", "旧契约",
+                     "共同判据", "尚未实现或验证", "双方设计输入", "系统验收", "独立的设计仍可继续"):
+            self.assertTrue(term in package, f"Missing capability workflow: {term}")
+        audit = guide.split("### 6.7", 1)[1].split("## 7.", 1)[0]
+        self.assertIn("打开", audit)
+        self.assertIn("实际技术", audit)
+        review = guide.split("### 13.2", 1)[1].split("### 13.3", 1)[0].replace("\n", "")
+        self.assertIn("全部适用能力子项", review)
+        self.assertIn("一个代表请求不能替代", review)
+        self.assertIn("实际有不同协作/清理机制", review)
+
+    def test_ai_guide_complete_example_keeps_operations_failures_and_handoff(self):
+        """Prevent the worked example degrading to names or a success-only diagram."""
+        guide = (ROOT / "docs/ai-system-design-authoring-guide.md").read_text()
+        example = guide.split("### 8.8", 1)[1].split("## 9.", 1)[0].replace("\n", " ")
+        self.assertEqual(re.findall(r"\| (EX-OP\d+) /", example), ["EX-OP1", "EX-OP2"])
+        self.assertEqual(re.findall(r"\| (EX-T\d+) ", example), ["EX-T1", "EX-T2", "EX-T3", "EX-T4"])
+        for term in ("EX-OBS-01/v1", "NOT_RUN", "运行时统筹者", "唯一公共契约", "字段均必选",
+                     "Result 成功分支", "Result 失败分支", "DEADLINE_EXCEEDED", "IDENTITY_MISMATCH",
+                     "M 中途退出", "PARTIAL", "FAILED", "非原子", "单调时钟", "迟到",
+                     "只读", "不得把只读可重试推广", "sys-inspect revisions", "退出 64", "EX-C1/C2"):
+            self.assertIn(term, example)
+        self.assertIn("不改变业务状态和无槽位泄漏", example)
+
+    def test_system_recovery_guidance_distinguishes_readonly_sampling(self):
+        system = (ROOT / "templates/design/architecture-design.md").read_text()
+        recovery = system.split("#### 5.1.2", 1)[1].split("### 5.2", 1)[0].replace("\n", "")
+        for term in ("有副作用的重新执行或在途资源复用", "旧执行权限已停止或隔离",
+                     "幂等/去重", "无跨请求资源预留", "新的观测上下文",
+                     "旧查询的清理期限", "新采样不是原操作恢复"):
+            self.assertIn(term, recovery)
+        self.assertNotIn("取消比赛", system)
+        self.assertIn("命中并发时的裁决和最终结果", system)
+        guide = (ROOT / "docs/ai-system-design-authoring-guide.md").read_text().replace("\n", "")
+        self.assertIn("不要求不同组件共用启动代次", guide)
+        self.assertIn("可验证的关联或转换规则", re.sub(r"\s+", "", guide),
+                      "Cross-object identity mapping must be explicit and verifiable")
+        self.assertNotIn("双方目标身份和代次相同", guide)
+
+    def test_readonly_example_defines_freshness_deadlines_and_cleanup(self):
+        """Guard written contract boundaries; this does not execute the fictional service."""
+        guide = (ROOT / "docs/ai-system-design-authoring-guide.md").read_text()
+        example = guide.split("### 8.8", 1)[1].split("## 9.", 1)[0].replace("\n", "")
+        for term in ("Cache-Control: no-store", "不跟随 `Location`", "禁止使用缓存",
+                     "响应不使用内容压缩", "超过大小限制即停止读取", "0～1499",
+                     "优先于此刻到达的其他结果", "截止时刻之前完成验证",
+                     "非阻塞", "处理及响应写出最多 700 ms", "最迟在单元处理期限内释放",
+                     "3xx 不产生第二次请求", "旧缓存不参与本轮", "HTTP 状态与合法 Error 代码对应"):
+            self.assertIn(term, example)
 
     def test_document_metadata_schema_excludes_project_std_version(self):
         schema = json.loads((ROOT / "schemas" / "document-metadata.schema.json").read_text())
@@ -822,7 +925,7 @@ B.4 设计约束与关键假设
         ):
             with self.subTest(template=name):
                 content = (ROOT / "templates/design" / name).read_text()
-                headings = re.findall(r"^#{2,4} (?:附录 )?((?:\d+|[A-C])(?:\.\d+)*)(?:\.)? ", content, re.MULTILINE)
+                headings = re.findall(r"^#{2,5} (?:附录 )?((?:\d+|[A-C])(?:\.\d+)*)(?:\.)? ", content, re.MULTILINE)
                 self.assertEqual(len(headings), len(set(headings)))
                 references = set(re.findall(r"§((?:\d+|[A-C])(?:\.\d+)*)", content))
                 self.assertTrue(references)
