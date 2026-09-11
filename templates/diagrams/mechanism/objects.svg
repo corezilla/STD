@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="840" viewBox="0 0 1440 840" role="img" aria-labelledby="title desc">
+<title id="title">02  数据从事实到报告</title>
+<desc id="desc">A与B各自原子复制本地tuple形成Sample；M校验后组合Report，报表不具备跨目标原子性或持久历史。</desc>
+<defs>
+<marker id="request-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M 0 0 L 10 5 L 0 10 z" fill="#2563b4"/>
+</marker>
+<marker id="response-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/>
+</marker>
+<marker id="control-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M 0 0 L 10 5 L 0 10 z" fill="#7957a6"/>
+</marker>
+</defs>
+<style>
+text { font-family:"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif; fill:#20334e; }
+.title { font-size:34px; font-weight:650; } .meta { font-size:19px; fill:#62738a; }
+.label { font-size:25px; font-weight:550; } .small { font-size:21px; fill:#4f617a; }
+.panel { fill:#edf4fc; stroke:#9bb7d9; stroke-width:2; }
+.accent { fill:#d6e7fb; stroke:#5f8ec8; stroke-width:2; }
+.neutral { fill:#f0f3f6; stroke:#b4bfcd; stroke-width:2; }
+.warning { fill:#fff3e3; stroke:#c89a58; stroke-width:2; }
+.request { fill:none; stroke:#2563b4; stroke-width:3; }
+.response { fill:none; stroke:#64748b; stroke-width:2.5; stroke-dasharray:8 6; }
+.control { fill:none; stroke:#7957a6; stroke-width:2.5; stroke-dasharray:5 5; }
+.lifeline { stroke:#c3cfdf; stroke-width:2; stroke-dasharray:5 6; }
+</style>
+<rect width="1440" height="840" fill="#fff"/>
+<rect x="40" y="35" width="6" height="65" rx="3" fill="#3375c3"/>
+<text class="title" x="64" y="65" text-anchor="start">
+<tspan x="64" dy="0">02  数据从事实到报告</tspan>
+</text>
+<text class="meta" x="64" y="101" text-anchor="start">
+<tspan x="64" dy="0">EX-OBS-01/v1 · 虚构教学 · Target / Planned / NOT_RUN · M + A/B 固定拓扑</tspan>
+</text>
+<g id="objects-content">
+<g id="a-fact">
+<rect class="panel" x="50" y="220" width="350" height="140" rx="16"/>
+<text class="label" x="225" y="283" text-anchor="middle">
+<tspan x="225" dy="0">A 本地版本事实</tspan>
+<tspan x="225" dy="30">target / boot / revision</tspan>
+</text>
+</g>
+<g id="b-fact">
+<rect class="panel" x="50" y="465" width="350" height="140" rx="16"/>
+<text class="label" x="225" y="528" text-anchor="middle">
+<tspan x="225" dy="0">B 本地版本事实</tspan>
+<tspan x="225" dy="30">target / boot / revision</tspan>
+</text>
+</g>
+<g id="a-sample">
+<rect class="accent" x="525" y="220" width="350" height="140" rx="16"/>
+<text class="label" x="700" y="283" text-anchor="middle">
+<tspan x="700" dy="0">A Sample</tspan>
+<tspan x="700" dy="30">锁内复制后立即解锁</tspan>
+</text>
+</g>
+<g id="b-sample">
+<rect class="accent" x="525" y="465" width="350" height="140" rx="16"/>
+<text class="label" x="700" y="528" text-anchor="middle">
+<tspan x="700" dy="0">B Sample 或错误</tspan>
+<tspan x="700" dy="30">错误不补造 sample</tspan>
+</text>
+</g>
+<g id="report">
+<rect class="panel" x="990" y="285" width="400" height="245" rx="16"/>
+<text class="label" x="1190" y="370.5" text-anchor="middle">
+<tspan x="1190" dy="0">M · 校验并组合 Report</tspan>
+<tspan x="1190" dy="30">固定 A、B 顺序</tspan>
+<tspan x="1190" dy="30">outcome = 成功数分类</tspan>
+<tspan x="1190" dy="30">consistency = non_atomic</tspan>
+</text>
+</g>
+<path id="copy-a" class="request" d="M400 290H525" marker-end="url(#request-arrow)"/>
+<text class="small" x="463" y="260" text-anchor="middle">
+<tspan x="463" dy="0">复制</tspan>
+</text>
+<path id="copy-b" class="request" d="M400 535H525" marker-end="url(#request-arrow)"/>
+<text class="small" x="463" y="505" text-anchor="middle">
+<tspan x="463" dy="0">复制</tspan>
+</text>
+<path id="merge-a" class="request" d="M875 290H930V340H990" marker-end="url(#request-arrow)"/>
+<path id="merge-b" class="request" d="M875 535H930V465H990" marker-end="url(#request-arrow)"/>
+<text class="small" x="715" y="190" text-anchor="middle">
+<tspan x="715" dy="0">同一 observation_id 关联本轮</tspan>
+</text>
+<g id="lifetime">
+<rect class="neutral" x="190" y="650" width="1060" height="70" rx="16"/>
+<text class="label" x="720" y="693" text-anchor="middle">
+<tspan x="720" dy="0">目标事实不改写；Sample / Report 为临时副本，不承诺退出后可恢复</tspan>
+</text>
+</g>
+</g>
+<g id="legend">
+<path d="M40 765H1400" stroke="#d9e2ed"/>
+<text class="meta" x="45" y="800" text-anchor="start">
+<tspan x="45" dy="0">图例：蓝箭头 = 对象复制 / 变换，不是调用时序；仅局部 tuple 一致，无跨目标原子快照。</tspan>
+</text>
+</g>
+</svg>

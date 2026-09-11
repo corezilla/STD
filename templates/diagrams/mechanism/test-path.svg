@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="840" viewBox="0 0 1440 840" role="img" aria-labelledby="title desc">
+<title id="title">06  测试控制、真实路径与独立判据</title>
+<desc id="desc">测试预置A版本与B延迟，先arm，再调用CLI经M到目标并确认hit，独立核对部分结果和退出码，结束后release并清理。</desc>
+<defs>
+<marker id="request-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M 0 0 L 10 5 L 0 10 z" fill="#2563b4"/>
+</marker>
+<marker id="response-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/>
+</marker>
+<marker id="control-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M 0 0 L 10 5 L 0 10 z" fill="#7957a6"/>
+</marker>
+</defs>
+<style>
+text { font-family:"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif; fill:#20334e; }
+.title { font-size:34px; font-weight:650; } .meta { font-size:19px; fill:#62738a; }
+.label { font-size:25px; font-weight:550; } .small { font-size:21px; fill:#4f617a; }
+.panel { fill:#edf4fc; stroke:#9bb7d9; stroke-width:2; }
+.accent { fill:#d6e7fb; stroke:#5f8ec8; stroke-width:2; }
+.neutral { fill:#f0f3f6; stroke:#b4bfcd; stroke-width:2; }
+.warning { fill:#fff3e3; stroke:#c89a58; stroke-width:2; }
+.request { fill:none; stroke:#2563b4; stroke-width:3; }
+.response { fill:none; stroke:#64748b; stroke-width:2.5; stroke-dasharray:8 6; }
+.control { fill:none; stroke:#7957a6; stroke-width:2.5; stroke-dasharray:5 5; }
+.lifeline { stroke:#c3cfdf; stroke-width:2; stroke-dasharray:5 6; }
+</style>
+<rect width="1440" height="840" fill="#fff"/>
+<rect x="40" y="35" width="6" height="65" rx="3" fill="#3375c3"/>
+<text class="title" x="64" y="65" text-anchor="start">
+<tspan x="64" dy="0">06  测试控制、真实路径与独立判据</tspan>
+</text>
+<text class="meta" x="64" y="101" text-anchor="start">
+<tspan x="64" dy="0">EX-OBS-01/v1 · 虚构教学 · Target / Planned / NOT_RUN · M + A/B 固定拓扑</tspan>
+</text>
+<g id="test-content">
+<g id="fixture">
+<rect class="neutral" x="60" y="165" width="425" height="120" rx="16"/>
+<text class="label" x="272.5" y="218" text-anchor="middle">
+<tspan x="272.5" dy="0">测试夹具 / 隔离环境</tspan>
+<tspan x="272.5" dy="30">预置 A tuple、B 延迟</tspan>
+</text>
+</g>
+<g id="oracle">
+<rect class="accent" x="950" y="165" width="425" height="120" rx="16"/>
+<text class="label" x="1162.5" y="218" text-anchor="middle">
+<tspan x="1162.5" dy="0">独立 Oracle</tspan>
+<tspan x="1162.5" dy="30">预置事实 + 契约 + 期限</tspan>
+</text>
+</g>
+<g id="cli">
+<rect class="panel" x="60" y="425" width="280" height="120" rx="16"/>
+<text class="label" x="200" y="478" text-anchor="middle">
+<tspan x="200" dy="0">真实 CLI</tspan>
+<tspan x="200" dy="30">一次 EX-OP1</tspan>
+</text>
+</g>
+<g id="m">
+<rect class="panel" x="570" y="425" width="280" height="120" rx="16"/>
+<text class="label" x="710" y="478" text-anchor="middle">
+<tspan x="710" dy="0">真实 M</tspan>
+<tspan x="710" dy="30">汇总被测结果</tspan>
+</text>
+</g>
+<g id="targets">
+<rect class="panel" x="1100" y="425" width="275" height="120" rx="16"/>
+<text class="label" x="1237.5" y="478" text-anchor="middle">
+<tspan x="1237.5" dy="0">A / B 协议端</tspan>
+<tspan x="1237.5" dy="30">受控输入/延迟</tspan>
+</text>
+</g>
+<path id="call-m" class="request" d="M340 455H570" marker-end="url(#request-arrow)"/>
+<text class="small" x="455" y="428" text-anchor="middle">
+<tspan x="455" dy="0">调用</tspan>
+</text>
+<path id="call-target" class="request" d="M850 455H1100" marker-end="url(#request-arrow)"/>
+<text class="small" x="975" y="428" text-anchor="middle">
+<tspan x="975" dy="0">EX-OP2</tspan>
+</text>
+<path id="result-m" class="response" d="M1100 520H850" marker-end="url(#response-arrow)"/>
+<path id="result-cli" class="response" d="M570 520H340" marker-end="url(#response-arrow)"/>
+<path id="control-input" class="control" d="M485 225H735V350H1240V425" marker-end="url(#control-arrow)"/>
+<text class="small" x="780" y="330" text-anchor="middle">
+<tspan x="780" dy="0">arm → hit（确认）→ release</tspan>
+</text>
+<path id="oracle-check" class="control" d="M200 545V605H915V225H950" marker-end="url(#control-arrow)"/>
+<text class="small" x="555" y="639" text-anchor="middle">
+<tspan x="555" dy="0">检查 A 内容 / B 超时 / PARTIAL / 退出码 2</tspan>
+</text>
+<g id="cleanup">
+<rect class="neutral" x="175" y="690" width="1090" height="50" rx="16"/>
+<text class="label" x="720" y="723" text-anchor="middle">
+<tspan x="720" dy="0">撤销延迟 → 结束残留连接 → 槽位归还 → 环境基线复位；夹具尚未实现或验证</tspan>
+</text>
+</g>
+</g>
+<g id="legend">
+<path d="M40 765H1400" stroke="#d9e2ed"/>
+<text class="meta" x="45" y="800" text-anchor="start">
+<tspan x="45" dy="0">图例：蓝实线 = 被测请求；灰虚线 = 响应；紫虚线 = 测试控制/核对。替身测试须另标 simulated。</tspan>
+</text>
+</g>
+</svg>

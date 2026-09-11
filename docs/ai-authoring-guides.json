@@ -1,0 +1,142 @@
+{
+  "description": "AI authoring navigation only; each catalog template has one primary specialist. Versions follow adopted templates, not this mapping.",
+  "common_guide": "docs/ai-authoring-guide.md",
+  "families": [
+    {
+      "id": "system",
+      "title": "系统设计",
+      "guide": "docs/ai-system-design-authoring-guide.md",
+      "template_ids": [
+        "design.system"
+      ]
+    },
+    {
+      "id": "mechanism",
+      "title": "系统机制",
+      "guide": "docs/ai-guides/system-mechanism.md",
+      "template_ids": [
+        "design.system-mechanism"
+      ]
+    },
+    {
+      "id": "unit",
+      "title": "子系统与模块",
+      "guide": "docs/ai-guides/unit-design.md",
+      "template_ids": [
+        "design.definition"
+      ]
+    },
+    {
+      "id": "hardware",
+      "title": "硬件、制造与板级评审",
+      "guide": "docs/ai-guides/hardware.md",
+      "template_ids": [
+        "design.hardware",
+        "hardware.manufacturing",
+        "hardware.bom",
+        "review.schematic-pcb"
+      ]
+    },
+    {
+      "id": "fpga",
+      "title": "FPGA 程序与实现报告",
+      "guide": "docs/ai-guides/fpga.md",
+      "template_ids": [
+        "design.fpga",
+        "assurance.fpga-implementation-report"
+      ]
+    },
+    {
+      "id": "management",
+      "title": "工程管理",
+      "guide": "docs/ai-guides/management.md",
+      "template_ids": [
+        "management.project-plan",
+        "management.tailoring",
+        "management.development-plan",
+        "management.semp",
+        "management.configuration-plan",
+        "management.risk-plan",
+        "management.quality-plan",
+        "management.safety-plan",
+        "management.security-plan"
+      ]
+    },
+    {
+      "id": "requirements",
+      "title": "需求与追溯",
+      "guide": "docs/ai-guides/requirements.md",
+      "template_ids": [
+        "requirements.stakeholder-needs",
+        "requirements.conops",
+        "requirements.specification",
+        "requirements.traceability"
+      ]
+    },
+    {
+      "id": "analysis",
+      "title": "技术分析",
+      "guide": "docs/ai-guides/technical-analysis.md",
+      "template_ids": [
+        "evaluation.technical-analysis"
+      ]
+    },
+    {
+      "id": "product",
+      "title": "产品与交付定义",
+      "guide": "docs/ai-guides/product.md",
+      "template_ids": [
+        "product.solution-definition",
+        "product.sku-specification",
+        "product.roadmap"
+      ]
+    },
+    {
+      "id": "contracts",
+      "title": "接口、契约与数据",
+      "guide": "docs/ai-guides/interfaces-contracts-data.md",
+      "template_ids": [
+        "interfaces.control",
+        "contracts.specification",
+        "design.data-dictionary"
+      ]
+    },
+    {
+      "id": "verification",
+      "title": "验证与验收",
+      "guide": "docs/ai-guides/verification.md",
+      "template_ids": [
+        "assurance.vv-plan",
+        "assurance.test-plan",
+        "assurance.test-specification",
+        "assurance.test-procedure",
+        "assurance.test-report",
+        "assurance.acceptance-plan",
+        "assurance.acceptance-report"
+      ]
+    },
+    {
+      "id": "review",
+      "title": "评审与决策",
+      "guide": "docs/ai-guides/review-decisions.md",
+      "template_ids": [
+        "review.packet",
+        "decisions.adr"
+      ]
+    },
+    {
+      "id": "operations",
+      "title": "交付与运维",
+      "guide": "docs/ai-guides/operations.md",
+      "template_ids": [
+        "operations.release",
+        "operations.version-description",
+        "operations.user-manual",
+        "operations.installation-deployment",
+        "operations.operations-manual",
+        "operations.maintenance",
+        "operations.bring-up"
+      ]
+    }
+  ]
+}

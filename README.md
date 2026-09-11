@@ -80,11 +80,17 @@ manifest。完整接入规则见 [`docs/adoption.md`](docs/adoption.md)。
 面向实现的设计文档写法和质量检查见 [`docs/design-writing-guide.md`](docs/design-writing-guide.md)。
 系统设计的概览、适用性、状态/证据、图和信息安全写法及正反例见
 [`docs/architecture-design-authoring-guide.md`](docs/architecture-design-authoring-guide.md)。
-AI Agent 的任务计划、输入核查、章节预设计、分步成文、绘图验收和长任务续写方法见
-[`docs/ai-system-design-authoring-guide.md`](docs/ai-system-design-authoring-guide.md)。
-这是从 HIFM v0.3 迁入的通用执行指南（`0.4.0-draft.1`，待完整写作任务验证），不是新模板，
-不改变项目已采用的 STD/模板版本，也不自动授权提交、发布或运行。
-指南 §7.9 说明 Agent 如何选择场景/系统/软件/FPGA/板卡图样式，复用 SVG、替换项目内容、
+AI 编写入口采用“通用方法 + 模板类型专项”：先读
+[`docs/ai-authoring-guide.md`](docs/ai-authoring-guide.md)（`0.1.0-draft.1`），
+再按其中的映射选择主专项和项目已采用模板，不需要通读全部指南。
+13 类专项覆盖当前 45 个模板，同类模板共享方法，计划、报告和决定仍保留不同完成边界；
+精确导航见 [`docs/ai-authoring-guides.json`](docs/ai-authoring-guides.json)。
+从 HIFM v0.3 迁入的系统方法保留为
+[`docs/ai-system-design-authoring-guide.md`](docs/ai-system-design-authoring-guide.md)（`0.5.0-draft.3`）；
+机制方法已独立到 [`docs/ai-guides/system-mechanism.md`](docs/ai-guides/system-mechanism.md)。
+这些是方法草案，待实际任务验证，不是新模板，不改变项目已采用的 STD/模板版本，
+也不自动授权提交、发布或运行。公共规则只在通用指南维护，专项解释本类型的实际设计/取证方法。
+系统专项 §7.9 说明 Agent 如何选择场景/系统/软件/FPGA/板卡图样式，复用 SVG、替换项目内容、
 调整排版和连接、落入正文并检查实际渲染；样式复用不等于采用示例设计。
 局部修订只检查受影响内容和直接依赖，不重跑完整写作流程；原生图源与生成式插画分别维护，
 架构视图、实现状态和验证结果分别记录。
@@ -128,8 +134,16 @@ AI 指南按能力贯通章节、先复用并核对现有契约，再交接双�
 
 `design.definition` 保持待发布 `1.1.0`；`design.hardware` 与 `design.fpga` 增加上级约束承接、
 本地落实和系统组合验收，独立升为待发布 `1.1.0`，不要求另建通用单元文档。
-`design.system-mechanism` 为待发布 `1.3.0`，在既有安全恢复规则上兼容增补运行时统筹、参与方
-确认、完整公共契约及能力级双方交接指导。有副作用的任务失联先核对权威结果，确认旧执行者
+`design.system-mechanism` 为待发布 `1.5.1`，保留 15 个主章与既有约束，兼容展开 29 处段落式指导，
+补齐拓扑/身份、资源寿命、维护命令、测试控制/隔离与能力级双方承接；采用短封面和文末控制记录。
+九幅[可复用机制图文样板](templates/diagrams/mechanism/README.md)在模板中直接展示：
+保留只读六幅关系图，另加开篇用途图和两幅有副作用过程/依赖图。
+[暂存导出完整案例](docs/examples/mechanism-side-effect-example.md)给出完整调用和安全停止后未知结果的收口路径；
+[机制 AI 专项指南](docs/ai-guides/system-mechanism.md)补充双方调用演练、异常五轴、条件依赖、验证承接和全篇一致性检查。
+本轮补实取证来源封口、缺失/无效/不可读的判定，以及仅通过调用入口完成的执行中取消测试；
+副作用收口演练按适用条件执行，只读机制检查中断、迟到与临时资源清理，不照搬取证状态。
+示例及内存模型不新增项目协议、运行实现或审批要求；逻辑回归不替代真实 IPC/隔离验证。
+有副作用的任务失联先核对权威结果，确认旧执行者
 停止或隔离并满足幂等/去重条件后才可重新执行，否则阻塞或转人工；只读重新采样不代表原操作恢复。
 系统保留端到端原理与关键阶段，机制文档唯一维护详细状态转换及参与方协议。
 其他模板版本不变，不新增模板种类或审批流程。

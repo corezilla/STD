@@ -656,14 +656,17 @@ B.4 设计约束与关键假设
         self.assertIn("不重跑 S0～S7", scope)
         self.assertIn("直接依赖", scope)
         self.assertIn("完成条件后交付", scope)
-        state = guide.split("### 9.1", 1)[1].split("### 9.2", 1)[0]
+        common = (ROOT / "docs/ai-authoring-guide.md").read_text()
+        state = common.split("## 6.", 1)[1].split("## 7.", 1)[0]
+        self.assertIn("ai-authoring-guide.md#6-", guide.split("### 9.1", 1)[1].split("### 9.2", 1)[0])
         template = (ROOT / "templates/design/architecture-design.md").read_text()
         for vocabulary in ("Current / Target / Transitional", "Planned / Partial / Implemented",
                            "NOT_RUN / BLOCKED / FAIL / PARTIAL / Verified"):
             self.assertIn(f"`{vocabulary}`", state)
             self.assertIn(f"`{vocabulary}`", template)
         self.assertNotIn("Planned / Implemented / Verified", guide)
-        assets = guide.split("### 7.3", 1)[1].split("### 7.4", 1)[0]
+        assets = common.split("### 7.2", 1)[1].split("## 8.", 1)[0]
+        self.assertIn("ai-authoring-guide.md#72-", guide.split("### 7.3", 1)[1].split("### 7.4", 1)[0])
         for text in ("原生工程图保留", "生成式插画保留原始位图", "不存在的 SVG/三维源"):
             self.assertIn(text, assets)
         entry = guide.split("## 14.", 1)[1].split("## 15.", 1)[0]
@@ -986,7 +989,7 @@ B.4 设计约束与关键假设
         for name, heading, source_section, column in (
             ("architecture-design.md", "### 13.6 验证覆盖与验收矩阵", "§3.2", "| Target/Constraint ID 与能力范围 |"),
             ("design-definition.md", "## 14. 测试与验收", "§1.1", "| Function/Rule/Constraint |"),
-            ("system-mechanism-design.md", "## 14. 验证、上线与回滚", "§3.1", "| Scenario/Invariant/Constraint |"),
+            ("system-mechanism-design.md", "## 14. 验证、上线与回滚", "§3.1", "| 设计验证项 / Scenario/Invariant/Constraint |"),
             ("hardware-design.md", "## 12. Verification 与验收", "§1.1", "| Function/Requirement/Constraint ID |"),
             ("fpga-design.md", "## 12. Verification 与验收", "§1.1", "| Function/Invariant/Constraint ID |"),
         ):
@@ -1038,6 +1041,160 @@ B.4 设计约束与关键假设
         verification = content.split("## 14. 验证、上线与回滚\n", 1)[1].split("\n## ", 1)[0]
         for prompt in ("FAIL-001", "旧 Worker 恢复", "副作用不重复", "无法确认则阻塞或转人工"):
             self.assertIn(prompt, verification)
+
+    def test_mechanism_every_section_has_paragraph_guidance_and_body(self):
+        content = (ROOT / "templates/design/system-mechanism-design.md").read_text()
+        headings = list(re.finditer(r"^#{2,3} (.+)$", content, re.MULTILINE))
+        self.assertEqual(len(headings), 29)
+        self.assertEqual(re.findall(r"^## (\d+)\.", content, re.MULTILINE),
+                         [str(n) for n in range(1, 16)])
+        for index, heading in enumerate(headings):
+            end = headings[index + 1].start() if index + 1 < len(headings) else len(content)
+            section = content[heading.end():end]
+            with self.subTest(heading=heading[1]):
+                self.assertEqual(section.count("<details>"), 1)
+                self.assertEqual(section.count("</details>"), 1)
+                guidance, body = section.split("</details>", 1)
+                for label in ("本节目的", "必须写清楚", "编写规范", "抽象示例", "完成条件"):
+                    self.assertIn(f"**{label}**", guidance)
+                rules = guidance.split("**编写规范**：", 1)[1].split("**抽象示例**", 1)[0]
+                self.assertGreater(len(rules.strip()), 75)
+                body = re.sub(r"<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->.*?<!-- STD_TEMPLATE_EXAMPLE_END -->",
+                              "", body, flags=re.DOTALL)
+                self.assertTrue(body.strip(), "Teaching material cannot be the only body")
+        self.assertIn("不能只填表", content)
+        self.assertNotIn("新 lease/同 generation", content)
+
+    def test_mechanism_executable_topics_are_not_only_generic_checklists(self):
+        content = (ROOT / "templates/design/system-mechanism-design.md").read_text()
+        checks = {
+            "3.3": ("地址不等于身份", "共享故障/复位域", "映射"),
+            "4.1": ("accepted", "durable", "released", "每个成功和错误"),
+            "4.2": ("节点断电", "持久", "所有权", "安全复用"),
+            "5.1": ("启动未就绪", "在途", "并发裁决"),
+            "7.1": ("联合资源", "安全复用", "排空确认"),
+            "9": ("推导", "共享开销", "背压", "不等于"),
+            "10": ("身份 tuple 不是授权", "撤权", "强制点"),
+            "11.1": ("窗口", "时间源", "清零", "丢失"),
+            "11.2": ("完整语法", "执行位置", "施加/回读点", "软件 echo"),
+            "12": ("installed", "active", "verified", "回滚前提"),
+            "13": ("旧契约冲突", "全部提供方和消费者", "组合验证"),
+            "14.1": ("LLM", "arm→hit→release", "独立", "real/simulated"),
+            "14.2": ("就绪", "复位", "隔离测试", "竞争测试", "自动化"),
+            "14.3": ("实际授权", "唯一流程", "NOT_RUN"),
+        }
+        for number, terms in checks.items():
+            match = re.search(r"^#{2,3} " + re.escape(number) + r"[. ]+[^\n]+\n", content, re.MULTILINE)
+            self.assertIsNotNone(match, number)
+            section = re.split(r"\n#{2,3} ", content[match.end():], maxsplit=1)[0]
+            for term in terms:
+                self.assertIn(term, section, f"{number}: {term}")
+
+    def test_mechanism_figures_have_visible_prose_safe_svg_and_bound_exports(self):
+        content = (ROOT / "templates/design/system-mechanism-design.md").read_text()
+        blocks = re.findall(r"<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->(.*?)<!-- STD_TEMPLATE_EXAMPLE_END -->",
+                            content, re.DOTALL)
+        readonly = {"usage-overview", "collaboration", "objects", "sequence", "state-lifecycle", "failure-recovery", "test-path"}
+        effects = {"effect-flow", "cleanup-dependencies"}
+        names = readonly | effects
+        self.assertEqual(len(blocks), 12)
+        seen = set()
+        for block in blocks:
+            self.assertNotIn("<details>", block)
+            self.assertIn("Target / Planned / NOT_RUN", block)
+            self.assertIn("不是第二份协议", block)
+            paths = re.findall(r"!\[[^]]*\]\(([^)]+\.png)\)", block)
+            if not paths:  # API, five-axis and verification teaching blocks are text/tables.
+                self.assertIn("mechanism-side-effect-example.md", block)
+                continue
+            self.assertEqual(len(paths), 1)
+            png = (ROOT / "templates/design" / paths[0]).resolve()
+            self.assertTrue(png.is_file())
+            seen.add(png.stem)
+            self.assertIn(f"../diagrams/mechanism/{png.stem}.svg", block)
+            self.assertIn("#88-完整小例两个单元的只读版本核对" if png.stem in readonly
+                          else "mechanism-side-effect-example.md", block)
+        self.assertEqual(seen, names)
+        exports = json.loads((ROOT / "docs/assets/system-mechanism-authoring/exports.json").read_text())
+        self.assertEqual((exports["width"], exports["height"]), (1440, 840))
+        self.assertEqual(len(exports["exports"]), 9)
+        self.assertEqual({Path(item["svg"]).stem for item in exports["exports"]}, names)
+        for item in exports["exports"]:
+            svg_bytes = (ROOT / item["svg"]).read_bytes()
+            png_bytes = (ROOT / item["png"]).read_bytes()
+            self.assertEqual(hashlib.sha256(svg_bytes).hexdigest(), item["svg_sha256"])
+            self.assertEqual(hashlib.sha256(png_bytes).hexdigest(), item["png_sha256"])
+            self.assertEqual(png_bytes[:8], b"\x89PNG\r\n\x1a\n")
+            self.assertEqual((int.from_bytes(png_bytes[16:20], "big"),
+                              int.from_bytes(png_bytes[20:24], "big")), (1440, 840))
+            svg = ET.fromstring(svg_bytes)
+            self.assertEqual(svg.attrib["viewBox"], "0 0 1440 840")
+            ids = [node.attrib["id"] for node in svg.iter() if "id" in node.attrib]
+            self.assertEqual(len(ids), len(set(ids)))
+            self.assertTrue({"title", "desc", "legend"}.issubset(ids))
+            for node in svg.iter():
+                self.assertNotIn(node.tag.rsplit("}", 1)[-1], ("script", "image", "foreignObject"))
+                for key, value in node.attrib.items():
+                    self.assertFalse(key.lower().startswith("on"))
+                    if key.endswith("href"):
+                        self.assertTrue(value.startswith("#"))
+                    for reference in re.findall(r"url\(#([^)]+)\)", value):
+                        self.assertIn(reference, ids)
+            self.assertIn("EX-OBS-01/v1" if Path(item["svg"]).stem in readonly
+                          else "EX-EXPORT-01/v1", svg_bytes.decode())
+
+    def test_mechanism_example_preserves_test_order_and_volatile_boundary(self):
+        content = (ROOT / "templates/design/system-mechanism-design.md").read_text()
+        sample = content.split("图 6：", 1)[1].split("<!-- STD_TEMPLATE_EXAMPLE_END -->", 1)[0]
+        positions = [sample.index(text) for text in ("arm B", "协议路径调用后", "已 hit", "撤销延迟")]
+        self.assertEqual(positions, sorted(positions))
+        self.assertIn("不保留 CLOSED 记录", content)
+        self.assertIn("新观测", content)
+        state = (ROOT / "templates/diagrams/mechanism/state-lifecycle.svg").read_text()
+        self.assertIn("不保存 CLOSED 记录", state)
+        self.assertNotIn("取消 / 进程退出", state)
+        sequence = (ROOT / "templates/diagrams/mechanism/sequence.svg").read_text()
+        for term in ("先后", "700 ms", "1500 ms", "2000 ms", "CLI 校验后退出 0"):
+            self.assertIn(term, sequence)
+        self.assertLess(sequence.index('id="query-a"'), sequence.index('id="query-b"'))
+
+    def test_mechanism_guide_routes_same_assets_without_forcing_whole_system(self):
+        guide_path = ROOT / "docs/ai-guides/system-mechanism.md"
+        entry = guide_path.read_text()
+        system = (ROOT / "docs/ai-system-design-authoring-guide.md").read_text()
+        stub = system.split("### 14.1 系统机制写作入口", 1)[1].split("## 15.", 1)[0]
+        self.assertIn("ai-guides/system-mechanism.md", stub)
+        self.assertNotIn("**这六图如何复用**", stub)
+        for term in ("不要求", "15", "预设计", "独立 Oracle", "不要求六图全画", "900 px",
+                     "SVG 是维护源", "作者自审", "实际字段/行为定义", "未实际开展独立评审"):
+            self.assertIn(term, entry)
+        self.assertEqual(len(re.findall(r"\]\(../../templates/diagrams/mechanism/[^)]+\.svg\)", entry)), 9)
+        for reference in re.findall(r"\]\(([^)#]+)(?:#[^)]*)?\)", entry):
+            self.assertTrue((guide_path.parent / reference).resolve().is_file(), reference)
+
+    def test_generated_mechanism_keeps_compact_controls_but_not_teaching_assets(self):
+        source = (ROOT / "templates/design/system-mechanism-design.md").read_text()
+        sync = load_script("std_sync_mechanism_covers", "sync-template-covers")
+        front, back = sync.split_cover((ROOT / "templates/_shared/document-cover.md").read_text().strip())
+        self.assertIn(front, source)
+        self.assertIn(back, source)
+        with tempfile.TemporaryDirectory() as directory:
+            subprocess.run([str(ROOT / "scripts/new-design"), "--project", "example",
+                            "--template", "design.system-mechanism", "--name", "mechanism",
+                            "--output", directory, "--repository", "example/repo",
+                            "--owner", "Example Owner", "--author", "Example Author"],
+                           check=True, capture_output=True, text=True)
+            content = (Path(directory) / "mechanism.md").read_text()
+            for marker in ("STD_TEMPLATE_EXAMPLE", "../../docs/assets/", "../diagrams/", "!["):
+                self.assertNotIn(marker, content)
+            cover = content.split("<!-- STD_DOCUMENT_COVER_BEGIN -->", 1)[1].split("<!-- STD_DOCUMENT_COVER_END -->", 1)[0]
+            self.assertEqual(len(re.findall(r"^\| [^|]+ \|", cover, re.MULTILINE)), 9)  # header + 8 fields
+            self.assertEqual(content.count("<details>"), 29)
+            self.assertIn("<!-- STD_DOCUMENT_CONTROL_BEGIN -->", content)
+            validation = subprocess.run([str(ROOT / "scripts/validate-design"), directory, "--json"],
+                                        capture_output=True, text=True)
+            self.assertEqual(validation.returncode, 0, validation.stdout + validation.stderr)
+            self.assertEqual(json.loads(validation.stdout)["issues"], [])
 
     def test_system_plan_separates_review_implementation_and_integration_gates(self):
         system = (ROOT / "templates/design/architecture-design.md").read_text()

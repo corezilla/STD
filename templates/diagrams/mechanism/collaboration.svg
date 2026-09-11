@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="840" viewBox="0 0 1440 840" role="img" aria-labelledby="title desc">
+<title id="title">01  协作与责任边界</title>
+<desc id="desc">运维命令调用管理服务M，M先A后B采样；目标各自拥有版本事实，M仅汇总临时结果。</desc>
+<defs>
+<marker id="request-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M 0 0 L 10 5 L 0 10 z" fill="#2563b4"/>
+</marker>
+<marker id="response-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/>
+</marker>
+<marker id="control-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M 0 0 L 10 5 L 0 10 z" fill="#7957a6"/>
+</marker>
+</defs>
+<style>
+text { font-family:"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif; fill:#20334e; }
+.title { font-size:34px; font-weight:650; } .meta { font-size:19px; fill:#62738a; }
+.label { font-size:25px; font-weight:550; } .small { font-size:21px; fill:#4f617a; }
+.panel { fill:#edf4fc; stroke:#9bb7d9; stroke-width:2; }
+.accent { fill:#d6e7fb; stroke:#5f8ec8; stroke-width:2; }
+.neutral { fill:#f0f3f6; stroke:#b4bfcd; stroke-width:2; }
+.warning { fill:#fff3e3; stroke:#c89a58; stroke-width:2; }
+.request { fill:none; stroke:#2563b4; stroke-width:3; }
+.response { fill:none; stroke:#64748b; stroke-width:2.5; stroke-dasharray:8 6; }
+.control { fill:none; stroke:#7957a6; stroke-width:2.5; stroke-dasharray:5 5; }
+.lifeline { stroke:#c3cfdf; stroke-width:2; stroke-dasharray:5 6; }
+</style>
+<rect width="1440" height="840" fill="#fff"/>
+<rect x="40" y="35" width="6" height="65" rx="3" fill="#3375c3"/>
+<text class="title" x="64" y="65" text-anchor="start">
+<tspan x="64" dy="0">01  协作与责任边界</tspan>
+</text>
+<text class="meta" x="64" y="101" text-anchor="start">
+<tspan x="64" dy="0">EX-OBS-01/v1 · 虚构教学 · Target / Planned / NOT_RUN · M + A/B 固定拓扑</tspan>
+</text>
+<g id="collaboration-content">
+<g id="operator">
+<rect class="panel" x="55" y="330" width="250" height="150" rx="16"/>
+<text class="label" x="180" y="383" text-anchor="middle">
+<tspan x="180" dy="0">运维者 / 命令</tspan>
+<tspan x="180" dy="30">管理主机</tspan>
+<tspan x="180" dy="30">一次查询</tspan>
+</text>
+</g>
+<g id="manager">
+<rect class="accent" x="495" y="300" width="300" height="210" rx="16"/>
+<text class="label" x="645" y="383" text-anchor="middle">
+<tspan x="645" dy="0">M · 既有管理服务</tspan>
+<tspan x="645" dy="30">准入 / 采样 / 汇总</tspan>
+<tspan x="645" dy="30">本轮内存上下文</tspan>
+</text>
+</g>
+<g id="target-a">
+<rect class="panel" x="1050" y="215" width="335" height="160" rx="16"/>
+<text class="label" x="1217.5" y="288" text-anchor="middle">
+<tspan x="1217.5" dy="0">目标 A</tspan>
+<tspan x="1217.5" dy="30">本地版本 authority</tspan>
+</text>
+</g>
+<g id="target-b">
+<rect class="panel" x="1050" y="485" width="335" height="160" rx="16"/>
+<text class="label" x="1217.5" y="558" text-anchor="middle">
+<tspan x="1217.5" dy="0">目标 B</tspan>
+<tspan x="1217.5" dy="30">本地版本 authority</tspan>
+</text>
+</g>
+<path id="entry" class="request" d="M305 360H495" marker-end="url(#request-arrow)"/>
+<text class="small" x="400" y="340" text-anchor="middle">
+<tspan x="400" dy="0">EX-OP1</tspan>
+</text>
+<path id="report" class="response" d="M495 455H305" marker-end="url(#response-arrow)"/>
+<text class="small" x="400" y="495" text-anchor="middle">
+<tspan x="400" dy="0">Report / Error</tspan>
+</text>
+<path id="query-a" class="request" d="M795 345H925V265H1050" marker-end="url(#request-arrow)"/>
+<text class="small" x="935" y="205" text-anchor="middle">
+<tspan x="935" dy="0">① EX-OP2</tspan>
+</text>
+<path id="sample-a" class="response" d="M1050 325H970V390H795" marker-end="url(#response-arrow)"/>
+<path id="query-b" class="request" d="M795 455H925V535H1050" marker-end="url(#request-arrow)"/>
+<text class="small" x="930" y="680" text-anchor="middle">
+<tspan x="930" dy="0">② EX-OP2</tspan>
+</text>
+<path id="sample-b" class="response" d="M1050 595H970V495H795" marker-end="url(#response-arrow)"/>
+<text class="small" x="660" y="610" text-anchor="middle">
+<tspan x="660" dy="0">无新增队列 / 版本库</tspan>
+<tspan x="660" dy="30">A、B 是独立采样，不是全局原子快照</tspan>
+</text>
+</g>
+<g id="legend">
+<path d="M40 765H1400" stroke="#d9e2ed"/>
+<text class="meta" x="45" y="800" text-anchor="start">
+<tspan x="45" dy="0">图例：蓝实线 = 请求；灰虚线 = 响应；框 = 运行职责。采样顺序为 A → B，非并行。</tspan>
+</text>
+</g>
+</svg>

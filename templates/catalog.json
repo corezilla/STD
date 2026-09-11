@@ -63,7 +63,7 @@
     "requirements.traceability": "0.1.0",
     "evaluation.technical-analysis": "0.1.0",
     "design.system": "8.0.0",
-    "design.system-mechanism": "1.3.0",
+    "design.system-mechanism": "1.5.1",
     "design.definition": "1.1.0",
     "design.hardware": "1.1.0",
     "design.fpga": "1.1.0",

@@ -4,8 +4,10 @@
 [系统模板](../templates/design/architecture-design.md) 为准；项目只在用户要求升级时采用新版本。
 本指南中的示例完全虚构，仅说明表达方式，不构成任何项目的设计或验证证据。
 
-本文侧重内容深度与评审判据；AI 的任务计划、分步执行、绘图检查及续写流程见
-[系统设计 AI Agent 编写指南](ai-system-design-authoring-guide.md)。两者配合使用，不替代项目事实和模板。
+本文侧重系统内容深度与评审判据，不是另一份通用 AI 执行指南。AI 先读
+[通用 AI 编写指南](ai-authoring-guide.md)，再按
+[系统专项](ai-system-design-authoring-guide.md)完成计划、设计、图件与检查。
+这些方法配合使用，不替代项目事实和模板。
 
 ## 1. 先让读者理解系统
 

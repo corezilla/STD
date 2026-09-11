@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="840" viewBox="0 0 1440 840" role="img" aria-labelledby="title desc">
+<title id="title">04  轮次状态与资源寿命</title>
+<desc id="desc">M内存轮次经历采样A、采样B、汇总、关闭；本地关闭不等于远端查询已经停止。</desc>
+<defs>
+<marker id="request-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M 0 0 L 10 5 L 0 10 z" fill="#2563b4"/>
+</marker>
+<marker id="response-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/>
+</marker>
+<marker id="control-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+<path d="M 0 0 L 10 5 L 0 10 z" fill="#7957a6"/>
+</marker>
+</defs>
+<style>
+text { font-family:"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif; fill:#20334e; }
+.title { font-size:34px; font-weight:650; } .meta { font-size:19px; fill:#62738a; }
+.label { font-size:25px; font-weight:550; } .small { font-size:21px; fill:#4f617a; }
+.panel { fill:#edf4fc; stroke:#9bb7d9; stroke-width:2; }
+.accent { fill:#d6e7fb; stroke:#5f8ec8; stroke-width:2; }
+.neutral { fill:#f0f3f6; stroke:#b4bfcd; stroke-width:2; }
+.warning { fill:#fff3e3; stroke:#c89a58; stroke-width:2; }
+.request { fill:none; stroke:#2563b4; stroke-width:3; }
+.response { fill:none; stroke:#64748b; stroke-width:2.5; stroke-dasharray:8 6; }
+.control { fill:none; stroke:#7957a6; stroke-width:2.5; stroke-dasharray:5 5; }
+.lifeline { stroke:#c3cfdf; stroke-width:2; stroke-dasharray:5 6; }
+</style>
+<rect width="1440" height="840" fill="#fff"/>
+<rect x="40" y="35" width="6" height="65" rx="3" fill="#3375c3"/>
+<text class="title" x="64" y="65" text-anchor="start">
+<tspan x="64" dy="0">04  轮次状态与资源寿命</tspan>
+</text>
+<text class="meta" x="64" y="101" text-anchor="start">
+<tspan x="64" dy="0">EX-OBS-01/v1 · 虚构教学 · Target / Planned / NOT_RUN · M + A/B 固定拓扑</tspan>
+</text>
+<g id="state-content">
+<g id="admit">
+<rect class="neutral" x="50" y="195" width="1340" height="80" rx="16"/>
+<text class="label" x="720" y="243" text-anchor="middle">
+<tspan x="720" dy="0">入口校验 + M 槽位准入 → 新 observation_id；未获准直接拒绝，不创建轮次</tspan>
+</text>
+</g>
+<g id="sample-a">
+<rect class="panel" x="55" y="350" width="275" height="125" rx="16"/>
+<text class="label" x="192.5" y="405.5" text-anchor="middle">
+<tspan x="192.5" dy="0">采样 A</tspan>
+<tspan x="192.5" dy="30">成功或错误</tspan>
+</text>
+</g>
+<g id="sample-b">
+<rect class="panel" x="410" y="350" width="275" height="125" rx="16"/>
+<text class="label" x="547.5" y="405.5" text-anchor="middle">
+<tspan x="547.5" dy="0">采样 B</tspan>
+<tspan x="547.5" dy="30">成功或错误</tspan>
+</text>
+</g>
+<g id="assemble">
+<rect class="accent" x="770" y="350" width="260" height="125" rx="16"/>
+<text class="label" x="900" y="405.5" text-anchor="middle">
+<tspan x="900" dy="0">汇总 / 发送</tspan>
+<tspan x="900" dy="30">0 / 1 / 2 成功</tspan>
+</text>
+</g>
+<g id="closed">
+<rect class="neutral" x="1115" y="350" width="270" height="125" rx="16"/>
+<text class="label" x="1250" y="405.5" text-anchor="middle">
+<tspan x="1250" dy="0">CLOSED</tspan>
+<tspan x="1250" dy="30">拒绝迟到回调</tspan>
+</text>
+</g>
+<path id="ab" class="request" d="M330 412H410" marker-end="url(#request-arrow)"/>
+<text class="small" x="370" y="332" text-anchor="middle">
+<tspan x="370" dy="0">A 定案</tspan>
+</text>
+<path id="bf" class="request" d="M685 412H770" marker-end="url(#request-arrow)"/>
+<text class="small" x="727" y="332" text-anchor="middle">
+<tspan x="727" dy="0">B 定案</tspan>
+</text>
+<path id="fc" class="request" d="M1030 412H1115" marker-end="url(#request-arrow)"/>
+<text class="small" x="1073" y="332" text-anchor="middle">
+<tspan x="1073" dy="0">结束</tspan>
+</text>
+<path id="abort" class="response" d="M192 475V555H1250V475" marker-end="url(#response-arrow)"/>
+<path id="abort-b" class="response" d="M547 475V555" marker-end="url(#response-arrow)"/>
+<path id="abort-f" class="response" d="M900 475V555" marker-end="url(#response-arrow)"/>
+<text class="small" x="720" y="590" text-anchor="middle">
+<tspan x="720" dy="0">客户端取消：冻结本轮并清理，不产生成功确认</tspan>
+</text>
+<g id="resource">
+<rect class="warning" x="150" y="640" width="1140" height="80" rx="16"/>
+<text class="label" x="720" y="673" text-anchor="middle">
+<tspan x="720" dy="0">关闭本地 I/O 并释放 M 槽位；远端在途查询仍可能执行，按目标 700 ms 上限清理</tspan>
+<tspan x="720" dy="30">进程退出只回收本地资源，不保存 CLOSED 记录</tspan>
+</text>
+</g>
+</g>
+<g id="legend">
+<path d="M40 765H1400" stroke="#d9e2ed"/>
+<text class="meta" x="45" y="800" text-anchor="start">
+<tspan x="45" dy="0">图例：蓝实线 = 正常转换；灰虚线 = 终止分支。仅 M 内存轮次；业务状态和目标资源不可混为一体。</tspan>
+</text>
+</g>
+</svg>

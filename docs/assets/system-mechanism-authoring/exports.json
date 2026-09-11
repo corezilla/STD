@@ -1,0 +1,62 @@
+{
+  "format_version": 1,
+  "renderer": "Local Chromium / PingFang SC / deviceScaleFactor=1",
+  "width": 1440,
+  "height": 840,
+  "exports": [
+    {
+      "svg": "templates/diagrams/mechanism/usage-overview.svg",
+      "png": "docs/assets/system-mechanism-authoring/usage-overview.png",
+      "svg_sha256": "bc1f3077165b38c0d85e8e3d5f989d66a2537a035fa1ac090487e8b7181e4527",
+      "png_sha256": "877df682bd494ce3b444c65952e513523982906f88773592c06e956f187adc63"
+    },
+    {
+      "svg": "templates/diagrams/mechanism/effect-flow.svg",
+      "png": "docs/assets/system-mechanism-authoring/effect-flow.png",
+      "svg_sha256": "8fc62ef1b56387881e2a1e26d8e081f6a1cd08d1d905813e13861a86535c0da4",
+      "png_sha256": "9911bfda85751128f5f1659f5b315f9eb7a862fd56adbb9e65384abf09f771e0"
+    },
+    {
+      "svg": "templates/diagrams/mechanism/cleanup-dependencies.svg",
+      "png": "docs/assets/system-mechanism-authoring/cleanup-dependencies.png",
+      "svg_sha256": "011d21e1fb9e0fecf0cac493c4a9bbd37a2e1ccdba2fe16a2f09a2aafdb892a3",
+      "png_sha256": "72784f93d50de77ef12b82516af86a10a3e6ba43e664f80422e3cad2306df609"
+    },
+    {
+      "svg": "templates/diagrams/mechanism/collaboration.svg",
+      "png": "docs/assets/system-mechanism-authoring/collaboration.png",
+      "svg_sha256": "c99dbb0220442dbdba2c678f7463016322cd3bbd9e41e2803400443ac8ef3985",
+      "png_sha256": "8c921bf8897da3805e33c530ad37d1442cb72608f9ac519eff111488dd54f7e9"
+    },
+    {
+      "svg": "templates/diagrams/mechanism/objects.svg",
+      "png": "docs/assets/system-mechanism-authoring/objects.png",
+      "svg_sha256": "30e7095749ebf8980dc49a2c7b6bd3fe4627b9f1f5656da667171ef1e2b177d9",
+      "png_sha256": "87e5e1b057e571030d2ddb6b339b742f10aee20bb353bc4f39fece9c21bb42e7"
+    },
+    {
+      "svg": "templates/diagrams/mechanism/sequence.svg",
+      "png": "docs/assets/system-mechanism-authoring/sequence.png",
+      "svg_sha256": "eb038fea4772318aff36ae9304f7086a7740ac712cc46c8acd513cfab128101b",
+      "png_sha256": "2f6a67f795d10cee73d6127aa8df35adb8b0dc6f82e3a59efbaaf7847f86c578"
+    },
+    {
+      "svg": "templates/diagrams/mechanism/state-lifecycle.svg",
+      "png": "docs/assets/system-mechanism-authoring/state-lifecycle.png",
+      "svg_sha256": "a16cb15bc54d857596780c2fa73b1dfc59a6af89b4493327c436bdc04e53728c",
+      "png_sha256": "d6c745ec351916acf3c0fc177fbc9ed8cd594a8a9ec135f08966b99f4d6d7283"
+    },
+    {
+      "svg": "templates/diagrams/mechanism/failure-recovery.svg",
+      "png": "docs/assets/system-mechanism-authoring/failure-recovery.png",
+      "svg_sha256": "18ebb416c4e515e41877a334b08867595369724537b8ea0e59d3a79973e07473",
+      "png_sha256": "22e0de425d2995863f63eb9c85691f0da6e376cc98c311a16bc9eb527727bf05"
+    },
+    {
+      "svg": "templates/diagrams/mechanism/test-path.svg",
+      "png": "docs/assets/system-mechanism-authoring/test-path.png",
+      "svg_sha256": "0ee6348fa1a948a88d040cd98aba542c4b50f3dba4b4efe6d24e0425f5952ccf",
+      "png_sha256": "5b5ec2bf9b2c366a0e6814887abe5b444eed437adaff5c47994e34de22306043"
+    }
+  ]
+}
