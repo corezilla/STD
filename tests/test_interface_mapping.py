@@ -116,6 +116,115 @@ class InterfaceMappingTests(unittest.TestCase):
         op["bindings"] = []
         self.assertTrue(any("requires applicable" in e for e in self.errors()))
 
+    def test_signature_roles_and_completeness_cannot_drift(self):
+        op = next(m for m in self.catalog["members"] if m["name"] == "prepare")
+        baseline = copy.deepcopy(op["bindings"])
+        variants = {}
+        swapped = copy.deepcopy(baseline)
+        for binding in swapped:
+            if binding["role"] in ("request", "response"):
+                binding["role"] = {"request": "response", "response": "request"}[binding["role"]]
+        variants["swapped roles"] = swapped
+        for role in ("request", "response"):
+            variants["missing " + role] = [b for b in baseline if b["role"] != role]
+        variants["missing args"] = [b for b in baseline if b["selector"]["value"] != "/args"]
+        disguised = copy.deepcopy(baseline)
+        disguised[0].update(role="alias", mapping="Not a replacement for the actual signature")
+        variants["disguised as alias"] = disguised
+        variants["duplicate response"] = baseline + [next(b for b in baseline if b["role"] == "response")]
+        extra = copy.deepcopy(baseline[0])
+        extra["role"] = "event"
+        variants["invented event"] = baseline + [extra]
+        for label, bindings in variants.items():
+            with self.subTest(mutation=label):
+                op["bindings"] = bindings
+                self.assertTrue(any(e.startswith("signature:") for e in self.errors()))
+
+    def test_one_way_and_nested_signature_slots_use_only_actual_source(self):
+        derive = validator.signature_bindings
+        self.assertEqual(derive({"request": {"$ref": "#/Request"}}), {("request", "json_pointer", "/request")})
+        self.assertEqual(derive({"event": {"$ref": "#/Event"}}), {("event", "json_pointer", "/event")})
+        self.assertEqual(derive({"response": {"oneOf": [{"$ref": "#/Ok"}, {"$ref": "#/Error"}]}}),
+                         {("response", "json_pointer", "/response/oneOf/0"), ("response", "json_pointer", "/response/oneOf/1")})
+        for value in ({"input": {"$ref": "#/Request"}}, {"request": {"type": "object"}}, {}):
+            with self.subTest(unsupported=value), self.assertRaises(ValueError):
+                derive(value)
+
+    def test_one_way_operation_passes_catalog_without_invented_response(self):
+        definition = self.contract["x-operations"]["prepare"]
+        definition.pop("response")
+        definition["mode"] = "one-way"
+        member = next(m for m in self.catalog["members"] if m["name"] == "prepare")
+        member["bindings"] = [b for b in member["bindings"] if b["role"] != "response"]
+        member["reading_view"] = None  # This temporary source declares no generated reading projection.
+        self.changed_contract()
+        self.assertEqual(self.errors(), [])
+
+    def test_prose_cover_metadata_and_catalog_are_one_identity(self):
+        path = self.root / "docs/examples/mechanism-side-effect-example.md"
+        sidecar = path.with_suffix(".metadata.json")
+        original_text = path.read_text()
+        original_metadata = json.loads(sidecar.read_text())
+        version = original_metadata["document_version"]
+        self.assertNotIn("<!-- Document Version:", original_text)
+        self.assertEqual(self.errors(), [])  # no hidden ID/version needed
+        mutations = (
+            ("cover version", lambda s: s.replace(f'| Document Version | `{version}` |', '| Document Version | `4.0.0` |'), None),
+            ("metadata version", lambda s: s, {"document_version": "4.0.0"}),
+            ("cover ID", lambda s: s.replace('`EX-EXPORT-DESIGN`', '`OTHER-DESIGN`'), None),
+            ("metadata ID", lambda s: s, {"document_id": "OTHER-DESIGN"}),
+            ("metadata path", lambda s: s, {"source_path": "wrong.md"}),
+            ("metadata repo", lambda s: s, {"source_repository": "fiction/other"}),
+            ("stale hidden mirror", lambda s: s + '\n<!-- Document Version: 4.0.0 -->\n', None),
+        )
+        for label, edit, data in mutations:
+            with self.subTest(mutation=label):
+                path.write_text(edit(original_text))
+                sidecar.write_text(json.dumps(original_metadata | (data or {})))
+                self.assertTrue(any(e.startswith("prose:") for e in self.errors()))
+        path.write_text(original_text)
+        sidecar.write_text(json.dumps(original_metadata))
+        for field, wrong in (("version", "4.0.0"), ("document_id", "OTHER-DESIGN")):
+            member = self.catalog["members"][0]
+            previous = member["prose"][field]
+            member["prose"][field] = wrong
+            self.assertTrue(any("catalog document ID/version" in e for e in self.errors()))
+            member["prose"][field] = previous
+
+    def test_legacy_comments_cannot_replace_metadata_or_cover(self):
+        path = self.root / "docs/examples/mechanism-side-effect-example.md"
+        sidecar = path.with_suffix(".metadata.json")
+        metadata = json.loads(sidecar.read_text())
+        text = path.read_text() + f'\n<!-- Document ID: {metadata["document_id"]} -->\n<!-- Document Version: {metadata["document_version"]} -->\n'
+        path.write_text(text)
+        self.assertEqual(self.errors(), [])  # matching old mirrors are checked, not required
+        path.write_text(text + f'\n<!-- Document Version: {metadata["document_version"]} -->\n')
+        self.assertTrue(any("duplicated" in e for e in self.errors()))
+        path.write_text(text.replace("STD_DOCUMENT_COVER_BEGIN", "NO_COVER"))
+        self.assertTrue(any("cover.markers" in e for e in self.errors()))
+        path.write_text(text)
+        sidecar.unlink()
+        self.assertTrue(any("missing file" in e for e in self.errors()))
+
+    def test_identity_check_accepts_normal_generated_design_without_new_markers(self):
+        dest = self.root / "docs/generated"
+        result = subprocess.run([sys.executable, str(ROOT / "scripts/new-design"), "--template", "design.system-mechanism",
+                                 "--project", "example", "--name", "real-design", "--project-root", str(self.root), "--output", str(dest),
+                                 "--owner", "Example", "--author", "Example", "--repository", "corezilla/STD"], capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        path = dest / "real-design.md"
+        path.write_text(path.read_text() + '\n<a id="bound-data"></a>\n')
+        data = json.loads(path.with_suffix(".metadata.json").read_text())
+        self.catalog["members"][0]["prose"] = {"repository": data["source_repository"], "path": data["source_path"],
+                                               "document_id": data["document_id"], "version": data["document_version"], "anchor": "bound-data"}
+        self.assertEqual(self.errors(), [])
+        # Identity validation must not silently require the latest adopted template.
+        current_template = data["template_version"]
+        data["template_version"] = "1.5.1"
+        path.with_suffix(".metadata.json").write_text(json.dumps(data))
+        path.write_text(path.read_text().replace(f'| Template Version | `{current_template}` |', '| Template Version | `1.5.1` |'))
+        self.assertEqual(self.errors(), [])
+
     def test_native_source_reports_semantic_check_limit(self):
         p = self.root / "native.proto"
         p.write_text('version: v1\nrevision: 1\nmessage Existing {}\n')
@@ -244,6 +353,8 @@ class InterfaceMappingTests(unittest.TestCase):
             self.assertIn("成员 ID", body)
             if tid == "design.system":
                 self.assertIn("Document ID / 预定仓库相对文件名或实际链接", body)
+                self.assertIn("上级 Mechanism ID", body)
+                self.assertIn("前置依赖（类别）", body)
                 self.assertNotIn("EX-EXPORT-DESIGN", body)
             else:
                 self.assertIn("## 5. 接口设计", body)

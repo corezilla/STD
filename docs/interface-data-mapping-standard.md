@@ -1,6 +1,6 @@
 # 接口与数据规格映射规范
 
-版本：1.0.0-draft.1 · 日期：2026-09-12 · 状态：待发布方法；不自动升级项目采用基线
+版本：1.0.0-draft.2 · 日期：2026-09-12 · 状态：待发布方法；不自动升级项目采用基线
 
 ## 1. 双读者与唯一来源
 
@@ -32,12 +32,16 @@
 | family | id/name/purpose、providers/consumers、source、coverage；目的写使用任务，不只写接口名称 |
 | source | repository、根相对 path、selector、version/revision 及其 selector、SHA-256、semantic_scope |
 | member | id/family/kind/name、source、prose、bindings、status、evolution、downstream、reading_view |
-| prose | repository/path、Document ID/version、显式稳定 anchor；正文保留下面三个绑定标记 |
+| prose | repository/path、Document ID/version、显式稳定 anchor；身份复用同名 metadata 与受控封面 |
 | bindings | role、target 成员 ID、相对本成员定义的 selector；alias/conversion 另需 mapping 说明 |
 | downstream | 提供/消费 role、module/backend、version/revision/source_sha256、实现和验证状态、location/symbol、design_items/cases、verification_ref/runs |
 
-正文绑定使用 `<!-- Document ID: EX-DESIGN -->`、`<!-- Document Version: 1.0.0 -->` 和
-`<a id="contract-data"></a>`。每个标记在该文件唯一；一个正文可以给多个成员共用稳定锚点。
+正文身份沿用同名 `.metadata.json` 的 `document_id/document_version/source_repository/source_path`，
+并与 `STD_DOCUMENT_COVER_BEGIN/END` 封面及可选 `STD_DOCUMENT_CONTROL_BEGIN/END` 文末控制区核对。
+检查器复用 `validate-design` 的封面校验和现有 document-metadata Schema，再与目录比对；
+不扫描示例表格冒充封面，不要求项目追踪新模板版本。显式 `<a id="contract-data"></a>` 只定位章节，
+一个正文可给多个成员共用锚点。不得新建独立的隐藏文档 ID/版本；旧 `Document ID/Version` 注释若仍保留，
+只能是 metadata 的唯一且一致的镜像，冲突即失败，缺失 metadata 也不能退回注释验证。
 代码 location 只含 repository/path，symbol 为实际声明；未实现时二者为 null，不创建空代码。
 verification_ref 定位既有验证表，design_items、Case 和 Run 是不同 ID；未实现 Case 仍保留在
 该表的分母中，NOT_RUN 不得填伪造 Run。目录只索引任务/证据，不另复制全项目测试平台。
@@ -61,6 +65,11 @@ offset 分开；只有实际二进制 ABI 才规定端序、对齐、padding/res
 
 逐操作写提供/调用方、同步/异步、完整请求/响应/事件/错误类型、身份权限、前置及校验顺序、
 副作用、accepted/completed/effective/released 保证、重复/幂等、取消/超时和每个错误后的合法动作。
+目录的 role 必须与源签名语义一致，所有适用槽位恰好映射一次，不能漏响应、重复请求或用 alias 掩盖错配。
+本检查器支持源 JSON 对象中命名的 `request/response/event/error` 类型引用及 `args`（role=field），
+包括这些槽位内嵌的 `$ref`；从源枚举角色与 selector，再核对目录和目标类型。单向操作只映射源实际声明的
+槽位，不强加不存在的响应。未知签名布局报未支持并阻止本项通过，由项目解析器适配；不把 OpenAPI/Proto 等
+其他布局默认为此形状，也不为适配工具重写原协议。转换应另由实际类型/转换定义承载，不能替代操作的真实签名。
 CLI 同时给命令 ID、参数类型/范围/默认/互斥、stdout/stderr/退出码及执行环境。
 硬件边界给标准号/版本/适用部分和项目绑定；自定义信号按实际写方向、位宽、时钟/时序、电气条件。
 标准链接不能代替未被标准决定的项目选项。不存在的信号或故障控制不为填模板新增。
@@ -83,8 +92,12 @@ evolution 记录 active/deprecated、replaced_by（无替代为 null）及 compa
 
 ## 5. 先登记机制，再逐份编写
 
-系统设计保留一份机制清单：Mechanism ID、Document ID、预定仓库相对文件名、用途/范围、
-关联能力/Process/Constraint、参与单元、相关接口族、Owner、依赖、写作状态和已成文基线。
+系统设计保留一份机制清单：Mechanism ID、上级 Mechanism ID、Document ID、预定仓库相对文件名、用途/范围、
+关联能力/Process/Constraint、参与单元、相关接口族、Owner、前置依赖、写作状态和已成文基线。
+上级 Mechanism ID 表示设计分解与约束继承，顶层填 none；前置依赖表示写作或行为的先决条件并注明类别，
+可以跨分支，不能替代父子归属，也不从父子关系推断运行时调用顺序。每个机制只有一个直接上级且上级须已登记
+（可为 Planned），禁止自指、循环或悬空；被多处使用时引用原机制，不复制多个身份。子机制写明承接范围，
+由上级保留组合约束；跨仓库上级须使用明确的仓库/机制 ID 定位。父子树与依赖图分别做内容走查。
 可以先定稳定 ID 和文件名，不要求先创建空文件。待编写路径用代码文字，不能用会误导读者的断链；
 成文后改为真实相对链接并绑定文档版本/锚点。状态区分 Planned、Draft、In Review、Approved、Retired；
 Planned 行的已成文版本为 none，不能当作已存在接口来源、已接收的下游实现输入或审批依据。
@@ -100,7 +113,7 @@ Planned 行的已成文版本为 none，不能当作已存在接口来源、已�
 新[完整映射示例](examples/interfaces/README.md)复用虚构 EX-EXPORT-01/v1，结构从真实 Schema
 投影，行为仍在既有案例。`--print-view 'IF-EXPORT#OP01'` 只向 stdout 输出所选定义，方便更新阅读视图。
 
-本工具检查格式/重复 ID、hash 与版本、来源定位、正文稳定锚点、JSON `$ref` 与 binding、
+本工具检查格式/重复 ID、hash 与版本、来源定位、封面/metadata/目录身份、正文稳定锚点、JSON `$ref` 与签名映射完整性、
 逐字投影视图、声明全集、废弃指向及下游基线/状态。reading_view 不为 null 时，正文使用
 `<!-- CONTRACT_VIEW IF-EXPORT#OP01 BEGIN -->` + JSON fenced 完整投影 +对应 END 标记，
 由工具确定性排序输出后核对。普通解释段落不能被自动证明与契约一致，须内容走查。

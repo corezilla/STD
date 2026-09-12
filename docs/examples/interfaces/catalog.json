@@ -131,7 +131,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/mechanism-side-effect-example.md",
         "document_id": "EX-EXPORT-DESIGN",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-data"
       },
       "bindings": [],
@@ -169,7 +169,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -197,7 +197,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -207,7 +207,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/interfaces/contract-view.md",
         "document_id": "EX-EXPORT-CONTRACT-VIEW",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-view"
       }
     },
@@ -240,7 +240,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/mechanism-side-effect-example.md",
         "document_id": "EX-EXPORT-DESIGN",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-data"
       },
       "bindings": [],
@@ -278,7 +278,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -306,7 +306,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -316,7 +316,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/interfaces/contract-view.md",
         "document_id": "EX-EXPORT-CONTRACT-VIEW",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-view"
       }
     },
@@ -349,7 +349,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/mechanism-side-effect-example.md",
         "document_id": "EX-EXPORT-DESIGN",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-data"
       },
       "bindings": [],
@@ -387,7 +387,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -415,7 +415,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -425,7 +425,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/interfaces/contract-view.md",
         "document_id": "EX-EXPORT-CONTRACT-VIEW",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-view"
       }
     },
@@ -458,7 +458,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/mechanism-side-effect-example.md",
         "document_id": "EX-EXPORT-DESIGN",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-data"
       },
       "bindings": [],
@@ -496,7 +496,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -524,7 +524,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -534,7 +534,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/interfaces/contract-view.md",
         "document_id": "EX-EXPORT-CONTRACT-VIEW",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-view"
       }
     },
@@ -567,7 +567,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/mechanism-side-effect-example.md",
         "document_id": "EX-EXPORT-DESIGN",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-data"
       },
       "bindings": [],
@@ -605,7 +605,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -633,7 +633,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -643,7 +643,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/interfaces/contract-view.md",
         "document_id": "EX-EXPORT-CONTRACT-VIEW",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-view"
       }
     },
@@ -676,7 +676,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/mechanism-side-effect-example.md",
         "document_id": "EX-EXPORT-DESIGN",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-data"
       },
       "bindings": [],
@@ -714,7 +714,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -742,7 +742,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -752,7 +752,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/interfaces/contract-view.md",
         "document_id": "EX-EXPORT-CONTRACT-VIEW",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-view"
       }
     },
@@ -785,7 +785,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/mechanism-side-effect-example.md",
         "document_id": "EX-EXPORT-DESIGN",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-data"
       },
       "bindings": [],
@@ -823,7 +823,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -851,7 +851,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -861,7 +861,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/interfaces/contract-view.md",
         "document_id": "EX-EXPORT-CONTRACT-VIEW",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-view"
       }
     },
@@ -894,7 +894,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/mechanism-side-effect-example.md",
         "document_id": "EX-EXPORT-DESIGN",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-data"
       },
       "bindings": [],
@@ -932,7 +932,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -960,7 +960,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -970,7 +970,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/interfaces/contract-view.md",
         "document_id": "EX-EXPORT-CONTRACT-VIEW",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-view"
       }
     },
@@ -1003,7 +1003,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/mechanism-side-effect-example.md",
         "document_id": "EX-EXPORT-DESIGN",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-data"
       },
       "bindings": [],
@@ -1041,7 +1041,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -1069,7 +1069,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -1079,7 +1079,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/interfaces/contract-view.md",
         "document_id": "EX-EXPORT-CONTRACT-VIEW",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-view"
       }
     },
@@ -1112,7 +1112,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/mechanism-side-effect-example.md",
         "document_id": "EX-EXPORT-DESIGN",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-data"
       },
       "bindings": [],
@@ -1150,7 +1150,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -1178,7 +1178,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -1188,7 +1188,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/interfaces/contract-view.md",
         "document_id": "EX-EXPORT-CONTRACT-VIEW",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-view"
       }
     },
@@ -1221,7 +1221,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/mechanism-side-effect-example.md",
         "document_id": "EX-EXPORT-DESIGN",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-data"
       },
       "bindings": [],
@@ -1259,7 +1259,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -1287,7 +1287,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -1297,7 +1297,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/interfaces/contract-view.md",
         "document_id": "EX-EXPORT-CONTRACT-VIEW",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-view"
       }
     },
@@ -1330,7 +1330,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/mechanism-side-effect-example.md",
         "document_id": "EX-EXPORT-DESIGN",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-data"
       },
       "bindings": [],
@@ -1368,7 +1368,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -1396,7 +1396,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -1406,7 +1406,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/interfaces/contract-view.md",
         "document_id": "EX-EXPORT-CONTRACT-VIEW",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-view"
       }
     },
@@ -1439,7 +1439,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/mechanism-side-effect-example.md",
         "document_id": "EX-EXPORT-DESIGN",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-data"
       },
       "bindings": [],
@@ -1477,7 +1477,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -1505,7 +1505,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -1515,7 +1515,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/interfaces/contract-view.md",
         "document_id": "EX-EXPORT-CONTRACT-VIEW",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-view"
       }
     },
@@ -1548,7 +1548,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/mechanism-side-effect-example.md",
         "document_id": "EX-EXPORT-DESIGN",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-behavior"
       },
       "bindings": [
@@ -1566,6 +1566,14 @@
           "selector": {
             "kind": "json_pointer",
             "value": "/response"
+          }
+        },
+        {
+          "role": "field",
+          "target": "IF-EXPORT#TYPE04",
+          "selector": {
+            "kind": "json_pointer",
+            "value": "/args"
           }
         }
       ],
@@ -1603,7 +1611,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -1631,7 +1639,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -1641,7 +1649,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/interfaces/contract-view.md",
         "document_id": "EX-EXPORT-CONTRACT-VIEW",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-view"
       }
     },
@@ -1674,7 +1682,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/mechanism-side-effect-example.md",
         "document_id": "EX-EXPORT-DESIGN",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-behavior"
       },
       "bindings": [
@@ -1692,6 +1700,14 @@
           "selector": {
             "kind": "json_pointer",
             "value": "/response"
+          }
+        },
+        {
+          "role": "field",
+          "target": "IF-EXPORT#TYPE03",
+          "selector": {
+            "kind": "json_pointer",
+            "value": "/args"
           }
         }
       ],
@@ -1729,7 +1745,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -1757,7 +1773,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -1767,7 +1783,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/interfaces/contract-view.md",
         "document_id": "EX-EXPORT-CONTRACT-VIEW",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-view"
       }
     },
@@ -1800,7 +1816,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/mechanism-side-effect-example.md",
         "document_id": "EX-EXPORT-DESIGN",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-behavior"
       },
       "bindings": [
@@ -1818,6 +1834,14 @@
           "selector": {
             "kind": "json_pointer",
             "value": "/response"
+          }
+        },
+        {
+          "role": "field",
+          "target": "IF-EXPORT#TYPE03",
+          "selector": {
+            "kind": "json_pointer",
+            "value": "/args"
           }
         }
       ],
@@ -1855,7 +1879,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -1883,7 +1907,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -1893,7 +1917,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/interfaces/contract-view.md",
         "document_id": "EX-EXPORT-CONTRACT-VIEW",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-view"
       }
     },
@@ -1926,7 +1950,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/mechanism-side-effect-example.md",
         "document_id": "EX-EXPORT-DESIGN",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-behavior"
       },
       "bindings": [
@@ -1944,6 +1968,14 @@
           "selector": {
             "kind": "json_pointer",
             "value": "/response"
+          }
+        },
+        {
+          "role": "field",
+          "target": "IF-EXPORT#TYPE03",
+          "selector": {
+            "kind": "json_pointer",
+            "value": "/args"
           }
         }
       ],
@@ -1981,7 +2013,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2009,7 +2041,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2019,7 +2051,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/interfaces/contract-view.md",
         "document_id": "EX-EXPORT-CONTRACT-VIEW",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-view"
       }
     },
@@ -2052,7 +2084,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/mechanism-side-effect-example.md",
         "document_id": "EX-EXPORT-DESIGN",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-behavior"
       },
       "bindings": [
@@ -2070,6 +2102,14 @@
           "selector": {
             "kind": "json_pointer",
             "value": "/response"
+          }
+        },
+        {
+          "role": "field",
+          "target": "IF-EXPORT#TYPE03",
+          "selector": {
+            "kind": "json_pointer",
+            "value": "/args"
           }
         }
       ],
@@ -2107,7 +2147,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2135,7 +2175,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2145,7 +2185,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/interfaces/contract-view.md",
         "document_id": "EX-EXPORT-CONTRACT-VIEW",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-view"
       }
     },
@@ -2178,7 +2218,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/mechanism-side-effect-example.md",
         "document_id": "EX-EXPORT-DESIGN",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-behavior"
       },
       "bindings": [
@@ -2196,6 +2236,14 @@
           "selector": {
             "kind": "json_pointer",
             "value": "/response"
+          }
+        },
+        {
+          "role": "field",
+          "target": "IF-EXPORT#TYPE05",
+          "selector": {
+            "kind": "json_pointer",
+            "value": "/args"
           }
         }
       ],
@@ -2233,7 +2281,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2261,7 +2309,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2271,7 +2319,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/interfaces/contract-view.md",
         "document_id": "EX-EXPORT-CONTRACT-VIEW",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-view"
       }
     },
@@ -2304,7 +2352,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/mechanism-side-effect-example.md",
         "document_id": "EX-EXPORT-DESIGN",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-behavior"
       },
       "bindings": [
@@ -2322,6 +2370,14 @@
           "selector": {
             "kind": "json_pointer",
             "value": "/response"
+          }
+        },
+        {
+          "role": "field",
+          "target": "IF-EXPORT#TYPE03",
+          "selector": {
+            "kind": "json_pointer",
+            "value": "/args"
           }
         }
       ],
@@ -2359,7 +2415,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2387,7 +2443,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2397,7 +2453,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/interfaces/contract-view.md",
         "document_id": "EX-EXPORT-CONTRACT-VIEW",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-view"
       }
     },
@@ -2430,7 +2486,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/mechanism-side-effect-example.md",
         "document_id": "EX-EXPORT-DESIGN",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "error-actions"
       },
       "bindings": [],
@@ -2468,7 +2524,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2496,7 +2552,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2506,7 +2562,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/interfaces/contract-view.md",
         "document_id": "EX-EXPORT-CONTRACT-VIEW",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-view"
       }
     },
@@ -2539,7 +2595,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/mechanism-side-effect-example.md",
         "document_id": "EX-EXPORT-DESIGN",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "error-actions"
       },
       "bindings": [],
@@ -2577,7 +2633,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2605,7 +2661,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2615,7 +2671,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/interfaces/contract-view.md",
         "document_id": "EX-EXPORT-CONTRACT-VIEW",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-view"
       }
     },
@@ -2648,7 +2704,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/mechanism-side-effect-example.md",
         "document_id": "EX-EXPORT-DESIGN",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "error-actions"
       },
       "bindings": [],
@@ -2686,7 +2742,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2714,7 +2770,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2724,7 +2780,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/interfaces/contract-view.md",
         "document_id": "EX-EXPORT-CONTRACT-VIEW",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-view"
       }
     },
@@ -2757,7 +2813,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/mechanism-side-effect-example.md",
         "document_id": "EX-EXPORT-DESIGN",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "error-actions"
       },
       "bindings": [],
@@ -2795,7 +2851,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2823,7 +2879,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2833,7 +2889,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/interfaces/contract-view.md",
         "document_id": "EX-EXPORT-CONTRACT-VIEW",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-view"
       }
     },
@@ -2866,7 +2922,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/mechanism-side-effect-example.md",
         "document_id": "EX-EXPORT-DESIGN",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "error-actions"
       },
       "bindings": [],
@@ -2904,7 +2960,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2932,7 +2988,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2942,7 +2998,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/interfaces/contract-view.md",
         "document_id": "EX-EXPORT-CONTRACT-VIEW",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-view"
       }
     },
@@ -2975,7 +3031,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/mechanism-side-effect-example.md",
         "document_id": "EX-EXPORT-DESIGN",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "error-actions"
       },
       "bindings": [],
@@ -3013,7 +3069,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -3041,7 +3097,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -3051,7 +3107,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/interfaces/contract-view.md",
         "document_id": "EX-EXPORT-CONTRACT-VIEW",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-view"
       }
     },
@@ -3084,7 +3140,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/mechanism-side-effect-example.md",
         "document_id": "EX-EXPORT-DESIGN",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "error-actions"
       },
       "bindings": [],
@@ -3122,7 +3178,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -3150,7 +3206,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -3160,7 +3216,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/interfaces/contract-view.md",
         "document_id": "EX-EXPORT-CONTRACT-VIEW",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-view"
       }
     },
@@ -3193,7 +3249,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/mechanism-side-effect-example.md",
         "document_id": "EX-EXPORT-DESIGN",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "error-actions"
       },
       "bindings": [],
@@ -3231,7 +3287,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -3259,7 +3315,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -3269,7 +3325,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/interfaces/contract-view.md",
         "document_id": "EX-EXPORT-CONTRACT-VIEW",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-view"
       }
     },
@@ -3302,7 +3358,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/mechanism-side-effect-example.md",
         "document_id": "EX-EXPORT-DESIGN",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "error-actions"
       },
       "bindings": [],
@@ -3340,7 +3396,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -3368,7 +3424,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -3378,7 +3434,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/interfaces/contract-view.md",
         "document_id": "EX-EXPORT-CONTRACT-VIEW",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-view"
       }
     },
@@ -3411,7 +3467,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/mechanism-side-effect-example.md",
         "document_id": "EX-EXPORT-DESIGN",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "error-actions"
       },
       "bindings": [],
@@ -3449,7 +3505,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -3477,7 +3533,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -3487,7 +3543,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/interfaces/contract-view.md",
         "document_id": "EX-EXPORT-CONTRACT-VIEW",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-view"
       }
     },
@@ -3520,7 +3576,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/mechanism-side-effect-example.md",
         "document_id": "EX-EXPORT-DESIGN",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "error-actions"
       },
       "bindings": [],
@@ -3558,7 +3614,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -3586,7 +3642,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -3596,7 +3652,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/interfaces/contract-view.md",
         "document_id": "EX-EXPORT-CONTRACT-VIEW",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-view"
       }
     },
@@ -3629,7 +3685,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/mechanism-side-effect-example.md",
         "document_id": "EX-EXPORT-DESIGN",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "error-actions"
       },
       "bindings": [],
@@ -3667,7 +3723,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -3695,7 +3751,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.0-draft.1",
+            "version": "3.0.1-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -3705,7 +3761,7 @@
         "repository": "corezilla/STD",
         "path": "docs/examples/interfaces/contract-view.md",
         "document_id": "EX-EXPORT-CONTRACT-VIEW",
-        "version": "3.0.0-draft.1",
+        "version": "3.0.1-draft.1",
         "anchor": "contract-view"
       }
     }

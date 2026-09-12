@@ -1,6 +1,6 @@
 # 接口、契约与数据 AI 编写指南
 
-版本：0.2.0-draft.1 · 日期：2026-09-12 · 状态：方法草案，待实际写作任务验证
+版本：0.2.0-draft.2 · 日期：2026-09-12 · 状态：方法草案，待实际写作任务验证
 
 主模板：`interfaces.control`、`contracts.specification`、`design.data-dictionary`。
 先读[通用 AI 编写指南](../ai-authoring-guide.md)，再读项目已采用的对应模板。本文补充本类型的工作方法，不重复公共来源、权限和状态规则，不自动升级项目模板。
@@ -19,8 +19,8 @@
 4. 推演部分失败、超时、重试、迟到、重复和版本不匹配；有副作用时核实旧执行隔离与幂等/去重条件，不把超时等于未执行。
 5. 对照双方实际字段/行为逐项收口，给出共同向量、兼容性规则及本地/组合验收；共同语义未定不能留给两方独立猜测。
 
-6. 按[映射规范](../interface-data-mapping-standard.md)建立现有接口根的人读/机器目录，固定来源 selector、version/revision/hash 和正文 Document ID/稳定锚点；先确认实际定义再标完整。
-7. 用同一类型 ID 解析 request/response/event/field，已有共享类型不重定义；投影/别名写映射和损失/补足。修改成员保留身份，逐项比较旧消费基线、废弃/替代和兼容，不能只升级版本字符串。
+6. 按[映射规范](../interface-data-mapping-standard.md)建立现有接口根的人读/机器目录，固定来源 selector、version/revision/hash 和正文 Document ID/稳定锚点；Document ID/version 复用封面与同名 metadata 并与目录核对，不新增隐藏身份；先确认实际定义再标完整。
+7. 用同一类型 ID 解析 request/response/event/field，对照源签名检查每个适用角色、selector 和目标类型恰好出现一次；反向检查目录无伪造槽位，不强加单向操作没有的响应。已有共享类型不重定义；投影/别名不能替代真实签名。修改成员保留身份，逐项比较旧消费基线、废弃/替代和兼容，不能只升级版本字符串。
 8. 用[完整案例](../examples/interfaces/README.md)的方法实际核对字段、签名、枚举/错误、默认/null、长度/计数，并分别记录原生解析器的检查范围。目录定位通过不代表 CLI/信号或 wire ABI 校验。
 
 ## 3. 不同模板的实际产物
@@ -48,6 +48,8 @@
 | 正文 OP01 存在，catalog 未收录；或源仅 TODO | 按全部入口清单、source inventory 双向比对并实际解析 selector | 补真实定义/索引或保留未完成，不能删分母 |
 | 两操作复用 OP01；章节移动使 contract-data 锚点失效 | 重复 ID / prose 定位回归 | 恢复稳定身份/显式锚点，移址只更新路径 |
 | 请求引用 Unknown；两模块各造不同 Shared | $ref/binding 解析、来源唯一性及逐字段比较 | 引用原类型 ID；必要转换另记映射，不覆盖旧源 |
+| request/response 角色对调，或 response 漏项/重复 | 从源签名生成角色/selector 分母，与目录双向比对再核目标类型 | 恢复完整且唯一的实际映射；未知布局须用项目解析器，不放行为空 |
+| 封面新版本，metadata/目录或旧隐藏注释仍是旧版 | 复用原封面校验，再核 metadata 与目录，显式注入漂移反例 | 同步现有身份；删除冗余注释或保持一致，不建立第二个版本来源 |
 | 正文 u32、源 u64；count、枚举、错误、default/null 不同 | 完整投影逐字校验 + 边界向量 | 原 authority 决定语义，再同次更新视图和消费基线 |
 | 逻辑对象标成 wire ABI，用 sizeof 推断长度 | 编码/布局内容复审和实际序列化向量 | 分开逻辑/Host/wire，只对实际 ABI 规定偏移 |
 | 新增字段但 consumer 仍旧 revision/hash | 下游基线匹配、旧新向量对照 | 按项目采用决定迁移，不能只改标签掩盖实现差异 |

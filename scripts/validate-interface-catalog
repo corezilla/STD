@@ -5,6 +5,8 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.machinery
+import importlib.util
 import json
 import re
 import sys
@@ -13,6 +15,41 @@ from pathlib import Path
 import jsonschema
 
 ROOT = Path(__file__).resolve().parents[1]
+_loader = importlib.machinery.SourceFileLoader("std_design_validator", str(ROOT / "scripts/validate-design"))
+_spec = importlib.util.spec_from_loader(_loader.name, _loader)
+document_validator = importlib.util.module_from_spec(_spec)
+_loader.exec_module(document_validator)
+
+
+def signature_bindings(value):
+    """Derive applicable roles from the pinned source, not from catalog assertions."""
+    roles = {"request": "request", "response": "response", "event": "event", "error": "error", "args": "field"}
+    expected = set()
+
+    def walk(node, parts):
+        if isinstance(node, dict):
+            if "$ref" in node:
+                if not parts or parts[0] not in roles:
+                    raise ValueError("unsupported signature layout; requires a project parser/adapter")
+                selector = "/" + "/".join(str(p).replace("~", "~0").replace("/", "~1") for p in parts)
+                expected.add((roles[parts[0]], "json_pointer", selector))
+            for key, child in node.items():
+                if key != "$ref":
+                    walk(child, parts + [key])
+        elif isinstance(node, list):
+            for index, child in enumerate(node):
+                walk(child, parts + [str(index)])
+
+    if not isinstance(value, dict):
+        raise ValueError("unsupported signature layout; expected a source object")
+    # In this supported layout each applicable signature slot names a registered type.
+    for slot in roles.keys() & value.keys():
+        if not list(refs(value[slot])):
+            raise ValueError(f"signature slot {slot} requires a registered type reference")
+    walk(value, [])
+    if not expected:
+        raise ValueError("unsupported signature layout; no applicable signature type references")
+    return expected
 
 
 def read_json(path):
@@ -91,6 +128,11 @@ def validate(catalog, roots):
         return errors, []
     unchecked = ["Behavior/prose semantics, historical compatibility, source scope completeness beyond declared inventories, "
                  "implementation guarantees and Run authenticity need content/project review"]
+    metadata_schema = jsonschema.Draft202012Validator(
+        read_json(ROOT / "schemas/document-metadata.schema.json"),
+        format_checker=jsonschema.FormatChecker(),
+    )
+    prose_documents = {}
 
     def check(code, function):
         try:
@@ -114,14 +156,34 @@ def validate(catalog, roots):
         return select(path, ref["selector"])
 
     def prose(ref):
-        text = file(ref).read_text(encoding="utf-8")
-        # Explicit anchors/identity markers are stable under heading renumbering.
-        markers = [f'<!-- Document ID: {ref["document_id"]} -->',
-                   f'<!-- Document Version: {ref["version"]} -->',
-                   f'<a id="{ref["anchor"]}"></a>']
-        for marker in markers:
-            if text.count(marker) != 1:
-                raise ValueError(f"missing/duplicate prose binding: {marker} in {ref['path']}")
+        key = (ref["repository"], ref["path"])
+        if key not in prose_documents:
+            path = file(ref)
+            if path.suffix != ".md":
+                raise ValueError("prose must be a Markdown document with its existing metadata sidecar")
+            sidecar = {"repository": ref["repository"], "path": str(Path(ref["path"]).with_suffix(".metadata.json"))}
+            metadata = read_json(file(sidecar))
+            failures = list(metadata_schema.iter_errors(metadata))
+            if failures:
+                raise ValueError(f"document metadata schema: {failures[0].message}")
+            if (metadata["source_repository"], metadata["source_path"]) != key:
+                raise ValueError("document metadata repository/path mismatch")
+            text = path.read_text(encoding="utf-8")
+            failures = document_validator.validate_cover(path, text, metadata)
+            if failures:
+                raise ValueError("; ".join(f'{e["code"]}: {e["message"]}' for e in failures))
+            # Legacy comments are optional mirrors, never a second identity authority.
+            for label, field in (("ID", "document_id"), ("Version", "document_version")):
+                mirrors = re.findall(r"<!--\s*Document " + label + r":\s*(.*?)\s*-->", text)
+                if len(mirrors) > 1 or any(v != metadata[field] for v in mirrors):
+                    raise ValueError(f"legacy Document {label} comment disagrees with metadata or is duplicated")
+            prose_documents[key] = (text, metadata)
+        text, metadata = prose_documents[key]
+        if (ref["document_id"], ref["version"]) != (metadata["document_id"], metadata["document_version"]):
+            raise ValueError("catalog document ID/version differs from cover/metadata")
+        marker = f'<a id="{ref["anchor"]}"></a>'
+        if text.count(marker) != 1:
+            raise ValueError(f"missing/duplicate prose binding: {marker} in {ref['path']}")
         return text
 
     families = {f["id"]: f for f in catalog["families"]}
@@ -149,8 +211,14 @@ def validate(catalog, roots):
             continue
         if ref["selector"]["kind"] == "literal":
             unchecked.append(f"{mid}: native field/signature semantics require the project's parser/adapter")
-        elif member["kind"] in ("operation", "command") and not member["bindings"]:
-            errors.append(f"binding:{mid}: operation/command requires applicable request/response/event bindings")
+        elif member["kind"] in ("operation", "command"):
+            def signature_check():
+                expected = signature_bindings(value)
+                actual = [(b["role"], b["selector"]["kind"], b["selector"]["value"]) for b in member["bindings"]]
+                if len(actual) != len(set(actual)) or set(actual) != expected:
+                    raise ValueError("requires applicable signature bindings exactly once with source roles/selectors; "
+                                     f"missing={sorted(expected - set(actual))}, extra={sorted(set(actual) - expected)}")
+            check(f"signature:{mid}", signature_check)
         for native_ref in refs(value):
             def resolve_type():
                 path_part, sep, selector = native_ref.partition("#")
@@ -172,6 +240,8 @@ def validate(catalog, roots):
                         raise ValueError("alias/conversion needs loss/addition and field mapping")
                     return
                 expected = target["source"]
+                if target["kind"] != "type" or expected["selector"]["kind"] != "json_pointer":
+                    raise ValueError("binding target must be a registered JSON type")
                 if not isinstance(part, dict) or "$ref" not in part:
                     raise ValueError("binding must locate a $ref; native transformations need an adapter")
                 raw_path, _, ptr = part["$ref"].partition("#")

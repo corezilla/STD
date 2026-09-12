@@ -103,6 +103,45 @@ class AIAuthoringGuidesTests(unittest.TestCase):
             for term in terms:
                 self.assertIn(term, text)
 
+    def test_mechanism_chapter_routes_match_actual_template(self):
+        template = (ROOT / "templates/design/system-mechanism-design.md").read_text()
+        writing = (ROOT / "docs/design-writing-guide.md").read_text()
+        count = len(re.findall(r"^## \d+\.", template, re.M))
+        self.assertEqual(count, 16)
+        self.assertIn(f"沿其 {count} 章主线", writing)
+        self.assertIn("维护入口在 §12.2、测试在 §15", writing)
+        self.assertRegex(template, r"(?m)^### 12\.2 .*维护")
+        self.assertRegex(template, r"(?m)^## 15\. .*验证")
+        for path in [ROOT / "docs/design-writing-guide.md", *self.guides]:
+            text = path.read_text()
+            self.assertNotIn("沿其 15 章主线", text)
+            self.assertNotIn("维护入口在 §11.2", text)
+            self.assertNotIn("包含 15 章写作顺序", text)
+
+    def test_mechanism_parent_tree_is_not_the_dependency_graph(self):
+        template = (ROOT / "templates/design/architecture-design.md").read_text()
+        section = template.split("### 3.4 系统机制清单与文档映射", 1)[1].split("## 4.", 1)[0]
+        examples = {}
+        for line in section.splitlines():
+            if line.startswith("| M-"):
+                cells = [cell.strip() for cell in line.strip("|").split("|")]
+                examples[cells[0].split(" / ")[0]] = cells[1]
+        self.assertEqual(examples, {"M-DELIVERY": "none", "M-EXPORT": "M-DELIVERY", "M-OBS": "none"})
+        for child, parent in examples.items():
+            seen = {child}
+            while parent != "none":
+                self.assertIn(parent, examples)
+                self.assertNotIn(parent, seen)
+                seen.add(parent)
+                parent = examples[parent]
+        self.assertIn("写作前置 M-OBS", section)
+        for relative in ("docs/interface-data-mapping-standard.md", "docs/ai-system-design-authoring-guide.md",
+                         "docs/ai-guides/system-mechanism.md", "templates/design/system-mechanism-design.md"):
+            text = (ROOT / relative).read_text()
+            self.assertIn("上级 Mechanism ID", text)
+            self.assertIn("前置依赖", text)
+            self.assertIn("循环", text)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -270,7 +270,7 @@ B.4 设计约束与关键假设
 附录 C. 编写与交付检查""".splitlines()
         self.assertEqual(re.findall(r"^#{2,3} (.+)$", system, re.MULTILINE), expected)
         catalog = json.loads((ROOT / "templates/catalog.json").read_text())
-        self.assertEqual(catalog["template_versions"]["design.system"], "8.1.0")
+        self.assertEqual(catalog["template_versions"]["design.system"], "8.2.0")
 
     def test_system_reordering_keeps_business_preconditions_and_risk_handoff(self):
         system = (ROOT / "templates/design/architecture-design.md").read_text()

@@ -498,30 +498,31 @@ Document ID、版本/提交和章节，以来源文档与约束 ID 联合定位�
 
 **本节目的**：在总体设计阶段确定哪些协作需要独立细化，使后续作者逐份承接同一边界。
 
-**必须写清楚**：每项机制的稳定 Mechanism ID、Document ID、预定文件名、范围/非职责、参与方、系统能力/过程/约束、接口族、Owner、前置依赖及成文状态。
+**必须写清楚**：每项机制的稳定 Mechanism ID、上级 Mechanism ID、Document ID、预定文件名、范围/非职责、参与方、系统能力/过程/约束、接口族、Owner、前置依赖及成文状态。上级是设计归属和约束承接，依赖是先决条件，两者不能互相替代。
 
 **编写规范**：先读项目已有机制，复用唯一文档，不按模板重新建同义文件。按 docs/interface-data-mapping-standard.md §5 先登记 ID 和仓库相对文件名，再逐份编写；Planned 路径写成代码文字，不创建空文件或伪造已可访问链接。成文后核对真实 Document ID/版本/稳定锚点，改成实际链接。机制边界与目录顺序无关，文件移动更新映射而不换身份；机制拆分/合并记录原 ID 去向。系统正文仍保留端到端原理、关键阶段、共同约束和代表失败，不能让清单代替系统设计。
 
-**抽象示例**：虚构 M-EXPORT 预定写入 mechanisms/export-design.md，Document ID 为 EX-EXPORT-DESIGN，承接导出/取消的过程和安全约束。先登记为 Planned / none；后续写出契约与流程后才登记 Draft 的实际版本，不能在未编写时宣称双方已能实现。
+**抽象示例**：虚构 M-EXPORT 是 M-DELIVERY 的下级机制，预定写入 mechanisms/export-design.md，Document ID 为 EX-EXPORT-DESIGN；写作前还依赖独立 M-OBS 的版本标识约定。M-DELIVERY 是上级，M-OBS 是前置依赖，不把两种关系合并为一列。先登记为 Planned / none，成文后才填写 Draft 的实际版本，不提前宣称下游可实现。
 
-**完成条件**：读者能找到全部拟议及已成文机制、知道哪份接着写和依赖什么；不会把预定路径误认为已完成设计或正式实现输入。
+**完成条件**：读者能沿上级 ID 看清归属树，再独立查看前置依赖；所有上级可定位，无自指、循环或悬空。能找到全部拟议及已成文机制、知道哪份接着写；不会把预定路径误认为已完成设计或正式实现输入。
 
 </details>
 
-逐项解释为何独立成文及与其他机制的边界，再维护唯一清单。Planned 不等于契约已有或获准实施。
+逐项解释为何独立成文及与其他机制的边界，再维护唯一清单。每项只有一个直接上级，顶层填 none；上级可为 Planned，但必须登记。前置依赖标明写作或行为条件，不由父子关系推断执行顺序。Planned 不等于契约已有或获准实施。
 
-| Mechanism ID / 名称与用途 | Document ID / 预定仓库相对文件名或实际链接 | 能力 / Process / Constraint ID | 参与方 / 相关接口族 | Owner / 前置依赖 | 写作状态 / 已成文版本与锚点 |
-|---|---|---|---|---|---|
+| Mechanism ID / 名称与用途 | 上级 Mechanism ID | Document ID / 预定仓库相对文件名或实际链接 | 能力 / Process / Constraint ID | 参与方 / 相关接口族 | Owner / 前置依赖（类别） | 写作状态 / 已成文版本与锚点 |
+|---|---|---|---|---|---|---|
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 虚构规划示例（不是现有项目链接）：
 
-| 机制 | 文档与目标文件 | 承接关系 | 状态 |
-|---|---|---|---|
-| M-EXPORT / 暂存导出 | EX-EXPORT-DESIGN · `docs/20_system_design/mechanisms/export-design.md` | F-EXPORT / PROC-EXPORT / CON-SAFE；A、C；IF-EXPORT；依赖身份边界先确定 | Planned；已成文版本 none |
-| M-OBS / 版本核对 | EX-OBS-DESIGN · `docs/20_system_design/mechanisms/observation-design.md` | F-OBS / PROC-OBS；M、A、B；IF-OBS；可独立写作 | Planned；已成文版本 none |
+| 机制 | 上级 Mechanism ID | 文档与目标文件 | 承接关系 / 前置依赖 | 状态 |
+|---|---|---|---|---|
+| M-DELIVERY / 结果交付 | none | EX-DELIVERY-DESIGN · `docs/20_system_design/mechanisms/delivery-design.md` | 顶层负责组合约束；无前置依赖 | Planned；已成文版本 none |
+| M-EXPORT / 暂存导出 | M-DELIVERY | EX-EXPORT-DESIGN · `docs/20_system_design/mechanisms/export-design.md` | F-EXPORT / PROC-EXPORT / CON-SAFE；A、C；IF-EXPORT；写作前置 M-OBS 的版本标识约定 | Planned；已成文版本 none |
+| M-OBS / 版本核对 | none | EX-OBS-DESIGN · `docs/20_system_design/mechanisms/observation-design.md` | F-OBS / PROC-OBS；M、A、B；IF-OBS；可独立写作 | Planned；已成文版本 none |
 
-两行只先确定映射，不能用作 `catalog.members[].source`。正式案例见 STD 的教学目录，不能把本表路径直接当项目已有文件。
+三行仅示范父子归属与跨分支写作依赖，不修改教学案例协议，也不表示新增运行时调用。预定路径不能用作 `catalog.members[].source` 或项目已有文件。
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 4. 功能与需求实现概览

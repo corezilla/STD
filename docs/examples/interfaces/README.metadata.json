@@ -1,0 +1,30 @@
+{
+  "project": "STD",
+  "authority": "STD",
+  "document_id": "EX-EXPORT-MAPPING",
+  "document_type": "interfaces.control",
+  "document_version": "3.0.1-draft.1",
+  "title": "虚构暂存导出：正文到接口、实现与验证的完整映射",
+  "document_owner": "STD Example Maintainer",
+  "authors": [
+    "STD"
+  ],
+  "source_repository": "corezilla/STD",
+  "source_path": "docs/examples/interfaces/README.md",
+  "template_id": "interfaces.control",
+  "template_version": "0.2.0",
+  "template_sha256": "d5dd27770b1a4df4ddc02a8f5a3d2c1ec71c1c322d7ad3df814971f307cc503d",
+  "template_conformance": "legacy-mapped",
+  "tailoring_ref": null,
+  "migration_map_ref": "docs/interface-data-mapping-review.md",
+  "design_level": "cross-level",
+  "domain": [
+    "software"
+  ],
+  "status": "draft",
+  "visibility": "public",
+  "reviewed_commit": null,
+  "created_at": "2026-09-12",
+  "last_modified_at": "2026-09-12",
+  "supersedes": null
+}

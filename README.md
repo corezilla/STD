@@ -86,7 +86,7 @@ AI 编写入口采用“通用方法 + 模板类型专项”：先读
 13 类专项覆盖当前 45 个模板，同类模板共享方法，计划、报告和决定仍保留不同完成边界；
 精确导航见 [`docs/ai-authoring-guides.json`](docs/ai-authoring-guides.json)。
 从 HIFM v0.3 迁入的系统方法保留为
-[`docs/ai-system-design-authoring-guide.md`](docs/ai-system-design-authoring-guide.md)（`0.6.0-draft.1`）；
+[`docs/ai-system-design-authoring-guide.md`](docs/ai-system-design-authoring-guide.md)（`0.6.0-draft.2`）；
 机制方法已独立到 [`docs/ai-guides/system-mechanism.md`](docs/ai-guides/system-mechanism.md)。
 这些是方法草案，待实际任务验证，不是新模板，不改变项目已采用的 STD/模板版本，
 也不自动授权提交、发布或运行。公共规则只在通用指南维护，专项解释本类型的实际设计/取证方法。
@@ -95,7 +95,7 @@ AI 编写入口采用“通用方法 + 模板类型专项”：先读
 局部修订只检查受影响内容和直接依赖，不重跑完整写作流程；原生图源与生成式插画分别维护，
 架构视图、实现状态和验证结果分别记录。
 
-当前工作区的 `design.system` 为待发布的 `8.1.0`，保留 `7.0.0` 的 17 个通用主章。
+当前工作区的 `design.system` 为待发布的 `8.2.0`，保留 `7.0.0` 的 17 个通用主章。
 正文仍采用八项必要字段的短封面，附录 A 保存控制信息与导航，附录 B 保存输入/适用性，
 附录 C 保存编写与交付检查。保留各节的段落式编写建议、完成条件及已确认的原创教学图。
 
@@ -134,7 +134,7 @@ AI 指南按能力贯通章节、先复用并核对现有契约，再交接双�
 
 `design.definition` 为待发布 `1.2.0`；`design.hardware` 与 `design.fpga` 增加上级约束承接、
 本地落实和系统组合验收，当前为待发布 `1.2.0`，不要求另建通用单元文档。
-`design.system-mechanism` 为待发布 `2.0.0`，数据与接口分章，16 个主章保留既有约束和段落式指导，
+`design.system-mechanism` 为待发布 `2.1.0`，数据与接口分章，16 个主章保留既有约束和段落式指导，
 补齐拓扑/身份、资源寿命、维护命令、测试控制/隔离与能力级双方承接；采用短封面和文末控制记录。
 九幅[可复用机制图文样板](templates/diagrams/mechanism/README.md)在模板中直接展示：
 保留只读六幅关系图，另加开篇用途图和两幅有副作用过程/依赖图。
@@ -154,9 +154,10 @@ AI 指南按能力贯通章节、先复用并核对现有契约，再交接双�
 ## 接口映射与机制预先规划
 
 [统一映射规范](docs/interface-data-mapping-standard.md)连接可读正文、稳定成员 ID、实际机器契约和下游实现/验证。
-系统 §3.4 可先登记机制 Document ID、预定文件名及依赖，再逐份成文；计划路径不冒充已完成设计。
+系统 §3.4 可先登记机制 ID、上级 Mechanism ID、Document ID、预定文件名及前置依赖，再逐份成文；归属与依赖分开，计划路径不冒充已完成设计。
 [目录 Schema](schemas/interface-catalog.schema.json)、[只读检查器](scripts/validate-interface-catalog)与
 [完整虚构案例](docs/examples/interfaces/README.md)给出字段/签名/错误、双向定位和正反例。
+检查器从源签名推导角色与完整性，并复用原封面/metadata 身份；注释不再拥有独立文档版本。
 本轮版本、15→16 章迁移与实际检查范围见[复审记录](docs/interface-data-mapping-review.md)；
 STD `draft.26` 发布版及既有项目 lock 不变，不自动升级项目或复制私密产品协议。
 

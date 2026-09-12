@@ -1,11 +1,22 @@
+<!-- STD_DOCUMENT_COVER_BEGIN -->
 # 完整机制教学案例：有副作用的暂存导出
 
-版本：EX-EXPORT-01/v1 · 日期：2026-09-12 · Target / Planned / NOT_RUN
+| 文档字段 | 值 |
+|---|---|
+| Document ID | `EX-EXPORT-DESIGN` |
+| Document Version | `3.0.1-draft.1` |
+| Status | `Draft` |
+| Project | `STD` |
+| Document Owner | `STD Example Maintainer` |
+| Last Modified Date | `2026-09-12` |
+| Template ID | `design.system-mechanism` |
+| Template Version | `2.1.0` |
+<!-- STD_DOCUMENT_COVER_END -->
 
-案例修订：3（结构落盘与成员映射；请求/响应封包和行为不变）。
+协议版本：EX-EXPORT-01/v1 · 日期：2026-09-12 · Target / Planned / NOT_RUN
 
-<!-- Document ID: EX-EXPORT-DESIGN -->
-<!-- Document Version: 3.0.0-draft.1 -->
+契约修订：3（结构落盘与成员映射；请求/响应封包和行为不变）。文档修订见封面，二者不混用。
+
 
 本例为原创虚构设计，用于试写机制模板，不是项目协议、可部署服务或运行验证证据。
 保留[只读 EX-OBS-01/v1](../ai-system-design-authoring-guide.md#88-完整小例两个单元的只读版本核对)作为另一案例；不能把只读重采样规则用于本例写操作。
@@ -259,3 +270,23 @@ EX-ENV-M 由 [教学逻辑模型回归](../../tests/test_mechanism_effect_exampl
 
 本次 EX-R5 回查：§4.2 明确来源封口及转换表；§5/6 和图 E1/E2 的取证节点都引用该规则；
 EX-V3/4 与模型改为从原始事件生成判定，不再注入 UNRECOVERABLE 结论。无法读取与确认不存在分开验证。
+
+## 文档控制与教学映射
+
+<!-- STD_DOCUMENT_CONTROL_BEGIN -->
+| 文档字段 | 值 |
+|---|---|
+| Authority | `STD` |
+| Authors | `STD` |
+| Created Date | `2026-09-12` |
+| Template Conformance | `legacy-mapped` |
+| Tailoring Reference | `none` |
+| Migration Map Reference | `docs/interface-data-mapping-review.md` |
+| Repository | `corezilla/STD` |
+| Canonical Path | `docs/examples/mechanism-side-effect-example.md` |
+| Supersedes | `none` |
+<!-- STD_DOCUMENT_CONTROL_END -->
+
+同名 metadata、短封面和文末控制信息使用同一文档身份；不新增隐藏版本。
+本页为 legacy-mapped 教学片段，不声称完整 native 设计或产品批准；信息项映射与保留缺口见
+[复审记录](../interface-data-mapping-review.md#5-bc67a74-之后的四项修正)。

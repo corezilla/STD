@@ -1,0 +1,30 @@
+{
+  "project": "STD",
+  "authority": "STD",
+  "document_id": "EX-EXPORT-CONTRACT-VIEW",
+  "document_type": "design.data-dictionary",
+  "document_version": "3.0.1-draft.1",
+  "title": "EX-EXPORT 完整字段与签名阅读视图",
+  "document_owner": "STD Example Maintainer",
+  "authors": [
+    "STD"
+  ],
+  "source_repository": "corezilla/STD",
+  "source_path": "docs/examples/interfaces/contract-view.md",
+  "template_id": "design.data-dictionary",
+  "template_version": "1.1.0",
+  "template_sha256": "2c33e1cac1bd318a67148ca7a90d0d4aba8fcd7f0c684c8e74aee77117ea8ba7",
+  "template_conformance": "legacy-mapped",
+  "tailoring_ref": null,
+  "migration_map_ref": "docs/interface-data-mapping-review.md",
+  "design_level": "cross-level",
+  "domain": [
+    "software"
+  ],
+  "status": "draft",
+  "visibility": "public",
+  "reviewed_commit": null,
+  "created_at": "2026-09-12",
+  "last_modified_at": "2026-09-12",
+  "supersedes": null
+}

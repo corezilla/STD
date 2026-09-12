@@ -1,7 +1,18 @@
+<!-- STD_DOCUMENT_COVER_BEGIN -->
 # EX-EXPORT 完整字段与签名阅读视图
 
-<!-- Document ID: EX-EXPORT-CONTRACT-VIEW -->
-<!-- Document Version: 3.0.0-draft.1 -->
+| 文档字段 | 值 |
+|---|---|
+| Document ID | `EX-EXPORT-CONTRACT-VIEW` |
+| Document Version | `3.0.1-draft.1` |
+| Status | `Draft` |
+| Project | `STD` |
+| Document Owner | `STD Example Maintainer` |
+| Last Modified Date | `2026-09-12` |
+| Template ID | `design.data-dictionary` |
+| Template Version | `1.1.0` |
+<!-- STD_DOCUMENT_COVER_END -->
+
 <a id="contract-view"></a>
 
 此页为机器源的确定性完整投影，不独立手改字段。先读[用途和行为](../mechanism-side-effect-example.md)，
@@ -1101,3 +1112,23 @@ null 只有明确列入时才合法。额外键禁止；字节上限、关联与
 }
 ```
 <!-- CONTRACT_VIEW IF-EXPORT#ERR12 END -->
+
+## 文档控制与教学映射
+
+<!-- STD_DOCUMENT_CONTROL_BEGIN -->
+| 文档字段 | 值 |
+|---|---|
+| Authority | `STD` |
+| Authors | `STD` |
+| Created Date | `2026-09-12` |
+| Template Conformance | `legacy-mapped` |
+| Tailoring Reference | `none` |
+| Migration Map Reference | `docs/interface-data-mapping-review.md` |
+| Repository | `corezilla/STD` |
+| Canonical Path | `docs/examples/interfaces/contract-view.md` |
+| Supersedes | `none` |
+<!-- STD_DOCUMENT_CONTROL_END -->
+
+同名 metadata、短封面和文末控制信息使用同一文档身份；不新增隐藏版本。
+本页为 legacy-mapped 教学片段，不声称完整 native 设计或产品批准；信息项映射与保留缺口见
+[复审记录](../../interface-data-mapping-review.md#5-bc67a74-之后的四项修正)。

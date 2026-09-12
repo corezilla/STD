@@ -1,9 +1,20 @@
+<!-- STD_DOCUMENT_COVER_BEGIN -->
 # 虚构暂存导出：正文到接口、实现与验证的完整映射
 
-<!-- Document ID: EX-EXPORT-MAPPING -->
-<!-- Document Version: 3.0.0-draft.1 -->
+| 文档字段 | 值 |
+|---|---|
+| Document ID | `EX-EXPORT-MAPPING` |
+| Document Version | `3.0.1-draft.1` |
+| Status | `Draft` |
+| Project | `STD` |
+| Document Owner | `STD Example Maintainer` |
+| Last Modified Date | `2026-09-12` |
+| Template ID | `interfaces.control` |
+| Template Version | `0.2.0` |
+<!-- STD_DOCUMENT_COVER_END -->
 
-版本：3.0.0-draft.1 · Target / Proposed / 服务未实现 / Runtime NOT_RUN
+
+Target / Proposed / 服务未实现 / Runtime NOT_RUN
 
 ![正文、目录、机器定义与下游的关系](mapping.svg)
 
@@ -91,3 +102,23 @@ python3 -m unittest discover -s tests -p 'test_mechanism_effect_example.py' -v
 命令从 STD 根执行，无网络。需要更新某个投影时加 `--print-view 'IF-EXPORT#OP01'`，
 将输出置于同名 CONTRACT_VIEW 标记内，复算受影响来源摘要并重跑；工具不会自动改项目契约。
 完整目录仅证明声明范围内的机器成员均已索引，不证明本例服务实现、独立评审或运行验收。
+
+## 文档控制与教学映射
+
+<!-- STD_DOCUMENT_CONTROL_BEGIN -->
+| 文档字段 | 值 |
+|---|---|
+| Authority | `STD` |
+| Authors | `STD` |
+| Created Date | `2026-09-12` |
+| Template Conformance | `legacy-mapped` |
+| Tailoring Reference | `none` |
+| Migration Map Reference | `docs/interface-data-mapping-review.md` |
+| Repository | `corezilla/STD` |
+| Canonical Path | `docs/examples/interfaces/README.md` |
+| Supersedes | `none` |
+<!-- STD_DOCUMENT_CONTROL_END -->
+
+同名 metadata、短封面和文末控制信息使用同一文档身份；不新增隐藏版本。
+本页为 legacy-mapped 教学片段，不声称完整 native 设计或产品批准；信息项映射与保留缺口见
+[复审记录](../../interface-data-mapping-review.md#5-bc67a74-之后的四项修正)。

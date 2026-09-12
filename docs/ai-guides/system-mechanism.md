@@ -1,8 +1,8 @@
 # 系统机制 AI 编写指南
 
-版本：0.3.0-draft.1 · 日期：2026-09-12 · 状态：方法草案，待实际写作任务验证
+版本：0.3.0-draft.2 · 日期：2026-09-12 · 状态：方法草案，待实际写作任务验证
 
-主模板：`design.system-mechanism`。先读[通用 AI 编写指南](../ai-authoring-guide.md)，再读项目已采用的[机制模板](../../templates/design/system-mechanism-design.md)。本文从系统指南 `0.4.0-draft.2` 的机制入口独立；本轮对应模板 `2.0.0` 工作稿，补实取证条件的事实来源和异常演练适用性，不改变项目采用或产品机制。
+主模板：`design.system-mechanism`。先读[通用 AI 编写指南](../ai-authoring-guide.md)，再读项目已采用的[机制模板](../../templates/design/system-mechanism-design.md)。本文从系统指南 `0.4.0-draft.2` 的机制入口独立；本轮对应模板 `2.1.0` 工作稿，补实取证条件的事实来源和异常演练适用性，不改变项目采用或产品机制。
 
 ## 1. 输入与边界
 
@@ -39,9 +39,10 @@
 
 §4 专写数据结构（完整字段/共享类型/编码与寿命），§5 专写接口（逐操作签名/错误/完整调用），
 §6–13 保留流程、状态、恢复、资源、权限、观测及配置，§14 逐成员交接实现，§15 关联验证，§16 风险。
-按[映射规范](../interface-data-mapping-standard.md)读系统机制清单，继承已有 Document ID/文件名与 Process/Constraint，
+按[映射规范](../interface-data-mapping-standard.md)读系统机制清单，继承已有 Mechanism ID、上级 Mechanism ID、Document ID/文件名与 Process/Constraint，
+先走归属树确认直接上级及组合边界，再单独走前置依赖图；顶层 none，上级须已登记且不得自指、循环或悬空。不能把调用/写作前置当父机制，跨分支使用不复制身份。
 再以接口族#成员 ID 连接两章；计划路径不充当机器来源。使用[完整映射案例](../examples/interfaces/README.md)
-实际从 OP 定位请求/响应、字段、错误和下游；不能只记录“链接通过”。迁移表见[版本与复审记录](../interface-data-mapping-review.md)。
+实际从 OP 定位请求/响应、字段、错误和下游，按源签名核对角色及漏项；正文身份与原封面/metadata/目录一致，不另建隐藏版本。不能只记录“链接通过”。迁移表见[版本与复审记录](../interface-data-mapping-review.md)。
 
 ## 3. 图例与正文落位
 

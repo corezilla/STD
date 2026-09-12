@@ -116,6 +116,7 @@
     },
     "prose": {
       "type": "object",
+      "description": "Bind the existing STD cover/control and same-basename document metadata identity; hidden ID/version comments are not an authority.",
       "properties": {
         "repository": {
           "type": "string",
@@ -232,6 +233,7 @@
     },
     "binding": {
       "type": "object",
+      "description": "Roles/selectors for supported operation signatures must exactly cover source-declared type references, then match each registered target type.",
       "properties": {
         "role": {
           "enum": [
