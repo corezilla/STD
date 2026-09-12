@@ -1,0 +1,280 @@
+#!/usr/bin/env python3
+"""Read-only offline catalog, source, projection and adoption checks (not runtime tests)."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import re
+import sys
+from pathlib import Path
+
+import jsonschema
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def read_json(path):
+    def unique(pairs):
+        result = {}
+        for key, value in pairs:
+            if key in result:
+                raise ValueError(f"duplicate JSON key: {key}")
+            result[key] = value
+        return result
+    return json.loads(path.read_text(encoding="utf-8"), object_pairs_hook=unique)
+
+
+def safe_path(root, relative):
+    parts = Path(relative).parts
+    if (not relative or Path(relative).is_absolute() or ".." in parts
+            or "\\" in relative or ":" in relative):
+        raise ValueError(f"unsafe repository-relative path: {relative}")
+    target = root / relative
+    if any((root.joinpath(*parts[:i])).is_symlink() for i in range(1, len(parts) + 1)):
+        raise ValueError(f"symlink not permitted: {relative}")
+    target.resolve().relative_to(root.resolve())
+    if not target.is_file():
+        raise ValueError(f"missing file: {relative}")
+    return target
+
+
+def pointer(data, value):
+    if value == "":
+        return data
+    if not value.startswith("/") or re.search(r"~(?![01])", value):
+        raise ValueError(f"invalid JSON pointer: {value}")
+    for token in value[1:].split("/"):
+        token = token.replace("~1", "/").replace("~0", "~")
+        if isinstance(data, list):
+            if not re.fullmatch(r"0|[1-9][0-9]*", token):
+                raise ValueError(f"invalid array index: {token}")
+            data = data[int(token)]
+        else:
+            data = data[token]
+    return data
+
+
+def select(path, selector):
+    if selector["kind"] == "json_pointer":
+        return pointer(read_json(path), selector["value"])
+    # Native formats: a unique exact declaration line, never an executable query.
+    lines = path.read_text(encoding="utf-8").splitlines()
+    matches = [line for line in lines if line == selector["value"]]
+    if len(matches) != 1:
+        raise ValueError("literal selector must match exactly one complete line")
+    return matches[0]
+
+
+def projection(value):
+    return json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True)
+
+
+def refs(value):
+    if isinstance(value, dict):
+        for key, child in value.items():
+            if key == "$ref":
+                yield child
+            else:
+                yield from refs(child)
+    elif isinstance(value, list):
+        for child in value:
+            yield from refs(child)
+
+
+def validate(catalog, roots):
+    schema = read_json(ROOT / "schemas/interface-catalog.schema.json")
+    errors = [f"schema:{'/'.join(map(str, e.absolute_path))}: {e.message}"
+              for e in jsonschema.Draft202012Validator(schema).iter_errors(catalog)]
+    if errors:
+        return errors, []
+    unchecked = ["Behavior/prose semantics, historical compatibility, source scope completeness beyond declared inventories, "
+                 "implementation guarantees and Run authenticity need content/project review"]
+
+    def check(code, function):
+        try:
+            return function()
+        except (ValueError, KeyError, IndexError, TypeError, OSError) as exc:
+            errors.append(f"{code}: {exc}")
+            return None
+
+    def file(ref):
+        if ref["repository"] not in roots:
+            raise ValueError(f"unmapped repository: {ref['repository']}; no network fallback")
+        return safe_path(roots[ref["repository"]], ref["path"])
+
+    def source(ref):
+        path = file(ref)
+        if hashlib.sha256(path.read_bytes()).hexdigest() != ref["sha256"]:
+            raise ValueError(f"source hash mismatch: {ref['path']}")
+        for field in ("version", "revision"):
+            if select(path, ref[field + "_selector"]) != ref[field]:
+                raise ValueError(f"{field} mismatch: {ref['path']}")
+        return select(path, ref["selector"])
+
+    def prose(ref):
+        text = file(ref).read_text(encoding="utf-8")
+        # Explicit anchors/identity markers are stable under heading renumbering.
+        markers = [f'<!-- Document ID: {ref["document_id"]} -->',
+                   f'<!-- Document Version: {ref["version"]} -->',
+                   f'<a id="{ref["anchor"]}"></a>']
+        for marker in markers:
+            if text.count(marker) != 1:
+                raise ValueError(f"missing/duplicate prose binding: {marker} in {ref['path']}")
+        return text
+
+    families = {f["id"]: f for f in catalog["families"]}
+    members = {m["id"]: m for m in catalog["members"]}
+    if len(families) != len(catalog["families"]):
+        errors.append("id.duplicate: family")
+    if len(members) != len(catalog["members"]):
+        errors.append("id.duplicate: member")
+    locations = {}
+    values = {}
+    for member in catalog["members"]:
+        mid = member["id"]
+        if member["family"] not in families or mid.split("#")[0] != member["family"]:
+            errors.append(f"id.family: {mid}")
+        ref = member["source"]
+        key = (ref["repository"], ref["path"], ref["selector"]["kind"], ref["selector"]["value"])
+        if key in locations:
+            errors.append(f"source.duplicate_authority: {mid} and {locations[key]}")
+        locations[key] = mid
+        values[mid] = check(f"source:{mid}", lambda r=ref: source(r))
+        check(f"prose:{mid}", lambda m=member: prose(m["prose"]))
+    for mid, member in members.items():
+        ref, value = member["source"], values[mid]
+        if value is None:
+            continue
+        if ref["selector"]["kind"] == "literal":
+            unchecked.append(f"{mid}: native field/signature semantics require the project's parser/adapter")
+        elif member["kind"] in ("operation", "command") and not member["bindings"]:
+            errors.append(f"binding:{mid}: operation/command requires applicable request/response/event bindings")
+        for native_ref in refs(value):
+            def resolve_type():
+                path_part, sep, selector = native_ref.partition("#")
+                if not sep or (path_part and (":" in path_part or path_part.startswith("/"))):
+                    raise ValueError(f"unsupported/unpinned type reference: {native_ref}")
+                target_path = (Path(ref["path"]).parent / path_part).as_posix() if path_part else ref["path"]
+                key = (ref["repository"], target_path, "json_pointer", selector)
+                target_id = locations.get(key)
+                if target_id is None or members[target_id]["kind"] != "type":
+                    raise ValueError(f"unknown type reference: {native_ref}")
+                return target_id
+            check(f"type:{mid}", resolve_type)
+        for binding in member["bindings"]:
+            def binding_check():
+                target = members[binding["target"]]
+                part = pointer(value, binding["selector"]["value"]) if binding["selector"]["kind"] == "json_pointer" else value
+                if binding["role"] in ("alias", "conversion"):
+                    if not binding.get("mapping", "").strip():
+                        raise ValueError("alias/conversion needs loss/addition and field mapping")
+                    return
+                expected = target["source"]
+                if not isinstance(part, dict) or "$ref" not in part:
+                    raise ValueError("binding must locate a $ref; native transformations need an adapter")
+                raw_path, _, ptr = part["$ref"].partition("#")
+                bound_path = (Path(ref["path"]).parent / raw_path).as_posix() if raw_path else ref["path"]
+                if (ref["repository"], bound_path, ptr) != (expected["repository"], expected["path"], expected["selector"]["value"]):
+                    raise ValueError("binding target differs from source signature/field")
+            check(f"binding:{mid}", binding_check)
+        view = member["reading_view"]
+        if view is not None:
+            def view_check():
+                text = prose(view)
+                start, end = f"<!-- CONTRACT_VIEW {mid} BEGIN -->", f"<!-- CONTRACT_VIEW {mid} END -->"
+                if text.count(start) != 1 or text.count(end) != 1:
+                    raise ValueError("missing/duplicate reading view markers")
+                actual = text.split(start)[1].split(end)[0].strip()
+                if actual != "```json\n" + projection(value) + "\n```":
+                    raise ValueError("field/signature reading projection mismatch")
+            check(f"projection:{mid}", view_check)
+        ev = member["evolution"]
+        if ev["state"] == "deprecated":
+            if member["status"]["design"] != "deprecated":
+                errors.append(f"evolution:{mid}: deprecated status mismatch")
+            if ev["replaced_by"] is not None and (ev["replaced_by"] not in members or ev["replaced_by"] == mid):
+                errors.append(f"evolution:{mid}: invalid replacement")
+        elif ev["replaced_by"] is not None:
+            errors.append(f"evolution:{mid}: active ID cannot have replacement")
+        ds = member["downstream"]
+        if len({(d["role"], d["module"], d["backend"]) for d in ds}) != len(ds):
+            errors.append(f"downstream:{mid}: duplicate role/module/backend")
+        for d in ds:
+            def downstream_check():
+                if (d["version"], d["revision"], d["source_sha256"]) != (ref["version"], ref["revision"], ref["sha256"]):
+                    raise ValueError("consumer/provider baseline mismatch")
+                check(f"verification_ref:{mid}", lambda: prose(d["verification_ref"]))
+                if d["implementation"] == "not_implemented":
+                    if d["location"] is not None or d["symbol"] is not None or d["verification"] == "pass":
+                        raise ValueError("unimplemented backend cannot claim code or PASS")
+                else:
+                    if not d["location"] or not d["symbol"]:
+                        raise ValueError("implemented/partial backend requires path and symbol")
+                    if d["symbol"] not in file(d["location"]).read_text(encoding="utf-8"):
+                        raise ValueError("implementation symbol not found (not a semantic code audit)")
+                if d["verification"] == "pass" and (not d["cases"] or not d["runs"]):
+                    raise ValueError("PASS requires Case and Run references")
+                if d["verification"] == "not_run" and d["runs"]:
+                    raise ValueError("NOT_RUN cannot claim Run records")
+            check(f"downstream:{mid}", downstream_check)
+        if member["status"]["verification"] == "pass" and (not ds or any(d["verification"] != "pass" for d in ds)):
+            errors.append(f"coverage:{mid}: aggregate PASS excludes a backend")
+        if member["status"]["implementation"] == "implemented" and (not ds or any(d["implementation"] != "implemented" for d in ds)):
+            errors.append(f"coverage:{mid}: aggregate implementation excludes a backend")
+    for fid, family in families.items():
+        check(f"family.source:{fid}", lambda f=family: source(f["source"]))
+        coverage = family["coverage"]
+        selected = [m for m in members.values() if m["family"] == fid]
+        if coverage["level"] == "entry_only" and selected:
+            errors.append(f"coverage:{fid}: entry_only has members")
+        if coverage["level"] == "complete":
+            expected = set()
+            for inventory in coverage["inventory"]:
+                data = check(f"inventory:{fid}", lambda i=inventory: source(i))
+                if inventory["selector"]["kind"] != "json_pointer" or not isinstance(data, dict):
+                    errors.append(f"coverage:{fid}: complete requires enumerable dictionary inventories")
+                    continue
+                for key in data:
+                    ptr = inventory["selector"]["value"] + "/" + key.replace("~", "~0").replace("/", "~1")
+                    expected.add((inventory["repository"], inventory["path"], "json_pointer", ptr))
+            actual = {(m["source"]["repository"], m["source"]["path"], m["source"]["selector"]["kind"], m["source"]["selector"]["value"]) for m in selected}
+            if not expected or actual != expected:
+                errors.append(f"coverage:{fid}: missing/extra declared members ({len(expected)} expected, {len(actual)} indexed)")
+        if coverage["level"] != "complete":
+            unchecked.append(f"{fid}: {coverage['level']}; not a complete-interface claim")
+    return errors, unchecked
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--catalog", required=True, type=Path)
+    parser.add_argument("--project-root", required=True, type=Path)
+    parser.add_argument("--repository-root", action="append", default=[], metavar="ID=PATH")
+    parser.add_argument("--print-view", help="Print exact JSON reading view for one member; never writes files")
+    args = parser.parse_args()
+    try:
+        catalog = read_json(args.catalog)
+        roots = {catalog["repository"]: args.project_root.resolve()}
+        for mapping in args.repository_root:
+            repo, sep, path = mapping.partition("=")
+            if not sep or repo in roots:
+                raise ValueError("repository mapping must be unique ID=PATH")
+            roots[repo] = Path(path).resolve()
+        if args.print_view:
+            m = next(m for m in catalog["members"] if m["id"] == args.print_view)
+            print(projection(select(safe_path(roots[m["source"]["repository"]], m["source"]["path"]), m["source"]["selector"])))
+            return 0
+        errors, unchecked = validate(catalog, roots)
+        print(json.dumps({"result": "FAIL" if errors else "PASS", "members": len(catalog["members"]),
+                          "issues": errors, "not_checked": unchecked,
+                          "runtime_validation": "NOT_RUN"}, ensure_ascii=False, indent=2))
+        return 1 if errors else 0
+    except (ValueError, KeyError, TypeError, OSError, StopIteration) as exc:
+        print(f"catalog input error: {exc}", file=sys.stderr)
+        return 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

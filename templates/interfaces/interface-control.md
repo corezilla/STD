@@ -33,13 +33,18 @@
 |---|---|---|---|---|---|
 | <!-- TODO --> | | | | | |
 
+按 `docs/interface-data-mapping-standard.md` 注册族和成员，不另编与机器目录不同的编号。编目范围说明 entry_only、selected_members 或 complete 的分母及遗漏；状态不等于实现通过。
+
+| 接口族#成员 ID / 类别 | 机器源 / selector / 版本/revision/hash | 正文 Document ID / 版本 / 稳定锚点 | 编目范围/缺口 | 下游提供/消费 / 模块 / 设计 V / Case |
+|---|---|---|---|---|
+
 ## 3. 传输与物理边界
 
 按需描述 function call、HTTP、message、file、PCIe、AXI、pin、connector 或 mechanical datum。
 
 ## 4. 数据、命令与 Schema
 
-字段必须给出类型、单位、范围、endianness/alignment、必填性、默认值和兼容性。
+逐对象保留完整机器源阅读视图及类型/字段 ID，给类型、单位、范围、必填/默认/null、条件有效性、数组计数及兼容；真实二进制 ABI 才补 endianness/alignment。标准接口注明标准号/版本/适用部分和项目绑定，不能仅贴标准链接。
 
 ## 5. 状态机、顺序和时序
 

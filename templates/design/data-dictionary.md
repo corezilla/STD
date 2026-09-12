@@ -49,9 +49,14 @@
 |---|---|---|---|---|---|
 | <!-- TODO --> | | | | | |
 
+依 `docs/interface-data-mapping-standard.md` 绑定类型成员 ID、固定源和可达 selector；共享类型引用原 ID，不在两个模块重定义。正文保留生成或核对的完整字段视图，目录只作索引。
+
+| 类型成员 ID / 基线 | 机器源 / selector | 正文稳定锚点 | 原类型引用 / 投影/转换 / 损失补足 |
+|---|---|---|---|
+
 ## 4. Field Dictionary
 
-| Object.Field | Type | Required | Unit/Encoding | Range | Default | Meaning |
+| 类型成员 ID.Field/原字段号 | Type/位宽/引用 | Required/null/条件有效 | Unit/Encoding/大小/计数 | Range/枚举/跨字段约束 | Default | Meaning |
 |---|---|---|---|---|---|---|
 | <!-- TODO --> | | | | | | |
 
@@ -78,6 +83,8 @@ flowchart LR
 | <!-- TODO --> | | | | | |
 
 ## 8. Serialization、Alignment、Endianness 与 Compatibility
+
+逻辑位宽、序列化长度、Host sizeof 与 wire offset 分开；实际 ABI 才给端序、padding/reserved、校验覆盖。可变数组给计数来源、边界及溢出处理，不能用 sizeof 代替序列化规格。
 
 ## 9. Persistence、Retention、Migration 与 Deletion
 

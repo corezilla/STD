@@ -113,6 +113,11 @@ flowchart LR
 
 描述软件从配置、启动、轮询/中断到完成或恢复的完整流程。
 
+按 `docs/interface-data-mapping-standard.md` 与软件/板卡共用接口族#成员 ID、源版本/revision/hash及稳定 selector；不另造同名 CSR 字段。既有 RTL/寄存器源保留字段 authority，正文解释行为，完整阅读视图必须核对来源。标准总线写标准号/版本/项目绑定，自定义信号写方向、位宽、clock/时序和适用电气边界。
+
+| 接口/CSR/信号成员 ID / 上级 Constraint | 机器源 / selector / 基线 | 提供/消费 / RTL模块/端口或未实现 | 软件/板卡承接 | 设计 V → 仿真 Case / 系统组合验证 |
+|---|---|---|---|---|
+
 ## 5. 内部协议、状态机和 backpressure
 
 | State | Event/Guard | Next | Output/action | timeout/error |

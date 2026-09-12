@@ -1,0 +1,891 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/std/ex-export-v1.schema.json",
+  "title": "Fictional EX-EXPORT-01/v1 complete teaching contract",
+  "x-contract-version": "EX-EXPORT-01/v1",
+  "x-revision": "3",
+  "x-behavior-authority": "docs/examples/mechanism-side-effect-example.md#contract-behavior",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/Request"
+    },
+    {
+      "$ref": "#/$defs/Response"
+    }
+  ],
+  "$defs": {
+    "Id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9-]{0,63}$",
+      "$comment": "1–64 ASCII characters; opaque identity, not credentials; no default/null"
+    },
+    "Payload": {
+      "type": "string",
+      "maxLength": 4096,
+      "x-max-utf8-bytes": 4096,
+      "$comment": "Frozen input, empty allowed; <=4096 UTF-8 bytes (byte bound needs encoding check); no implicit conversion or appended LF."
+    },
+    "EmptyArgs": {
+      "type": "object",
+      "properties": {},
+      "required": [],
+      "additionalProperties": false
+    },
+    "PrepareArgs": {
+      "type": "object",
+      "properties": {
+        "slot_id": {
+          "const": "slot-1",
+          "$comment": "Only teaching slot; ownership remains A"
+        },
+        "payload": {
+          "$ref": "#/$defs/Payload"
+        }
+      },
+      "required": [
+        "slot_id",
+        "payload"
+      ],
+      "additionalProperties": false
+    },
+    "FinalizeArgs": {
+      "type": "object",
+      "properties": {
+        "disposition": {
+          "enum": [
+            "deliver",
+            "discard"
+          ],
+          "$comment": "Explicit selected branch; immutable after finalize"
+        }
+      },
+      "required": [
+        "disposition"
+      ],
+      "additionalProperties": false
+    },
+    "State": {
+      "type": "object",
+      "properties": {
+        "phase": {
+          "enum": [
+            "PREPARED",
+            "EXECUTING",
+            "STOPPING",
+            "STOPPED",
+            "FINALIZED",
+            "RELEASED"
+          ]
+        },
+        "result": {
+          "enum": [
+            "NOT_STARTED",
+            "UNKNOWN",
+            "SUCCEEDED",
+            "FAILED"
+          ]
+        },
+        "access": {
+          "enum": [
+            "OPEN",
+            "CLOSING",
+            "FENCED"
+          ]
+        },
+        "evidence": {
+          "enum": [
+            "PENDING",
+            "CAPTURED",
+            "UNRECOVERABLE"
+          ]
+        },
+        "disposition": {
+          "enum": [
+            null,
+            "deliver",
+            "discard"
+          ]
+        },
+        "resource": {
+          "enum": [
+            "HELD",
+            "RELEASED"
+          ]
+        },
+        "admission": {
+          "enum": [
+            "BLOCKED",
+            "ELIGIBLE"
+          ]
+        }
+      },
+      "required": [
+        "phase",
+        "result",
+        "access",
+        "evidence",
+        "disposition",
+        "resource",
+        "admission"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "phase": {
+                "enum": [
+                  "STOPPED",
+                  "FINALIZED",
+                  "RELEASED"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "access": {
+                "const": "FENCED"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "phase": {
+                "enum": [
+                  "FINALIZED",
+                  "RELEASED"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "evidence": {
+                "enum": [
+                  "CAPTURED",
+                  "UNRECOVERABLE"
+                ]
+              },
+              "disposition": {
+                "enum": [
+                  "deliver",
+                  "discard"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "phase": {
+                "const": "RELEASED"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "resource": {
+                "const": "RELEASED"
+              },
+              "admission": {
+                "const": "ELIGIBLE"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "resource": {
+                "const": "HELD"
+              },
+              "admission": {
+                "const": "BLOCKED"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "phase": {
+                "const": "PREPARED"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "result": {
+                "const": "NOT_STARTED"
+              },
+              "access": {
+                "const": "OPEN"
+              },
+              "evidence": {
+                "const": "PENDING"
+              },
+              "disposition": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ],
+      "$comment": "All fields required; separate five-axis meanings and legal transitions at prose EX-R1–8; no implicit defaults."
+    },
+    "Output": {
+      "type": "object",
+      "properties": {
+        "encoding": {
+          "const": "base64"
+        },
+        "data": {
+          "type": "string",
+          "maxLength": 5464,
+          "pattern": "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "encoding",
+        "data",
+        "sha256"
+      ],
+      "additionalProperties": false,
+      "$comment": "Validate decoded <=4096 bytes, SHA-256 and equality to frozen payload UTF-8; schema alone cannot prove these."
+    },
+    "Request": {
+      "type": "object",
+      "properties": {
+        "protocol": {
+          "const": "EX-EXPORT-01/v1"
+        },
+        "request_id": {
+          "$ref": "#/$defs/Id"
+        },
+        "agent_instance": {
+          "$ref": "#/$defs/Id"
+        },
+        "operation_id": {
+          "$ref": "#/$defs/Id"
+        },
+        "op": {
+          "enum": [
+            "prepare",
+            "execute",
+            "inspect",
+            "stop",
+            "collect",
+            "finalize",
+            "release"
+          ]
+        },
+        "args": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/PrepareArgs"
+            },
+            {
+              "$ref": "#/$defs/FinalizeArgs"
+            },
+            {
+              "$ref": "#/$defs/EmptyArgs"
+            }
+          ]
+        }
+      },
+      "required": [
+        "protocol",
+        "request_id",
+        "agent_instance",
+        "operation_id",
+        "op",
+        "args"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "op": {
+                "const": "prepare"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "args": {
+                "$ref": "#/$defs/PrepareArgs"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "op": {
+                "const": "execute"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "args": {
+                "$ref": "#/$defs/EmptyArgs"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "op": {
+                "const": "inspect"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "args": {
+                "$ref": "#/$defs/EmptyArgs"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "op": {
+                "const": "stop"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "args": {
+                "$ref": "#/$defs/EmptyArgs"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "op": {
+                "const": "collect"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "args": {
+                "$ref": "#/$defs/EmptyArgs"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "op": {
+                "const": "finalize"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "args": {
+                "$ref": "#/$defs/FinalizeArgs"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "op": {
+                "const": "release"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "args": {
+                "$ref": "#/$defs/EmptyArgs"
+              }
+            }
+          }
+        }
+      ],
+      "$comment": "No unknown/duplicate keys; JSON Lines <=8192 bytes; UID is authenticated via peer credentials, not payload."
+    },
+    "Error": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "enum": [
+            "FORBIDDEN",
+            "BAD_REQUEST",
+            "INSTANCE_MISMATCH",
+            "NOT_FOUND",
+            "CLOSED",
+            "CONFLICT",
+            "BUSY",
+            "LEDGER_FULL",
+            "NOT_SAFE",
+            "EVIDENCE_PENDING",
+            "RESULT_UNAVAILABLE",
+            "NOT_FINALIZED"
+          ]
+        }
+      },
+      "required": [
+        "code"
+      ],
+      "additionalProperties": false
+    },
+    "SuccessResponse": {
+      "type": "object",
+      "properties": {
+        "protocol": {
+          "const": "EX-EXPORT-01/v1"
+        },
+        "request_id": {
+          "$ref": "#/$defs/Id"
+        },
+        "agent_instance": {
+          "$ref": "#/$defs/Id"
+        },
+        "operation_id": {
+          "$ref": "#/$defs/Id"
+        },
+        "ok": {
+          "const": true
+        },
+        "state": {
+          "$ref": "#/$defs/State"
+        },
+        "output": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/Output"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "protocol",
+        "request_id",
+        "agent_instance",
+        "operation_id",
+        "ok",
+        "state",
+        "output"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "output": {
+                "type": "object"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "state": {
+                "properties": {
+                  "result": {
+                    "const": "SUCCEEDED"
+                  },
+                  "evidence": {
+                    "const": "CAPTURED"
+                  },
+                  "disposition": {
+                    "const": "deliver"
+                  },
+                  "phase": {
+                    "enum": [
+                      "FINALIZED",
+                      "RELEASED"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "$comment": "<=16384 bytes; correlate all four identity fields to current request. Output only for successful/repeated finalize(deliver); cannot establish this from response alone."
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "protocol": {
+          "const": "EX-EXPORT-01/v1"
+        },
+        "request_id": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/Id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "agent_instance": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/Id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "operation_id": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/Id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ok": {
+          "const": false
+        },
+        "error": {
+          "$ref": "#/$defs/Error"
+        }
+      },
+      "required": [
+        "protocol",
+        "request_id",
+        "agent_instance",
+        "operation_id",
+        "ok",
+        "error"
+      ],
+      "additionalProperties": false,
+      "$comment": "Unparseable correlation fields null; state/output absent. Errors and connection uncertainty follow prose, not automatic retry."
+    },
+    "Response": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/SuccessResponse"
+        },
+        {
+          "$ref": "#/$defs/ErrorResponse"
+        }
+      ]
+    },
+    "CompletionReceipt": {
+      "type": "object",
+      "properties": {
+        "protocol": {
+          "const": "EX-EXPORT-01/v1"
+        },
+        "request_id": {
+          "$ref": "#/$defs/Id"
+        },
+        "agent_instance": {
+          "$ref": "#/$defs/Id"
+        },
+        "operation_id": {
+          "$ref": "#/$defs/Id"
+        },
+        "slot_id": {
+          "const": "slot-1"
+        },
+        "payload_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "result": {
+          "enum": [
+            "SUCCEEDED",
+            "FAILED"
+          ]
+        },
+        "output": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/Output"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "protocol",
+        "request_id",
+        "agent_instance",
+        "operation_id",
+        "slot_id",
+        "payload_sha256",
+        "result",
+        "output"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "result": {
+                "const": "FAILED"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "output": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "output": {
+                "$ref": "#/$defs/Output"
+              }
+            }
+          }
+        }
+      ],
+      "$comment": "Internal A/W receipt, not new C→A operation; binds FIRST execute request_id and frozen payload. Ingress closes atomically with fencing per EX-R5."
+    }
+  },
+  "x-operations": {
+    "prepare": {
+      "id": "IF-EXPORT#OP01",
+      "name": "prepare",
+      "provider": "A",
+      "consumer": "C",
+      "mode": "synchronous-control",
+      "request": {
+        "$ref": "#/$defs/Request"
+      },
+      "response": {
+        "$ref": "#/$defs/Response"
+      },
+      "args": {
+        "$ref": "#/$defs/PrepareArgs"
+      },
+      "$comment": "Behavior, check order, legal errors and next calls: EX-EXPORT prose §4.2 / EX-R1–8; accepted != completed. op must equal name."
+    },
+    "execute": {
+      "id": "IF-EXPORT#OP02",
+      "name": "execute",
+      "provider": "A",
+      "consumer": "C",
+      "mode": "synchronous-control",
+      "request": {
+        "$ref": "#/$defs/Request"
+      },
+      "response": {
+        "$ref": "#/$defs/Response"
+      },
+      "args": {
+        "$ref": "#/$defs/EmptyArgs"
+      },
+      "$comment": "Behavior, check order, legal errors and next calls: EX-EXPORT prose §4.2 / EX-R1–8; accepted != completed. op must equal name."
+    },
+    "inspect": {
+      "id": "IF-EXPORT#OP03",
+      "name": "inspect",
+      "provider": "A",
+      "consumer": "C",
+      "mode": "synchronous-control",
+      "request": {
+        "$ref": "#/$defs/Request"
+      },
+      "response": {
+        "$ref": "#/$defs/Response"
+      },
+      "args": {
+        "$ref": "#/$defs/EmptyArgs"
+      },
+      "$comment": "Behavior, check order, legal errors and next calls: EX-EXPORT prose §4.2 / EX-R1–8; accepted != completed. op must equal name."
+    },
+    "stop": {
+      "id": "IF-EXPORT#OP04",
+      "name": "stop",
+      "provider": "A",
+      "consumer": "C",
+      "mode": "synchronous-control",
+      "request": {
+        "$ref": "#/$defs/Request"
+      },
+      "response": {
+        "$ref": "#/$defs/Response"
+      },
+      "args": {
+        "$ref": "#/$defs/EmptyArgs"
+      },
+      "$comment": "Behavior, check order, legal errors and next calls: EX-EXPORT prose §4.2 / EX-R1–8; accepted != completed. op must equal name."
+    },
+    "collect": {
+      "id": "IF-EXPORT#OP05",
+      "name": "collect",
+      "provider": "A",
+      "consumer": "C",
+      "mode": "synchronous-control",
+      "request": {
+        "$ref": "#/$defs/Request"
+      },
+      "response": {
+        "$ref": "#/$defs/Response"
+      },
+      "args": {
+        "$ref": "#/$defs/EmptyArgs"
+      },
+      "$comment": "Behavior, check order, legal errors and next calls: EX-EXPORT prose §4.2 / EX-R1–8; accepted != completed. op must equal name."
+    },
+    "finalize": {
+      "id": "IF-EXPORT#OP06",
+      "name": "finalize",
+      "provider": "A",
+      "consumer": "C",
+      "mode": "synchronous-control",
+      "request": {
+        "$ref": "#/$defs/Request"
+      },
+      "response": {
+        "$ref": "#/$defs/Response"
+      },
+      "args": {
+        "$ref": "#/$defs/FinalizeArgs"
+      },
+      "$comment": "Behavior, check order, legal errors and next calls: EX-EXPORT prose §4.2 / EX-R1–8; accepted != completed. op must equal name."
+    },
+    "release": {
+      "id": "IF-EXPORT#OP07",
+      "name": "release",
+      "provider": "A",
+      "consumer": "C",
+      "mode": "synchronous-control",
+      "request": {
+        "$ref": "#/$defs/Request"
+      },
+      "response": {
+        "$ref": "#/$defs/Response"
+      },
+      "args": {
+        "$ref": "#/$defs/EmptyArgs"
+      },
+      "$comment": "Behavior, check order, legal errors and next calls: EX-EXPORT prose §4.2 / EX-R1–8; accepted != completed. op must equal name."
+    }
+  },
+  "x-errors": {
+    "FORBIDDEN": {
+      "code": "FORBIDDEN",
+      "domain": "EX-EXPORT-01/v1",
+      "response": {
+        "$ref": "#/$defs/ErrorResponse"
+      },
+      "$comment": "Meaning and legal next action at prose error-actions; never infer no side effects from a missing response."
+    },
+    "BAD_REQUEST": {
+      "code": "BAD_REQUEST",
+      "domain": "EX-EXPORT-01/v1",
+      "response": {
+        "$ref": "#/$defs/ErrorResponse"
+      },
+      "$comment": "Meaning and legal next action at prose error-actions; never infer no side effects from a missing response."
+    },
+    "INSTANCE_MISMATCH": {
+      "code": "INSTANCE_MISMATCH",
+      "domain": "EX-EXPORT-01/v1",
+      "response": {
+        "$ref": "#/$defs/ErrorResponse"
+      },
+      "$comment": "Meaning and legal next action at prose error-actions; never infer no side effects from a missing response."
+    },
+    "NOT_FOUND": {
+      "code": "NOT_FOUND",
+      "domain": "EX-EXPORT-01/v1",
+      "response": {
+        "$ref": "#/$defs/ErrorResponse"
+      },
+      "$comment": "Meaning and legal next action at prose error-actions; never infer no side effects from a missing response."
+    },
+    "CLOSED": {
+      "code": "CLOSED",
+      "domain": "EX-EXPORT-01/v1",
+      "response": {
+        "$ref": "#/$defs/ErrorResponse"
+      },
+      "$comment": "Meaning and legal next action at prose error-actions; never infer no side effects from a missing response."
+    },
+    "CONFLICT": {
+      "code": "CONFLICT",
+      "domain": "EX-EXPORT-01/v1",
+      "response": {
+        "$ref": "#/$defs/ErrorResponse"
+      },
+      "$comment": "Meaning and legal next action at prose error-actions; never infer no side effects from a missing response."
+    },
+    "BUSY": {
+      "code": "BUSY",
+      "domain": "EX-EXPORT-01/v1",
+      "response": {
+        "$ref": "#/$defs/ErrorResponse"
+      },
+      "$comment": "Meaning and legal next action at prose error-actions; never infer no side effects from a missing response."
+    },
+    "LEDGER_FULL": {
+      "code": "LEDGER_FULL",
+      "domain": "EX-EXPORT-01/v1",
+      "response": {
+        "$ref": "#/$defs/ErrorResponse"
+      },
+      "$comment": "Meaning and legal next action at prose error-actions; never infer no side effects from a missing response."
+    },
+    "NOT_SAFE": {
+      "code": "NOT_SAFE",
+      "domain": "EX-EXPORT-01/v1",
+      "response": {
+        "$ref": "#/$defs/ErrorResponse"
+      },
+      "$comment": "Meaning and legal next action at prose error-actions; never infer no side effects from a missing response."
+    },
+    "EVIDENCE_PENDING": {
+      "code": "EVIDENCE_PENDING",
+      "domain": "EX-EXPORT-01/v1",
+      "response": {
+        "$ref": "#/$defs/ErrorResponse"
+      },
+      "$comment": "Meaning and legal next action at prose error-actions; never infer no side effects from a missing response."
+    },
+    "RESULT_UNAVAILABLE": {
+      "code": "RESULT_UNAVAILABLE",
+      "domain": "EX-EXPORT-01/v1",
+      "response": {
+        "$ref": "#/$defs/ErrorResponse"
+      },
+      "$comment": "Meaning and legal next action at prose error-actions; never infer no side effects from a missing response."
+    },
+    "NOT_FINALIZED": {
+      "code": "NOT_FINALIZED",
+      "domain": "EX-EXPORT-01/v1",
+      "response": {
+        "$ref": "#/$defs/ErrorResponse"
+      },
+      "$comment": "Meaning and legal next action at prose error-actions; never infer no side effects from a missing response."
+    }
+  }
+}

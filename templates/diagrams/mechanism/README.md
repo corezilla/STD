@@ -13,12 +13,12 @@
 | [usage-overview.svg](usage-overview.svg) | §1 | 使用场景 → 处理范围 → 输出结果 |
 | [collaboration.svg](collaboration.svg) | §3 | 触发者、运行参与方、连接及 authority |
 | [objects.svg](objects.svg) | §4 | 本地事实 → Sample → Report；复制、变换及寿命 |
-| [sequence.svg](sequence.svg) | §5 | EX-OP1、顺序的两次 EX-OP2、响应与期限 |
-| [state-lifecycle.svg](state-lifecycle.svg) | §7 | M 内存轮次、终止、迟到拒绝及槽位释放边界 |
-| [failure-recovery.svg](failure-recovery.svg) | §8 | M 可返回部分结果 vs M 退出后的未知结果 |
-| [test-path.svg](test-path.svg) | §14 | 测试控制、被测链路、独立 Oracle 和清理 |
-| [effect-flow.svg](effect-flow.svg) | §5、§8 | 有副作用操作的正常与响应丢失全路径 |
-| [cleanup-dependencies.svg](cleanup-dependencies.svg) | §5、§7、§8 | 停止、取证、互斥收口与释放的条件依赖 |
+| [sequence.svg](sequence.svg) | §6 | EX-OP1、顺序的两次 EX-OP2、响应与期限 |
+| [state-lifecycle.svg](state-lifecycle.svg) | §8 | M 内存轮次、终止、迟到拒绝及槽位释放边界 |
+| [failure-recovery.svg](failure-recovery.svg) | §9 | M 可返回部分结果 vs M 退出后的未知结果 |
+| [test-path.svg](test-path.svg) | §15 | 测试控制、被测链路、独立 Oracle 和清理 |
+| [effect-flow.svg](effect-flow.svg) | §6、§9 | 有副作用操作的正常与响应丢失全路径 |
+| [cleanup-dependencies.svg](cleanup-dependencies.svg) | §6、§8、§9 | 停止、取证、互斥收口与释放的条件依赖 |
 
 ## 选择与复用
 

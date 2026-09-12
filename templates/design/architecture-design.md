@@ -491,6 +491,39 @@ Document ID、版本/提交和章节，以来源文档与约束 ID 联合定位�
 
 <!-- 画访问路径或列入口→依赖→对象；逐项说明共享故障的影响及剩余诊断/恢复手段。 -->
 
+### 3.4 系统机制清单与文档映射
+
+<details>
+<summary>本节编写建议、规范与示例</summary>
+
+**本节目的**：在总体设计阶段确定哪些协作需要独立细化，使后续作者逐份承接同一边界。
+
+**必须写清楚**：每项机制的稳定 Mechanism ID、Document ID、预定文件名、范围/非职责、参与方、系统能力/过程/约束、接口族、Owner、前置依赖及成文状态。
+
+**编写规范**：先读项目已有机制，复用唯一文档，不按模板重新建同义文件。按 docs/interface-data-mapping-standard.md §5 先登记 ID 和仓库相对文件名，再逐份编写；Planned 路径写成代码文字，不创建空文件或伪造已可访问链接。成文后核对真实 Document ID/版本/稳定锚点，改成实际链接。机制边界与目录顺序无关，文件移动更新映射而不换身份；机制拆分/合并记录原 ID 去向。系统正文仍保留端到端原理、关键阶段、共同约束和代表失败，不能让清单代替系统设计。
+
+**抽象示例**：虚构 M-EXPORT 预定写入 mechanisms/export-design.md，Document ID 为 EX-EXPORT-DESIGN，承接导出/取消的过程和安全约束。先登记为 Planned / none；后续写出契约与流程后才登记 Draft 的实际版本，不能在未编写时宣称双方已能实现。
+
+**完成条件**：读者能找到全部拟议及已成文机制、知道哪份接着写和依赖什么；不会把预定路径误认为已完成设计或正式实现输入。
+
+</details>
+
+逐项解释为何独立成文及与其他机制的边界，再维护唯一清单。Planned 不等于契约已有或获准实施。
+
+| Mechanism ID / 名称与用途 | Document ID / 预定仓库相对文件名或实际链接 | 能力 / Process / Constraint ID | 参与方 / 相关接口族 | Owner / 前置依赖 | 写作状态 / 已成文版本与锚点 |
+|---|---|---|---|---|---|
+
+<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
+虚构规划示例（不是现有项目链接）：
+
+| 机制 | 文档与目标文件 | 承接关系 | 状态 |
+|---|---|---|---|
+| M-EXPORT / 暂存导出 | EX-EXPORT-DESIGN · `docs/20_system_design/mechanisms/export-design.md` | F-EXPORT / PROC-EXPORT / CON-SAFE；A、C；IF-EXPORT；依赖身份边界先确定 | Planned；已成文版本 none |
+| M-OBS / 版本核对 | EX-OBS-DESIGN · `docs/20_system_design/mechanisms/observation-design.md` | F-OBS / PROC-OBS；M、A、B；IF-OBS；可独立写作 | Planned；已成文版本 none |
+
+两行只先确定映射，不能用作 `catalog.members[].source`。正式案例见 STD 的教学目录，不能把本表路径直接当项目已有文件。
+<!-- STD_TEMPLATE_EXAMPLE_END -->
+
 ## 4. 功能与需求实现概览
 
 <details>
@@ -1721,6 +1754,12 @@ FPGA 场景画项目自行设计和集成的程序逻辑，不用芯片厂商的
 
 </details>
 
+本章与 §10 使用同一接口目录和类型成员 ID；完整阅读视图绑定机器源版本/revision/hash。
+共享类型引用原定义，转换/投影另说明损失或补足；范围、单位、默认/null 等差异必须回到唯一源解决。
+
+| 类型成员 ID / 字段标识 | catalog / 机器来源与 selector / 基线 | 正文稳定锚点 | 共享类型/投影关系 | 下游提供/消费 / 设计验证项 |
+|---|---|---|---|---|
+
 ### 9.1 业务数据流
 
 <details>
@@ -1897,6 +1936,12 @@ payload 如何关联。不能只说“序号保证一致”：要解释序号的
 
 | IF ID | 类型 | 提供方 | 使用方 | 协议/总线 | 数据 authority | 超时/流控 | 版本策略 |
 |---|---|---|---|---|---|---|---|
+
+按 `docs/interface-data-mapping-standard.md` 固定以下映射。目录登记完整度与设计批准、实现、验证分别记录；
+机制详细契约与系统摘要共享同一成员 ID。路径存在不代表字段齐全，Planned 机制不作为已存在源。
+
+| 接口族#成员 ID / 类别 | 机器源 / selector / 版本/revision/hash | 正文 Document ID / 版本 / 稳定锚点 | 编目范围/缺口 | 下游提供/消费 / 模块 / 验证项 |
+|---|---|---|---|---|
 
 ### 10.2 数据面接口
 

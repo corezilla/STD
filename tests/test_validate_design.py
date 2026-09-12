@@ -183,6 +183,7 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
 3.1 系统架构
 3.2 组成与职责
 3.3 物理与逻辑对应关系
+3.4 系统机制清单与文档映射
 4. 功能与需求实现概览
 4.1 功能总表
 4.2 关键功能原理与边界
@@ -269,7 +270,7 @@ B.4 设计约束与关键假设
 附录 C. 编写与交付检查""".splitlines()
         self.assertEqual(re.findall(r"^#{2,3} (.+)$", system, re.MULTILINE), expected)
         catalog = json.loads((ROOT / "templates/catalog.json").read_text())
-        self.assertEqual(catalog["template_versions"]["design.system"], "8.0.0")
+        self.assertEqual(catalog["template_versions"]["design.system"], "8.1.0")
 
     def test_system_reordering_keeps_business_preconditions_and_risk_handoff(self):
         system = (ROOT / "templates/design/architecture-design.md").read_text()
@@ -989,7 +990,7 @@ B.4 设计约束与关键假设
         for name, heading, source_section, column in (
             ("architecture-design.md", "### 13.6 验证覆盖与验收矩阵", "§3.2", "| Target/Constraint ID 与能力范围 |"),
             ("design-definition.md", "## 14. 测试与验收", "§1.1", "| Function/Rule/Constraint |"),
-            ("system-mechanism-design.md", "## 14. 验证、上线与回滚", "§3.1", "| 设计验证项 / Scenario/Invariant/Constraint |"),
+            ("system-mechanism-design.md", "## 15. 验证、上线与回滚", "§3.1", "| 设计验证项 / Scenario/Invariant/Constraint |"),
             ("hardware-design.md", "## 12. Verification 与验收", "§1.1", "| Function/Requirement/Constraint ID |"),
             ("fpga-design.md", "## 12. Verification 与验收", "§1.1", "| Function/Invariant/Constraint ID |"),
         ):
@@ -1024,9 +1025,9 @@ B.4 设计约束与关键假设
         content = (ROOT / "templates/design/system-mechanism-design.md").read_text()
         self.assertNotIn("新 lease/同 generation", content)
         self.assertNotIn("| generation matches |", content)
-        state_machine = content.split("## 7. 状态机与不变量\n", 1)[1].split("\n## ", 1)[0]
+        state_machine = content.split("## 8. 状态机与不变量\n", 1)[1].split("\n## ", 1)[0]
         self.assertIn("执行/写入授权有效", state_machine)
-        recovery = content.split("## 8. 失败传播、重试与恢复\n", 1)[1].split("\n## ", 1)[0]
+        recovery = content.split("## 9. 失败传播、重试与恢复\n", 1)[1].split("\n## ", 1)[0]
         guidance, body = recovery.split("</details>", 1)
         for label in ("本节目的", "必须写清楚", "编写规范", "抽象示例", "完成条件"):
             self.assertIn(f"**{label}**", guidance)
@@ -1038,16 +1039,16 @@ B.4 设计约束与关键假设
             self.assertIn(prompt, guidance.replace("\n", ""))
         for prompt in ("已有结果则不重试", "停止或隔离且幂等/去重成立", "unknown/blocked", "拒绝旧写入"):
             self.assertIn(prompt, body)
-        verification = content.split("## 14. 验证、上线与回滚\n", 1)[1].split("\n## ", 1)[0]
+        verification = content.split("## 15. 验证、上线与回滚\n", 1)[1].split("\n## ", 1)[0]
         for prompt in ("FAIL-001", "旧 Worker 恢复", "副作用不重复", "无法确认则阻塞或转人工"):
             self.assertIn(prompt, verification)
 
     def test_mechanism_every_section_has_paragraph_guidance_and_body(self):
         content = (ROOT / "templates/design/system-mechanism-design.md").read_text()
         headings = list(re.finditer(r"^#{2,3} (.+)$", content, re.MULTILINE))
-        self.assertEqual(len(headings), 29)
+        self.assertEqual(len(headings), 32)
         self.assertEqual(re.findall(r"^## (\d+)\.", content, re.MULTILINE),
-                         [str(n) for n in range(1, 16)])
+                         [str(n) for n in range(1, 17)])
         for index, heading in enumerate(headings):
             end = headings[index + 1].start() if index + 1 < len(headings) else len(content)
             section = content[heading.end():end]
@@ -1069,19 +1070,19 @@ B.4 设计约束与关键假设
         content = (ROOT / "templates/design/system-mechanism-design.md").read_text()
         checks = {
             "3.3": ("地址不等于身份", "共享故障/复位域", "映射"),
-            "4.1": ("accepted", "durable", "released", "每个成功和错误"),
-            "4.2": ("节点断电", "持久", "所有权", "安全复用"),
-            "5.1": ("启动未就绪", "在途", "并发裁决"),
-            "7.1": ("联合资源", "安全复用", "排空确认"),
-            "9": ("推导", "共享开销", "背压", "不等于"),
-            "10": ("身份 tuple 不是授权", "撤权", "强制点"),
-            "11.1": ("窗口", "时间源", "清零", "丢失"),
-            "11.2": ("完整语法", "执行位置", "施加/回读点", "软件 echo"),
-            "12": ("installed", "active", "verified", "回滚前提"),
-            "13": ("旧契约冲突", "全部提供方和消费者", "组合验证"),
-            "14.1": ("LLM", "arm→hit→release", "独立", "real/simulated"),
-            "14.2": ("就绪", "复位", "隔离测试", "竞争测试", "自动化"),
-            "14.3": ("实际授权", "唯一流程", "NOT_RUN"),
+            "5": ("accepted", "durable", "released", "每个成功和错误"),
+            "4.3": ("节点断电", "持久", "所有权", "安全复用"),
+            "6.1": ("启动未就绪", "在途", "并发裁决"),
+            "8.1": ("联合资源", "安全复用", "排空确认"),
+            "10": ("推导", "共享开销", "背压", "不等于"),
+            "11": ("身份 tuple 不是授权", "撤权", "强制点"),
+            "12.1": ("窗口", "时间源", "清零", "丢失"),
+            "12.2": ("完整语法", "执行位置", "施加/回读点", "软件 echo"),
+            "13": ("installed", "active", "verified", "回滚前提"),
+            "14": ("旧契约冲突", "全部提供方和消费者", "组合验证"),
+            "15.1": ("LLM", "arm→hit→release", "独立", "real/simulated"),
+            "15.2": ("就绪", "复位", "隔离测试", "竞争测试", "自动化"),
+            "15.3": ("实际授权", "唯一流程", "NOT_RUN"),
         }
         for number, terms in checks.items():
             match = re.search(r"^#{2,3} " + re.escape(number) + r"[. ]+[^\n]+\n", content, re.MULTILINE)
@@ -1165,7 +1166,7 @@ B.4 设计约束与关键假设
         stub = system.split("### 14.1 系统机制写作入口", 1)[1].split("## 15.", 1)[0]
         self.assertIn("ai-guides/system-mechanism.md", stub)
         self.assertNotIn("**这六图如何复用**", stub)
-        for term in ("不要求", "15", "预设计", "独立 Oracle", "不要求六图全画", "900 px",
+        for term in ("不要求", "16", "预设计", "独立 Oracle", "不要求六图全画", "900 px",
                      "SVG 是维护源", "作者自审", "实际字段/行为定义", "未实际开展独立评审"):
             self.assertIn(term, entry)
         self.assertEqual(len(re.findall(r"\]\(../../templates/diagrams/mechanism/[^)]+\.svg\)", entry)), 9)
@@ -1189,7 +1190,7 @@ B.4 设计约束与关键假设
                 self.assertNotIn(marker, content)
             cover = content.split("<!-- STD_DOCUMENT_COVER_BEGIN -->", 1)[1].split("<!-- STD_DOCUMENT_COVER_END -->", 1)[0]
             self.assertEqual(len(re.findall(r"^\| [^|]+ \|", cover, re.MULTILINE)), 9)  # header + 8 fields
-            self.assertEqual(content.count("<details>"), 29)
+            self.assertEqual(content.count("<details>"), 32)
             self.assertIn("<!-- STD_DOCUMENT_CONTROL_BEGIN -->", content)
             validation = subprocess.run([str(ROOT / "scripts/validate-design"), directory, "--json"],
                                         capture_output=True, text=True)

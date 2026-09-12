@@ -2,11 +2,18 @@
 
 版本：EX-EXPORT-01/v1 · 日期：2026-09-12 · Target / Planned / NOT_RUN
 
-案例修订：2（补齐取证判定；请求/响应封包不变）。
+案例修订：3（结构落盘与成员映射；请求/响应封包和行为不变）。
+
+<!-- Document ID: EX-EXPORT-DESIGN -->
+<!-- Document Version: 3.0.0-draft.1 -->
 
 本例为原创虚构设计，用于试写机制模板，不是项目协议、可部署服务或运行验证证据。
 保留[只读 EX-OBS-01/v1](../ai-system-design-authoring-guide.md#88-完整小例两个单元的只读版本核对)作为另一案例；不能把只读重采样规则用于本例写操作。
-本文是本例公共规则的唯一维护位置；模板中的接口实例、图和测试是引用视图，不是第二份协议。
+本文是本例行为规则的唯一维护位置；结构、字段、签名及适用编码由
+[真实 Schema](interfaces/ex-export-v1.schema.json)唯一维护。本节完整解释与
+[逐项阅读投影](interfaces/contract-view.md)按同一基线核对，不独立改两套字段。
+[成员目录与下游映射](interfaces/README.md)提供稳定 ID、类型引用及实际检查入口；
+模板中的实例、图和模型是引用视图，不是第二份协议，也不是可部署实现。
 
 ## 1. 用途与范围
 
@@ -42,6 +49,7 @@
 
 ## 4. 完整调用契约
 
+<a id="contract-data"></a>
 ### 4.1 封包与类型
 
 请求恰有 `protocol, request_id, agent_instance, operation_id, op, args` 六项。protocol 固定 EX-EXPORT-01/v1；request_id、agent_instance、operation_id、slot_id 都是 1–64 位 ASCII 字符，首位字母，余位为字母/数字/连字符；request_id 只关联本次响应，不承担幂等性。所有参数都必填，不接受额外字段；字符串不做隐式转换。响应最大 16384 bytes，请求最大 8192 bytes，超限或坏 JSON/重复 key 为 BAD_REQUEST。
@@ -66,6 +74,7 @@ output 仅在成功 deliver 及其后重复 finalize(deliver) 时为 `{encoding:
 
 跨字段约束：STOPPED 及之后必须 FENCED；FINALIZED/RELEASED 必须 evidence 非 PENDING、disposition 非 null；RELEASED 才允许 resource=RELEASED/admission=ELIGIBLE。非 RELEASED 一律 HELD/BLOCKED。PREPARED 为 NOT_STARTED，初始其余 OPEN/PENDING/null；SUCCEEDED 不自动改变访问或资源状态。
 
+<a id="contract-behavior"></a>
 ### 4.2 操作、失败与后续动作
 
 | op / args 完整形状 | 受理条件与效果 | 失败后合法动作 |
@@ -112,7 +121,26 @@ PENDING 是尚未 collect 或当前无法核查，不是“还等 W 的未知完
 教学模型以具名故障注入模拟不可读/回报丢失，不能把 receipt 或 evidence 直接设成目标结论代替判定。
 真实服务失联或损坏超出本例可保证进展的边界，安全阻塞是合法出口；本例不承诺故障持续时仍强行释放。
 
-错误集合还包括 FORBIDDEN、BAD_REQUEST、INSTANCE_MISMATCH、NOT_FOUND、CLOSED、CONFLICT、
+<a id="error-actions"></a>
+
+下表补齐全部错误的用途及合法下一步，与 Schema 的 Error.code 枚举逐项对应；状态改变仍以 EX-R1–8 为准。
+
+| code / 稳定成员 | 拒绝原因 | 调用方合法下一步 |
+|---|---|---|
+| FORBIDDEN / IF-EXPORT#ERR01 | peer UID 无权访问或非原调用 UID | 交授权配置责任方；不读取/重试冒用别人的操作 |
+| BAD_REQUEST / IF-EXPORT#ERR02 | 封包、大小、类型或参数非法 | 修正合法请求；不据格式错误重执行未知旧任务 |
+| INSTANCE_MISMATCH / IF-EXPORT#ERR03 | A 实例不符 | 核查可信部署和旧实例状态；不换实例重放 |
+| NOT_FOUND / IF-EXPORT#ERR04 | 该 UID/实例未找到原操作 | 核查身份和原记录；不推断其他实例未执行 |
+| CLOSED / IF-EXPORT#ERR05 | execute 已不处于可执行阶段 | inspect 原记录，按当前阶段处理，不能重开旧 ID |
+| CONFLICT / IF-EXPORT#ERR06 | 原 ID 参数不同或已选分支冲突 | 核查冻结参数/原分支；不覆盖或切换 |
+| BUSY / IF-EXPORT#ERR07 | 槽正被其他操作持有 | 等其合法释放，再显式请求；不强行清槽 |
+| LEDGER_FULL / IF-EXPORT#ERR08 | 防重放记录达到上限 | 交生命周期责任方；不逐出旧 ID 规避限制 |
+| NOT_SAFE / IF-EXPORT#ERR09 | 尚无 FENCED 证明 | 先 stop/inspect 或报告阻塞，不释放 |
+| EVIDENCE_PENDING / IF-EXPORT#ERR10 | 取证尚未封结 | collect 核查来源或报告阻塞，不伪造缺失 |
+| RESULT_UNAVAILABLE / IF-EXPORT#ERR11 | 不满足交付条件 | C 可显式选 discard，不能假成功 |
+| NOT_FINALIZED / IF-EXPORT#ERR12 | 未选择并完成终结分支 | 按前提 finalize，再 release |
+
+错误集合为 FORBIDDEN、BAD_REQUEST、INSTANCE_MISMATCH、NOT_FOUND、CLOSED、CONFLICT、
 BUSY、LEDGER_FULL、NOT_SAFE、EVIDENCE_PENDING、RESULT_UNAVAILABLE、NOT_FINALIZED。
 按鉴权→封包/参数→实例→操作存在/prepare 冻结参数→状态/资源的顺序检查，前一步不通过不执行后续效果。除预定义错误外的连接断开/服务故障视为结果未知，不能暗设“内部错误无副作用”。
 

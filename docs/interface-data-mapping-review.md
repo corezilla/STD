@@ -1,0 +1,94 @@
+# 接口映射与机制规划：变更及复审记录
+
+版本：0.1.0-draft.1 · 日期：2026-09-12 · 作者自审；不是独立评审或产品验收
+
+输入为 STD `fef1a61612a50ab09a85dcd65b65f2fec67e58ff`，结合接口映射 handoff 1.0-draft.1
+及用户补充的系统机制预先规划要求。只改 STD；未读取保密 demo、未改 HIFM 技术方案/采用锁，
+不处理 Matrix 历史消息。公开例子沿用 STD 已有虚构 EX-EXPORT，未复制产品协议。
+
+## 1. 版本与迁移
+
+| 模板 | 输入 → 工作稿 | 变化 |
+|---|---|---|
+| design.system | 8.0.0 → 8.1.0 | §3.4 机制清单/预定文件，§9/10 统一映射 |
+| design.system-mechanism | 1.5.1 → 2.0.0 | 15→16 主章的不兼容目录调整；必需设计信息保留 |
+| design.definition / hardware / fpga | 1.1.0 → 1.2.0 | 兼容增加同 ID、固定基线的接口及下游承接 |
+| design.data-dictionary | 1.0.0 → 1.1.0 | 完整字段映射、共享类型、逻辑/ABI 边界 |
+| interfaces.control / contracts.specification | 0.1.0 → 0.2.0 | 目录成员、来源/覆盖、类型/错误及版本映射 |
+
+通用 AI 指南为 0.2.0-draft.1，系统为 0.6.0-draft.1，机制为 0.3.0-draft.1；
+接口/单元/硬件/FPGA/验证专项为 0.2.0-draft.1。映射规范 1.0.0-draft.1、目录 Schema 模型 1.0.0。
+其他模板不变；catalog 的发布版本和 STD VERSION 仍为 draft.26，不重写已发布 source/RAG 清单。
+模板 hash 继续由生成器按模板实际 bytes 写入 sidecar，不建第二份固定哈希表。
+
+| 机制 1.5.1 原位置 | 2.0.0 位置 |
+|---|---|
+| §1–3 | 不变 |
+| §4 输入/输出及 §4.2 寿命 | §4 数据结构，§4.1 全字段、§4.2 编码/映射、§4.3 寿命 |
+| §4.1 公共操作 | §5 接口，§5.1 完整逐操作；已有请求响应示例随迁 |
+| §5–12 | §6–13，流程/分支/状态/恢复/资源/安全/观测/配置不丢失 |
+| §13–15 | §14 实现、§15 验证、§16 决策风险 |
+| 附录 A/B | 不变；引用、图例落位同步，图件 bytes 不变 |
+
+## 2. 需求落实位置
+
+| 交接项 | 唯一规范与实际承载 |
+|---|---|
+| STD-MAP-01 | design-writing-guide 双读者交付 → interface-data-mapping-standard 唯一模型 |
+| STD-MAP-02 | schemas/interface-catalog.schema.json + scripts/validate-interface-catalog；类型/必填/枚举/路径/selector/版本/摘要 |
+| STD-MAP-03 | 映射规范 §2/4；稳定族/成员/字段身份、废弃和消费基线 |
+| STD-MAP-04 | 规范 §1、EX-EXPORT Schema 与行为正文/完整阅读投影；共享 $ref 与 binding |
+| STD-MAP-05/06 | 规范 §3、机制 §4/5、完整例的请求/响应/十二错误/内部完成凭据；原生硬件/CLI 按适用展开 |
+| STD-MAP-07 | 规范 §4、机制 §14/15、单元及专项承接表、示例逐成员 backend/Case/NOT_RUN |
+| STD-MAP-08 | Schema/validator 和 test_interface_mapping；枚举来源全集与目录双向集合、投影及基线反例 |
+| STD-TPL-01 | 机制 2.0.0：16 主章，32 处段落式帮助；正常/异常图原约束不丢失 |
+| STD-TPL-02 | 系统/单元/硬件/FPGA/接口控制/契约/数据字典七类映射栏目 |
+| STD-TPL-03 | docs/examples/interfaces：真实 Schema + catalog + README + contract-view + mapping.svg；复用原行为案例与模型 |
+| STD-TPL-04 | catalog 独立模板版本、上表章节映射、指南导航、生成实例和结构回归同步 |
+| STD-AI-01 | 通用指南 §3/5：现有工作包加入 ID、实际源、投影、双向定位和承接，不另设工作流 |
+| STD-AI-02 | 系统/机制/接口/单元/硬件/FPGA/验证专项，各自引用同一规则 |
+| STD-AI-03 | 接口专项 §4.1 的错误位置/发现/修正表及具名负向回归 |
+| 用户补充 | 系统 §3.4 先定 Mechanism/Document ID 与文件名；Planned 不创建假源/断链，逐份成文再绑定版本 |
+
+## 3. 两轮作者走查
+
+**新读者视角**：先读案例用途、图和正常/取消/丢响应路径，能复述“私有导出，交付或丢弃后归还槽位”；
+结果 UNKNOWN 与安全 FENCED、资源 RELEASED 分开。发现原正文声称所有公共定义都由正文拥有，
+已改为机器结构/正文行为分工；新增错误解释表明确十二错误各自合法下一步。没有把映射图当作产品过程图。
+
+**Agent 定位视角**：实际沿 IF-EXPORT#OP01 → Request → operation_id/Id → contract-behavior/EX-R1
+→ A-control/C-client → EX-V1/6、EX-T1/6，及 CONFLICT/ERR06 → error-actions 检查。
+所有 32 个成员的 source、prose、reading_view、类型引用、声明范围及下游基线均由测试/工具核对。
+修正了旧版本表、机制章号、图例落点、附录适用矩阵和固定旧目录的回归断言；外部案例的 §6 引用不随机制章号顺延。
+原生修订号可保持整数；native literal 定位明确报告字段语义未检查。没有删除原取证/取消/安全测试来通过检查。
+
+本地 Chrome/marked 以 900 px 正文宽度实际渲染映射入口、完整字段投影、系统机制清单和机制数据章；
+图片均加载，页面无横向溢出。目视核对新 SVG 的双向来源关系/下游分流和中文，以及清单中的
+Planned 路径、字段投影的嵌套引用；代码块按阅读宽度换行。预览仅存在临时目录，不提交渲染环境或私密材料。
+
+这两轮均为作者模拟走查，未开展另一位读者/Agent 的独立评审。文档结构和测试全绿也不证明产品设计质量。
+
+## 4. 检查与采用边界
+
+检查命令：
+
+```sh
+python3 scripts/validate-interface-catalog --project-root . --catalog docs/examples/interfaces/catalog.json
+python3 -m unittest discover -s tests -v
+git diff --check
+git diff --cached --check
+```
+
+具体最终执行结果与提交由交付消息报告，本文不预填运行证据或包含自身的 commit。
+正反例覆盖重复 ID、未知字段、空/漏全集、TODO/失效指针、源 hash/版本、正文锚点/版本、
+未定义共享类型、签名绑定、字段/枚举/default/null/长度投影、旧消费基线、backend 过度结论、
+废弃指向、路径越界/symlink/未授权仓库、重复 JSON key、非法跨字段封包及生成后帮助移除。
+既有正常/错误 JSON 样本逐条对正式 Schema 验证，原内存模型独立复验取证/释放，不代替真实服务。
+
+原生 Proto/RTL literal 定位不等于字段语义，需项目现有解析器；格式检查不自动验证历史兼容、
+普通解释段落的全部语义、未被项目清单识别的接口、实际代码保证、Run 真实性或真实 ABI/网络。
+无外部索引/部署/Runtime Activation，不把静态结果填成服务 backend PASS。
+
+采用由用户明确发起：选定已发布/批准的目标 STD 来源，评估本项目实际采用的受影响模板；
+机制按上表移动信息与引用，保留已有 ID 和机器 authority，补映射与实际源，验证正文和下游，
+再按项目流程更新 README/lock/模板版本。当前 HIFM 本地裁剪不自动变 native，旧项目无需主动跟随。

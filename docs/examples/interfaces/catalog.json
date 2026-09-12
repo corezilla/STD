@@ -1,0 +1,3713 @@
+{
+  "schema_version": "1.0.0",
+  "repository": "corezilla/STD",
+  "families": [
+    {
+      "id": "IF-EXPORT",
+      "name": "暂存导出",
+      "purpose": "构造一次私有导出，显式选择交付/丢弃并安全归还槽位",
+      "providers": [
+        "A"
+      ],
+      "consumers": [
+        "C"
+      ],
+      "source": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+        "selector": {
+          "kind": "json_pointer",
+          "value": ""
+        },
+        "version": "EX-EXPORT-01/v1",
+        "revision": "3",
+        "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+        "version_selector": {
+          "kind": "json_pointer",
+          "value": "/x-contract-version"
+        },
+        "revision_selector": {
+          "kind": "json_pointer",
+          "value": "/x-revision"
+        },
+        "semantic_scope": "structure"
+      },
+      "coverage": {
+        "level": "complete",
+        "scope": "EX-EXPORT v1 logical C→A envelopes, seven operations, all errors, and A/W completion receipt types",
+        "excluded_scope": "No CLI, external publication, physical ABI or deployed Unix service; raw transport behavior stays in prose",
+        "inventory": [
+          {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+            "selector": {
+              "kind": "json_pointer",
+              "value": "/$defs"
+            },
+            "version": "EX-EXPORT-01/v1",
+            "revision": "3",
+            "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+            "version_selector": {
+              "kind": "json_pointer",
+              "value": "/x-contract-version"
+            },
+            "revision_selector": {
+              "kind": "json_pointer",
+              "value": "/x-revision"
+            },
+            "semantic_scope": "structure"
+          },
+          {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+            "selector": {
+              "kind": "json_pointer",
+              "value": "/x-operations"
+            },
+            "version": "EX-EXPORT-01/v1",
+            "revision": "3",
+            "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+            "version_selector": {
+              "kind": "json_pointer",
+              "value": "/x-contract-version"
+            },
+            "revision_selector": {
+              "kind": "json_pointer",
+              "value": "/x-revision"
+            },
+            "semantic_scope": "structure"
+          },
+          {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+            "selector": {
+              "kind": "json_pointer",
+              "value": "/x-errors"
+            },
+            "version": "EX-EXPORT-01/v1",
+            "revision": "3",
+            "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+            "version_selector": {
+              "kind": "json_pointer",
+              "value": "/x-contract-version"
+            },
+            "revision_selector": {
+              "kind": "json_pointer",
+              "value": "/x-revision"
+            },
+            "semantic_scope": "structure"
+          }
+        ]
+      }
+    }
+  ],
+  "members": [
+    {
+      "id": "IF-EXPORT#TYPE01",
+      "family": "IF-EXPORT",
+      "kind": "type",
+      "name": "Id",
+      "source": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+        "selector": {
+          "kind": "json_pointer",
+          "value": "/$defs/Id"
+        },
+        "version": "EX-EXPORT-01/v1",
+        "revision": "3",
+        "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+        "version_selector": {
+          "kind": "json_pointer",
+          "value": "/x-contract-version"
+        },
+        "revision_selector": {
+          "kind": "json_pointer",
+          "value": "/x-revision"
+        },
+        "semantic_scope": "structure"
+      },
+      "prose": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/mechanism-side-effect-example.md",
+        "document_id": "EX-EXPORT-DESIGN",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-data"
+      },
+      "bindings": [],
+      "status": {
+        "design": "proposed",
+        "implementation": "not_implemented",
+        "verification": "not_run"
+      },
+      "evolution": {
+        "state": "active",
+        "replaced_by": null,
+        "compatibility": "New catalog registration; v1 envelopes and behavior preserved from case revision 2; mapping revision 3 only."
+      },
+      "downstream": [
+        {
+          "role": "provider",
+          "module": "A-control",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        },
+        {
+          "role": "consumer",
+          "module": "C-client",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        }
+      ],
+      "reading_view": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/contract-view.md",
+        "document_id": "EX-EXPORT-CONTRACT-VIEW",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-view"
+      }
+    },
+    {
+      "id": "IF-EXPORT#TYPE02",
+      "family": "IF-EXPORT",
+      "kind": "type",
+      "name": "Payload",
+      "source": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+        "selector": {
+          "kind": "json_pointer",
+          "value": "/$defs/Payload"
+        },
+        "version": "EX-EXPORT-01/v1",
+        "revision": "3",
+        "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+        "version_selector": {
+          "kind": "json_pointer",
+          "value": "/x-contract-version"
+        },
+        "revision_selector": {
+          "kind": "json_pointer",
+          "value": "/x-revision"
+        },
+        "semantic_scope": "structure"
+      },
+      "prose": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/mechanism-side-effect-example.md",
+        "document_id": "EX-EXPORT-DESIGN",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-data"
+      },
+      "bindings": [],
+      "status": {
+        "design": "proposed",
+        "implementation": "not_implemented",
+        "verification": "not_run"
+      },
+      "evolution": {
+        "state": "active",
+        "replaced_by": null,
+        "compatibility": "New catalog registration; v1 envelopes and behavior preserved from case revision 2; mapping revision 3 only."
+      },
+      "downstream": [
+        {
+          "role": "provider",
+          "module": "A-control",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        },
+        {
+          "role": "consumer",
+          "module": "C-client",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        }
+      ],
+      "reading_view": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/contract-view.md",
+        "document_id": "EX-EXPORT-CONTRACT-VIEW",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-view"
+      }
+    },
+    {
+      "id": "IF-EXPORT#TYPE03",
+      "family": "IF-EXPORT",
+      "kind": "type",
+      "name": "EmptyArgs",
+      "source": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+        "selector": {
+          "kind": "json_pointer",
+          "value": "/$defs/EmptyArgs"
+        },
+        "version": "EX-EXPORT-01/v1",
+        "revision": "3",
+        "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+        "version_selector": {
+          "kind": "json_pointer",
+          "value": "/x-contract-version"
+        },
+        "revision_selector": {
+          "kind": "json_pointer",
+          "value": "/x-revision"
+        },
+        "semantic_scope": "structure"
+      },
+      "prose": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/mechanism-side-effect-example.md",
+        "document_id": "EX-EXPORT-DESIGN",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-data"
+      },
+      "bindings": [],
+      "status": {
+        "design": "proposed",
+        "implementation": "not_implemented",
+        "verification": "not_run"
+      },
+      "evolution": {
+        "state": "active",
+        "replaced_by": null,
+        "compatibility": "New catalog registration; v1 envelopes and behavior preserved from case revision 2; mapping revision 3 only."
+      },
+      "downstream": [
+        {
+          "role": "provider",
+          "module": "A-control",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        },
+        {
+          "role": "consumer",
+          "module": "C-client",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        }
+      ],
+      "reading_view": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/contract-view.md",
+        "document_id": "EX-EXPORT-CONTRACT-VIEW",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-view"
+      }
+    },
+    {
+      "id": "IF-EXPORT#TYPE04",
+      "family": "IF-EXPORT",
+      "kind": "type",
+      "name": "PrepareArgs",
+      "source": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+        "selector": {
+          "kind": "json_pointer",
+          "value": "/$defs/PrepareArgs"
+        },
+        "version": "EX-EXPORT-01/v1",
+        "revision": "3",
+        "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+        "version_selector": {
+          "kind": "json_pointer",
+          "value": "/x-contract-version"
+        },
+        "revision_selector": {
+          "kind": "json_pointer",
+          "value": "/x-revision"
+        },
+        "semantic_scope": "structure"
+      },
+      "prose": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/mechanism-side-effect-example.md",
+        "document_id": "EX-EXPORT-DESIGN",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-data"
+      },
+      "bindings": [],
+      "status": {
+        "design": "proposed",
+        "implementation": "not_implemented",
+        "verification": "not_run"
+      },
+      "evolution": {
+        "state": "active",
+        "replaced_by": null,
+        "compatibility": "New catalog registration; v1 envelopes and behavior preserved from case revision 2; mapping revision 3 only."
+      },
+      "downstream": [
+        {
+          "role": "provider",
+          "module": "A-control",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        },
+        {
+          "role": "consumer",
+          "module": "C-client",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        }
+      ],
+      "reading_view": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/contract-view.md",
+        "document_id": "EX-EXPORT-CONTRACT-VIEW",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-view"
+      }
+    },
+    {
+      "id": "IF-EXPORT#TYPE05",
+      "family": "IF-EXPORT",
+      "kind": "type",
+      "name": "FinalizeArgs",
+      "source": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+        "selector": {
+          "kind": "json_pointer",
+          "value": "/$defs/FinalizeArgs"
+        },
+        "version": "EX-EXPORT-01/v1",
+        "revision": "3",
+        "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+        "version_selector": {
+          "kind": "json_pointer",
+          "value": "/x-contract-version"
+        },
+        "revision_selector": {
+          "kind": "json_pointer",
+          "value": "/x-revision"
+        },
+        "semantic_scope": "structure"
+      },
+      "prose": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/mechanism-side-effect-example.md",
+        "document_id": "EX-EXPORT-DESIGN",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-data"
+      },
+      "bindings": [],
+      "status": {
+        "design": "proposed",
+        "implementation": "not_implemented",
+        "verification": "not_run"
+      },
+      "evolution": {
+        "state": "active",
+        "replaced_by": null,
+        "compatibility": "New catalog registration; v1 envelopes and behavior preserved from case revision 2; mapping revision 3 only."
+      },
+      "downstream": [
+        {
+          "role": "provider",
+          "module": "A-control",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        },
+        {
+          "role": "consumer",
+          "module": "C-client",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        }
+      ],
+      "reading_view": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/contract-view.md",
+        "document_id": "EX-EXPORT-CONTRACT-VIEW",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-view"
+      }
+    },
+    {
+      "id": "IF-EXPORT#TYPE06",
+      "family": "IF-EXPORT",
+      "kind": "type",
+      "name": "State",
+      "source": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+        "selector": {
+          "kind": "json_pointer",
+          "value": "/$defs/State"
+        },
+        "version": "EX-EXPORT-01/v1",
+        "revision": "3",
+        "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+        "version_selector": {
+          "kind": "json_pointer",
+          "value": "/x-contract-version"
+        },
+        "revision_selector": {
+          "kind": "json_pointer",
+          "value": "/x-revision"
+        },
+        "semantic_scope": "structure"
+      },
+      "prose": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/mechanism-side-effect-example.md",
+        "document_id": "EX-EXPORT-DESIGN",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-data"
+      },
+      "bindings": [],
+      "status": {
+        "design": "proposed",
+        "implementation": "not_implemented",
+        "verification": "not_run"
+      },
+      "evolution": {
+        "state": "active",
+        "replaced_by": null,
+        "compatibility": "New catalog registration; v1 envelopes and behavior preserved from case revision 2; mapping revision 3 only."
+      },
+      "downstream": [
+        {
+          "role": "provider",
+          "module": "A-control",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        },
+        {
+          "role": "consumer",
+          "module": "C-client",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        }
+      ],
+      "reading_view": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/contract-view.md",
+        "document_id": "EX-EXPORT-CONTRACT-VIEW",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-view"
+      }
+    },
+    {
+      "id": "IF-EXPORT#TYPE07",
+      "family": "IF-EXPORT",
+      "kind": "type",
+      "name": "Output",
+      "source": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+        "selector": {
+          "kind": "json_pointer",
+          "value": "/$defs/Output"
+        },
+        "version": "EX-EXPORT-01/v1",
+        "revision": "3",
+        "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+        "version_selector": {
+          "kind": "json_pointer",
+          "value": "/x-contract-version"
+        },
+        "revision_selector": {
+          "kind": "json_pointer",
+          "value": "/x-revision"
+        },
+        "semantic_scope": "structure"
+      },
+      "prose": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/mechanism-side-effect-example.md",
+        "document_id": "EX-EXPORT-DESIGN",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-data"
+      },
+      "bindings": [],
+      "status": {
+        "design": "proposed",
+        "implementation": "not_implemented",
+        "verification": "not_run"
+      },
+      "evolution": {
+        "state": "active",
+        "replaced_by": null,
+        "compatibility": "New catalog registration; v1 envelopes and behavior preserved from case revision 2; mapping revision 3 only."
+      },
+      "downstream": [
+        {
+          "role": "provider",
+          "module": "A-control",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        },
+        {
+          "role": "consumer",
+          "module": "C-client",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        }
+      ],
+      "reading_view": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/contract-view.md",
+        "document_id": "EX-EXPORT-CONTRACT-VIEW",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-view"
+      }
+    },
+    {
+      "id": "IF-EXPORT#TYPE08",
+      "family": "IF-EXPORT",
+      "kind": "type",
+      "name": "Request",
+      "source": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+        "selector": {
+          "kind": "json_pointer",
+          "value": "/$defs/Request"
+        },
+        "version": "EX-EXPORT-01/v1",
+        "revision": "3",
+        "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+        "version_selector": {
+          "kind": "json_pointer",
+          "value": "/x-contract-version"
+        },
+        "revision_selector": {
+          "kind": "json_pointer",
+          "value": "/x-revision"
+        },
+        "semantic_scope": "structure"
+      },
+      "prose": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/mechanism-side-effect-example.md",
+        "document_id": "EX-EXPORT-DESIGN",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-data"
+      },
+      "bindings": [],
+      "status": {
+        "design": "proposed",
+        "implementation": "not_implemented",
+        "verification": "not_run"
+      },
+      "evolution": {
+        "state": "active",
+        "replaced_by": null,
+        "compatibility": "New catalog registration; v1 envelopes and behavior preserved from case revision 2; mapping revision 3 only."
+      },
+      "downstream": [
+        {
+          "role": "provider",
+          "module": "A-control",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        },
+        {
+          "role": "consumer",
+          "module": "C-client",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        }
+      ],
+      "reading_view": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/contract-view.md",
+        "document_id": "EX-EXPORT-CONTRACT-VIEW",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-view"
+      }
+    },
+    {
+      "id": "IF-EXPORT#TYPE09",
+      "family": "IF-EXPORT",
+      "kind": "type",
+      "name": "Error",
+      "source": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+        "selector": {
+          "kind": "json_pointer",
+          "value": "/$defs/Error"
+        },
+        "version": "EX-EXPORT-01/v1",
+        "revision": "3",
+        "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+        "version_selector": {
+          "kind": "json_pointer",
+          "value": "/x-contract-version"
+        },
+        "revision_selector": {
+          "kind": "json_pointer",
+          "value": "/x-revision"
+        },
+        "semantic_scope": "structure"
+      },
+      "prose": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/mechanism-side-effect-example.md",
+        "document_id": "EX-EXPORT-DESIGN",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-data"
+      },
+      "bindings": [],
+      "status": {
+        "design": "proposed",
+        "implementation": "not_implemented",
+        "verification": "not_run"
+      },
+      "evolution": {
+        "state": "active",
+        "replaced_by": null,
+        "compatibility": "New catalog registration; v1 envelopes and behavior preserved from case revision 2; mapping revision 3 only."
+      },
+      "downstream": [
+        {
+          "role": "provider",
+          "module": "A-control",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        },
+        {
+          "role": "consumer",
+          "module": "C-client",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        }
+      ],
+      "reading_view": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/contract-view.md",
+        "document_id": "EX-EXPORT-CONTRACT-VIEW",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-view"
+      }
+    },
+    {
+      "id": "IF-EXPORT#TYPE10",
+      "family": "IF-EXPORT",
+      "kind": "type",
+      "name": "SuccessResponse",
+      "source": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+        "selector": {
+          "kind": "json_pointer",
+          "value": "/$defs/SuccessResponse"
+        },
+        "version": "EX-EXPORT-01/v1",
+        "revision": "3",
+        "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+        "version_selector": {
+          "kind": "json_pointer",
+          "value": "/x-contract-version"
+        },
+        "revision_selector": {
+          "kind": "json_pointer",
+          "value": "/x-revision"
+        },
+        "semantic_scope": "structure"
+      },
+      "prose": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/mechanism-side-effect-example.md",
+        "document_id": "EX-EXPORT-DESIGN",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-data"
+      },
+      "bindings": [],
+      "status": {
+        "design": "proposed",
+        "implementation": "not_implemented",
+        "verification": "not_run"
+      },
+      "evolution": {
+        "state": "active",
+        "replaced_by": null,
+        "compatibility": "New catalog registration; v1 envelopes and behavior preserved from case revision 2; mapping revision 3 only."
+      },
+      "downstream": [
+        {
+          "role": "provider",
+          "module": "A-control",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        },
+        {
+          "role": "consumer",
+          "module": "C-client",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        }
+      ],
+      "reading_view": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/contract-view.md",
+        "document_id": "EX-EXPORT-CONTRACT-VIEW",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-view"
+      }
+    },
+    {
+      "id": "IF-EXPORT#TYPE11",
+      "family": "IF-EXPORT",
+      "kind": "type",
+      "name": "ErrorResponse",
+      "source": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+        "selector": {
+          "kind": "json_pointer",
+          "value": "/$defs/ErrorResponse"
+        },
+        "version": "EX-EXPORT-01/v1",
+        "revision": "3",
+        "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+        "version_selector": {
+          "kind": "json_pointer",
+          "value": "/x-contract-version"
+        },
+        "revision_selector": {
+          "kind": "json_pointer",
+          "value": "/x-revision"
+        },
+        "semantic_scope": "structure"
+      },
+      "prose": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/mechanism-side-effect-example.md",
+        "document_id": "EX-EXPORT-DESIGN",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-data"
+      },
+      "bindings": [],
+      "status": {
+        "design": "proposed",
+        "implementation": "not_implemented",
+        "verification": "not_run"
+      },
+      "evolution": {
+        "state": "active",
+        "replaced_by": null,
+        "compatibility": "New catalog registration; v1 envelopes and behavior preserved from case revision 2; mapping revision 3 only."
+      },
+      "downstream": [
+        {
+          "role": "provider",
+          "module": "A-control",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        },
+        {
+          "role": "consumer",
+          "module": "C-client",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        }
+      ],
+      "reading_view": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/contract-view.md",
+        "document_id": "EX-EXPORT-CONTRACT-VIEW",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-view"
+      }
+    },
+    {
+      "id": "IF-EXPORT#TYPE12",
+      "family": "IF-EXPORT",
+      "kind": "type",
+      "name": "Response",
+      "source": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+        "selector": {
+          "kind": "json_pointer",
+          "value": "/$defs/Response"
+        },
+        "version": "EX-EXPORT-01/v1",
+        "revision": "3",
+        "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+        "version_selector": {
+          "kind": "json_pointer",
+          "value": "/x-contract-version"
+        },
+        "revision_selector": {
+          "kind": "json_pointer",
+          "value": "/x-revision"
+        },
+        "semantic_scope": "structure"
+      },
+      "prose": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/mechanism-side-effect-example.md",
+        "document_id": "EX-EXPORT-DESIGN",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-data"
+      },
+      "bindings": [],
+      "status": {
+        "design": "proposed",
+        "implementation": "not_implemented",
+        "verification": "not_run"
+      },
+      "evolution": {
+        "state": "active",
+        "replaced_by": null,
+        "compatibility": "New catalog registration; v1 envelopes and behavior preserved from case revision 2; mapping revision 3 only."
+      },
+      "downstream": [
+        {
+          "role": "provider",
+          "module": "A-control",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        },
+        {
+          "role": "consumer",
+          "module": "C-client",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        }
+      ],
+      "reading_view": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/contract-view.md",
+        "document_id": "EX-EXPORT-CONTRACT-VIEW",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-view"
+      }
+    },
+    {
+      "id": "IF-EXPORT#TYPE13",
+      "family": "IF-EXPORT",
+      "kind": "type",
+      "name": "CompletionReceipt",
+      "source": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+        "selector": {
+          "kind": "json_pointer",
+          "value": "/$defs/CompletionReceipt"
+        },
+        "version": "EX-EXPORT-01/v1",
+        "revision": "3",
+        "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+        "version_selector": {
+          "kind": "json_pointer",
+          "value": "/x-contract-version"
+        },
+        "revision_selector": {
+          "kind": "json_pointer",
+          "value": "/x-revision"
+        },
+        "semantic_scope": "structure"
+      },
+      "prose": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/mechanism-side-effect-example.md",
+        "document_id": "EX-EXPORT-DESIGN",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-data"
+      },
+      "bindings": [],
+      "status": {
+        "design": "proposed",
+        "implementation": "not_implemented",
+        "verification": "not_run"
+      },
+      "evolution": {
+        "state": "active",
+        "replaced_by": null,
+        "compatibility": "New catalog registration; v1 envelopes and behavior preserved from case revision 2; mapping revision 3 only."
+      },
+      "downstream": [
+        {
+          "role": "provider",
+          "module": "A-control",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        },
+        {
+          "role": "consumer",
+          "module": "C-client",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        }
+      ],
+      "reading_view": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/contract-view.md",
+        "document_id": "EX-EXPORT-CONTRACT-VIEW",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-view"
+      }
+    },
+    {
+      "id": "IF-EXPORT#OP01",
+      "family": "IF-EXPORT",
+      "kind": "operation",
+      "name": "prepare",
+      "source": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+        "selector": {
+          "kind": "json_pointer",
+          "value": "/x-operations/prepare"
+        },
+        "version": "EX-EXPORT-01/v1",
+        "revision": "3",
+        "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+        "version_selector": {
+          "kind": "json_pointer",
+          "value": "/x-contract-version"
+        },
+        "revision_selector": {
+          "kind": "json_pointer",
+          "value": "/x-revision"
+        },
+        "semantic_scope": "signature"
+      },
+      "prose": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/mechanism-side-effect-example.md",
+        "document_id": "EX-EXPORT-DESIGN",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-behavior"
+      },
+      "bindings": [
+        {
+          "role": "request",
+          "target": "IF-EXPORT#TYPE08",
+          "selector": {
+            "kind": "json_pointer",
+            "value": "/request"
+          }
+        },
+        {
+          "role": "response",
+          "target": "IF-EXPORT#TYPE12",
+          "selector": {
+            "kind": "json_pointer",
+            "value": "/response"
+          }
+        }
+      ],
+      "status": {
+        "design": "proposed",
+        "implementation": "not_implemented",
+        "verification": "not_run"
+      },
+      "evolution": {
+        "state": "active",
+        "replaced_by": null,
+        "compatibility": "New catalog registration; v1 envelopes and behavior preserved from case revision 2; mapping revision 3 only."
+      },
+      "downstream": [
+        {
+          "role": "provider",
+          "module": "A-control",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        },
+        {
+          "role": "consumer",
+          "module": "C-client",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        }
+      ],
+      "reading_view": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/contract-view.md",
+        "document_id": "EX-EXPORT-CONTRACT-VIEW",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-view"
+      }
+    },
+    {
+      "id": "IF-EXPORT#OP02",
+      "family": "IF-EXPORT",
+      "kind": "operation",
+      "name": "execute",
+      "source": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+        "selector": {
+          "kind": "json_pointer",
+          "value": "/x-operations/execute"
+        },
+        "version": "EX-EXPORT-01/v1",
+        "revision": "3",
+        "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+        "version_selector": {
+          "kind": "json_pointer",
+          "value": "/x-contract-version"
+        },
+        "revision_selector": {
+          "kind": "json_pointer",
+          "value": "/x-revision"
+        },
+        "semantic_scope": "signature"
+      },
+      "prose": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/mechanism-side-effect-example.md",
+        "document_id": "EX-EXPORT-DESIGN",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-behavior"
+      },
+      "bindings": [
+        {
+          "role": "request",
+          "target": "IF-EXPORT#TYPE08",
+          "selector": {
+            "kind": "json_pointer",
+            "value": "/request"
+          }
+        },
+        {
+          "role": "response",
+          "target": "IF-EXPORT#TYPE12",
+          "selector": {
+            "kind": "json_pointer",
+            "value": "/response"
+          }
+        }
+      ],
+      "status": {
+        "design": "proposed",
+        "implementation": "not_implemented",
+        "verification": "not_run"
+      },
+      "evolution": {
+        "state": "active",
+        "replaced_by": null,
+        "compatibility": "New catalog registration; v1 envelopes and behavior preserved from case revision 2; mapping revision 3 only."
+      },
+      "downstream": [
+        {
+          "role": "provider",
+          "module": "A-control",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        },
+        {
+          "role": "consumer",
+          "module": "C-client",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        }
+      ],
+      "reading_view": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/contract-view.md",
+        "document_id": "EX-EXPORT-CONTRACT-VIEW",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-view"
+      }
+    },
+    {
+      "id": "IF-EXPORT#OP03",
+      "family": "IF-EXPORT",
+      "kind": "operation",
+      "name": "inspect",
+      "source": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+        "selector": {
+          "kind": "json_pointer",
+          "value": "/x-operations/inspect"
+        },
+        "version": "EX-EXPORT-01/v1",
+        "revision": "3",
+        "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+        "version_selector": {
+          "kind": "json_pointer",
+          "value": "/x-contract-version"
+        },
+        "revision_selector": {
+          "kind": "json_pointer",
+          "value": "/x-revision"
+        },
+        "semantic_scope": "signature"
+      },
+      "prose": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/mechanism-side-effect-example.md",
+        "document_id": "EX-EXPORT-DESIGN",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-behavior"
+      },
+      "bindings": [
+        {
+          "role": "request",
+          "target": "IF-EXPORT#TYPE08",
+          "selector": {
+            "kind": "json_pointer",
+            "value": "/request"
+          }
+        },
+        {
+          "role": "response",
+          "target": "IF-EXPORT#TYPE12",
+          "selector": {
+            "kind": "json_pointer",
+            "value": "/response"
+          }
+        }
+      ],
+      "status": {
+        "design": "proposed",
+        "implementation": "not_implemented",
+        "verification": "not_run"
+      },
+      "evolution": {
+        "state": "active",
+        "replaced_by": null,
+        "compatibility": "New catalog registration; v1 envelopes and behavior preserved from case revision 2; mapping revision 3 only."
+      },
+      "downstream": [
+        {
+          "role": "provider",
+          "module": "A-control",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        },
+        {
+          "role": "consumer",
+          "module": "C-client",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        }
+      ],
+      "reading_view": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/contract-view.md",
+        "document_id": "EX-EXPORT-CONTRACT-VIEW",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-view"
+      }
+    },
+    {
+      "id": "IF-EXPORT#OP04",
+      "family": "IF-EXPORT",
+      "kind": "operation",
+      "name": "stop",
+      "source": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+        "selector": {
+          "kind": "json_pointer",
+          "value": "/x-operations/stop"
+        },
+        "version": "EX-EXPORT-01/v1",
+        "revision": "3",
+        "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+        "version_selector": {
+          "kind": "json_pointer",
+          "value": "/x-contract-version"
+        },
+        "revision_selector": {
+          "kind": "json_pointer",
+          "value": "/x-revision"
+        },
+        "semantic_scope": "signature"
+      },
+      "prose": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/mechanism-side-effect-example.md",
+        "document_id": "EX-EXPORT-DESIGN",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-behavior"
+      },
+      "bindings": [
+        {
+          "role": "request",
+          "target": "IF-EXPORT#TYPE08",
+          "selector": {
+            "kind": "json_pointer",
+            "value": "/request"
+          }
+        },
+        {
+          "role": "response",
+          "target": "IF-EXPORT#TYPE12",
+          "selector": {
+            "kind": "json_pointer",
+            "value": "/response"
+          }
+        }
+      ],
+      "status": {
+        "design": "proposed",
+        "implementation": "not_implemented",
+        "verification": "not_run"
+      },
+      "evolution": {
+        "state": "active",
+        "replaced_by": null,
+        "compatibility": "New catalog registration; v1 envelopes and behavior preserved from case revision 2; mapping revision 3 only."
+      },
+      "downstream": [
+        {
+          "role": "provider",
+          "module": "A-control",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        },
+        {
+          "role": "consumer",
+          "module": "C-client",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        }
+      ],
+      "reading_view": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/contract-view.md",
+        "document_id": "EX-EXPORT-CONTRACT-VIEW",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-view"
+      }
+    },
+    {
+      "id": "IF-EXPORT#OP05",
+      "family": "IF-EXPORT",
+      "kind": "operation",
+      "name": "collect",
+      "source": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+        "selector": {
+          "kind": "json_pointer",
+          "value": "/x-operations/collect"
+        },
+        "version": "EX-EXPORT-01/v1",
+        "revision": "3",
+        "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+        "version_selector": {
+          "kind": "json_pointer",
+          "value": "/x-contract-version"
+        },
+        "revision_selector": {
+          "kind": "json_pointer",
+          "value": "/x-revision"
+        },
+        "semantic_scope": "signature"
+      },
+      "prose": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/mechanism-side-effect-example.md",
+        "document_id": "EX-EXPORT-DESIGN",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-behavior"
+      },
+      "bindings": [
+        {
+          "role": "request",
+          "target": "IF-EXPORT#TYPE08",
+          "selector": {
+            "kind": "json_pointer",
+            "value": "/request"
+          }
+        },
+        {
+          "role": "response",
+          "target": "IF-EXPORT#TYPE12",
+          "selector": {
+            "kind": "json_pointer",
+            "value": "/response"
+          }
+        }
+      ],
+      "status": {
+        "design": "proposed",
+        "implementation": "not_implemented",
+        "verification": "not_run"
+      },
+      "evolution": {
+        "state": "active",
+        "replaced_by": null,
+        "compatibility": "New catalog registration; v1 envelopes and behavior preserved from case revision 2; mapping revision 3 only."
+      },
+      "downstream": [
+        {
+          "role": "provider",
+          "module": "A-control",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        },
+        {
+          "role": "consumer",
+          "module": "C-client",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        }
+      ],
+      "reading_view": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/contract-view.md",
+        "document_id": "EX-EXPORT-CONTRACT-VIEW",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-view"
+      }
+    },
+    {
+      "id": "IF-EXPORT#OP06",
+      "family": "IF-EXPORT",
+      "kind": "operation",
+      "name": "finalize",
+      "source": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+        "selector": {
+          "kind": "json_pointer",
+          "value": "/x-operations/finalize"
+        },
+        "version": "EX-EXPORT-01/v1",
+        "revision": "3",
+        "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+        "version_selector": {
+          "kind": "json_pointer",
+          "value": "/x-contract-version"
+        },
+        "revision_selector": {
+          "kind": "json_pointer",
+          "value": "/x-revision"
+        },
+        "semantic_scope": "signature"
+      },
+      "prose": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/mechanism-side-effect-example.md",
+        "document_id": "EX-EXPORT-DESIGN",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-behavior"
+      },
+      "bindings": [
+        {
+          "role": "request",
+          "target": "IF-EXPORT#TYPE08",
+          "selector": {
+            "kind": "json_pointer",
+            "value": "/request"
+          }
+        },
+        {
+          "role": "response",
+          "target": "IF-EXPORT#TYPE12",
+          "selector": {
+            "kind": "json_pointer",
+            "value": "/response"
+          }
+        }
+      ],
+      "status": {
+        "design": "proposed",
+        "implementation": "not_implemented",
+        "verification": "not_run"
+      },
+      "evolution": {
+        "state": "active",
+        "replaced_by": null,
+        "compatibility": "New catalog registration; v1 envelopes and behavior preserved from case revision 2; mapping revision 3 only."
+      },
+      "downstream": [
+        {
+          "role": "provider",
+          "module": "A-control",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        },
+        {
+          "role": "consumer",
+          "module": "C-client",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        }
+      ],
+      "reading_view": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/contract-view.md",
+        "document_id": "EX-EXPORT-CONTRACT-VIEW",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-view"
+      }
+    },
+    {
+      "id": "IF-EXPORT#OP07",
+      "family": "IF-EXPORT",
+      "kind": "operation",
+      "name": "release",
+      "source": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+        "selector": {
+          "kind": "json_pointer",
+          "value": "/x-operations/release"
+        },
+        "version": "EX-EXPORT-01/v1",
+        "revision": "3",
+        "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+        "version_selector": {
+          "kind": "json_pointer",
+          "value": "/x-contract-version"
+        },
+        "revision_selector": {
+          "kind": "json_pointer",
+          "value": "/x-revision"
+        },
+        "semantic_scope": "signature"
+      },
+      "prose": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/mechanism-side-effect-example.md",
+        "document_id": "EX-EXPORT-DESIGN",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-behavior"
+      },
+      "bindings": [
+        {
+          "role": "request",
+          "target": "IF-EXPORT#TYPE08",
+          "selector": {
+            "kind": "json_pointer",
+            "value": "/request"
+          }
+        },
+        {
+          "role": "response",
+          "target": "IF-EXPORT#TYPE12",
+          "selector": {
+            "kind": "json_pointer",
+            "value": "/response"
+          }
+        }
+      ],
+      "status": {
+        "design": "proposed",
+        "implementation": "not_implemented",
+        "verification": "not_run"
+      },
+      "evolution": {
+        "state": "active",
+        "replaced_by": null,
+        "compatibility": "New catalog registration; v1 envelopes and behavior preserved from case revision 2; mapping revision 3 only."
+      },
+      "downstream": [
+        {
+          "role": "provider",
+          "module": "A-control",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        },
+        {
+          "role": "consumer",
+          "module": "C-client",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        }
+      ],
+      "reading_view": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/contract-view.md",
+        "document_id": "EX-EXPORT-CONTRACT-VIEW",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-view"
+      }
+    },
+    {
+      "id": "IF-EXPORT#ERR01",
+      "family": "IF-EXPORT",
+      "kind": "error",
+      "name": "FORBIDDEN",
+      "source": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+        "selector": {
+          "kind": "json_pointer",
+          "value": "/x-errors/FORBIDDEN"
+        },
+        "version": "EX-EXPORT-01/v1",
+        "revision": "3",
+        "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+        "version_selector": {
+          "kind": "json_pointer",
+          "value": "/x-contract-version"
+        },
+        "revision_selector": {
+          "kind": "json_pointer",
+          "value": "/x-revision"
+        },
+        "semantic_scope": "error"
+      },
+      "prose": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/mechanism-side-effect-example.md",
+        "document_id": "EX-EXPORT-DESIGN",
+        "version": "3.0.0-draft.1",
+        "anchor": "error-actions"
+      },
+      "bindings": [],
+      "status": {
+        "design": "proposed",
+        "implementation": "not_implemented",
+        "verification": "not_run"
+      },
+      "evolution": {
+        "state": "active",
+        "replaced_by": null,
+        "compatibility": "New catalog registration; v1 envelopes and behavior preserved from case revision 2; mapping revision 3 only."
+      },
+      "downstream": [
+        {
+          "role": "provider",
+          "module": "A-control",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        },
+        {
+          "role": "consumer",
+          "module": "C-client",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        }
+      ],
+      "reading_view": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/contract-view.md",
+        "document_id": "EX-EXPORT-CONTRACT-VIEW",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-view"
+      }
+    },
+    {
+      "id": "IF-EXPORT#ERR02",
+      "family": "IF-EXPORT",
+      "kind": "error",
+      "name": "BAD_REQUEST",
+      "source": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+        "selector": {
+          "kind": "json_pointer",
+          "value": "/x-errors/BAD_REQUEST"
+        },
+        "version": "EX-EXPORT-01/v1",
+        "revision": "3",
+        "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+        "version_selector": {
+          "kind": "json_pointer",
+          "value": "/x-contract-version"
+        },
+        "revision_selector": {
+          "kind": "json_pointer",
+          "value": "/x-revision"
+        },
+        "semantic_scope": "error"
+      },
+      "prose": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/mechanism-side-effect-example.md",
+        "document_id": "EX-EXPORT-DESIGN",
+        "version": "3.0.0-draft.1",
+        "anchor": "error-actions"
+      },
+      "bindings": [],
+      "status": {
+        "design": "proposed",
+        "implementation": "not_implemented",
+        "verification": "not_run"
+      },
+      "evolution": {
+        "state": "active",
+        "replaced_by": null,
+        "compatibility": "New catalog registration; v1 envelopes and behavior preserved from case revision 2; mapping revision 3 only."
+      },
+      "downstream": [
+        {
+          "role": "provider",
+          "module": "A-control",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        },
+        {
+          "role": "consumer",
+          "module": "C-client",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        }
+      ],
+      "reading_view": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/contract-view.md",
+        "document_id": "EX-EXPORT-CONTRACT-VIEW",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-view"
+      }
+    },
+    {
+      "id": "IF-EXPORT#ERR03",
+      "family": "IF-EXPORT",
+      "kind": "error",
+      "name": "INSTANCE_MISMATCH",
+      "source": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+        "selector": {
+          "kind": "json_pointer",
+          "value": "/x-errors/INSTANCE_MISMATCH"
+        },
+        "version": "EX-EXPORT-01/v1",
+        "revision": "3",
+        "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+        "version_selector": {
+          "kind": "json_pointer",
+          "value": "/x-contract-version"
+        },
+        "revision_selector": {
+          "kind": "json_pointer",
+          "value": "/x-revision"
+        },
+        "semantic_scope": "error"
+      },
+      "prose": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/mechanism-side-effect-example.md",
+        "document_id": "EX-EXPORT-DESIGN",
+        "version": "3.0.0-draft.1",
+        "anchor": "error-actions"
+      },
+      "bindings": [],
+      "status": {
+        "design": "proposed",
+        "implementation": "not_implemented",
+        "verification": "not_run"
+      },
+      "evolution": {
+        "state": "active",
+        "replaced_by": null,
+        "compatibility": "New catalog registration; v1 envelopes and behavior preserved from case revision 2; mapping revision 3 only."
+      },
+      "downstream": [
+        {
+          "role": "provider",
+          "module": "A-control",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        },
+        {
+          "role": "consumer",
+          "module": "C-client",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        }
+      ],
+      "reading_view": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/contract-view.md",
+        "document_id": "EX-EXPORT-CONTRACT-VIEW",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-view"
+      }
+    },
+    {
+      "id": "IF-EXPORT#ERR04",
+      "family": "IF-EXPORT",
+      "kind": "error",
+      "name": "NOT_FOUND",
+      "source": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+        "selector": {
+          "kind": "json_pointer",
+          "value": "/x-errors/NOT_FOUND"
+        },
+        "version": "EX-EXPORT-01/v1",
+        "revision": "3",
+        "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+        "version_selector": {
+          "kind": "json_pointer",
+          "value": "/x-contract-version"
+        },
+        "revision_selector": {
+          "kind": "json_pointer",
+          "value": "/x-revision"
+        },
+        "semantic_scope": "error"
+      },
+      "prose": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/mechanism-side-effect-example.md",
+        "document_id": "EX-EXPORT-DESIGN",
+        "version": "3.0.0-draft.1",
+        "anchor": "error-actions"
+      },
+      "bindings": [],
+      "status": {
+        "design": "proposed",
+        "implementation": "not_implemented",
+        "verification": "not_run"
+      },
+      "evolution": {
+        "state": "active",
+        "replaced_by": null,
+        "compatibility": "New catalog registration; v1 envelopes and behavior preserved from case revision 2; mapping revision 3 only."
+      },
+      "downstream": [
+        {
+          "role": "provider",
+          "module": "A-control",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        },
+        {
+          "role": "consumer",
+          "module": "C-client",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        }
+      ],
+      "reading_view": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/contract-view.md",
+        "document_id": "EX-EXPORT-CONTRACT-VIEW",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-view"
+      }
+    },
+    {
+      "id": "IF-EXPORT#ERR05",
+      "family": "IF-EXPORT",
+      "kind": "error",
+      "name": "CLOSED",
+      "source": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+        "selector": {
+          "kind": "json_pointer",
+          "value": "/x-errors/CLOSED"
+        },
+        "version": "EX-EXPORT-01/v1",
+        "revision": "3",
+        "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+        "version_selector": {
+          "kind": "json_pointer",
+          "value": "/x-contract-version"
+        },
+        "revision_selector": {
+          "kind": "json_pointer",
+          "value": "/x-revision"
+        },
+        "semantic_scope": "error"
+      },
+      "prose": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/mechanism-side-effect-example.md",
+        "document_id": "EX-EXPORT-DESIGN",
+        "version": "3.0.0-draft.1",
+        "anchor": "error-actions"
+      },
+      "bindings": [],
+      "status": {
+        "design": "proposed",
+        "implementation": "not_implemented",
+        "verification": "not_run"
+      },
+      "evolution": {
+        "state": "active",
+        "replaced_by": null,
+        "compatibility": "New catalog registration; v1 envelopes and behavior preserved from case revision 2; mapping revision 3 only."
+      },
+      "downstream": [
+        {
+          "role": "provider",
+          "module": "A-control",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        },
+        {
+          "role": "consumer",
+          "module": "C-client",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        }
+      ],
+      "reading_view": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/contract-view.md",
+        "document_id": "EX-EXPORT-CONTRACT-VIEW",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-view"
+      }
+    },
+    {
+      "id": "IF-EXPORT#ERR06",
+      "family": "IF-EXPORT",
+      "kind": "error",
+      "name": "CONFLICT",
+      "source": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+        "selector": {
+          "kind": "json_pointer",
+          "value": "/x-errors/CONFLICT"
+        },
+        "version": "EX-EXPORT-01/v1",
+        "revision": "3",
+        "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+        "version_selector": {
+          "kind": "json_pointer",
+          "value": "/x-contract-version"
+        },
+        "revision_selector": {
+          "kind": "json_pointer",
+          "value": "/x-revision"
+        },
+        "semantic_scope": "error"
+      },
+      "prose": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/mechanism-side-effect-example.md",
+        "document_id": "EX-EXPORT-DESIGN",
+        "version": "3.0.0-draft.1",
+        "anchor": "error-actions"
+      },
+      "bindings": [],
+      "status": {
+        "design": "proposed",
+        "implementation": "not_implemented",
+        "verification": "not_run"
+      },
+      "evolution": {
+        "state": "active",
+        "replaced_by": null,
+        "compatibility": "New catalog registration; v1 envelopes and behavior preserved from case revision 2; mapping revision 3 only."
+      },
+      "downstream": [
+        {
+          "role": "provider",
+          "module": "A-control",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        },
+        {
+          "role": "consumer",
+          "module": "C-client",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        }
+      ],
+      "reading_view": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/contract-view.md",
+        "document_id": "EX-EXPORT-CONTRACT-VIEW",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-view"
+      }
+    },
+    {
+      "id": "IF-EXPORT#ERR07",
+      "family": "IF-EXPORT",
+      "kind": "error",
+      "name": "BUSY",
+      "source": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+        "selector": {
+          "kind": "json_pointer",
+          "value": "/x-errors/BUSY"
+        },
+        "version": "EX-EXPORT-01/v1",
+        "revision": "3",
+        "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+        "version_selector": {
+          "kind": "json_pointer",
+          "value": "/x-contract-version"
+        },
+        "revision_selector": {
+          "kind": "json_pointer",
+          "value": "/x-revision"
+        },
+        "semantic_scope": "error"
+      },
+      "prose": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/mechanism-side-effect-example.md",
+        "document_id": "EX-EXPORT-DESIGN",
+        "version": "3.0.0-draft.1",
+        "anchor": "error-actions"
+      },
+      "bindings": [],
+      "status": {
+        "design": "proposed",
+        "implementation": "not_implemented",
+        "verification": "not_run"
+      },
+      "evolution": {
+        "state": "active",
+        "replaced_by": null,
+        "compatibility": "New catalog registration; v1 envelopes and behavior preserved from case revision 2; mapping revision 3 only."
+      },
+      "downstream": [
+        {
+          "role": "provider",
+          "module": "A-control",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        },
+        {
+          "role": "consumer",
+          "module": "C-client",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        }
+      ],
+      "reading_view": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/contract-view.md",
+        "document_id": "EX-EXPORT-CONTRACT-VIEW",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-view"
+      }
+    },
+    {
+      "id": "IF-EXPORT#ERR08",
+      "family": "IF-EXPORT",
+      "kind": "error",
+      "name": "LEDGER_FULL",
+      "source": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+        "selector": {
+          "kind": "json_pointer",
+          "value": "/x-errors/LEDGER_FULL"
+        },
+        "version": "EX-EXPORT-01/v1",
+        "revision": "3",
+        "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+        "version_selector": {
+          "kind": "json_pointer",
+          "value": "/x-contract-version"
+        },
+        "revision_selector": {
+          "kind": "json_pointer",
+          "value": "/x-revision"
+        },
+        "semantic_scope": "error"
+      },
+      "prose": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/mechanism-side-effect-example.md",
+        "document_id": "EX-EXPORT-DESIGN",
+        "version": "3.0.0-draft.1",
+        "anchor": "error-actions"
+      },
+      "bindings": [],
+      "status": {
+        "design": "proposed",
+        "implementation": "not_implemented",
+        "verification": "not_run"
+      },
+      "evolution": {
+        "state": "active",
+        "replaced_by": null,
+        "compatibility": "New catalog registration; v1 envelopes and behavior preserved from case revision 2; mapping revision 3 only."
+      },
+      "downstream": [
+        {
+          "role": "provider",
+          "module": "A-control",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        },
+        {
+          "role": "consumer",
+          "module": "C-client",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        }
+      ],
+      "reading_view": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/contract-view.md",
+        "document_id": "EX-EXPORT-CONTRACT-VIEW",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-view"
+      }
+    },
+    {
+      "id": "IF-EXPORT#ERR09",
+      "family": "IF-EXPORT",
+      "kind": "error",
+      "name": "NOT_SAFE",
+      "source": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+        "selector": {
+          "kind": "json_pointer",
+          "value": "/x-errors/NOT_SAFE"
+        },
+        "version": "EX-EXPORT-01/v1",
+        "revision": "3",
+        "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+        "version_selector": {
+          "kind": "json_pointer",
+          "value": "/x-contract-version"
+        },
+        "revision_selector": {
+          "kind": "json_pointer",
+          "value": "/x-revision"
+        },
+        "semantic_scope": "error"
+      },
+      "prose": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/mechanism-side-effect-example.md",
+        "document_id": "EX-EXPORT-DESIGN",
+        "version": "3.0.0-draft.1",
+        "anchor": "error-actions"
+      },
+      "bindings": [],
+      "status": {
+        "design": "proposed",
+        "implementation": "not_implemented",
+        "verification": "not_run"
+      },
+      "evolution": {
+        "state": "active",
+        "replaced_by": null,
+        "compatibility": "New catalog registration; v1 envelopes and behavior preserved from case revision 2; mapping revision 3 only."
+      },
+      "downstream": [
+        {
+          "role": "provider",
+          "module": "A-control",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        },
+        {
+          "role": "consumer",
+          "module": "C-client",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        }
+      ],
+      "reading_view": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/contract-view.md",
+        "document_id": "EX-EXPORT-CONTRACT-VIEW",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-view"
+      }
+    },
+    {
+      "id": "IF-EXPORT#ERR10",
+      "family": "IF-EXPORT",
+      "kind": "error",
+      "name": "EVIDENCE_PENDING",
+      "source": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+        "selector": {
+          "kind": "json_pointer",
+          "value": "/x-errors/EVIDENCE_PENDING"
+        },
+        "version": "EX-EXPORT-01/v1",
+        "revision": "3",
+        "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+        "version_selector": {
+          "kind": "json_pointer",
+          "value": "/x-contract-version"
+        },
+        "revision_selector": {
+          "kind": "json_pointer",
+          "value": "/x-revision"
+        },
+        "semantic_scope": "error"
+      },
+      "prose": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/mechanism-side-effect-example.md",
+        "document_id": "EX-EXPORT-DESIGN",
+        "version": "3.0.0-draft.1",
+        "anchor": "error-actions"
+      },
+      "bindings": [],
+      "status": {
+        "design": "proposed",
+        "implementation": "not_implemented",
+        "verification": "not_run"
+      },
+      "evolution": {
+        "state": "active",
+        "replaced_by": null,
+        "compatibility": "New catalog registration; v1 envelopes and behavior preserved from case revision 2; mapping revision 3 only."
+      },
+      "downstream": [
+        {
+          "role": "provider",
+          "module": "A-control",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        },
+        {
+          "role": "consumer",
+          "module": "C-client",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        }
+      ],
+      "reading_view": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/contract-view.md",
+        "document_id": "EX-EXPORT-CONTRACT-VIEW",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-view"
+      }
+    },
+    {
+      "id": "IF-EXPORT#ERR11",
+      "family": "IF-EXPORT",
+      "kind": "error",
+      "name": "RESULT_UNAVAILABLE",
+      "source": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+        "selector": {
+          "kind": "json_pointer",
+          "value": "/x-errors/RESULT_UNAVAILABLE"
+        },
+        "version": "EX-EXPORT-01/v1",
+        "revision": "3",
+        "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+        "version_selector": {
+          "kind": "json_pointer",
+          "value": "/x-contract-version"
+        },
+        "revision_selector": {
+          "kind": "json_pointer",
+          "value": "/x-revision"
+        },
+        "semantic_scope": "error"
+      },
+      "prose": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/mechanism-side-effect-example.md",
+        "document_id": "EX-EXPORT-DESIGN",
+        "version": "3.0.0-draft.1",
+        "anchor": "error-actions"
+      },
+      "bindings": [],
+      "status": {
+        "design": "proposed",
+        "implementation": "not_implemented",
+        "verification": "not_run"
+      },
+      "evolution": {
+        "state": "active",
+        "replaced_by": null,
+        "compatibility": "New catalog registration; v1 envelopes and behavior preserved from case revision 2; mapping revision 3 only."
+      },
+      "downstream": [
+        {
+          "role": "provider",
+          "module": "A-control",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        },
+        {
+          "role": "consumer",
+          "module": "C-client",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        }
+      ],
+      "reading_view": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/contract-view.md",
+        "document_id": "EX-EXPORT-CONTRACT-VIEW",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-view"
+      }
+    },
+    {
+      "id": "IF-EXPORT#ERR12",
+      "family": "IF-EXPORT",
+      "kind": "error",
+      "name": "NOT_FINALIZED",
+      "source": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/ex-export-v1.schema.json",
+        "selector": {
+          "kind": "json_pointer",
+          "value": "/x-errors/NOT_FINALIZED"
+        },
+        "version": "EX-EXPORT-01/v1",
+        "revision": "3",
+        "sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+        "version_selector": {
+          "kind": "json_pointer",
+          "value": "/x-contract-version"
+        },
+        "revision_selector": {
+          "kind": "json_pointer",
+          "value": "/x-revision"
+        },
+        "semantic_scope": "error"
+      },
+      "prose": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/mechanism-side-effect-example.md",
+        "document_id": "EX-EXPORT-DESIGN",
+        "version": "3.0.0-draft.1",
+        "anchor": "error-actions"
+      },
+      "bindings": [],
+      "status": {
+        "design": "proposed",
+        "implementation": "not_implemented",
+        "verification": "not_run"
+      },
+      "evolution": {
+        "state": "active",
+        "replaced_by": null,
+        "compatibility": "New catalog registration; v1 envelopes and behavior preserved from case revision 2; mapping revision 3 only."
+      },
+      "downstream": [
+        {
+          "role": "provider",
+          "module": "A-control",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        },
+        {
+          "role": "consumer",
+          "module": "C-client",
+          "backend": "real-unix-socket",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V1",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T1",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.0.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        }
+      ],
+      "reading_view": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/contract-view.md",
+        "document_id": "EX-EXPORT-CONTRACT-VIEW",
+        "version": "3.0.0-draft.1",
+        "anchor": "contract-view"
+      }
+    }
+  ]
+}

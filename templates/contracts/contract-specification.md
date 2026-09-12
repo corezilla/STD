@@ -35,6 +35,11 @@
 |---|---|---|---|---|---|
 | <!-- TODO --> | | | | | |
 
+依 `docs/interface-data-mapping-standard.md` 使用目录里的接口族#成员 ID；逐方法定义完整请求、响应、事件及错误类型，关联身份、前置、校验顺序、副作用、确认/完成、期限/重复/取消和合法下一步。
+
+| 成员 ID / 类别 | 机器源 / selector / 版本/revision/hash | request/response/event/error 类型 ID | 正文稳定锚点 | 下游提供/消费 / 实现 / 设计 V → Case |
+|---|---|---|---|---|
+
 ## 3. Request、Response、Event 与数据对象
 
 引用 OpenAPI、JSON Schema、Proto、IDL 或 ABI；禁止只给示例不给约束。
@@ -48,6 +53,8 @@
 ## 7. 身份、权限、Secret 与多项目隔离
 
 ## 8. 版本、兼容性与迁移
+
+绑定消费方的实际 version/revision/hash；ID 不变不等于兼容。字段改名、枚举/错误变化、删除和替代对照旧基线逐项记录，废弃 ID 不回收，多 backend 分别迁移和验证。
 
 ## 9. Positive/Negative fixture 与 validator
 

@@ -1,6 +1,6 @@
 # 验证与验收 AI 编写指南
 
-版本：0.1.0-draft.1 · 日期：2026-09-11 · 状态：方法草案，待实际写作任务验证
+版本：0.2.0-draft.1 · 日期：2026-09-12 · 状态：方法草案，待实际写作任务验证
 
 主模板：`assurance.vv-plan`、`assurance.test-plan`、`assurance.test-specification`、`assurance.test-procedure`、`assurance.test-report`、`assurance.acceptance-plan`、`assurance.acceptance-report`。
 先读[通用 AI 编写指南](../ai-authoring-guide.md)，再读项目已采用的对应模板。本文补充本类型的工作方法，不重复公共来源、权限和状态规则，不自动升级项目模板。
@@ -40,6 +40,12 @@
 虚构例：弱写法“构造 prompt，LLM 返回正确即 PASS”。有效规范先给 prompt/输入构造规则、模型与配置、预期约束、比较方法和不确定性处理；Oracle 可以基于固定期望、结构/约束校验或独立评判标准，但不能让同一被测代码无条件认定自身正确。
 
 还要说明多次运行的统计判据与失败留存、并行请求隔离、复位是否清除缓存/会话、哪些环境事实被保存以复现。确切样本量和阈值需有项目依据，不从示例擅自指定。
+
+依[接口与数据规格映射规范](../interface-data-mapping-standard.md)读取上级成员 ID 与机器来源的实际 version/revision/hash，
+逐项记录本单元提供/消费、backend、实际实现文件/symbol 或 NOT_IMPLEMENTED、Constraint/设计 V→Case/环境/Run。
+数据类型、寄存器或信号保持原 authority；标准接口核对标准版本及项目绑定，不复制字段再自行修改。
+原生硬件/RTL/ABI 用现有工具检查，目录 JSON PASS 不代替电气/时序/互操作。验证计划保留未实现/NOT_RUN/缺测分母，
+同一接口的多个 backend 分别检查，单方通过不关闭组合目标。冲突回报原成员 ID、具体输入反例与影响，不能静默换定义。
 
 ## 5. 完成检查与下游承接
 

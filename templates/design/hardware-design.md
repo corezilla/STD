@@ -107,6 +107,11 @@ flowchart LR
 |---|---|---|---|---|---|---|
 | PCIe | J1 | Gen5 x8 | bidirectional | 32 GT/s | ESD | interface spec |
 
+按 `docs/interface-data-mapping-standard.md` 承接接口族#成员 ID，不另外复制寄存器/信号 authority；标准号、版本、适用部分与项目选项写全，自定义信号明确方向、位宽、时钟/时序、电压/电平及其他适用电气条件。
+
+| 接口/信号/寄存器成员 ID / 上级 Constraint | 机器源 / selector / 版本/revision/hash | 标准绑定 / 项目条件 | 提供/消费 / 器件端口/原理图位置或未实现 | 设计 V → 板级 Case / 系统组合验证 |
+|---|---|---|---|---|
+
 ## 6. 电源、时钟、复位与启动顺序
 
 | Rail/Clock/Reset | Source | Consumer | Target/Tolerance | Sequence dependency | Monitor |

@@ -156,7 +156,15 @@ sequenceDiagram
 |---|---|---|---|---|---|
 | <!-- TODO --> | | | | | |
 
-只解释设计意图，不复制 OpenAPI、Schema、IDL、ABI 或 register map 的字段定义。
+解释行为和设计意图；需要完整阅读视图时从 OpenAPI、Schema、IDL、ABI 或 register map 生成或逐项核对，不独立维护第二份字段 authority。
+
+按 `docs/interface-data-mapping-standard.md` 复用上级接口族/成员 ID；先读取固定机器源，再按同一基线说明本地职责。
+正文的完整字段阅读视图生成或逐项核对，不独立手改一套。§6 数据、§13 实现任务及 §14 验证用同一成员标识。
+
+| 接口成员 ID / 类型字段 ID | 提供/消费 / 责任模块 / backend | 消费版本/revision/hash / selector | 本地文件/symbol 或 NOT_IMPLEMENTED | Constraint / 设计 V → Case / 环境 / Run |
+|---|---|---|---|---|
+
+多个 backend 分别填写，未实现和未运行不从分母删除；若无法满足，回报原 ID、反例和影响，不静默改错误或字段。
 
 ## 10. 并发、失败与恢复
 

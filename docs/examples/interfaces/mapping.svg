@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="260" viewBox="0 0 960 260" role="img" aria-labelledby="title desc">
+<title id="title">正文到契约与下游的映射</title><desc id="desc">正文与目录、目录与机器定义双向关联，机器定义分流到实现任务和验证项；这是文档关系，不是执行顺序。</desc>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10" fill="#3975a5"/></marker></defs>
+<rect width="960" height="260" fill="#fff"/>
+<g font-family="Arial, PingFang SC, sans-serif" text-anchor="middle" font-size="20" fill="#17314a">
+<g fill="#edf4fa" stroke="#91adc5"><rect x="24" y="95" width="175" height="70" rx="10"/><rect x="253" y="95" width="170" height="70" rx="10"/><rect x="477" y="95" width="185" height="70" rx="10"/><rect x="739" y="30" width="195" height="70" rx="10"/><rect x="739" y="166" width="195" height="70" rx="10"/></g>
+<text x="111" y="127">设计正文</text><text x="111" y="151" font-size="14">稳定成员 ID / 行为</text>
+<text x="338" y="127">接口目录</text><text x="338" y="151" font-size="14">来源 / 版本 / 回链</text>
+<text x="569" y="127">机器定义</text><text x="569" y="151" font-size="14">完整字段 / 签名</text>
+<text x="836" y="60">实现任务</text><text x="836" y="83" font-size="14">责任单元 / 消费基线</text>
+<text x="836" y="196">验证项与用例</text><text x="836" y="220" font-size="14">Case / 环境 / Run</text>
+</g><g fill="none" stroke="#3975a5" stroke-width="2" marker-end="url(#a)">
+<path d="M204 130H248" marker-start="url(#a)"/><path d="M428 130H472" marker-start="url(#a)"/><path d="M667 130H697V65H733"/><path d="M697 130V201H733"/>
+</g><text x="24" y="24" font-family="Arial, PingFang SC, sans-serif" font-size="14" fill="#526477">MAP-1 · 虚构教学案例 · 资产关联，不表示产品调用顺序</text></svg>

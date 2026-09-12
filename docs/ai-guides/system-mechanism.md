@@ -1,8 +1,8 @@
 # 系统机制 AI 编写指南
 
-版本：0.2.0-draft.2 · 日期：2026-09-12 · 状态：方法草案，待实际写作任务验证
+版本：0.3.0-draft.1 · 日期：2026-09-12 · 状态：方法草案，待实际写作任务验证
 
-主模板：`design.system-mechanism`。先读[通用 AI 编写指南](../ai-authoring-guide.md)，再读项目已采用的[机制模板](../../templates/design/system-mechanism-design.md)。本文从系统指南 `0.4.0-draft.2` 的机制入口独立；本轮对应模板 `1.5.1` 工作稿，补实取证条件的事实来源和异常演练适用性，不改变项目采用或产品机制。
+主模板：`design.system-mechanism`。先读[通用 AI 编写指南](../ai-authoring-guide.md)，再读项目已采用的[机制模板](../../templates/design/system-mechanism-design.md)。本文从系统指南 `0.4.0-draft.2` 的机制入口独立；本轮对应模板 `2.0.0` 工作稿，补实取证条件的事实来源和异常演练适用性，不改变项目采用或产品机制。
 
 ## 1. 输入与边界
 
@@ -12,7 +12,7 @@
 
 ## 2. 专项执行顺序
 
-收到 `design.system-mechanism` 任务时，Agent 沿机制模板的 15 章主线使用以下执行顺序。系统指南的产品/硬件专业章是完整系统的写作方法，不要求每份机制另写客户全景、整机选型或下级 RTL；适用内容以机制
+收到 `design.system-mechanism` 任务时，Agent 沿机制模板的 16 章主线使用以下执行顺序。系统指南的产品/硬件专业章是完整系统的写作方法，不要求每份机制另写客户全景、整机选型或下级 RTL；适用内容以机制
 模板附录 A 和实际系统约束为准。工程 Owner 的人数不决定是否跨单元，独立运行职责和共同
 协议才是边界；已有完整机制文档只维护唯一来源，不为模板重新建一套。
 
@@ -37,6 +37,12 @@
    本地与组合验证责任。接口语义、错误和测试向量评审后可并行实现；各方契约验证后集成，
    组合验证后才关闭目标。未实现与 NOT_RUN 如实记录，不伪造签收、执行或上线授权。
 
+§4 专写数据结构（完整字段/共享类型/编码与寿命），§5 专写接口（逐操作签名/错误/完整调用），
+§6–13 保留流程、状态、恢复、资源、权限、观测及配置，§14 逐成员交接实现，§15 关联验证，§16 风险。
+按[映射规范](../interface-data-mapping-standard.md)读系统机制清单，继承已有 Document ID/文件名与 Process/Constraint，
+再以接口族#成员 ID 连接两章；计划路径不充当机器来源。使用[完整映射案例](../examples/interfaces/README.md)
+实际从 OP 定位请求/响应、字段、错误和下游；不能只记录“链接通过”。迁移表见[版本与复审记录](../interface-data-mapping-review.md)。
+
 ## 3. 图例与正文落位
 
 | 要说明的问题 | 机制模板位置 | 可编辑图形源 | 正文必须补足 |
@@ -44,12 +50,12 @@
 | 什么时候用、处理什么、得到什么 | §1 | [用途概览图](../../templates/diagrams/mechanism/usage-overview.svg) | 使用场景、处理范围和输出结果；不开篇堆参与方 |
 | 谁协作、谁拥有事实 | §3 | [协作图](../../templates/diagrams/mechanism/collaboration.svg) | 运行职责、分工理由、既有 authority 与依赖 |
 | 对象怎样变化 | §4 | [数据对象图](../../templates/diagrams/mechanism/objects.svg) | 生产/复制/变换、字段唯一来源、一致性和寿命 |
-| 谁先执行、何时等到结果 | §5 | [正常时序图](../../templates/diagrams/mechanism/sequence.svg) | 操作语义、前提、先后/并行、确认及期限 |
-| 状态和资源何时转移 | §7 | [状态与资源图](../../templates/diagrams/mechanism/state-lifecycle.svg) | Guard、迟到事件、在途资源、释放/复用的证明 |
-| 失败后能做什么 | §8 | [异常处置图](../../templates/diagrams/mechanism/failure-recovery.svg) | 已知/未知结果、权威核对、副作用、隔离和安全出口 |
-| 怎样控制并检查真实路径 | §14 | [测试路径图](../../templates/diagrams/mechanism/test-path.svg) | 输入、arm/hit/release、独立 Oracle、真实/模拟边界和清理 |
-| 有副作用时怎样正常与异常收口 | §5、§8 | [完整过程图](../../templates/diagrams/mechanism/effect-flow.svg) | 准备、执行、响应丢失、停止、取证、分支收口及释放 |
-| 取消和回退应该等哪些前置 | §5、§7、§8 | [条件依赖图](../../templates/diagrams/mechanism/cleanup-dependencies.svg) | 全局与分支条件、停止/取证依赖、仍合法的控制调用 |
+| 谁先执行、何时等到结果 | §6 | [正常时序图](../../templates/diagrams/mechanism/sequence.svg) | 操作语义、前提、先后/并行、确认及期限 |
+| 状态和资源何时转移 | §8 | [状态与资源图](../../templates/diagrams/mechanism/state-lifecycle.svg) | Guard、迟到事件、在途资源、释放/复用的证明 |
+| 失败后能做什么 | §9 | [异常处置图](../../templates/diagrams/mechanism/failure-recovery.svg) | 已知/未知结果、权威核对、副作用、隔离和安全出口 |
+| 怎样控制并检查真实路径 | §15 | [测试路径图](../../templates/diagrams/mechanism/test-path.svg) | 输入、arm/hit/release、独立 Oracle、真实/模拟边界和清理 |
+| 有副作用时怎样正常与异常收口 | §6、§9 | [完整过程图](../../templates/diagrams/mechanism/effect-flow.svg) | 准备、执行、响应丢失、停止、取证、分支收口及释放 |
+| 取消和回退应该等哪些前置 | §6、§8、§9 | [条件依赖图](../../templates/diagrams/mechanism/cleanup-dependencies.svg) | 全局与分支条件、停止/取证依赖、仍合法的控制调用 |
 
 **这些图如何复用**：先读[机制图形说明](../../templates/diagrams/mechanism/README.md)。复制所需 SVG
 到项目自己的文档资产目录，修改 `title`/`desc`、对象名称、分组 ID、基线/状态、连线端点和图例，
