@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="680" viewBox="0 0 1200 680" role="img" aria-labelledby="title desc">
+<title id="title">应用环境 · 用户从已有文档中查找所需内容</title><desc id="desc">逻辑应用场景，不是物理部署图；不要求项目新增浏览器界面、云平台或建索引服务。</desc>
+<defs><style>text{font-family:system-ui,"PingFang SC","Microsoft YaHei",sans-serif;fill:#20344b}.heading{font-size:30px;font-weight:650}.label{font-size:22px;font-weight:550}.note{font-size:18px;fill:#53667b}</style>
+<marker id="blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10Z" fill="#287bc1"/></marker>
+<marker id="orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10Z" fill="#a06643"/></marker></defs>
+<rect width="1200" height="680" rx="18" fill="white"/>
+<text x="40" y="48" class="heading" text-anchor="start">应用环境 · 用户从已有文档中查找所需内容</text>
+<text x="40" y="83" class="note" text-anchor="start">EX-SEARCH/v1 · Target / Planned / NOT_RUN · 虚构教学</text>
+
+<rect x="35" y="123" width="1130" height="445" rx="22" fill="#f7f9fc" stroke="#d4e0eb"/>
+<text x="62" y="159" class="note" text-anchor="start">客户工作环境：已有文档目录及查询客户端</text>
+<g id="user"><circle cx="140" cy="255" r="31" fill="#c5d2df"/><path d="M90 353 V315 Q140 272 190 315 V353Z" fill="#a6b9cc"/>
+<rect x="205" y="235" width="145" height="100" rx="8" fill="#cbd9e8" stroke="#718ba5"/><rect x="215" y="246" width="125" height="77" fill="white"/><path d="M243 345 H315 M278 335 V345" stroke="#718ba5" stroke-width="7"/>
+<path d="M85 367 H372 M106 367 V450 M350 367 V450" stroke="#a0b3c6" stroke-width="9"/>
+<text x="225" y="484" class="label" text-anchor="middle">用户 / 已有查询客户端</text></g>
+<g id="service"><rect x="465" y="246" width="285" height="156" rx="14" fill="#dceafb" stroke="#9eb5cb"/><text x="607.5" y="304" class="label" text-anchor="middle">EX-SEARCH 软件</text>
+<text x="607.5" y="333" class="label" text-anchor="middle">接收查询、检索目录</text>
+<text x="607.5" y="362" class="label" text-anchor="middle">返回匹配结果</text></g>
+<g id="snapshot"><rect x="885" y="255" width="240" height="135" rx="14" fill="#edf1f5" stroke="#9eb5cb"/><text x="1005" y="302.5" class="label" text-anchor="middle">只读目录快照</text>
+<text x="1005" y="331.5" class="label" text-anchor="middle">文件 + 清单</text>
+<text x="1005" y="360.5" class="label" text-anchor="middle">客户提供</text></g>
+<path d="M350 272 H465" fill="none" stroke="#287bc1" stroke-width="2.8" marker-end="url(#blue)"/><text x="405" y="250" class="note" text-anchor="middle">查询</text>
+<path d="M465 357 H370" fill="none" stroke="#287bc1" stroke-width="2.8" marker-end="url(#blue)"/><text x="417" y="386" class="note" text-anchor="middle">匹配项 / 错误</text>
+<path d="M885 320 H750" fill="none" stroke="#287bc1" stroke-width="2.8" marker-end="url(#blue)"/><text x="817" y="298" class="note" text-anchor="middle">加载</text>
+<text x="604" y="442" class="note" text-anchor="middle">本项目责任边界</text>
+<text x="817" y="505" class="note" text-anchor="middle">外部工具离线生成；服务不修改输入</text>
+
+<text x="40" y="626" class="note" text-anchor="start">蓝箭头：业务输入 / 输出　蓝框：本软件　人物、客户端、目录：外部环境</text>
+<text x="40" y="657" class="note" text-anchor="start">逻辑应用场景，不是物理部署图；不要求项目新增浏览器界面、云平台或建索引服务。</text>
+</svg>

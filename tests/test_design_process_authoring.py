@@ -1,9 +1,11 @@
 """Guard writing requirements and teaching links, not design or runtime quality."""
 
 import re
+import struct
 import subprocess
 import tempfile
 import unittest
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 
@@ -11,6 +13,32 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class DesignProcessAuthoringTests(unittest.TestCase):
+    DIAGRAMS = {
+        "2.1": "software-application-context",
+        "7.1": "software-startup-flow",
+        "7.2": "software-query-flow",
+        "7.3": "software-configuration-flow",
+        "7.4": "software-stop-flow",
+        "8.1": "software-data-flow",
+    }
+
+    def test_six_diagrams_have_sources_previews_and_chapter_prose(self):
+        text = (ROOT / "templates/design/software-system-design.md").read_text()
+        for section, name in self.DIAGRAMS.items():
+            with self.subTest(section=section):
+                body = text.split(f"### {section} ", 1)[1].split("\n##", 1)[0]
+                self.assertIn(f"../diagrams/{name}.png", body)
+                self.assertIn(f"../diagrams/{name}.svg", body)
+                self.assertIn("EX-SEARCH/v1", body)
+                self.assertIn("<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->", body)
+                svg = ET.parse(ROOT / f"templates/diagrams/{name}.svg").getroot()
+                self.assertEqual(svg.attrib["width"], "1200")
+                ids = [node.attrib["id"] for node in svg.iter() if "id" in node.attrib]
+                self.assertEqual(len(ids), len(set(ids)))
+                png = (ROOT / f"templates/diagrams/{name}.png").read_bytes()
+                self.assertEqual(png[:8], b"\x89PNG\r\n\x1a\n")
+                self.assertEqual(struct.unpack(">II", png[16:24]), (1200, int(svg.attrib["height"])))
+
     def test_example_routing_and_existing_outline_quality_rules(self):
         guide = (ROOT / "docs/ai-guides/software-system.md").read_text()
         self.assertNotIn("虚构完整主线示例", guide)
@@ -106,6 +134,8 @@ class DesignProcessAuthoringTests(unittest.TestCase):
             self.assertIn("图号 / 图内路径 / 正文位置", text)
             self.assertNotIn("EX-SEARCH", text)
             self.assertNotIn("software-startup-design-example.md", text)
+            for name in self.DIAGRAMS.values():
+                self.assertNotIn(name, text)
 
 
 if __name__ == "__main__":

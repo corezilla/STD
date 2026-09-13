@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="690" viewBox="0 0 1200 690" role="img" aria-labelledby="title desc">
+<title id="title">数据视图 · 数据形态、持有者与生命周期</title><desc id="desc">箭头表示数据变换或读取，不表示进程调用协议；状态及完整格式由正文解释。</desc>
+<defs><style>text{font-family:system-ui,"PingFang SC","Microsoft YaHei",sans-serif;fill:#20344b}.heading{font-size:30px;font-weight:650}.label{font-size:22px;font-weight:550}.note{font-size:18px;fill:#53667b}</style>
+<marker id="blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10Z" fill="#287bc1"/></marker>
+<marker id="orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10Z" fill="#a06643"/></marker></defs>
+<rect width="1200" height="690" rx="18" fill="white"/>
+<text x="40" y="48" class="heading" text-anchor="start">数据视图 · 数据形态、持有者与生命周期</text>
+<text x="40" y="83" class="note" text-anchor="start">EX-SEARCH/v1 · Target / Planned / NOT_RUN · 虚构教学</text>
+<g id="disk"><rect x="55" y="175" width="300" height="110" rx="14" fill="#edf1f5" stroke="#9eb5cb"/><text x="205" y="210" class="label" text-anchor="middle">只读快照目录</text>
+<text x="205" y="239" class="label" text-anchor="middle">manifest + 数据文件</text>
+<text x="205" y="268" class="label" text-anchor="middle">外部生成器负责</text></g><g id="table"><rect x="450" y="175" width="300" height="110" rx="14" fill="#dceafb" stroke="#9eb5cb"/><text x="600" y="210" class="label" text-anchor="middle">进程内只读检索表</text>
+<text x="600" y="239" class="label" text-anchor="middle">快照模块构建</text>
+<text x="600" y="268" class="label" text-anchor="middle">绑定 generation</text></g><g id="result"><rect x="855" y="175" width="290" height="110" rx="14" fill="#dceafb" stroke="#9eb5cb"/><text x="1000" y="210" class="label" text-anchor="middle">每请求结果对象</text>
+<text x="1000" y="239" class="label" text-anchor="middle">查询处理创建</text>
+<text x="1000" y="268" class="label" text-anchor="middle">返回匹配项</text></g><g id="input"><rect x="450" y="400" width="300" height="95" rx="14" fill="#edf1f5" stroke="#9eb5cb"/><text x="600" y="441.5" class="label" text-anchor="middle">客户端查询条件</text>
+<text x="600" y="470.5" class="label" text-anchor="middle">入口模块校验</text></g><g id="release1"><rect x="55" y="415" width="300" height="85" rx="14" fill="#edf1f5" stroke="#9eb5cb"/><text x="205" y="451.5" class="label" text-anchor="middle">目录由外部管理</text>
+<text x="205" y="480.5" class="label" text-anchor="middle">服务不改写或删除</text></g><g id="release2"><rect x="855" y="415" width="290" height="85" rx="14" fill="#ece6f5" stroke="#9eb5cb"/><text x="1000" y="451.5" class="label" text-anchor="middle">发送结束 / 中断</text>
+<text x="1000" y="480.5" class="label" text-anchor="middle">释放本请求对象</text></g><path d="M355 230 H450" fill="none" stroke="#287bc1" stroke-width="2.8" marker-end="url(#blue)"/><text x="402" y="209" class="note" text-anchor="middle">校验后建表</text><path d="M750 230 H855" fill="none" stroke="#287bc1" stroke-width="2.8" marker-end="url(#blue)"/><text x="804" y="209" class="note" text-anchor="middle">检索：新建结果</text><path d="M600 400 V285" fill="none" stroke="#287bc1" stroke-width="2.8" marker-end="url(#blue)"/><text x="688" y="356" class="note" text-anchor="middle">读取同一代</text><path d="M1000 285 V415" fill="none" stroke="#287bc1" stroke-width="2.8" marker-end="url(#blue)"/><text x="1075" y="357" class="note" text-anchor="middle">请求寿命</text><text x="600" y="565" class="note" text-anchor="middle">检索表：进程寿命；全部请求退出后释放</text>
+<text x="600" y="594" class="note" text-anchor="middle">内存峰值包含检索表与并发结果，不能只按磁盘文件大小估算</text>
+<text x="40" y="636" class="note" text-anchor="start">蓝箭头：数据读取 / 变换　灰框：外部输入　蓝框：内存数据　紫框：释放条件</text>
+<text x="40" y="667" class="note" text-anchor="start">箭头表示数据变换或读取，不表示进程调用协议；状态及完整格式由正文解释。</text>
+</svg>

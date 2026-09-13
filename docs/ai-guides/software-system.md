@@ -1,8 +1,8 @@
 # 软件系统设计 AI 编写指南
 
-版本：0.2.0-draft.3 · 日期：2026-09-14 · 状态：方法草案，待实际项目试写验证
+版本：0.3.0-draft.1 · 日期：2026-09-14 · 状态：方法草案，待实际项目试写验证
 
-主模板：`design.software-system`，独立版本 `0.2.0`。先读[通用 AI 编写指南](../ai-authoring-guide.md)，
+主模板：`design.software-system`，独立版本 `0.3.0`。先读[通用 AI 编写指南](../ai-authoring-guide.md)，
 再读项目已采用的[软件系统模板](../../templates/design/software-system-design.md)及其全部编写建议。
 本指南从总体系统设计的产品先行、预设计、过程推演与下游承接方法派生，不要求通读总体模板的硬件专业章。
 本次只使用 STD 已有通用材料和虚构案例，不依赖或读取保密 demo；教学内容不代表项目设计决定。
@@ -88,6 +88,12 @@ metadata 枚举。纯软件项目不强制再建一份重复的总体设计。�
 
 | 问题 | 图形入口 | 必须修改和核对 |
 |---|---|---|
+| 谁在什么环境下使用 | [逻辑应用环境 SVG](../../templates/diagrams/software-application-context.svg) | §2.1 先图后说明；用户、业务任务、输入输出、外部责任，不用内部架构替代 |
+| 何时开放业务 | [启动 SVG](../../templates/diagrams/software-startup-flow.svg) | §7.1 执行步骤、期限与就绪事实；独立监督不能画成主流程下一步 |
+| 一次业务怎样结束 | [查询 SVG](../../templates/diagrams/software-query-flow.svg) | §7.2 正常、拒绝、中断与共同清理；本例只读，不推导写入安全 |
+| 配置何时生效 | [配置 SVG](../../templates/diagrams/software-configuration-flow.svg) | §7.3 明确热更新或重启选择、在途边界和失败时可用性 |
+| 停止后能否重启 | [停止 SVG](../../templates/diagrams/software-stop-flow.svg) | §7.4 关闭入口、在途退出、资源释放、退出确认；未确认不能重启 |
+| 数据怎样变换与释放 | [数据 SVG](../../templates/diagrams/software-data-flow.svg) | §8.1 区分磁盘、共享内存与每请求对象，关联峰值及寿命 |
 | 系统包含哪些对象 | [软件直属组成 SVG](../../templates/diagrams/software-design-composition.svg) | 层次、对象/父对象 ID、类型、图后职责；不加调用箭头 |
 | 左侧层名、内部模块布局 | [软件分层 SVG](../../templates/diagrams/software-layered-architecture.svg) | 层名与模块名、底色对比、无图标无连接线；只保留实际定制系统层 |
 | 同一对象如何运行和交接 | [软件运行交互 SVG](../../templates/diagrams/software-design-runtime.svg) | 承载进程/实例、箭头方向、交接语义与接口 ID；不从组成图猜进程 |
@@ -97,6 +103,8 @@ metadata 枚举。纯软件项目不强制再建一份重复的总体设计。�
 采用[对象编码规范](../software-object-identifiers.md)时，将虚构 SW-P/SUB-C/MOD-D 替换为本项目
 登记的身份；对象 ID、Document ID 和机制 ID 不混用。增减块后调整坐标/viewBox，在 Markdown
 实际渲染检查文字遮挡、裁切、对比与缩放可读性。保存可编辑源；图片不能成为第二套设计 authority。
+
+上述六张新图采用同一 EX-SEARCH/v1 只读教学场景，并在模板对应章节展示 PNG 与解释；SVG 是唯一绘图源，改后同步导出 PNG。原组成/运行两图属于 EX-SOFTWARE-LAYERS/v1 的另一个案例，不与 EX-SEARCH 拼接。保持现有目录；复用表达形式而非示例架构或操作政策。完整机制/接口等更细粒度图按上表和机制图形目录选择，不为增加图数重复同一视图。
 
 **虚构场景摘要（不是完整设计）**：文档转换应用先验证输入与访问权限，再在已有额度内转换，核对输出后
 发布可取得的结果。配置模块提供固定版本规则，处理子系统完成转换，两者的共同交接由软件系统决定。

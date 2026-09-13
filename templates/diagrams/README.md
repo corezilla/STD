@@ -14,6 +14,19 @@ FPGA 与板卡图的 PNG 位于[共享资产目录](../../docs/assets/system-des
 
 ## 软件分层图
 
+软件系统模板 0.3.0 在原章节内补充六幅 EX-SEARCH/v1 连续图例；参考总体模板的白底蓝灰样式、图注和图后正文，全部为 Target / Planned / NOT_RUN。应用场景不是内部组成，数据视图不是部署拓扑。原 EX-SOFTWARE-LAYERS 与 EX-SW-01 图仍是独立案例，不能合并成 EX-SEARCH 的组成。
+
+| 软件模板位置 | SVG 源 / PNG 展示 | 表达目的 |
+|---|---|---|
+| §2.1 | [应用环境 SVG](software-application-context.svg) / [PNG](software-application-context.png) | 用户、客户端、软件与只读数据的业务关系 |
+| §7.1 | [启动 SVG](software-startup-flow.svg) / [PNG](software-startup-flow.png) | 正常顺序、失败出口、独立监督 |
+| §7.2 | [业务 SVG](software-query-flow.svg) / [PNG](software-query-flow.png) | 只读查询、返回与中断清理 |
+| §7.3 | [配置 SVG](software-configuration-flow.svg) / [PNG](software-configuration-flow.png) | 选择重启生效后的停止与重新就绪 |
+| §7.4 | [停止 SVG](software-stop-flow.svg) / [PNG](software-stop-flow.png) | 在途退出、释放与重启前确认 |
+| §8.1 | [数据 SVG](software-data-flow.svg) / [PNG](software-data-flow.png) | 文件、共享表与请求结果的生命周期 |
+
+修改 SVG 的 title/desc、步骤 ID、对象名、条件和线条后重新导出同名 PNG，并逐图核对正文。只有启动和停止图包含监督/终止路径，不能把图中“确认退出”替换为“已发送终止”。PNG 不独立修改，图源和展示需保持一致。这些教学图在生成项目文档时自动移除，不成为项目的已完成设计。
+
 软件系统与直属软件子系统/模块关系另有[父子组成](software-design-composition.svg)和[同对象运行交互](software-design-runtime.svg)。
 两图共用 `data-object-id`、`data-object-type`、`data-parent-id`，复制时同时修改这些属性、可见文字及图注。
 SW-P 软件系统内部包含 SUB-C 软件子系统与直属 MOD-D 模块；运行图的进程是独立设计选择，不展开 SUB-C 内部线程。
