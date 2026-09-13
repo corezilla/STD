@@ -24,7 +24,7 @@ class SubsystemTemplateTests(unittest.TestCase):
     def test_every_section_has_paragraph_guidance_and_completion(self):
         text = TEMPLATE.read_text()
         sections = re.split(r"(?m)^#{2,3} ", text)[1:]
-        self.assertEqual(len(sections), 40)  # 15 chapters, two appendices, twenty-three subsection guides
+        self.assertEqual(len(sections), 43)  # 14 chapters, two appendices, twenty-seven subsection guides
         for section in sections:
             with self.subTest(heading=section.splitlines()[0]):
                 self.assertEqual(section.count("<details>"), 1)
@@ -45,14 +45,14 @@ class SubsystemTemplateTests(unittest.TestCase):
             meta = json.loads((base / "example-subsystem.metadata.json").read_text())
             self.assertEqual(meta["design_level"], "subsystem")
             self.assertEqual(meta["template_id"], "design.subsystem")
-            self.assertEqual(meta["template_version"], "0.5.0")
+            self.assertEqual(meta["template_version"], "0.6.0")
             self.assertEqual(meta["template_sha256"], hashlib.sha256(TEMPLATE.read_bytes()).hexdigest())
             self.assertEqual(meta["source_path"], "docs/30_subsystem_design/example-subsystem.md")
             self.assertNotIn("{{", md)
             self.assertNotIn("EX-JOB", md)
             self.assertNotIn("EX-SOFTWARE-LAYERS", md)
             self.assertNotIn("../diagrams/", md)
-            self.assertIn("## 15. 实现与下游详细设计", md)
+            self.assertIn("## 14. 实现与下游详细设计", md)
             self.assertNotIn("```mermaid", md)  # explicitly marked fictional context example removed
             self.assertIn("**编写规范**", md)
             cover = md.split("<!-- STD_DOCUMENT_COVER_END -->")[0]
@@ -72,36 +72,88 @@ class SubsystemTemplateTests(unittest.TestCase):
             self.assertIn("必须使用 subsystem", result.stderr)
             self.assertEqual(list(Path(directory).iterdir()), [])
 
+    def test_chapter_order_references_and_three_view_positions(self):
+        text = TEMPLATE.read_text()
+        # Migration table intentionally records old chapter numbers, not active references.
+        active = re.sub(r"<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->.*?<!-- STD_TEMPLATE_EXAMPLE_END -->",
+                        "", text, flags=re.S)
+        numbers = re.findall(r"(?m)^#{2,3} (\d+(?:\.\d+)*)\.? ", active)
+        self.assertEqual(len(numbers), len(set(numbers)))
+        keys = [tuple(map(int, n.split("."))) for n in numbers]
+        self.assertEqual(keys, sorted(keys))
+        for reference in re.findall(r"§(\d+(?:\.\d+)*)", active):
+            self.assertIn(reference, numbers)
+        for chapter, image in (("1.2", "context"), ("2", "overall-architecture"), ("3", "module-breakdown")):
+            section = re.search(r"(?ms)^#{2,3} " + re.escape(chapter) +
+                                r"\.? .+?(?=^## |^### |\Z)", text)[0]
+            self.assertIn(f"subsystem-{image}.png", section)
+            self.assertIn(f"subsystem-{image}.svg", section)
+        self.assertIn("| 本地 Capability ID / 功能 | 需求 ID / 要求 |", text)
+        self.assertIn("0.5.0 → 0.6.0", text)
+        self.assertIn("| §5–15 | §4–14", text)
+
+    def test_continuous_figures_share_boundary_groups_and_real_modules(self):
+        roots = {name: ET.parse(ROOT / f"templates/diagrams/subsystem-{name}.svg").getroot()
+                 for name in ("context", "overall-architecture", "module-breakdown")}
+        for name, root in roots.items():
+            objects = [n for n in root.iter() if n.get("data-object-id")]
+            subsystem = [n for n in objects if n.get("data-object-id") == "S02"]
+            self.assertEqual(len(subsystem), 1)
+            self.assertEqual(subsystem[0].get("data-parent-id"), "SW-P")
+            self.assertEqual(subsystem[0].get("data-object-type"), "subsystem")
+            self.assertIn("EX-JOB/v2", "".join(root.itertext()))
+            # PNG export must preserve the full SVG aspect ratio, not a cropped square thumbnail.
+            png = (ROOT / f"templates/diagrams/subsystem-{name}.png").read_bytes()
+            self.assertEqual(png[:8], b"\x89PNG\r\n\x1a\n")
+            self.assertEqual((int.from_bytes(png[16:20], "big"), int.from_bytes(png[20:24], "big")), (1200, 720))
+        external = lambda root: {n.get("data-external-id") for n in root.iter() if n.get("data-external-id")}
+        self.assertEqual(external(roots["context"]), {"CALLER", "ADMIN", "EXEC"})
+        self.assertEqual(external(roots["context"]), external(roots["overall-architecture"]))
+        groups = lambda root: {n.get("data-group-id") for n in root.iter() if n.get("data-group-id")}
+        self.assertEqual(groups(roots["context"]), set())
+        self.assertEqual(groups(roots["overall-architecture"]), {"entry", "orchestration", "execution", "shared"})
+        self.assertEqual(groups(roots["overall-architecture"]), groups(roots["module-breakdown"]))
+        expected = {"entry": {"M201"}, "orchestration": {"M202", "M204"}, "execution": {"M203"}, "shared": {"M205"}}
+        for group in roots["module-breakdown"].iter():
+            if group.get("data-group-id"):
+                modules = [n for n in group.iter() if n.get("data-object-id")]
+                self.assertEqual({n.get("data-object-id") for n in modules}, expected[group.get("data-group-id")])
+                for module in modules:
+                    self.assertEqual(module.get("data-parent-id"), "S02")
+                    self.assertEqual(module.get("data-object-type"), "module")
+                    self.assertIn("(" + module.get("data-object-id") + ")", "".join(module.itertext()))
+        self.assertFalse(any(n.tag.endswith("}line") for n in roots["module-breakdown"].iter()))
+
     def test_outline_centers_preliminary_design_not_file_handoff(self):
         text = TEMPLATE.read_text()
         headings = re.findall(r"(?m)^## (\d+)\. (.+)$", text)
-        self.assertEqual([int(n) for n, _ in headings], list(range(1, 16)))
-        self.assertIn("总体方案（第 0 层设计）", headings[2][1])
-        self.assertIn("软件架构与模块分解（第 1 层设计）", headings[3][1])
-        self.assertEqual(headings[4][1], "运行设计")
-        for term in ("直属组成概要设计", "运行单元、调度与通信", "配置管理设计",
+        self.assertEqual([int(n) for n, _ in headings], list(range(1, 15)))
+        self.assertIn("总体架构设计（第 0 层）", headings[1][1])
+        self.assertIn("分层与模块设计（第 1 层）", headings[2][1])
+        self.assertEqual(headings[3][1], "运行设计")
+        for term in ("模块处理概要", "运行单元、调度与通信", "配置管理设计",
                      "可调试性设计", "可维护性与升级设计", "不是函数、类或源文件的详细设计",
                      "工厂装载/自检", "通用 OS/运行库", "上下文图例"):
             self.assertIn(term, text)
         guide = (ROOT / "docs/ai-guides/unit-design.md").read_text()
-        self.assertIn("第 0 层整体方案 → 第 1 层架构与模块概要 → 运行与接口设计", guide)
-        self.assertIn("§15 下游详细设计", guide)
+        self.assertIn("第 0 层整体架构 → 第 1 层分层与模块设计 → 运行与接口设计", guide)
+        self.assertIn("§14 下游详细设计", guide)
 
     def test_system_alignment_sections_have_concrete_obligations(self):
         text = TEMPLATE.read_text()
         expected = {
-            "2.2": ("Process/Step ID", "不要求照搬章号", "系统已定内容"),
-            "6.1": ("逻辑键", "私有字段", "不为模板新增数据库"),
-            "6.2": ("Data/Stage ID", "实际复制", "前后形态"),
-            "10.1": ("身份传播", "更新", "失败", "本地检查"),
-            "11.1": ("客户端", "生效", "恢复责任"),
-            "12.1": ("窗口", "代次", "不重新定义同名信号"),
-            "12.2": ("检查 ID", "未执行", "退出恢复"),
-            "12.3": ("§14.1", "用户数据", "回滚"),
-            "13.2": ("Oracle", "NOT_RUN", "分母"),
-            "13.3": ("串行", "撤销", "复位域"),
-            "13.4": ("Run", "清理失败", "不覆盖首次失败"),
-            "14.1": ("§12.3", "唯一", "固定单实例", "不兼容"),
+            "1.6": ("Process/Step ID", "不要求照搬章号", "系统已定内容"),
+            "5.1": ("逻辑键", "私有字段", "不为模板新增数据库"),
+            "5.2": ("Data/Stage ID", "实际复制", "前后形态"),
+            "9.1": ("身份传播", "更新", "失败", "本地检查"),
+            "10.1": ("客户端", "生效", "恢复责任"),
+            "11.1": ("窗口", "代次", "不重新定义同名信号"),
+            "11.2": ("检查 ID", "未执行", "退出恢复"),
+            "11.3": ("§13.1", "用户数据", "回滚"),
+            "12.2": ("Oracle", "NOT_RUN", "分母"),
+            "12.3": ("串行", "撤销", "复位域"),
+            "12.4": ("Run", "清理失败", "不覆盖首次失败"),
+            "13.1": ("§11.3", "唯一", "固定单实例", "不兼容"),
         }
         for number, terms in expected.items():
             section = re.search(r"(?ms)^### " + re.escape(number) + r" .+?(?=^## |^### |\Z)", text)

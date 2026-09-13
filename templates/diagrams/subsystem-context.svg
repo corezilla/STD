@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+<title id="title">作业处理子系统 · 上下文</title>
+<desc id="desc">S02 在 SW-P 内；业务调用方、管理客户端及执行服务是边界外对象。蓝色双向业务，紫色双向管理。</desc>
+<defs><style>text{font-family:system-ui,"PingFang SC","Microsoft YaHei",sans-serif;fill:#20344b}.title{font-size:28px;font-weight:650}.label{font-size:23px;font-weight:600}.note{font-size:17px;fill:#53667b}.id{font-size:16px;font-weight:400}.business{fill:none;stroke:#287bc1;stroke-width:3}.control{fill:none;stroke:#8264ab;stroke-width:3;stroke-dasharray:8 5}</style><marker id="blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10Z" fill="#287bc1"/></marker><marker id="purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10Z" fill="#8264ab"/></marker></defs>
+<rect width="1200" height="720" rx="18" fill="white"/>
+<text x="36" y="48" class="title">作业处理子系统 · 上下文</text><text x="36" y="80" class="note">EX-JOB/v2 · Target / Planned / NOT_RUN · 虚构教学示例</text>
+<g data-external-id="CALLER"><rect x="40" y="307" width="240" height="100" rx="12" fill="#edf1f5" stroke="#acc0d5"/><text x="160" y="365" text-anchor="middle" class="label">业务调用方</text></g>
+<g data-external-id="ADMIN"><rect x="460" y="140" width="280" height="82" rx="12" fill="#f0eaf8" stroke="#acc0d5"/><text x="600" y="189" text-anchor="middle" class="label">管理客户端</text></g>
+<g data-object-id="S02" data-object-type="subsystem" data-parent-id="SW-P"><rect x="420" y="315" width="360" height="150" rx="12" fill="#d5e6f8" stroke="#acc0d5"/><text x="600" y="398" text-anchor="middle" class="label">作业处理（S02）</text></g>
+<text x="440" y="494" class="note">SW-P 内的一个软件子系统；内部黑盒</text>
+<g data-external-id="EXEC"><rect x="920" y="330" width="240" height="110" rx="12" fill="#edf1f5" stroke="#acc0d5"/><text x="1040" y="393" text-anchor="middle" class="label">既有执行服务</text></g>
+<line x1="280" y1="357" x2="420" y2="357" class="business" marker-end="url(#blue)" marker-start="url(#blue)"/>
+<text x="286" y="331" class="note">任务 / 结果</text>
+<line x1="600" y1="222" x2="600" y2="315" class="control" marker-end="url(#purple)" marker-start="url(#purple)"/>
+<text x="622" y="267" class="note">配置 / 查询</text>
+<line x1="780" y1="387" x2="920" y2="387" class="business" marker-end="url(#blue)" marker-start="url(#blue)"/>
+<text x="792" y="362" class="note">执行 / 结果</text>
+<line x1="40" y1="642" x2="104" y2="642" class="business" marker-end="url(#blue)" marker-start="url(#blue)"/>
+<text x="118" y="648" class="note">业务请求/响应（双向）</text>
+<line x1="430" y1="642" x2="494" y2="642" class="control" marker-end="url(#purple)"/>
+<text x="508" y="648" class="note">配置/管理（紫虚线）</text>
+<text x="40" y="686" class="note">交接线不是执行时序；状态与接口规格由正文唯一维护。</text>
+</svg>

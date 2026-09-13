@@ -19,7 +19,7 @@ FPGA 与板卡图的 PNG 位于[共享资产目录](../../docs/assets/system-des
 SW-P 软件系统内部包含 SUB-C 软件子系统与直属 MOD-D 模块；运行图的进程是独立设计选择，不展开 SUB-C 内部线程。
 对象 ID/类型与父关系用于图例一致性回归，不是新增项目 authority；正文及父文档链仍需人工核验。
 
-子系统模板 §4 使用 [子系统逻辑组成 SVG](subsystem-layered-architecture.svg)，同样采用左侧层名、
+子系统模板 0.5.0 的原 [子系统逻辑组成 SVG](subsystem-layered-architecture.svg)保留供历史引用，采用左侧层名、
 有对比度的层/模块底色、无图标和无连接线。修改 SVG 的 `title`、`desc`、层名、模块名及图注；
 增减模块时同步调整背景、坐标与 `viewBox`，并检查窄屏可读性。它仅是 EX-JOB 虚构组成，
 不表示调用顺序、独立进程或已实现状态；图后逐个解释模块职责，交互另图表示。
@@ -81,6 +81,24 @@ EX-SW-01 的虚构软件示例。它只表达层次和组成：左侧层名、�
 图内不包含脚本、外部字体链接、远程图片或嵌入位图；中文由查看环境的本地字体渲染。
 SVG 是维护源，PNG 只作必要的兼容导出。修改时优先直接编辑 SVG 文本，避免绘图工具导出后
 把文字转成不可编辑的路径或丢失分组。图后仍需逐模块解释职责及边界，样式复用不替代设计。
+
+## 子系统连续三图
+
+当前子系统模板 0.6.0 使用 EX-JOB/v2 的同一虚构软件，三图均为 Target / Planned / NOT_RUN。
+第0/1层表示观察粒度，不产生新子系统层级；分区是图文分组，所有 M2xx 模块仍直属 S02。
+
+| 位置与任务 | 可编辑源 | 同源展示 |
+|---|---|---|
+| §1.2 上下文：S02 黑盒及业务/管理/执行环境 | [SVG](subsystem-context.svg) | [PNG](subsystem-context.png) |
+| §2 整体架构：入口、任务编排、执行对接、公共配置及协作 | [SVG](subsystem-overall-architecture.svg) | [PNG](subsystem-overall-architecture.png) |
+| §3 分层模块：四分区展开 M201–M205 | [SVG](subsystem-module-breakdown.svg) | [PNG](subsystem-module-breakdown.png) |
+
+上下文与整体架构使用蓝实线表示业务、紫虚线表示管理；双向箭头为请求/响应而非执行时序。
+组成图无交接线；不得把组成图的无连线规则推广到架构图。完整先后关系及异常分支另用流程图。
+模块编号以较小字号放在名称右侧括号内；分区使用 data-group-id，不分配模块编号。
+同步核对 title/desc、data-object-id/type/parent-id、外部对象、分区、可见文字及图注。
+SVG 是唯一维护源，PNG 从本地 SVG 导出；编辑后重新导出并检查全图、实际正文宽度及中文裁切。
+原 EX-JOB/v1 资产不覆盖，不把新分区或 M2xx 教学编号回写历史项目。
 
 ## FPGA 程序与板卡图
 

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+<title id="title">作业处理子系统 · 第 1 层模块展开</title>
+<desc id="desc">与第0层相同四个功能分区。M201、M202、M204、M203、M205均直属S02；分区只是分组。无调用箭头。</desc>
+<defs><style>text{font-family:system-ui,"PingFang SC","Microsoft YaHei",sans-serif;fill:#20344b}.title{font-size:28px;font-weight:650}.label{font-size:23px;font-weight:600}.note{font-size:17px;fill:#53667b}.id{font-size:16px;font-weight:400}.business{fill:none;stroke:#287bc1;stroke-width:3}.control{fill:none;stroke:#8264ab;stroke-width:3;stroke-dasharray:8 5}</style><marker id="blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10Z" fill="#287bc1"/></marker><marker id="purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10Z" fill="#8264ab"/></marker></defs>
+<rect width="1200" height="720" rx="18" fill="white"/>
+<text x="36" y="48" class="title">作业处理子系统 · 第 1 层模块展开</text><text x="36" y="80" class="note">EX-JOB/v2 · Target / Planned / NOT_RUN · 虚构教学示例</text>
+<g data-object-id="S02" data-object-type="subsystem" data-parent-id="SW-P"><rect x="220" y="112" width="940" height="492" rx="18" fill="#fafcff" stroke="#8faac7" stroke-width="2"/><text x="242" y="144" class="note">S02 子系统边界</text>
+<g data-group-id="entry"><text x="48" y="219" class="label">入口</text>
+<rect x="240" y="165" width="900" height="88" rx="12" fill="#eef5fc" stroke="#d5e0eb"/><g data-object-id="M201" data-object-type="module" data-parent-id="S02"><rect x="420" y="179" width="500" height="60" rx="12" fill="#c9ddef" stroke="#acc0d5"/><text x="670" y="217" text-anchor="middle" class="label">入口与准入 <tspan class="id">(M201)</tspan></text></g>
+</g><g data-group-id="orchestration"><text x="48" y="324" class="label">任务编排</text>
+<rect x="240" y="270" width="900" height="88" rx="12" fill="#edf2f8" stroke="#d5e0eb"/><g data-object-id="M202" data-object-type="module" data-parent-id="S02"><rect x="260" y="284" width="400" height="60" rx="12" fill="#c9ddef" stroke="#acc0d5"/><text x="460" y="322" text-anchor="middle" class="label">任务控制 <tspan class="id">(M202)</tspan></text></g>
+<g data-object-id="M204" data-object-type="module" data-parent-id="S02"><rect x="700" y="284" width="400" height="60" rx="12" fill="#c9ddef" stroke="#acc0d5"/><text x="900" y="322" text-anchor="middle" class="label">结果管理 <tspan class="id">(M204)</tspan></text></g>
+</g><g data-group-id="execution"><text x="48" y="429" class="label">执行对接</text>
+<rect x="240" y="375" width="900" height="88" rx="12" fill="#f0f4f6" stroke="#d5e0eb"/><g data-object-id="M203" data-object-type="module" data-parent-id="S02"><rect x="420" y="389" width="500" height="60" rx="12" fill="#c9ddef" stroke="#acc0d5"/><text x="670" y="427" text-anchor="middle" class="label">执行适配 <tspan class="id">(M203)</tspan></text></g>
+</g><g data-group-id="shared"><text x="48" y="534" class="label">公共配置</text>
+<rect x="240" y="480" width="900" height="88" rx="12" fill="#f5effa" stroke="#d5e0eb"/><g data-object-id="M205" data-object-type="module" data-parent-id="S02"><rect x="420" y="494" width="500" height="60" rx="12" fill="#dfd2ee" stroke="#acc0d5"/><text x="670" y="532" text-anchor="middle" class="label">配置快照 <tspan class="id">(M205)</tspan></text></g>
+</g></g><text x="40" y="645" class="note">图例：外边框 = 子系统；浅底 = 功能分区；深色块 = 实际模块；名称右侧括号 = 模块编号。</text>
+<text x="40" y="683" class="note">仅表达组成与归属；分区无模块编号，不代表进程、调用顺序或额外子系统层级。</text>
+</svg>

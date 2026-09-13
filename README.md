@@ -81,7 +81,7 @@ manifest。完整接入规则见 [`docs/adoption.md`](docs/adoption.md)。
 总体系统设计的概览、适用性、状态/证据、图和信息安全写法及正反例见
 [`docs/architecture-design-authoring-guide.md`](docs/architecture-design-authoring-guide.md)。
 AI 编写入口采用“通用方法 + 模板类型专项”：先读
-[`docs/ai-authoring-guide.md`](docs/ai-authoring-guide.md)（`0.2.0-draft.3`），
+[`docs/ai-authoring-guide.md`](docs/ai-authoring-guide.md)（`0.2.0-draft.6`），
 再按其中的映射选择主专项和项目已采用模板，不需要通读全部指南。
 14 类专项覆盖当前 47 个模板，同类模板共享方法，计划、报告和决定仍保留不同完成边界；
 精确导航见 [`docs/ai-authoring-guides.json`](docs/ai-authoring-guides.json)。
@@ -132,7 +132,9 @@ AI 指南按能力贯通章节、先复用并核对现有契约，再交接双�
 诊断在 §11，替代依赖与环回在 §10.4。系统约束由 §3.2 分配、§13.6 验证、§17.2 承接为
 下级设计与验收任务。机制未定时先预设计，不能只登记待定或以局部测试关闭系统目标。
 
-新增[软件系统设计说明书模板](templates/design/software-system-design.md) `design.software-system`，独立版本 `0.1.0`（待发布）。
+新增[软件系统设计说明书模板](templates/design/software-system-design.md) `design.software-system`，独立版本 `0.2.0`（待发布）。
+每个重要流程必须有图、正文和异常分支；先用一节真实方案检验写作质量，再扩展全篇。
+方法及完整虚构样稿见[软件 AI 指南](docs/ai-guides/software-system.md)和[启动与恢复示例](docs/examples/software-startup-design-example.md)。
 从总体模板派生为 17 个软件主章及文末附录，共 57 处段落式编写建议、示例和完成条件。
 §3.1 前置软件系统架构图，§3.2 紧接各组件职责；§5 展开子系统及直属模块概要，不重复全系统总图。
 软件组成、运行部署、配置与构建成为主体，保留产品、重要过程、数据/接口、维护、安全、预算与可测试性。
@@ -140,9 +142,10 @@ AI 指南按能力贯通章节、先复用并核对现有契约，再交接双�
 默认生成到 `docs/20_system_design`，配套[软件系统 AI 指南](docs/ai-guides/software-system.md)与两幅可编辑 SVG。
 初版仍需真实项目试写，不因结构检查通过声称设计质量或运行验证通过。
 
-新增 [软件子系统设计模板](templates/design/subsystem-design.md) `design.subsystem`，独立版本 `0.5.0`（待发布），
-15 个主章以概要设计为中心：整体方案、软件架构与模块概要、运行设计、数据/接口/配置、
-调试维护、部署测试和性能；保留系统约束及下游承接，含图例与逐节指导，不替代模块详细设计。
+新增 [软件子系统设计模板](templates/design/subsystem-design.md) `design.subsystem`，独立版本 `0.6.0`（待发布），
+14 个主章以概要设计为中心：第1章集中输入、第2章第0层整体架构、第3章第1层分层与模块设计、运行设计、数据/接口/配置、
+调试维护、部署测试和性能；保留系统约束及下游承接，含同一虚构软件的上下文/整体架构/分层模块三图与逐节指导，不替代模块详细设计。
+0.5.0 到 0.6.0 的旧新章节映射见模板附录 A，已有项目不自动迁移。
 系统对齐复审补齐身份/模式/过程映射、数据组织与阶段变换、安全执行点、维护测试子节及扩展兼容边界。
 软件子系统通过 `parent_document_id` 承接软件系统设计，下接软件模块，不采用递归子系统；组成、接口权威和验证均按对象区分。
 生成器支持 `--parent-document-id`，`validate-design --check-design-hierarchy` 可对完整输入显式检查父链并返回父文档关联，不计算子系统深度。
