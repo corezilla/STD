@@ -1,4 +1,4 @@
-# 系统机制示例展示资产
+# 总体系统机制设计示例展示资产
 
 九个 PNG 均由 [对应 SVG 源](../../../templates/diagrams/mechanism/README.md)本地渲染导出，
 仅用于机制模板图文教学。只读版本查询定义唯一见 [AI 指南](../../ai-system-design-authoring-guide.md#88-完整小例两个单元的只读版本核对)，

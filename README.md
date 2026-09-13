@@ -1,6 +1,6 @@
 # STD：统一工程文档标准与模板库
 
-STD 面向软件、硬件、固件、FPGA 和软硬件协同项目，提供项目管理、需求、系统设计、
+STD 面向软件、硬件、固件、FPGA 和软硬件协同项目，提供项目管理、需求、总体系统设计、总体系统机制设计、
 子系统设计、模块设计、接口契约、验证测试、评审、发布和运维所需的版本化模板。
 
 当前 `0.1.0-draft.26` 优先覆盖：
@@ -15,7 +15,7 @@ STD 面向软件、硬件、固件、FPGA 和软硬件协同项目，提供项�
 3. 每个项目采用记录固定 STD 来源版本；每个文档实例固定模板 ID、模板版本和来源哈希。
 4. 项目升级模板必须显式执行并评审 diff，禁止静默跟随 STD 更新。
 5. RAG 只负责检索，不负责模板分发、版本选择或事实裁决。
-6. 系统、子系统、模块和组件使用一致的分层标识，但可选择不同领域 profile。
+6. 总体系统下分软件系统、固件系统和硬件系统；软件子系统只用于软件分支，当前不递归，详见[分层设计](docs/template-selection.md#2-分层设计)。
 7. 项目 README 和 `docs/std.lock.json` 记录项目采用的 STD 版本；STD 更新不自动推动项目升级。
 8. 每个模板独立维护 Template Version；单份文档只追踪自己采用的模板版本和哈希。
 
@@ -78,7 +78,7 @@ manifest。完整接入规则见 [`docs/adoption.md`](docs/adoption.md)。
 版本域、项目采用和模板独立版本见 [`docs/versioning.md`](docs/versioning.md)；
 跨语言最低编码要求见 [`docs/coding-standard.md`](docs/coding-standard.md)；
 面向实现的设计文档写法和质量检查见 [`docs/design-writing-guide.md`](docs/design-writing-guide.md)。
-系统设计的概览、适用性、状态/证据、图和信息安全写法及正反例见
+总体系统设计的概览、适用性、状态/证据、图和信息安全写法及正反例见
 [`docs/architecture-design-authoring-guide.md`](docs/architecture-design-authoring-guide.md)。
 AI 编写入口采用“通用方法 + 模板类型专项”：先读
 [`docs/ai-authoring-guide.md`](docs/ai-authoring-guide.md)（`0.2.0-draft.2`），
@@ -86,7 +86,7 @@ AI 编写入口采用“通用方法 + 模板类型专项”：先读
 13 类专项覆盖当前 46 个模板，同类模板共享方法，计划、报告和决定仍保留不同完成边界；
 精确导航见 [`docs/ai-authoring-guides.json`](docs/ai-authoring-guides.json)。
 从 HIFM v0.3 迁入的系统方法保留为
-[`docs/ai-system-design-authoring-guide.md`](docs/ai-system-design-authoring-guide.md)（`0.6.0-draft.3`）；
+[`docs/ai-system-design-authoring-guide.md`](docs/ai-system-design-authoring-guide.md)（`0.7.0-draft.1`）；
 机制方法已独立到 [`docs/ai-guides/system-mechanism.md`](docs/ai-guides/system-mechanism.md)。
 这些是方法草案，待实际任务验证，不是新模板，不改变项目已采用的 STD/模板版本，
 也不自动授权提交、发布或运行。公共规则只在通用指南维护，专项解释本类型的实际设计/取证方法。
@@ -95,7 +95,7 @@ AI 编写入口采用“通用方法 + 模板类型专项”：先读
 局部修订只检查受影响内容和直接依赖，不重跑完整写作流程；原生图源与生成式插画分别维护，
 架构视图、实现状态和验证结果分别记录。
 
-当前工作区的 `design.system` 为待发布的 `8.2.0`，保留 `7.0.0` 的 17 个通用主章。
+当前工作区的 `design.system`（总体系统设计）为待发布的 `8.3.0`，保留 `7.0.0` 的 17 个通用主章。
 正文仍采用八项必要字段的短封面，附录 A 保存控制信息与导航，附录 B 保存输入/适用性，
 附录 C 保存编写与交付检查。保留各节的段落式编写建议、完成条件及已确认的原创教学图。
 
@@ -132,18 +132,18 @@ AI 指南按能力贯通章节、先复用并核对现有契约，再交接双�
 诊断在 §11，替代依赖与环回在 §10.4。系统约束由 §3.2 分配、§13.6 验证、§17.2 承接为
 下级设计与验收任务。机制未定时先预设计，不能只登记待定或以局部测试关闭系统目标。
 
-新增 [子系统设计模板](templates/design/subsystem-design.md) `design.subsystem`，独立版本 `0.4.0`（待发布），
+新增 [软件子系统设计模板](templates/design/subsystem-design.md) `design.subsystem`，独立版本 `0.5.0`（待发布），
 15 个主章以概要设计为中心：整体方案、软件架构与模块概要、运行设计、数据/接口/配置、
 调试维护、部署测试和性能；保留系统约束及下游承接，含图例与逐节指导，不替代模块详细设计。
 系统对齐复审补齐身份/模式/过程映射、数据组织与阶段变换、安全执行点、维护测试子节及扩展兼容边界。
-递归子系统通过 `parent_document_id` 表达归属，层级类型仍为 `subsystem`；组成、接口权威和验证均按对象区分。
-生成器支持 `--parent-document-id`，`validate-design --check-design-hierarchy` 可对完整输入显式检查父链并报告深度。
-默认生成到 `docs/30_subsystem_design`，共用[子系统与模块 AI 指南](docs/ai-guides/unit-design.md)。
-旧子系统文档不自动迁移，板卡/FPGA 对象直接采用专项模板。
+软件子系统通过 `parent_document_id` 承接软件系统设计，下接软件模块，不采用递归子系统；组成、接口权威和验证均按对象区分。
+生成器支持 `--parent-document-id`，`validate-design --check-design-hierarchy` 可对完整输入显式检查父链并返回父文档关联，不计算子系统深度。
+默认生成到 `docs/30_subsystem_design`，共用[软件子系统与模块 AI 指南](docs/ai-guides/unit-design.md)。
+旧子系统文档不自动迁移，板卡/FPGA 对象直接采用专项模板。软件系统设计是独立层次，专用模板待建立，不用软件子系统模板代替。
 
 `design.definition` 为待发布 `1.3.0`，明确易失状态也需生命周期设计；`design.hardware` 与 `design.fpga` 增加上级约束承接、
 本地落实和系统组合验收，当前为待发布 `1.2.0`，不要求另建通用单元文档。
-`design.system-mechanism` 为待发布 `2.2.0`，数据与接口分章，16 个主章保留既有约束和段落式指导，
+`design.system-mechanism`（总体系统机制设计）为待发布 `2.3.0`，数据与接口分章，16 个主章保留既有约束和段落式指导，
 补齐拓扑/身份、资源寿命、维护命令、测试控制/隔离与能力级双方承接；采用短封面和文末控制记录。
 九幅[可复用机制图文样板](templates/diagrams/mechanism/README.md)在模板中直接展示：
 保留只读六幅关系图，另加开篇用途图和两幅有副作用过程/依赖图。

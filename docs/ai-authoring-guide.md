@@ -14,9 +14,9 @@
 
 | 主专项指南 | 适用 Template ID |
 |---|---|
-| [系统设计](ai-system-design-authoring-guide.md) | `design.system` |
-| [系统机制](ai-guides/system-mechanism.md) | `design.system-mechanism` |
-| [子系统与模块](ai-guides/unit-design.md) | `design.subsystem`、`design.definition` |
+| [总体系统设计](ai-system-design-authoring-guide.md) | `design.system` |
+| [总体系统机制设计](ai-guides/system-mechanism.md) | `design.system-mechanism` |
+| [软件子系统与模块](ai-guides/unit-design.md) | `design.subsystem`、`design.definition` |
 | [硬件、制造与板级评审](ai-guides/hardware.md) | `design.hardware`、`hardware.manufacturing`、`hardware.bom`、`review.schematic-pcb` |
 | [FPGA 程序与实现报告](ai-guides/fpga.md) | `design.fpga`、`assurance.fpga-implementation-report` |
 | [工程管理](ai-guides/management.md) | `management.project-plan`、`management.tailoring`、`management.development-plan`、`management.semp`、`management.configuration-plan`、`management.risk-plan`、`management.quality-plan`、`management.safety-plan`、`management.security-plan` |

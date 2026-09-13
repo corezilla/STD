@@ -433,7 +433,7 @@ def validate_conformance_refs(records: list[tuple[Path, dict]], project_root: Pa
     return errors
 
 
-def validate_design_hierarchy(records: list[tuple[Path, dict]]) -> tuple[list[dict], dict[str, int]]:
+def validate_design_hierarchy(records: list[tuple[Path, dict]]) -> tuple[list[dict], dict[str, str]]:
     """Explicit closed-input hierarchy audit; no file traversal outside supplied records."""
     errors = []
     by_id = {}
@@ -446,24 +446,23 @@ def validate_design_hierarchy(records: list[tuple[Path, dict]]) -> tuple[list[di
         by_id[key] = (path, data)
     if errors:
         return errors, {}
-    depths = {}
+    parent_links = {}
     for key, (path, data) in by_id.items():
         level = data.get("design_level")
         if data.get("template_id") == "design.subsystem" and level != "subsystem":
             errors.append(issue("hierarchy.type", path, "design.subsystem 必须保持 design_level=subsystem"))
         parent = data.get("parent_document_id")
         if level == "subsystem" and parent is None:
-            errors.append(issue("hierarchy.parent-required", path, "子系统需要直属父设计；缺失不能推断为一级"))
+            errors.append(issue("hierarchy.parent-required", path, "软件子系统需要直属软件系统父设计"))
             continue
         if parent is None:
             continue
         seen = {key}
         current = data
-        depth = 1 if level == "subsystem" else 0
         while current.get("parent_document_id") is not None:
             reference = current["parent_document_id"]
             if not isinstance(reference, str) or reference not in by_id:
-                errors.append(issue("hierarchy.parent-missing", path, "父文档不在本次完整输入中，不能计算层级"))
+                errors.append(issue("hierarchy.parent-missing", path, "父文档不在本次完整输入中，不能核对父链"))
                 break
             if reference in seen:
                 errors.append(issue("hierarchy.cycle", path, "父链自指或成环"))
@@ -476,21 +475,19 @@ def validate_design_hierarchy(records: list[tuple[Path, dict]]) -> tuple[list[di
             if not str(ancestor.get("template_id", "")).startswith("design."):
                 errors.append(issue("hierarchy.parent-type", path, "父对象必须是设计文档，不是评审或需求记录"))
                 break
-            if current.get("design_level") == "subsystem" and ancestor.get("design_level") not in {"system", "subsystem"}:
-                errors.append(issue("hierarchy.parent-type", path, "子系统的父对象必须是系统或子系统，不能是模块"))
+            if current.get("design_level") == "subsystem" and ancestor.get("design_level") != "system":
+                errors.append(issue("hierarchy.parent-type", path, "软件子系统的直属父对象必须为 system 粒度；不采用递归子系统，软件领域角色另核对正文"))
                 break
             if ancestor.get("template_id") == "design.subsystem" and ancestor.get("design_level") != "subsystem":
                 errors.append(issue("hierarchy.type", path, "父链存在类型与层级矛盾"))
                 break
-            depth += ancestor.get("design_level") == "subsystem"
             current = ancestor
         else:
-            if level == "subsystem":
-                if current.get("design_level") != "system":
-                    errors.append(issue("hierarchy.root", path, "子系统父链必须到达 design_level=system 的根设计"))
-                else:
-                    depths[key] = depth
-    return errors, depths
+            if current.get("design_level") != "system":
+                errors.append(issue("hierarchy.root", path, "设计父链必须到达 design_level=system 的根设计"))
+            else:
+                parent_links[key] = parent
+    return errors, parent_links
 
 
 def baseline_fingerprints(path: Path | None) -> set[str]:
@@ -558,9 +555,9 @@ def main() -> int:
             markdown_paths.add(document)
             errors.extend(validate_markdown(document, data))
     errors.extend(validate_conformance_refs(metadata_records, project_root))
-    hierarchy_depths = {}
+    hierarchy_parent_links = {}
     if args.check_design_hierarchy:
-        hierarchy_errors, hierarchy_depths = validate_design_hierarchy(metadata_records)
+        hierarchy_errors, hierarchy_parent_links = validate_design_hierarchy(metadata_records)
         errors.extend(hierarchy_errors)
 
     decision_schema = load_json(ROOT / "schemas/review-decision.schema.json")
@@ -616,7 +613,7 @@ def main() -> int:
     }
     if args.json:
         if args.check_design_hierarchy:
-            result["subsystem_depths"] = hierarchy_depths
+            result["design_parent_links"] = hierarchy_parent_links
         rendered = json.dumps(result, ensure_ascii=False, indent=2) + "\n"
         if args.json == "-":
             print(rendered, end="")

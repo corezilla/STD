@@ -45,12 +45,12 @@ class SubsystemTemplateTests(unittest.TestCase):
             meta = json.loads((base / "example-subsystem.metadata.json").read_text())
             self.assertEqual(meta["design_level"], "subsystem")
             self.assertEqual(meta["template_id"], "design.subsystem")
-            self.assertEqual(meta["template_version"], "0.4.0")
+            self.assertEqual(meta["template_version"], "0.5.0")
             self.assertEqual(meta["template_sha256"], hashlib.sha256(TEMPLATE.read_bytes()).hexdigest())
             self.assertEqual(meta["source_path"], "docs/30_subsystem_design/example-subsystem.md")
             self.assertNotIn("{{", md)
             self.assertNotIn("EX-JOB", md)
-            self.assertNotIn("EX-RECURSIVE", md)
+            self.assertNotIn("EX-SOFTWARE-LAYERS", md)
             self.assertNotIn("../diagrams/", md)
             self.assertIn("## 15. 实现与下游详细设计", md)
             self.assertNotIn("```mermaid", md)  # explicitly marked fictional context example removed
@@ -124,11 +124,25 @@ class SubsystemTemplateTests(unittest.TestCase):
         for target in re.findall(r"\]\(([^)]+)\)", TEMPLATE.read_text()):
             self.assertTrue((TEMPLATE.parent / target).resolve().is_file(), target)
 
-    def test_recursive_figures_preserve_object_identity_and_type(self):
-        expected = {"SUB-P": ("subsystem", "SYS-EX"), "SUB-C": ("subsystem", "SUB-P"),
-                    "MOD-D": ("module", "SUB-P")}
+    def test_current_design_taxonomy_and_names_are_consistent(self):
+        selection = (ROOT / "docs/template-selection.md").read_text()
+        for name in ("总体系统设计", "软件系统设计", "软件子系统设计", "软件模块设计",
+                     "固件系统设计", "FPGA 程序顶层设计", "RTL 功能模块设计", "硬件系统设计",
+                     "板卡设计", "电路功能单元设计", "总体系统机制设计", "专用模板待建立"):
+            self.assertIn(name, selection)
+        mapping = json.loads((ROOT / "docs/ai-authoring-guides.json").read_text())
+        self.assertIn('"title": "总体系统设计"', json.dumps(mapping, ensure_ascii=False))
+        self.assertIn('"title": "总体系统机制设计"', json.dumps(mapping, ensure_ascii=False))
+        self.assertIn("软件子系统概要设计", TEMPLATE.read_text())
+        self.assertNotIn("subsystem_depths", (ROOT / "scripts/validate-design").read_text())
+        for name in ("subsystem-recursive-composition.svg", "subsystem-recursive-runtime.svg"):
+            self.assertFalse((ROOT / "templates/diagrams" / name).exists())
+
+    def test_software_hierarchy_figures_preserve_object_identity_and_type(self):
+        expected = {"SW-P": ("system", "SYS-EX"), "SUB-C": ("subsystem", "SW-P"),
+                    "MOD-D": ("module", "SW-P")}
         for name in ("composition", "runtime"):
-            tree = ET.parse(ROOT / f"templates/diagrams/subsystem-recursive-{name}.svg")
+            tree = ET.parse(ROOT / f"templates/diagrams/software-design-{name}.svg")
             nodes = [n for n in tree.iter() if "data-object-id" in n.attrib]
             self.assertEqual(len(nodes), 3)
             self.assertEqual({n.attrib["data-object-id"]: (n.attrib["data-object-type"], n.attrib["data-parent-id"])
@@ -150,18 +164,33 @@ class DesignHierarchyTests(unittest.TestCase):
         def node(id, level, parent, template):
             return Path(id + ".metadata.json"), {"document_id": id, "design_level": level,
                 "parent_document_id": parent, "template_id": template, "project": "example"}
+        # Legacy design.system metadata tests structural parent links, not an unavailable software-system template.
         return [node("DOC-SYS", "system", None, "design.system"),
-                node("DOC-P", "subsystem", "DOC-SYS", "design.subsystem"),
+                node("DOC-P", "system", "DOC-SYS", "design.system"),
                 node("DOC-C", "subsystem", "DOC-P", "design.subsystem"),
                 node("DOC-D", "module", "DOC-P", "design.definition")]
 
-    def test_recursive_subsystems_and_direct_module(self):
-        errors, depths = self.audit(self.records())
+    def test_software_system_subsystem_and_direct_module(self):
+        errors, links = self.audit(self.records())
         self.assertEqual(errors, [])
-        self.assertEqual(depths, {"DOC-P": 1, "DOC-C": 2})
+        self.assertEqual(links, {"DOC-P": "DOC-SYS", "DOC-C": "DOC-P", "DOC-D": "DOC-P"})
         records = self.records()
-        records[1][1]["template_id"] = "design.definition"  # existing adopted subsystem remains valid
-        self.assertEqual(self.audit(records), ([], depths))
+        records[2][1]["template_id"] = "design.definition"  # existing adopted subsystem remains valid
+        self.assertEqual(self.audit(records), ([], links))
+
+    def test_recursive_subsystem_is_rejected(self):
+        records = self.records()
+        records[1][1].update(template_id="design.subsystem", design_level="subsystem")
+        errors, links = self.audit(records)
+        self.assertIn("hierarchy.parent-type", {e["code"] for e in errors})
+        self.assertNotIn("DOC-C", links)
+
+    def test_subsystem_can_contain_software_module(self):
+        records = self.records()
+        records[3][1]["parent_document_id"] = "DOC-C"
+        errors, links = self.audit(records)
+        self.assertEqual(errors, [])
+        self.assertEqual(links["DOC-D"], "DOC-C")
 
     def test_missing_self_cycle_type_and_project_are_rejected(self):
         cases = [
@@ -171,7 +200,7 @@ class DesignHierarchyTests(unittest.TestCase):
             (1, "parent_document_id", "DOC-C", "hierarchy.cycle"),
             (2, "parent_document_id", "DOC-D", "hierarchy.parent-type"),
             (1, "project", "other", "hierarchy.project"),
-            (1, "design_level", "module", "hierarchy.type"),
+            (2, "design_level", "module", "hierarchy.type"),
             (0, "template_id", "review.packet", "hierarchy.parent-type"),
         ]
         for index, field, value, code in cases:
@@ -183,13 +212,13 @@ class DesignHierarchyTests(unittest.TestCase):
 
     def test_duplicate_and_incomplete_root_are_not_silently_resolved(self):
         records = self.records()
-        errors, depths = self.audit(records + [records[1]])
+        errors, links = self.audit(records + [records[1]])
         self.assertIn("hierarchy.ambiguous-id", {e["code"] for e in errors})
-        self.assertEqual(depths, {})
-        records[1][1]["parent_document_id"] = None
-        errors, depths = self.audit(records)
+        self.assertEqual(links, {})
+        records[0][1]["design_level"] = "module"
+        errors, links = self.audit(records)
         self.assertIn("hierarchy.root", {e["code"] for e in errors})
-        self.assertNotIn("DOC-C", depths)
+        self.assertNotIn("DOC-C", links)
 
     def test_cli_generation_parent_chain_and_explicit_audit(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -205,7 +234,7 @@ class DesignHierarchyTests(unittest.TestCase):
             check = subprocess.run([str(ROOT / "scripts/validate-design"), directory,
                                     "--check-design-hierarchy", "--json"], capture_output=True, text=True)
             self.assertEqual(check.returncode, 0, check.stdout + check.stderr)
-            self.assertEqual(json.loads(check.stdout)["subsystem_depths"], {"DOC-P": 1, "DOC-C": 2})
+            self.assertEqual(json.loads(check.stdout)["design_parent_links"], {"DOC-P": "DOC-SYS", "DOC-C": "DOC-P", "DOC-D": "DOC-P"})
             selfcheck = subprocess.run(command + ["--parent-document-id", item["document_id"]],
                                        capture_output=True, text=True)
             self.assertNotEqual(selfcheck.returncode, 0)

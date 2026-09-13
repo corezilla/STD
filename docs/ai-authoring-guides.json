@@ -4,7 +4,7 @@
   "families": [
     {
       "id": "system",
-      "title": "系统设计",
+      "title": "总体系统设计",
       "guide": "docs/ai-system-design-authoring-guide.md",
       "template_ids": [
         "design.system"
@@ -12,7 +12,7 @@
     },
     {
       "id": "mechanism",
-      "title": "系统机制",
+      "title": "总体系统机制设计",
       "guide": "docs/ai-guides/system-mechanism.md",
       "template_ids": [
         "design.system-mechanism"
@@ -20,7 +20,7 @@
     },
     {
       "id": "unit",
-      "title": "子系统与模块",
+      "title": "软件子系统与模块",
       "guide": "docs/ai-guides/unit-design.md",
       "template_ids": [
         "design.subsystem",

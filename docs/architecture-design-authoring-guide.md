@@ -1,4 +1,4 @@
-# 系统设计写作与评审指南
+# 总体系统设计写作与评审指南
 
 适用于 `design.system` 的写作和内容评审。章节编号以本次锁定的
 [系统模板](../templates/design/architecture-design.md) 为准；项目只在用户要求升级时采用新版本。
