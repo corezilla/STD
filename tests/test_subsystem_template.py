@@ -128,7 +128,7 @@ class SubsystemTemplateTests(unittest.TestCase):
         selection = (ROOT / "docs/template-selection.md").read_text()
         for name in ("总体系统设计", "软件系统设计", "软件子系统设计", "软件模块设计",
                      "固件系统设计", "FPGA 程序顶层设计", "RTL 功能模块设计", "硬件系统设计",
-                     "板卡设计", "电路功能单元设计", "总体系统机制设计", "专用模板待建立"):
+                     "板卡设计", "电路功能单元设计", "总体系统机制设计", "design.software-system"):
             self.assertIn(name, selection)
         mapping = json.loads((ROOT / "docs/ai-authoring-guides.json").read_text())
         self.assertIn('"title": "总体系统设计"', json.dumps(mapping, ensure_ascii=False))
@@ -164,9 +164,9 @@ class DesignHierarchyTests(unittest.TestCase):
         def node(id, level, parent, template):
             return Path(id + ".metadata.json"), {"document_id": id, "design_level": level,
                 "parent_document_id": parent, "template_id": template, "project": "example"}
-        # Legacy design.system metadata tests structural parent links, not an unavailable software-system template.
+        # The software system is distinct from the total system and the software subsystem.
         return [node("DOC-SYS", "system", None, "design.system"),
-                node("DOC-P", "system", "DOC-SYS", "design.system"),
+                node("DOC-P", "system", "DOC-SYS", "design.software-system"),
                 node("DOC-C", "subsystem", "DOC-P", "design.subsystem"),
                 node("DOC-D", "module", "DOC-P", "design.definition")]
 
@@ -216,6 +216,11 @@ class DesignHierarchyTests(unittest.TestCase):
         self.assertIn("hierarchy.ambiguous-id", {e["code"] for e in errors})
         self.assertEqual(links, {})
         records[0][1]["design_level"] = "module"
+        errors, links = self.audit(records)
+        self.assertIn("hierarchy.parent-type", {e["code"] for e in errors})
+        self.assertNotIn("DOC-C", links)
+        # Legacy generic system metadata still needs a valid root, not just a locally valid edge.
+        records[1][1]["template_id"] = "design.system"
         errors, links = self.audit(records)
         self.assertIn("hierarchy.root", {e["code"] for e in errors})
         self.assertNotIn("DOC-C", links)

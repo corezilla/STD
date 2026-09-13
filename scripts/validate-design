@@ -451,6 +451,8 @@ def validate_design_hierarchy(records: list[tuple[Path, dict]]) -> tuple[list[di
         level = data.get("design_level")
         if data.get("template_id") == "design.subsystem" and level != "subsystem":
             errors.append(issue("hierarchy.type", path, "design.subsystem 必须保持 design_level=subsystem"))
+        if data.get("template_id") == "design.software-system" and level != "system":
+            errors.append(issue("hierarchy.type", path, "design.software-system 必须保持 design_level=system"))
         parent = data.get("parent_document_id")
         if level == "subsystem" and parent is None:
             errors.append(issue("hierarchy.parent-required", path, "软件子系统需要直属软件系统父设计"))
@@ -474,6 +476,9 @@ def validate_design_hierarchy(records: list[tuple[Path, dict]]) -> tuple[list[di
                 break
             if not str(ancestor.get("template_id", "")).startswith("design."):
                 errors.append(issue("hierarchy.parent-type", path, "父对象必须是设计文档，不是评审或需求记录"))
+                break
+            if current.get("template_id") == "design.software-system" and ancestor.get("design_level") != "system":
+                errors.append(issue("hierarchy.parent-type", path, "领域软件系统的父设计必须为 system 粒度"))
                 break
             if current.get("design_level") == "subsystem" and ancestor.get("design_level") != "system":
                 errors.append(issue("hierarchy.parent-type", path, "软件子系统的直属父对象必须为 system 粒度；不采用递归子系统，软件领域角色另核对正文"))

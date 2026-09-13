@@ -17,6 +17,7 @@
     "requirements.traceability": "docs/10_requirements",
     "evaluation.technical-analysis": "docs/15_evaluation",
     "design.system": "docs/20_system_design",
+    "design.software-system": {"system": "docs/20_system_design"},
     "design.system-mechanism": "docs/20_system_design/mechanisms",
     "design.subsystem": {"subsystem": "docs/30_subsystem_design"},
     "design.definition": {

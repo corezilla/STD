@@ -11,6 +11,12 @@
       ]
     },
     {
+      "id": "software-system",
+      "title": "软件系统设计",
+      "guide": "docs/ai-guides/software-system.md",
+      "template_ids": ["design.software-system"]
+    },
+    {
       "id": "mechanism",
       "title": "总体系统机制设计",
       "guide": "docs/ai-guides/system-mechanism.md",
