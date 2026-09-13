@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="470" viewBox="0 0 1080 470" role="img" aria-labelledby="t d">
+ <title id="t">相同递归对象的运行交互</title><desc id="d">SUB-P 范围内 MOD-D 在管理进程、SUB-C 整体在处理进程，配置请求和生效确认跨进程交互。两个进程是本例的拟议决定，不展开 SUB-C 内部线程。</desc>
+ <style>text{font-family:system-ui,'PingFang SC',sans-serif;fill:#20344b}.note{font-size:18px;fill:#52697d}.label{font-size:23px;font-weight:600}.flow{stroke:#3276ba;stroke-width:2.5;marker-end:url(#arrow)}</style>
+ <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10Z" fill="#3276ba"/></marker></defs>
+ <rect width="1080" height="470" fill="white"/>
+ <text x="35" y="43" class="label">运行交互 · EX-RECURSIVE/v1</text>
+ <text x="35" y="76" class="note">Target / Planned / NOT_RUN · 与组成图使用相同对象 ID</text>
+ <g data-object-id="SUB-P" data-object-type="subsystem" data-parent-id="SYS-EX">
+ <rect x="35" y="104" width="1010" height="282" rx="18" fill="#f0f5fb" stroke="#94afca" stroke-width="2"/>
+ <text x="60" y="146" class="label">SUB-P · 本例选择两个进程边界</text>
+ <g data-object-id="MOD-D" data-object-type="module" data-parent-id="SUB-P">
+ <rect x="68" y="182" width="326" height="164" rx="13" fill="#e0e7ed" stroke="#9aafbf" stroke-width="2"/>
+ <text x="91" y="224" class="label">管理进程</text><text x="91" y="263" class="note">MOD-D · 配置模块</text><text x="91" y="306" class="note">发送并核对交接结果</text></g>
+ <g data-object-id="SUB-C" data-object-type="subsystem" data-parent-id="SUB-P">
+ <rect x="684" y="182" width="326" height="164" rx="13" fill="#d4e5f7" stroke="#7299c3" stroke-width="2"/>
+ <text x="707" y="224" class="label">处理进程</text><text x="707" y="263" class="note">SUB-C · 处理子系统</text><text x="707" y="306" class="note">内部线程留给下级设计</text></g>
+ <text x="466" y="211" class="note">配置请求</text><line x1="404" y1="232" x2="673" y2="232" class="flow"/>
+ <text x="466" y="288" class="note">生效确认</text><line x1="673" y1="307" x2="404" y2="307" class="flow"/>
+ </g><text x="35" y="430" class="note">示意操作不是接口规格；部署决定与逻辑包含关系分开，不规定下级内部实现。</text>
+</svg>

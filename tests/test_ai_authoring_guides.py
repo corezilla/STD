@@ -143,5 +143,31 @@ class AIAuthoringGuidesTests(unittest.TestCase):
             self.assertIn("循环", text)
 
 
+    def test_companion_templates_have_guidance_for_every_main_chapter(self):
+        for tid in ("interfaces.control", "contracts.specification", "assurance.test-specification"):
+            content = (ROOT / "templates" / self.catalog["templates"][tid]).read_text()
+            chapters = re.split(r"(?m)^## ", content)[1:]
+            self.assertTrue(chapters)
+            for chapter in chapters:
+                with self.subTest(template=tid, chapter=chapter.splitlines()[0]):
+                    for term in ("<details>", "**本节目的**", "**必须写清楚**", "**抽象示例**", "**完成条件**", "</details>"):
+                        self.assertIn(term, chapter)
+                    self.assertNotIn("<!-- 编写建议：", chapter)
+        spec = (ROOT / "templates/assurance/test-specification.md").read_text()
+        self.assertIn("设计 V", spec)
+        self.assertIn("Case 实现 / 执行状态", spec)
+        self.assertIn("Run/证据引用或缺口", spec)
+
+    def test_volatile_state_is_not_exempt_and_batch_method_is_concrete(self):
+        unit = (ROOT / "templates/design/design-definition.md").read_text()
+        self.assertNotIn("没有持久状态时明确写 N/A", unit)
+        self.assertIn("没有持久化不等于没有生命周期", unit)
+        guide = (ROOT / "docs/ai-guides/system-mechanism.md").read_text()
+        for term in ("## 10. 批量编写与跨文档复审", "共享文件责任人", "不能从 downstream",
+                     "父机制检查组合结果", "不能在各自文档", "不重跑整个项目"):
+            self.assertIn(term, guide)
+        self.assertIn("host-fpga-transfer-example.md", guide)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -1,11 +1,11 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://corezilla.github.io/STD/schemas/interface-catalog.schema.json",
-  "title": "STD interface and data catalog 1.0.0",
+  "title": "STD interface and data catalog 2.0.0",
   "type": "object",
   "properties": {
     "schema_version": {
-      "const": "1.0.0"
+      "const": "2.0.0"
     },
     "repository": {
       "type": "string",
@@ -183,6 +183,10 @@
     "family": {
       "type": "object",
       "properties": {
+        "downstream_inventory": {
+          "$ref": "#/$defs/source",
+          "description": "Pinned independent adoption scope, validated by downstream-scope.schema.json; never inferred from member.downstream rows."
+        },
         "id": {
           "type": "string",
           "pattern": "^[A-Za-z0-9._/-]+$"
@@ -226,6 +230,7 @@
         "purpose",
         "providers",
         "consumers",
+        "downstream_inventory",
         "source",
         "coverage"
       ],

@@ -52,7 +52,7 @@
       "type": ["string", "null"],
       "pattern": "^[a-f0-9]{7,64}$"
     },
-    "parent_document_id": {"type": ["string", "null"]},
+    "parent_document_id": {"type": ["string", "null"], "description": "直属父对象的设计 Document ID，不是依赖或模板类型。子系统可递归，design_level 始终为 subsystem；完整父链由显式 hierarchy 检查核对。"},
     "supersedes": {"type": ["string", "null"]},
     "created_at": {"type": "string", "format": "date"},
     "last_modified_at": {"type": "string", "format": "date"}

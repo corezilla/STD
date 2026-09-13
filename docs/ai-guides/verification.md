@@ -1,6 +1,6 @@
 # 验证与验收 AI 编写指南
 
-版本：0.2.0-draft.1 · 日期：2026-09-12 · 状态：方法草案，待实际写作任务验证
+版本：0.3.0-draft.1 · 日期：2026-09-12 · 状态：方法草案，待实际写作任务验证
 
 主模板：`assurance.vv-plan`、`assurance.test-plan`、`assurance.test-specification`、`assurance.test-procedure`、`assurance.test-report`、`assurance.acceptance-plan`、`assurance.acceptance-report`。
 先读[通用 AI 编写指南](../ai-authoring-guide.md)，再读项目已采用的对应模板。本文补充本类型的工作方法，不重复公共来源、权限和状态规则，不自动升级项目模板。
@@ -34,6 +34,11 @@
 实现前可评审语义、Schema、向量或参考模型；实现后才运行对应实现的契约测试，随后集成/E2E。不能形成“开发前先通过真实两端实现测试”的依赖循环。
 
 ## 4. 图例与写法示例
+
+测试规格工作稿 0.2.0 的十章均有段落式指导与完成条件；Case Matrix 分开设计 V、Case、
+backend/环境和 Run。可参考[软硬件案例 §7](../examples/host-fpga-transfer-example.md#verification)
+将一条共同保证交给模型、原生布局及真实平台分别检查。未实现/未执行的 backend 保留在
+独立承接分母；目录 PASS、模型 PASS 和 C 布局检查均不能代替真实排空、时序或互操作证据。
 
 复杂夹具可参考[机制测试路径图](../../templates/diagrams/mechanism/test-path.svg)，标明控制、真实路径、观测、Oracle 及被替代部分；简单测试用短表即可。图中的延迟夹具只是一项虚构示例，不是项目已有能力。自动化流水线有阶段依赖时另画流程图。
 

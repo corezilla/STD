@@ -61,11 +61,19 @@ def main() -> int:
     parser.add_argument("--tailoring-ref")
     parser.add_argument("--migration-map-ref")
     parser.add_argument("--reviewed-commit")
-    parser.add_argument("--level", help="设计层级；design.system 默认 system，其他模板默认 cross-level")
+    parser.add_argument("--parent-document-id", help="直属父设计 Document ID；不表示模板类型、依赖或目录层数")
+    parser.add_argument("--level", help="设计层级；design.system 默认 system，design.subsystem 默认 subsystem，其他模板默认 cross-level")
     parser.add_argument("--domain", action="append", default=[])
     args = parser.parse_args()
+    if args.parent_document_id is not None:
+        if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]*", args.parent_document_id):
+            parser.error("--parent-document-id 必须是合法 Document ID")
+        if args.parent_document_id == args.name:
+            parser.error("父文档不能是文档自身")
     if args.level is None:
-        args.level = "system" if args.template == "design.system" else "cross-level"
+        args.level = {"design.system": "system", "design.subsystem": "subsystem"}.get(args.template, "cross-level")
+    if args.template == "design.subsystem" and args.level != "subsystem":
+        parser.error("design.subsystem 必须使用 subsystem 层级；模块使用 design.definition 或领域专项模板")
 
     if args.project_root is None and args.output is None:
         parser.error("必须提供 --project-root 或 --output")
@@ -174,7 +182,7 @@ def main() -> int:
         "source_repository": args.repository,
         "source_path": source_path,
         "reviewed_commit": args.reviewed_commit,
-        "parent_document_id": None,
+        "parent_document_id": args.parent_document_id,
         "supersedes": None if args.supersedes == "none" else args.supersedes,
         "created_at": created_at,
         "last_modified_at": last_modified_at

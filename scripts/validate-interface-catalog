@@ -127,6 +127,7 @@ def validate(catalog, roots):
     if errors:
         return errors, []
     unchecked = ["Behavior/prose semantics, historical compatibility, source scope completeness beyond declared inventories, "
+                 "adoption-scope authority and applicability reasons, "
                  "implementation guarantees and Run authenticity need content/project review"]
     metadata_schema = jsonschema.Draft202012Validator(
         read_json(ROOT / "schemas/document-metadata.schema.json"),
@@ -192,6 +193,37 @@ def validate(catalog, roots):
         errors.append("id.duplicate: family")
     if len(members) != len(catalog["members"]):
         errors.append("id.duplicate: member")
+    # Scope is read from a separately pinned design input, never from the rows under test.
+    scope_schema = jsonschema.Draft202012Validator(read_json(ROOT / "schemas/downstream-scope.schema.json"))
+    expected_downstream = {}
+    for fid, family in families.items():
+        def scope_check():
+            ref = family["downstream_inventory"]
+            if ref["selector"]["kind"] != "json_pointer":
+                raise ValueError("downstream inventory requires a structured scope projection")
+            scope = source(ref)
+            problems = list(scope_schema.iter_errors(scope))
+            if problems:
+                raise ValueError(f"downstream scope schema: {problems[0].message}")
+            participants = {p["id"]: p for p in scope["participants"]}
+            identities = {(p["role"], p["module"], p["backend"]) for p in scope["participants"]}
+            if len(participants) != len(scope["participants"]) or len(identities) != len(participants):
+                raise ValueError("duplicate scope participant ID or role/module/backend")
+            selected = {m["id"] for m in members.values() if m["family"] == fid}
+            scoped = set(scope["members"])
+            if any(mid.split("#")[0] != fid for mid in scoped):
+                raise ValueError("scope contains another interface family")
+            if not selected <= scoped or (family["coverage"]["level"] == "complete" and selected != scoped):
+                raise ValueError("scope/member inventory mismatch")
+            for mid, item in scope["members"].items():
+                required = set(item["required"])
+                excluded = [n["participant"] for n in item["not_applicable"]]
+                if (len(excluded) != len(set(excluded)) or required & set(excluded)
+                        or required | set(excluded) != set(participants)):
+                    raise ValueError(f"{mid}: every scoped participant needs exactly one required or not_applicable disposition")
+                expected_downstream[mid] = {(participants[p]["role"], participants[p]["module"], participants[p]["backend"])
+                                            for p in required}
+        check(f"downstream_scope:{fid}", scope_check)
     locations = {}
     values = {}
     for member in catalog["members"]:
@@ -269,8 +301,13 @@ def validate(catalog, roots):
         elif ev["replaced_by"] is not None:
             errors.append(f"evolution:{mid}: active ID cannot have replacement")
         ds = member["downstream"]
-        if len({(d["role"], d["module"], d["backend"]) for d in ds}) != len(ds):
+        actual_downstream = {(d["role"], d["module"], d["backend"]) for d in ds}
+        if len(actual_downstream) != len(ds):
             errors.append(f"downstream:{mid}: duplicate role/module/backend")
+        if mid in expected_downstream and actual_downstream != expected_downstream[mid]:
+            expected = expected_downstream[mid]
+            errors.append(f"downstream:{mid}: adoption scope mismatch; "
+                          f"missing={sorted(expected - actual_downstream)}, extra={sorted(actual_downstream - expected)}")
         for d in ds:
             def downstream_check():
                 if (d["version"], d["revision"], d["source_sha256"]) != (ref["version"], ref["revision"], ref["sha256"]):

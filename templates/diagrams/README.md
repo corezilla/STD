@@ -14,6 +14,16 @@ FPGA 与板卡图的 PNG 位于[共享资产目录](../../docs/assets/system-des
 
 ## 软件分层图
 
+递归子系统另有[父子组成](subsystem-recursive-composition.svg)和[同对象运行交互](subsystem-recursive-runtime.svg)。
+两图共用 `data-object-id`、`data-object-type`、`data-parent-id`，复制时同时修改这些属性、可见文字及图注。
+SUB-P 内部包含 SUB-C 子系统与直属 MOD-D 模块；运行图的进程是独立设计选择，不展开 SUB-C 内部线程。
+对象 ID/类型与父关系用于图例一致性回归，不是新增项目 authority；正文及父文档链仍需人工核验。
+
+子系统模板 §4 使用 [子系统逻辑组成 SVG](subsystem-layered-architecture.svg)，同样采用左侧层名、
+有对比度的层/模块底色、无图标和无连接线。修改 SVG 的 `title`、`desc`、层名、模块名及图注；
+增减模块时同步调整背景、坐标与 `viewBox`，并检查窄屏可读性。它仅是 EX-JOB 虚构组成，
+不表示调用顺序、独立进程或已实现状态；图后逐个解释模块职责，交互另图表示。
+
 [软件分层架构 SVG](software-layered-architecture.svg) 是可直接复制的矢量图形模板，内含
 EX-SW-01 的虚构软件示例。它只表达层次和组成：左侧层名、右侧分组、纯文字模块，不使用
 图标或连接线。调用、数据流和执行时序应另图表达。

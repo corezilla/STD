@@ -18,6 +18,7 @@
     "evaluation.technical-analysis": "docs/15_evaluation",
     "design.system": "docs/20_system_design",
     "design.system-mechanism": "docs/20_system_design/mechanisms",
+    "design.subsystem": {"subsystem": "docs/30_subsystem_design"},
     "design.definition": {
       "system": "docs/20_system_design",
       "subsystem": "docs/30_subsystem_design",

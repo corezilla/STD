@@ -3,7 +3,7 @@
   "authority": "STD",
   "document_id": "EX-EXPORT-MAPPING",
   "document_type": "interfaces.control",
-  "document_version": "3.0.1-draft.1",
+  "document_version": "3.1.0-draft.1",
   "title": "虚构暂存导出：正文到接口、实现与验证的完整映射",
   "document_owner": "STD Example Maintainer",
   "authors": [

@@ -1,6 +1,6 @@
 # 接口与数据规格映射规范
 
-版本：1.0.0-draft.2 · 日期：2026-09-12 · 状态：待发布方法；不自动升级项目采用基线
+版本：2.0.0-draft.1 · 日期：2026-09-12 · 状态：待发布方法；不自动升级项目采用基线
 
 ## 1. 双读者与唯一来源
 
@@ -22,14 +22,16 @@
 或既有字段号。ID 不依赖章节、路径或实现函数名，不因移动重编号、回收或复用；历史带版本的 ID
 保留。契约 version/revision 与文档版本单独固定；ID 不变不代表兼容。
 
-[interface-catalog.schema.json](../schemas/interface-catalog.schema.json)是模型 1.0.0 的格式 authority。
+[interface-catalog.schema.json](../schemas/interface-catalog.schema.json)是模型 2.0.0 的格式 authority。
+2.0.0 新增必填的独立下游范围输入，与 1.0.0 不兼容；只有项目明确采用本修订时才迁移，
+不把旧清单静默当成新格式通过。原成员 ID、契约版本、正文身份和源文件位置不因此改变。
 对象禁止额外字段；字符串非空、ID/路径/摘要按 Schema 限制；revision 保留源的字符串或整数类型，
 不把 JSON 整数修订号强改为字符串。必填项及条件如下：
 
 | 记录 | 必填内容与实际写法 |
 |---|---|
 | 顶层 | schema_version、repository、families、members；repository 是稳定仓库名，不是本机路径 |
-| family | id/name/purpose、providers/consumers、source、coverage；目的写使用任务，不只写接口名称 |
+| family | id/name/purpose、providers/consumers、source、coverage、downstream_inventory；目的写使用任务，不只写接口名称 |
 | source | repository、根相对 path、selector、version/revision 及其 selector、SHA-256、semantic_scope |
 | member | id/family/kind/name、source、prose、bindings、status、evolution、downstream、reading_view |
 | prose | repository/path、Document ID/version、显式稳定 anchor；身份复用同名 metadata 与受控封面 |
@@ -84,6 +86,31 @@ complete 的 inventory 是实际机器源字典容器列表，检查器枚举每
 status.design 为 proposed/in_review/approved/deprecated；implementation 为 not_implemented/partial/implemented；
 verification 为 not_run/blocked/fail/pass。文档批准不等于实现，结构检查 PASS 不得填作运行验证 PASS。
 多 backend 分别登记；成员整体通过必须覆盖全部承接 backend，不能静默移除未实现或未执行者。
+
+### 4.1 独立的承接范围分母
+
+family.downstream_inventory 使用 source 格式绑定一份已有设计/采用范围的结构化投影，
+固定 repository/path、version/revision/selectors 和完整文件 hash。其内容遵循
+[downstream-scope.schema.json](../schemas/downstream-scope.schema.json) 1.0.0：
+
+- participants 固定每个参与方 ID 及 role/module/backend；ID 与三元组都不得重复。
+- members 以接口族#成员 ID 为键；每项 required 列出必须承接者，not_applicable 列出
+  participant 与非空理由。每个已规划参与方在每个成员下必须恰有一种归属，不能遗漏、重复或交叠。
+- 实际 member.downstream 的三元组集合必须与 required 双向相等。未实现者仍有承接行，
+  implementation=not_implemented、verification=not_run；不允许删除消费者或 backend 后通过。
+- complete 编目范围要求 scope 与成员全集精确一致；selected_members 可引用更大的同族
+  scope，但所有入选成员必须在 scope 内；范围外成员不被此批宣告已承接。
+
+该输入复用项目现有的采用/责任分配记录，可由其生成检查投影，不新设平行审批平台。
+先按真实设计及配置确定范围，再填写实际承接，禁止从 downstream 行反向生成分母。
+调整范围需记录旧新差异、原因和有权决定；检查器能发现 hash 漂移、删行和错配，但不能
+证明 scope 已获批准、理由合理或现实中没有遗漏消费者，这些必须内容复审。
+正文 Approved 不代表产品已实现；不过即使只有设计获批，承接行也不能少于固定 required 集合。
+全体在该成员下确实不适用时可以显式逐项说明，不因此产生运行 PASS。
+
+完整例见 [EX-EXPORT 独立范围](examples/interfaces/downstream-scope.json)。采用 2.0.0 时先
+核对原有参与方及每个 backend，建立该输入并补缺失承接，最后重跑目录正反例；不能只改
+schema_version，不能让工具自动为旧项目扩大编写或实现范围。
 
 evolution 记录 active/deprecated、replaced_by（无替代为 null）及 compatibility 理由。
 废弃 ID 保留为可追溯条目；删除字段、改名、范围/枚举/错误变化均需比较旧固定基线、更新兼容/替代关系，

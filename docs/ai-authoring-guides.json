@@ -23,6 +23,7 @@
       "title": "子系统与模块",
       "guide": "docs/ai-guides/unit-design.md",
       "template_ids": [
+        "design.subsystem",
         "design.definition"
       ]
     },

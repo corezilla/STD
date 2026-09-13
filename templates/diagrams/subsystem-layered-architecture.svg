@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="550" viewBox="0 0 1080 550" role="img" aria-labelledby="title desc">
+  <title id="title">作业处理子系统逻辑组成教学示例</title>
+  <desc id="desc">虚构 EX-JOB v1，Target、Planned、NOT_RUN。入口层包含入口与准入，控制层包含任务控制，支撑层包含执行适配与结果管理。仅表示包含关系，不表示调用顺序或独立进程。</desc>
+  <defs>
+    <style>
+      text {font-family:system-ui,"PingFang SC","Microsoft YaHei",sans-serif;fill:#20344b}
+      .layer {font-size:22px;font-weight:600}
+      .module {font-size:23px;font-weight:600}
+      .note {font-size:17px;fill:#5b6c80}
+      .band {stroke:#d6e1eb;stroke-width:1.5}
+      .box {stroke:#a9bfd4;stroke-width:1.5}
+    </style>
+  </defs>
+  <rect width="1080" height="550" rx="20" fill="#fff"/>
+  <text x="40" y="47" font-size="27" font-weight="650">作业处理子系统 · 逻辑组成</text>
+  <text x="40" y="79" class="note">EX-JOB/v1 · Target / Planned / NOT_RUN · 虚构教学示例</text>
+  <rect x="207" y="106" width="827" height="365" rx="20" fill="#f8fafc" stroke="#b7c9dc" stroke-width="2"/>
+  <text x="56" y="180" class="layer">入口层</text>
+  <rect x="228" y="124" width="785" height="96" rx="13" fill="#eef5fc" class="band"/>
+  <rect x="365" y="142" width="510" height="60" rx="10" fill="#d3e6f8" class="box"/>
+  <text x="620" y="180" text-anchor="middle" class="module">入口与准入</text>
+  <text x="56" y="294" class="layer">控制层</text>
+  <rect x="228" y="238" width="785" height="96" rx="13" fill="#edf2f8" class="band"/>
+  <rect x="365" y="256" width="510" height="60" rx="10" fill="#ccdaec" class="box"/>
+  <text x="620" y="294" text-anchor="middle" class="module">任务控制</text>
+  <text x="56" y="408" class="layer">支撑层</text>
+  <rect x="228" y="352" width="785" height="96" rx="13" fill="#f0f4f6" class="band"/>
+  <rect x="266" y="370" width="330" height="60" rx="10" fill="#d9e3e9" class="box"/>
+  <rect x="643" y="370" width="330" height="60" rx="10" fill="#d9e3e9" class="box"/>
+  <text x="431" y="408" text-anchor="middle" class="module">执行适配</text>
+  <text x="808" y="408" text-anchor="middle" class="module">结果管理</text>
+  <text x="40" y="513" class="note">图仅表示层次与归属；交互、部署边界和各模块职责由正文单独说明。</text>
+</svg>

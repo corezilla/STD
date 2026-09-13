@@ -1,0 +1,538 @@
+{
+  "schema_version": "1.0.0",
+  "version": "EX-EXPORT-ADOPTION/v1",
+  "revision": 1,
+  "participants": [
+    {
+      "id": "A-service",
+      "role": "provider",
+      "module": "A-control",
+      "backend": "real-unix-socket"
+    },
+    {
+      "id": "C-service",
+      "role": "consumer",
+      "module": "C-client",
+      "backend": "real-unix-socket"
+    },
+    {
+      "id": "W-receipt",
+      "role": "provider",
+      "module": "W-worker",
+      "backend": "real-worker-receipt"
+    },
+    {
+      "id": "A-receipt",
+      "role": "consumer",
+      "module": "A-control",
+      "backend": "real-worker-receipt"
+    }
+  ],
+  "members": {
+    "IF-EXPORT#TYPE01": {
+      "required": [
+        "A-service",
+        "C-service",
+        "W-receipt",
+        "A-receipt"
+      ],
+      "not_applicable": []
+    },
+    "IF-EXPORT#TYPE02": {
+      "required": [
+        "A-service",
+        "C-service"
+      ],
+      "not_applicable": [
+        {
+          "participant": "W-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        },
+        {
+          "participant": "A-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        }
+      ]
+    },
+    "IF-EXPORT#TYPE03": {
+      "required": [
+        "A-service",
+        "C-service"
+      ],
+      "not_applicable": [
+        {
+          "participant": "W-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        },
+        {
+          "participant": "A-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        }
+      ]
+    },
+    "IF-EXPORT#TYPE04": {
+      "required": [
+        "A-service",
+        "C-service"
+      ],
+      "not_applicable": [
+        {
+          "participant": "W-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        },
+        {
+          "participant": "A-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        }
+      ]
+    },
+    "IF-EXPORT#TYPE05": {
+      "required": [
+        "A-service",
+        "C-service"
+      ],
+      "not_applicable": [
+        {
+          "participant": "W-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        },
+        {
+          "participant": "A-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        }
+      ]
+    },
+    "IF-EXPORT#TYPE06": {
+      "required": [
+        "A-service",
+        "C-service"
+      ],
+      "not_applicable": [
+        {
+          "participant": "W-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        },
+        {
+          "participant": "A-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        }
+      ]
+    },
+    "IF-EXPORT#TYPE07": {
+      "required": [
+        "A-service",
+        "C-service"
+      ],
+      "not_applicable": [
+        {
+          "participant": "W-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        },
+        {
+          "participant": "A-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        }
+      ]
+    },
+    "IF-EXPORT#TYPE08": {
+      "required": [
+        "A-service",
+        "C-service"
+      ],
+      "not_applicable": [
+        {
+          "participant": "W-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        },
+        {
+          "participant": "A-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        }
+      ]
+    },
+    "IF-EXPORT#TYPE09": {
+      "required": [
+        "A-service",
+        "C-service"
+      ],
+      "not_applicable": [
+        {
+          "participant": "W-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        },
+        {
+          "participant": "A-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        }
+      ]
+    },
+    "IF-EXPORT#TYPE10": {
+      "required": [
+        "A-service",
+        "C-service"
+      ],
+      "not_applicable": [
+        {
+          "participant": "W-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        },
+        {
+          "participant": "A-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        }
+      ]
+    },
+    "IF-EXPORT#TYPE11": {
+      "required": [
+        "A-service",
+        "C-service"
+      ],
+      "not_applicable": [
+        {
+          "participant": "W-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        },
+        {
+          "participant": "A-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        }
+      ]
+    },
+    "IF-EXPORT#TYPE12": {
+      "required": [
+        "A-service",
+        "C-service"
+      ],
+      "not_applicable": [
+        {
+          "participant": "W-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        },
+        {
+          "participant": "A-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        }
+      ]
+    },
+    "IF-EXPORT#TYPE13": {
+      "required": [
+        "W-receipt",
+        "A-receipt"
+      ],
+      "not_applicable": [
+        {
+          "participant": "A-service",
+          "reason": "Internal A/W receipt is not a C-to-A public value."
+        },
+        {
+          "participant": "C-service",
+          "reason": "Internal A/W receipt is not a C-to-A public value."
+        }
+      ]
+    },
+    "IF-EXPORT#OP01": {
+      "required": [
+        "A-service",
+        "C-service"
+      ],
+      "not_applicable": [
+        {
+          "participant": "W-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        },
+        {
+          "participant": "A-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        }
+      ]
+    },
+    "IF-EXPORT#OP02": {
+      "required": [
+        "A-service",
+        "C-service"
+      ],
+      "not_applicable": [
+        {
+          "participant": "W-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        },
+        {
+          "participant": "A-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        }
+      ]
+    },
+    "IF-EXPORT#OP03": {
+      "required": [
+        "A-service",
+        "C-service"
+      ],
+      "not_applicable": [
+        {
+          "participant": "W-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        },
+        {
+          "participant": "A-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        }
+      ]
+    },
+    "IF-EXPORT#OP04": {
+      "required": [
+        "A-service",
+        "C-service"
+      ],
+      "not_applicable": [
+        {
+          "participant": "W-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        },
+        {
+          "participant": "A-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        }
+      ]
+    },
+    "IF-EXPORT#OP05": {
+      "required": [
+        "A-service",
+        "C-service"
+      ],
+      "not_applicable": [
+        {
+          "participant": "W-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        },
+        {
+          "participant": "A-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        }
+      ]
+    },
+    "IF-EXPORT#OP06": {
+      "required": [
+        "A-service",
+        "C-service"
+      ],
+      "not_applicable": [
+        {
+          "participant": "W-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        },
+        {
+          "participant": "A-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        }
+      ]
+    },
+    "IF-EXPORT#OP07": {
+      "required": [
+        "A-service",
+        "C-service"
+      ],
+      "not_applicable": [
+        {
+          "participant": "W-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        },
+        {
+          "participant": "A-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        }
+      ]
+    },
+    "IF-EXPORT#ERR01": {
+      "required": [
+        "A-service",
+        "C-service"
+      ],
+      "not_applicable": [
+        {
+          "participant": "W-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        },
+        {
+          "participant": "A-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        }
+      ]
+    },
+    "IF-EXPORT#ERR02": {
+      "required": [
+        "A-service",
+        "C-service"
+      ],
+      "not_applicable": [
+        {
+          "participant": "W-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        },
+        {
+          "participant": "A-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        }
+      ]
+    },
+    "IF-EXPORT#ERR03": {
+      "required": [
+        "A-service",
+        "C-service"
+      ],
+      "not_applicable": [
+        {
+          "participant": "W-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        },
+        {
+          "participant": "A-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        }
+      ]
+    },
+    "IF-EXPORT#ERR04": {
+      "required": [
+        "A-service",
+        "C-service"
+      ],
+      "not_applicable": [
+        {
+          "participant": "W-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        },
+        {
+          "participant": "A-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        }
+      ]
+    },
+    "IF-EXPORT#ERR05": {
+      "required": [
+        "A-service",
+        "C-service"
+      ],
+      "not_applicable": [
+        {
+          "participant": "W-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        },
+        {
+          "participant": "A-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        }
+      ]
+    },
+    "IF-EXPORT#ERR06": {
+      "required": [
+        "A-service",
+        "C-service"
+      ],
+      "not_applicable": [
+        {
+          "participant": "W-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        },
+        {
+          "participant": "A-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        }
+      ]
+    },
+    "IF-EXPORT#ERR07": {
+      "required": [
+        "A-service",
+        "C-service"
+      ],
+      "not_applicable": [
+        {
+          "participant": "W-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        },
+        {
+          "participant": "A-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        }
+      ]
+    },
+    "IF-EXPORT#ERR08": {
+      "required": [
+        "A-service",
+        "C-service"
+      ],
+      "not_applicable": [
+        {
+          "participant": "W-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        },
+        {
+          "participant": "A-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        }
+      ]
+    },
+    "IF-EXPORT#ERR09": {
+      "required": [
+        "A-service",
+        "C-service"
+      ],
+      "not_applicable": [
+        {
+          "participant": "W-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        },
+        {
+          "participant": "A-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        }
+      ]
+    },
+    "IF-EXPORT#ERR10": {
+      "required": [
+        "A-service",
+        "C-service"
+      ],
+      "not_applicable": [
+        {
+          "participant": "W-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        },
+        {
+          "participant": "A-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        }
+      ]
+    },
+    "IF-EXPORT#ERR11": {
+      "required": [
+        "A-service",
+        "C-service"
+      ],
+      "not_applicable": [
+        {
+          "participant": "W-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        },
+        {
+          "participant": "A-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        }
+      ]
+    },
+    "IF-EXPORT#ERR12": {
+      "required": [
+        "A-service",
+        "C-service"
+      ],
+      "not_applicable": [
+        {
+          "participant": "W-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        },
+        {
+          "participant": "A-receipt",
+          "reason": "This C-to-A envelope/operation/error is not used by the internal receipt interface."
+        }
+      ]
+    }
+  }
+}

@@ -81,12 +81,12 @@ manifest。完整接入规则见 [`docs/adoption.md`](docs/adoption.md)。
 系统设计的概览、适用性、状态/证据、图和信息安全写法及正反例见
 [`docs/architecture-design-authoring-guide.md`](docs/architecture-design-authoring-guide.md)。
 AI 编写入口采用“通用方法 + 模板类型专项”：先读
-[`docs/ai-authoring-guide.md`](docs/ai-authoring-guide.md)（`0.2.0-draft.1`），
+[`docs/ai-authoring-guide.md`](docs/ai-authoring-guide.md)（`0.2.0-draft.2`），
 再按其中的映射选择主专项和项目已采用模板，不需要通读全部指南。
-13 类专项覆盖当前 45 个模板，同类模板共享方法，计划、报告和决定仍保留不同完成边界；
+13 类专项覆盖当前 46 个模板，同类模板共享方法，计划、报告和决定仍保留不同完成边界；
 精确导航见 [`docs/ai-authoring-guides.json`](docs/ai-authoring-guides.json)。
 从 HIFM v0.3 迁入的系统方法保留为
-[`docs/ai-system-design-authoring-guide.md`](docs/ai-system-design-authoring-guide.md)（`0.6.0-draft.2`）；
+[`docs/ai-system-design-authoring-guide.md`](docs/ai-system-design-authoring-guide.md)（`0.6.0-draft.3`）；
 机制方法已独立到 [`docs/ai-guides/system-mechanism.md`](docs/ai-guides/system-mechanism.md)。
 这些是方法草案，待实际任务验证，不是新模板，不改变项目已采用的 STD/模板版本，
 也不自动授权提交、发布或运行。公共规则只在通用指南维护，专项解释本类型的实际设计/取证方法。
@@ -132,9 +132,18 @@ AI 指南按能力贯通章节、先复用并核对现有契约，再交接双�
 诊断在 §11，替代依赖与环回在 §10.4。系统约束由 §3.2 分配、§13.6 验证、§17.2 承接为
 下级设计与验收任务。机制未定时先预设计，不能只登记待定或以局部测试关闭系统目标。
 
-`design.definition` 为待发布 `1.2.0`；`design.hardware` 与 `design.fpga` 增加上级约束承接、
+新增 [子系统设计模板](templates/design/subsystem-design.md) `design.subsystem`，独立版本 `0.4.0`（待发布），
+15 个主章以概要设计为中心：整体方案、软件架构与模块概要、运行设计、数据/接口/配置、
+调试维护、部署测试和性能；保留系统约束及下游承接，含图例与逐节指导，不替代模块详细设计。
+系统对齐复审补齐身份/模式/过程映射、数据组织与阶段变换、安全执行点、维护测试子节及扩展兼容边界。
+递归子系统通过 `parent_document_id` 表达归属，层级类型仍为 `subsystem`；组成、接口权威和验证均按对象区分。
+生成器支持 `--parent-document-id`，`validate-design --check-design-hierarchy` 可对完整输入显式检查父链并报告深度。
+默认生成到 `docs/30_subsystem_design`，共用[子系统与模块 AI 指南](docs/ai-guides/unit-design.md)。
+旧子系统文档不自动迁移，板卡/FPGA 对象直接采用专项模板。
+
+`design.definition` 为待发布 `1.3.0`，明确易失状态也需生命周期设计；`design.hardware` 与 `design.fpga` 增加上级约束承接、
 本地落实和系统组合验收，当前为待发布 `1.2.0`，不要求另建通用单元文档。
-`design.system-mechanism` 为待发布 `2.1.0`，数据与接口分章，16 个主章保留既有约束和段落式指导，
+`design.system-mechanism` 为待发布 `2.2.0`，数据与接口分章，16 个主章保留既有约束和段落式指导，
 补齐拓扑/身份、资源寿命、维护命令、测试控制/隔离与能力级双方承接；采用短封面和文末控制记录。
 九幅[可复用机制图文样板](templates/diagrams/mechanism/README.md)在模板中直接展示：
 保留只读六幅关系图，另加开篇用途图和两幅有副作用过程/依赖图。
@@ -146,7 +155,7 @@ AI 指南按能力贯通章节、先复用并核对现有契约，再交接双�
 有副作用的任务失联先核对权威结果，确认旧执行者
 停止或隔离并满足幂等/去重条件后才可重新执行，否则阻塞或转人工；只读重新采样不代表原操作恢复。
 系统保留端到端原理与关键阶段，机制文档唯一维护详细状态转换及参与方协议。
-本轮受影响模板及各自版本见下方复审记录，未列入的模板版本不变；不新增模板种类或审批流程。
+本轮受影响模板及各自版本见下方复审记录，未列入的模板版本不变；上述机制复审不新增模板种类或审批流程；新增子系统模板见上文。
 模板保留每节可折叠的段落式指导与完成条件；生成器默认将系统文档层级设为 `system`。
 本次尚未发布新的 STD 版本或更新已发布来源/RAG 清单；现有 `draft.26` 的不可变来源保持原样。
 已采用旧版的项目继续使用原版本，只有用户要求升级时才评估章节映射与内容差异。
@@ -160,6 +169,18 @@ AI 指南按能力贯通章节、先复用并核对现有契约，再交接双�
 检查器从源签名推导角色与完整性，并复用原封面/metadata 身份；注释不再拥有独立文档版本。
 本轮版本、15→16 章迁移与实际检查范围见[复审记录](docs/interface-data-mapping-review.md)；
 STD `draft.26` 发布版及既有项目 lock 不变，不自动升级项目或复制私密产品协议。
+
+## 批量机制写作准备
+
+接口控制与契约规格模板各为待发布 `0.3.0`，测试规格为 `0.2.0`；三者逐章提供段落式建议、
+完成条件及贯穿示例，不仅保留空标题。[机制 AI 指南 §10](docs/ai-guides/system-mechanism.md#10-批量编写与跨文档复审)
+说明固定一批输入、共享契约唯一修改、父子承接和受影响文档的组合复查，不引入新的写作平台。
+[Host—驱动—FPGA 教学案例](docs/examples/host-fpga-transfer-example.md)给出完整逻辑调用、原生布局、
+停止/排空和 V→Case/环境的路径；未实现具体 OS/总线绑定，不宣称真实硬件验证。
+
+接口目录工作模型为 `2.0.0`：新增必填 downstream_inventory，绑定独立承接范围并检测漏消费者、
+漏 backend、错模块及无理由的裁剪。它与原 `1.0.0` 不兼容，旧项目仅在明确采用本修订时迁移；
+scope 真实性与批准仍需内容复审。当前变更及验证边界见[复审记录 §6](docs/interface-data-mapping-review.md#6-批量写作准备修订)。
 
 ## 上游参考
 

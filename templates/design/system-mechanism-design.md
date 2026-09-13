@@ -19,6 +19,15 @@
 > 编写方法见已采用 STD 的 `docs/ai-authoring-guide.md` 与 `docs/ai-guides/system-mechanism.md`，
 > 共同规范见 `docs/design-writing-guide.md` 与 `docs/interface-data-mapping-standard.md`。本文所有带“虚构/教学”标记的图文不是项目事实。
 
+<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
+**教学入口选择｜Target / Planned / NOT_RUN**：以下是方法导航，不是第二份协议。
+只读协作见本模板 EX-OBS 图文，有副作用的收口见
+[EX-EXPORT](../../docs/examples/mechanism-side-effect-example.md)；软硬件交接见
+[Host—驱动—FPGA 案例](../../docs/examples/host-fpga-transfer-example.md)。后者演示原生布局、
+完成可见性和停止/排空，不是芯片内部架构或已实现的板卡协议。选择与本机制相符的路径，
+不要求每份文档实现全部案例。批量写作方法见已采用指南 §10。
+<!-- STD_TEMPLATE_EXAMPLE_END -->
+
 ## 1. 机制摘要：解决什么问题
 
 <details>
@@ -885,6 +894,10 @@ A 已成功但 B 超时时，只要 M 仍存活并完成响应，就返回 A OK 
 **本节目的**：把设计承接、测试结果与实际启用分开，避免未闭合范围被上线动作掩盖。
 
 **必须写清楚**：每项组合约束的实际结果、未运行/阻塞范围、启用条件与授权、兼容观察窗口、暂停/回滚检查点及旧机制退出依据。
+
+批量成文时按父子及共享契约关系回查受影响的其他机制：固定同一场景/输入，比较各方保证与
+前提、预算分配及等待/释放条件。逐成员 backend 的分母来自独立范围输入；一份文档或一个
+backend 通过不能代表本批闭合，未实现者不删除。复用系统清单和已有记录，不另造评审台账。
 
 **编写规范**：只使用项目已批准流程，不引入新的发布平台。先核查双方实现和组合证据，再决定是否满足启用条件；回滚引用 §13 唯一流程并检查真实兼容性。存在旧/新 authority 冲突时先裁决实际范围，不以改名、加目录或复制文档关闭冲突。
 

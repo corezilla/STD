@@ -4,7 +4,7 @@
 | 文档字段 | 值 |
 |---|---|
 | Document ID | `EX-EXPORT-MAPPING` |
-| Document Version | `3.0.1-draft.1` |
+| Document Version | `3.1.0-draft.1` |
 | Status | `Draft` |
 | Project | `STD` |
 | Document Owner | `STD Example Maintainer` |
@@ -73,6 +73,13 @@ Target / Proposed / 服务未实现 / Runtime NOT_RUN
 | IF-EXPORT#OP01–OP07 / v1 revision 3 | A-control 提供 | 真实服务 NOT_IMPLEMENTED，无现成代码位置；可选内部函数组织，不改 EX-R1–8 | EX-V1–6 → EX-T1–6 / EX-ENV-P / NOT_RUN |
 | 同上及所引用类型/错误 | C-client 消费 | 真实客户端 NOT_IMPLEMENTED；不得换 ID 自动重试，必须核对响应关联 | EX-V1/6 → EX-T1/6 / EX-ENV-P / NOT_RUN |
 | 完整协议解释 / v1 | 教学逻辑模型（不充当服务 backend） | [内存模型](../../../tests/test_mechanism_effect_example.py)已有逻辑测试；无真实 IPC/文件强制点 | 案例 §7 单列 EX-ENV-M；模型通过不关闭 EX-ENV-P |
+
+独立范围输入 [downstream-scope.json](downstream-scope.json) 固定全部已规划参与方及逐成员适用性，
+catalog 2.0.0 用 family.downstream_inventory 绑定其版本和完整文件摘要，不从实际 downstream 行反推分母。
+内部 CompletionReceipt 由 W-worker 提供、A-control 消费，不映射成 C-client 的公共响应；共享 Id 另包含内部凭据两方。
+范围中的 required 保留 NOT_IMPLEMENTED/NOT_RUN 者；not_applicable 给出成员/配置理由，不能用来隐藏未实现。
+真实 A/W receipt backend 同样 NOT_IMPLEMENTED/NOT_RUN，关联 EX-V3/6→EX-T3/6；模型不充当真实后台。
+范围由示例维护者先按行为设计确定，脚本只能核对声明的一致性，不能证明裁剪理由获批或现实中没有其他消费者。
 
 目录逐成员/逐 backend 保留消费 version/revision/hash、设计项与 Case。上表汇总不删除未实现者。
 具体 EX-V/EX-T/环境语义仍唯一见[案例 §7](../mechanism-side-effect-example.md#7-验证项用例环境与执行记录)。

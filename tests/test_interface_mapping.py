@@ -237,7 +237,9 @@ class InterfaceMappingTests(unittest.TestCase):
                       version_selector={"kind": "literal", "value": "version: v1"},
                       revision_selector={"kind": "literal", "value": "revision: 1"},
                       sha256=hashlib.sha256(p.read_bytes()).hexdigest())
-        member.update(source=native, downstream=[], reading_view=None)
+        member.update(source=native, reading_view=None)
+        for d in member["downstream"]:
+            d.update(version=native["version"], revision=native["revision"], source_sha256=native["sha256"])
         family["source"] = native
         self.catalog.update(families=[family], members=[member])
         errors, limits = validator.validate(self.catalog, {"corezilla/STD": self.root})
@@ -249,7 +251,7 @@ class InterfaceMappingTests(unittest.TestCase):
         self.changed_contract()
         def revise(node):
             if isinstance(node, dict):
-                if "revision" in node:
+                if "revision" in node and node.get("path") != "docs/examples/interfaces/downstream-scope.json":
                     node["revision"] = 3
                 for value in node.values():
                     revise(value)
@@ -278,6 +280,76 @@ class InterfaceMappingTests(unittest.TestCase):
     def test_consumer_baseline_mismatch_is_rejected(self):
         self.catalog["members"][0]["downstream"][1]["revision"] = "2"
         self.assertTrue(any("baseline mismatch" in e for e in self.errors()))
+
+    def update_scope(self, mutate):
+        path = self.root / REL / "downstream-scope.json"
+        scope = validator.read_json(path)
+        mutate(scope)
+        path.write_text(json.dumps(scope, ensure_ascii=False, indent=2) + "\n")
+        self.catalog["families"][0]["downstream_inventory"]["sha256"] = hashlib.sha256(path.read_bytes()).hexdigest()
+
+    def test_downstream_omissions_and_invented_modules_are_rejected(self):
+        member = next(m for m in self.catalog["members"] if m["name"] == "prepare")
+        original = copy.deepcopy(member["downstream"])
+        for change in ("consumer", "all", "module", "backend", "role"):
+            with self.subTest(change=change):
+                member["downstream"] = copy.deepcopy(original)
+                member["status"]["design"] = "approved"
+                if change == "consumer":
+                    member["downstream"] = [d for d in member["downstream"] if d["role"] != "consumer"]
+                elif change == "all":
+                    member["downstream"] = []
+                else:
+                    member["downstream"][1][change] = "provider" if change == "role" else "undeclared"
+                self.assertTrue(any("adoption scope mismatch" in e for e in self.errors()))
+
+    def test_missing_backend_in_scope_cannot_be_hidden_by_existing_rows(self):
+        def add_backend(scope):
+            scope["participants"].append({"id": "C-alternative", "role": "consumer", "module": "C-client", "backend": "second-backend"})
+            for row in scope["members"].values():
+                row["required"].append("C-alternative")
+        self.update_scope(add_backend)
+        self.assertTrue(any("second-backend" in e and "adoption scope mismatch" in e for e in self.errors()))
+
+    def test_not_applicable_requires_disjoint_complete_dispositions_and_reason(self):
+        member = next(m for m in self.catalog["members"] if m["name"] == "prepare")
+        def exclude(scope):
+            row = scope["members"][member["id"]]
+            row["required"].remove("C-service")
+            row["not_applicable"].append({"participant": "C-service", "reason": "Fictional selected configuration has no C client; requires scope owner review."})
+        self.update_scope(exclude)
+        member["downstream"] = [d for d in member["downstream"] if d["role"] != "consumer"]
+        self.assertEqual(self.errors(), [])
+        self.update_scope(lambda s: s["members"][member["id"]]["not_applicable"][-1].update(reason="  "))
+        self.assertTrue(any("downstream scope schema" in e for e in self.errors()))
+
+    def test_scope_cannot_silently_drop_required_disposition(self):
+        mid = "IF-EXPORT#OP01"
+        self.update_scope(lambda s: s["members"][mid]["required"].remove("C-service"))
+        self.assertTrue(any("exactly one required or not_applicable" in e for e in self.errors()))
+
+    def test_scope_missing_member_duplicate_participant_and_wrong_hash_fail(self):
+        baseline = copy.deepcopy(self.catalog)
+        path = self.root / REL / "downstream-scope.json"
+        raw = path.read_text()
+        for mutation in (
+            lambda s: s["members"].pop("IF-EXPORT#OP01"),
+            lambda s: s["participants"].append(copy.deepcopy(s["participants"][0])),
+            lambda s: s["members"]["IF-EXPORT#OP01"]["required"].append("unknown"),
+        ):
+            self.catalog = copy.deepcopy(baseline)
+            path.write_text(raw)
+            self.update_scope(mutation)
+            self.assertTrue(any("downstream_scope:" in e for e in self.errors()))
+        self.catalog = baseline
+        path.write_text(raw)
+        self.catalog["families"][0]["downstream_inventory"]["sha256"] = "0" * 64
+        self.assertTrue(any("source hash mismatch" in e for e in self.errors()))
+
+    def test_legacy_catalog_requires_explicit_scope_migration(self):
+        self.catalog["schema_version"] = "1.0.0"
+        del self.catalog["families"][0]["downstream_inventory"]
+        self.assertTrue(all(e.startswith("schema:") for e in self.errors()))
 
     def test_backend_pass_does_not_close_unimplemented_backend(self):
         m = self.catalog["members"][0]
@@ -360,6 +432,24 @@ class InterfaceMappingTests(unittest.TestCase):
                 self.assertIn("## 5. 接口设计", body)
                 self.assertIn("必填/默认/null", body)
                 self.assertIn("request/response/event 类型 ID", body)
+
+    def test_generated_companion_templates_bind_current_version_and_keep_guidance(self):
+        catalog = validator.read_json(ROOT / "templates/catalog.json")
+        for tid in ("interfaces.control", "contracts.specification", "assurance.test-specification", "design.definition"):
+            dest = self.root / tid
+            result = subprocess.run([sys.executable, str(ROOT / "scripts/new-design"), "--template", tid,
+                                     "--project", "example", "--name", "sample", "--output", str(dest),
+                                     "--owner", "Example", "--author", "Example", "--repository", "fiction/example"], capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            text = (dest / "sample.md").read_text()
+            metadata = validator.read_json(dest / "sample.metadata.json")
+            self.assertEqual(metadata["template_version"], catalog["template_versions"][tid])
+            template = ROOT / "templates" / catalog["templates"][tid]
+            self.assertEqual(metadata["template_sha256"], hashlib.sha256(template.read_bytes()).hexdigest())
+            self.assertEqual(validator.document_validator.validate_cover(dest / "sample.md", text, metadata), [])
+            if tid != "design.definition":
+                for chapter in re.split(r"(?m)^## ", text)[1:]:
+                    self.assertIn("**完成条件**", chapter)
 
     def test_cli_is_read_only_and_reports_runtime_not_run(self):
         result = subprocess.run([sys.executable, str(ROOT / "scripts/validate-interface-catalog"),

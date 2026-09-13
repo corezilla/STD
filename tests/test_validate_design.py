@@ -1098,7 +1098,7 @@ B.4 设计约束与关键假设
         readonly = {"usage-overview", "collaboration", "objects", "sequence", "state-lifecycle", "failure-recovery", "test-path"}
         effects = {"effect-flow", "cleanup-dependencies"}
         names = readonly | effects
-        self.assertEqual(len(blocks), 12)
+        self.assertEqual(len(blocks), 13)  # twelve existing cases plus a removable native-case entry
         seen = set()
         for block in blocks:
             self.assertNotIn("<details>", block)

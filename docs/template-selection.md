@@ -20,7 +20,8 @@
 | 某项技术、平台或竞品应如何基于证据分析 | `evaluation.technical-analysis` |
 | 整个产品解决什么问题、有哪些功能/页面、整体数据如何流动和如何分解实现 | `design.system` |
 | 一个行为如何跨多个组件端到端运行、失败和恢复 | `design.system-mechanism` |
-| 一个子系统、模块或组件具体改哪些代码以及如何实现和测试 | `design.definition` |
+| 子系统整体怎样实现：总体方案、软件架构、运行组织与模块协作 | `design.subsystem` |
+| 一个模块或组件具体如何实现和测试 | `design.definition` |
 | 板卡/硬件如何满足电气、机械、热和制造约束 | `design.hardware` |
 | FPGA/RTL 如何实现数据面与控制面 | `design.fpga` |
 | 数据对象、字段、单位和编码如何定义 | `design.data-dictionary` |
@@ -54,13 +55,29 @@
 按设计对象和责任范围选择模板，`design_level` 记录该对象在层级中的位置：
 
 ```text
-system → subsystem → module → component → implementation-unit
+system → subsystem → [subsystem → …] → module → component → implementation-unit
 ```
+
+这是可递归的对象分解，不是强制固定深度；系统或子系统也可直接包含模块。
+文档类型（如 `design.subsystem`）、对象 ID、对象类型及设计归属分别记录。所有深度的子系统
+仍用 `design_level=subsystem`，不得发明 `subsystem-2` 枚举或将二级子系统改写为 module。
+`parent_document_id` 指向同一项目内描述直属父对象的唯一设计 Document ID，不表示前置依赖、
+目录或模板继承。正文记录本对象 ID、类型及父对象 ID，并核对与 metadata 父文档的对象一致。
+父链以 `design_level=system` 的根设计为基准：其直属子系统为一级；每经过一条子系统父子边加一级。
+一级、二级不是文件路径深度，也不是正文“第 0/1 层观察粒度”；缺父或成环时深度未知，不能默认一级。
+
+父设计确定直属组成、跨直属边界的协作及共同保证。下级子系统决定自身内部模块、线程和算法；
+必要跨层约束单列来源、目标对象、理由与自由度，不能用一个概要图无意冻结下级内部结构。
+新稿用 `new-design --parent-document-id <父Document-ID>` 设置父链，并用
+`validate-design <完整设计输入目录> --check-design-hierarchy --json` 检查；输入需包含所有父设计。
+该显式检查核对父引用、项目、环及子系统类型并报告深度，不证明正文对象归属、业务设计或验证结果正确。
+不加开关保持旧文档校验行为，不要求已采用版本的项目自动补链或升级。
 
 | 设计对象/要交付的决定 | 首选模板 | 内容深度与上层引用 |
 |---|---|---|
 | 完整软件系统、设备或软硬件一体系统 | `design.system`，通常 `design_level=system` | 自包含系统概览、关键分工、端到端流程、实现/部署及验证；字段和单元算法引用唯一详细规格 |
-| 系统中的一个 subsystem/module/component/implementation-unit | 默认 `design.definition`，硬件/FPGA 见下行专项模板；填写对应 `design_level` | 继承固定的上级约束与设计自由度，解释本单元问题/能力、结构、流程、失败及实现验证；系统背景只作必要摘要和引用 |
+| 系统或子系统中的一个 subsystem | `design.subsystem`，各级均为 `design_level=subsystem` | 完成直属范围的概要设计：总体方案、组成概要、跨边界运行与业务设计；下级子系统内部组织由下级决定 |
+| 一个 module/component/implementation-unit | 默认 `design.definition`，硬件/FPGA 见下行专项模板；填写对应 `design_level` | 在分配边界内完成本单元实现与验证，系统背景只作必要摘要和引用 |
 | 跨多个 Owner 的行为与恢复闭环 | `design.system-mechanism` | 参与方责任、状态/协议、正常与失败流程；参与单元的实现由各自定义文档负责 |
 | 板卡/硬件或 FPGA 单元设计 | `design.hardware` / `design.fpga` | 在专项模板 §1.1 承接固定上级约束与自由度，解释本地落实，并在 §12 区分本地与系统组合验证 |
 | 数据字段规格 | `design.data-dictionary` | 保存字段范围的详细 authority，引用所属系统/单元及契约 |
@@ -81,6 +98,9 @@ Document ID，并保留信息项到承载位置的映射。不得只写 N/A 或�
 只有确实需要独立描述跨组件机制、单一实现单元、硬件、FPGA 或数据字典时，才选择相应专项
 模板。一个文档可以引用其他领域设计，但每项责任只能有一个 authority。
 硬件、FPGA 单元使用专项模板即可完成约束承接，不必再创建 `design.definition` 文档重复同一设计。
+新建通用子系统设计优先使用 `design.subsystem`。既有采用 `design.definition` 的子系统文档继续有效，
+不因新增模板主动迁移。若设计对象本身就是板卡或 FPGA 程序，直接采用专项模板，不重复编写子系统文档。
+跨软硬件子系统可由 `design.subsystem` 统筹分工，板卡/FPGA 专项只承接各自的实现设计。
 
 ## 3. 当前项目映射
 
@@ -110,6 +130,8 @@ Planned 路径不是已存在链接或实现输入，成文后才绑定真实版
 - `design.system-mechanism` 每份细化一个跨子系统机制，唯一维护其详细状态转换、参与方协议、
   完整正常/失败步骤及恢复规则；公共字段与操作必须已完整定义，已有机器契约保持唯一来源。
   系统 §10 统一呈现或精确关联；没有机器源时先用受控设计明确共同定义，不伪造引用。
+- `design.subsystem` 在 §2 承接功能与约束、§3–5 完成总体/架构/运行概要、§13/§15 组织验证与下游交接；它引用公共机制，
+  解释本子系统承担的参与方行为，不另立协议 authority。
 - `design.definition` 接收系统/父单元及机制的固定输入，记录继承约束、允许自行选择的范围、
   本单元落实与验证；不能重新决定或静默放宽系统政策。
 

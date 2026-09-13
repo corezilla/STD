@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="470" viewBox="0 0 1080 470" role="img" aria-labelledby="t d">
+ <title id="t">递归子系统组成</title><desc id="d">SYS-EX 的一级子系统 SUB-P 包含二级子系统 SUB-C 和直属模块 MOD-D，不展开 SUB-C 内部。</desc>
+ <style>text{font-family:system-ui,'PingFang SC',sans-serif;fill:#20344b}.note{font-size:18px;fill:#52697d}.label{font-size:23px;font-weight:600}</style>
+ <rect width="1080" height="470" fill="white"/>
+ <text x="35" y="43" class="label">父子组成 · EX-RECURSIVE/v1</text>
+ <text x="35" y="76" class="note">Target / Planned / NOT_RUN · 虚构教学 · 上级系统 SYS-EX</text>
+ <g data-object-id="SUB-P" data-object-type="subsystem" data-parent-id="SYS-EX">
+ <rect x="35" y="104" width="1010" height="282" rx="18" fill="#f0f5fb" stroke="#94afca" stroke-width="2"/>
+ <text x="60" y="146" class="label">SUB-P · 软件子系统（一级）</text>
+ <g data-object-id="SUB-C" data-object-type="subsystem" data-parent-id="SUB-P">
+ <rect x="68" y="182" width="444" height="164" rx="13" fill="#d4e5f7" stroke="#7299c3" stroke-width="2"/>
+ <text x="93" y="225" class="label">SUB-C · 处理子系统（二级）</text>
+ <text x="93" y="265" class="note">对象类型：subsystem · 父对象：SUB-P</text>
+ <text x="93" y="305" class="note">内部组织由下级设计展开</text></g>
+ <g data-object-id="MOD-D" data-object-type="module" data-parent-id="SUB-P">
+ <rect x="548" y="182" width="462" height="164" rx="13" fill="#e0e7ed" stroke="#9aafbf" stroke-width="2"/>
+ <text x="573" y="225" class="label">MOD-D · 配置模块</text>
+ <text x="573" y="265" class="note">对象类型：module · 父对象：SUB-P</text>
+ <text x="573" y="305" class="note">父设计的直属模块</text></g></g>
+ <text x="35" y="430" class="note">仅表达包含关系；对象类型不决定独立进程，也不按目录深度判定层级。</text>
+</svg>

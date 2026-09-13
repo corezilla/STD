@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "2.0.0",
   "repository": "corezilla/STD",
   "families": [
     {
@@ -7,10 +7,12 @@
       "name": "暂存导出",
       "purpose": "构造一次私有导出，显式选择交付/丢弃并安全归还槽位",
       "providers": [
-        "A"
+        "A",
+        "W"
       ],
       "consumers": [
-        "C"
+        "C",
+        "A"
       ],
       "source": {
         "repository": "corezilla/STD",
@@ -98,6 +100,26 @@
             "semantic_scope": "structure"
           }
         ]
+      },
+      "downstream_inventory": {
+        "repository": "corezilla/STD",
+        "path": "docs/examples/interfaces/downstream-scope.json",
+        "selector": {
+          "kind": "json_pointer",
+          "value": ""
+        },
+        "version": "EX-EXPORT-ADOPTION/v1",
+        "revision": 1,
+        "version_selector": {
+          "kind": "json_pointer",
+          "value": "/version"
+        },
+        "revision_selector": {
+          "kind": "json_pointer",
+          "value": "/revision"
+        },
+        "sha256": "a76af59c653895ec0abe9ce58bb1ad936c1f7cc11d3010b46a3b83b7473dbc14",
+        "semantic_scope": "structure"
       }
     }
   ],
@@ -169,7 +191,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -197,7 +219,63 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        },
+        {
+          "role": "provider",
+          "module": "W-worker",
+          "backend": "real-worker-receipt",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V3",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T3",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.1.0-draft.1",
+            "anchor": "downstream"
+          },
+          "runs": []
+        },
+        {
+          "role": "consumer",
+          "module": "A-control",
+          "backend": "real-worker-receipt",
+          "version": "EX-EXPORT-01/v1",
+          "revision": "3",
+          "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
+          "implementation": "not_implemented",
+          "location": null,
+          "symbol": null,
+          "verification": "not_run",
+          "design_items": [
+            "EX-V3",
+            "EX-V6"
+          ],
+          "cases": [
+            "EX-T3",
+            "EX-T6"
+          ],
+          "verification_ref": {
+            "repository": "corezilla/STD",
+            "path": "docs/examples/interfaces/README.md",
+            "document_id": "EX-EXPORT-MAPPING",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -278,7 +356,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -306,7 +384,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -387,7 +465,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -415,7 +493,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -496,7 +574,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -524,7 +602,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -605,7 +683,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -633,7 +711,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -714,7 +792,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -742,7 +820,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -823,7 +901,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -851,7 +929,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -932,7 +1010,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -960,7 +1038,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -1041,7 +1119,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -1069,7 +1147,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -1150,7 +1228,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -1178,7 +1256,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -1259,7 +1337,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -1287,7 +1365,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -1368,7 +1446,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -1396,7 +1474,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -1456,8 +1534,8 @@
       "downstream": [
         {
           "role": "provider",
-          "module": "A-control",
-          "backend": "real-unix-socket",
+          "module": "W-worker",
+          "backend": "real-worker-receipt",
           "version": "EX-EXPORT-01/v1",
           "revision": "3",
           "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
@@ -1466,26 +1544,26 @@
           "symbol": null,
           "verification": "not_run",
           "design_items": [
-            "EX-V1",
+            "EX-V3",
             "EX-V6"
           ],
           "cases": [
-            "EX-T1",
+            "EX-T3",
             "EX-T6"
           ],
           "verification_ref": {
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
         },
         {
           "role": "consumer",
-          "module": "C-client",
-          "backend": "real-unix-socket",
+          "module": "A-control",
+          "backend": "real-worker-receipt",
           "version": "EX-EXPORT-01/v1",
           "revision": "3",
           "source_sha256": "567a5dd09ddc370772601452701269e43687e57c5750e201c86d25eb2eeb5ed6",
@@ -1494,18 +1572,18 @@
           "symbol": null,
           "verification": "not_run",
           "design_items": [
-            "EX-V1",
+            "EX-V3",
             "EX-V6"
           ],
           "cases": [
-            "EX-T1",
+            "EX-T3",
             "EX-T6"
           ],
           "verification_ref": {
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -1611,7 +1689,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -1639,7 +1717,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -1745,7 +1823,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -1773,7 +1851,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -1879,7 +1957,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -1907,7 +1985,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2013,7 +2091,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2041,7 +2119,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2147,7 +2225,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2175,7 +2253,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2281,7 +2359,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2309,7 +2387,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2415,7 +2493,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2443,7 +2521,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2524,7 +2602,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2552,7 +2630,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2633,7 +2711,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2661,7 +2739,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2742,7 +2820,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2770,7 +2848,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2851,7 +2929,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2879,7 +2957,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2960,7 +3038,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -2988,7 +3066,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -3069,7 +3147,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -3097,7 +3175,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -3178,7 +3256,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -3206,7 +3284,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -3287,7 +3365,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -3315,7 +3393,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -3396,7 +3474,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -3424,7 +3502,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -3505,7 +3583,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -3533,7 +3611,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -3614,7 +3692,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -3642,7 +3720,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -3723,7 +3801,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []
@@ -3751,7 +3829,7 @@
             "repository": "corezilla/STD",
             "path": "docs/examples/interfaces/README.md",
             "document_id": "EX-EXPORT-MAPPING",
-            "version": "3.0.1-draft.1",
+            "version": "3.1.0-draft.1",
             "anchor": "downstream"
           },
           "runs": []

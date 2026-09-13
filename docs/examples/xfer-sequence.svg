@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="960" viewBox="0 0 1440 960" role="img" aria-labelledby="title desc">
+<title id="title">EX-XFER：Host、驱动与 FPGA 的逻辑交接</title>
+<desc id="desc">先发布输入和描述符，再通知设备。接受不是完成；匹配完成并确认结果可见后才允许读取及释放。停止与排空另见正文 X-R3。</desc>
+<defs>
+<marker id="request-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2563b4"/></marker>
+<marker id="response-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/></marker>
+</defs>
+<style>
+text { font-family:"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif; fill:#20334e; }
+.title { font-size:34px; font-weight:650; } .meta { font-size:21px; fill:#62738a; }
+.label { font-size:26px; font-weight:550; } .small { font-size:23px; }
+.panel { fill:#edf4fc; stroke:#9bb7d9; stroke-width:2; }
+.request { fill:none; stroke:#2563b4; stroke-width:3; marker-end:url(#request-arrow); }
+.response { fill:none; stroke:#64748b; stroke-width:2.5; stroke-dasharray:8 6; marker-end:url(#response-arrow); }
+.life { stroke:#b4bfcd; stroke-width:2; stroke-dasharray:5 7; }
+</style>
+<rect width="1440" height="960" rx="20" fill="#fff"/>
+<text x="54" y="57" class="title">单块传输：接受 ≠ 完成 ≠ 释放</text>
+<text x="54" y="95" class="meta">EX-XFER/v1 · Target / Proposed / 硬件 NOT_RUN · 逻辑时序，非总线时序</text>
+<rect class="panel" x="85" y="128" width="270" height="68" rx="12"/>
+<rect class="panel" x="570" y="128" width="270" height="68" rx="12"/>
+<rect class="panel" x="1070" y="128" width="270" height="68" rx="12"/>
+<text x="220" y="171" text-anchor="middle" class="label">Host 应用</text>
+<text x="705" y="171" text-anchor="middle" class="label">驱动</text>
+<text x="1205" y="171" text-anchor="middle" class="label">FPGA 程序</text>
+<path class="life" d="M220 200V850 M705 200V850 M1205 200V850"/>
+<text x="462" y="238" text-anchor="middle" class="small">1. submit(ID, input)</text>
+<path class="request" d="M220 251H705"/>
+<rect x="501" y="268" width="408" height="55" rx="9" fill="#f0f3f6"/>
+<text x="705" y="303" text-anchor="middle" class="small">2. 校验、登记、发布数据与描述符</text>
+<text x="955" y="351" text-anchor="middle" class="small">3. 通知已发布描述符 · X-R1</text>
+<path class="request" d="M705 364H1205"/>
+<text x="462" y="407" text-anchor="middle" class="small">4. ACCEPTED（结果尚不可读）</text>
+<path class="response" d="M705 420H220"/>
+<rect x="1008" y="437" width="394" height="55" rx="9" fill="#f0f3f6"/>
+<text x="1205" y="472" text-anchor="middle" class="small">5. 读输入、变换、写输出</text>
+<text x="955" y="523" text-anchor="middle" class="small">6. 完成记录（中断仅为提示）</text>
+<path class="response" d="M1205 536H705"/>
+<rect x="501" y="553" width="408" height="55" rx="9" fill="#f0f3f6"/>
+<text x="705" y="588" text-anchor="middle" class="small">7. 校验身份及结果可见性 · X-R2</text>
+<text x="462" y="643" text-anchor="middle" class="small">8. query(handle)</text>
+<path class="request" d="M220 656H705"/>
+<text x="462" y="697" text-anchor="middle" class="small">COMPLETED / output</text>
+<path class="response" d="M705 710H220"/>
+<text x="462" y="754" text-anchor="middle" class="small">9. release(handle)</text>
+<path class="request" d="M220 767H705"/>
+<text x="462" y="808" text-anchor="middle" class="small">RELEASED</text>
+<path class="response" d="M705 821H220"/>
+<g id="legend">
+<path class="request" d="M65 884H135"/><text x="155" y="892" class="meta">调用 / 通知</text>
+<path class="response" d="M350 884H420"/><text x="440" y="892" class="meta">响应 / 完成</text>
+<text x="730" y="892" class="meta">灰色块：本地处理；不表示新增运行组件</text>
+<text x="65" y="934" class="meta">失败、取消与复位另按 X-R3 处理；仅收到停止 ACK 不允许释放，须同时证明平台旧访问已排空。</text>
+</g>
+</svg>
