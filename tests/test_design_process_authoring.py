@@ -13,6 +13,17 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class DesignProcessAuthoringTests(unittest.TestCase):
+    def test_author_instructions_are_separate_from_design_content(self):
+        norm = (ROOT / "docs/design-writing-guide.md").read_text()
+        for term in ("正文与编写过程隔离", "评审阻断项", "不能按关键词",
+                     "本图只保留一位较小的用户", "根据用户要求，把组件移到右侧",
+                     "本轮新增三张图，符合模板要求", "为保持简洁，省略这些模块",
+                     "本图仅展示控制面", "“本图”不是禁词"):
+            self.assertIn(term, norm)
+        for name in ("docs/ai-authoring-guide.md", "docs/ai-guides/software-system.md",
+                     "templates/design/software-system-design.md"):
+            self.assertIn("正文与编写过程隔离", (ROOT / name).read_text())
+
     DIAGRAMS = {
         "2.1": "software-application-context",
         "7.1": "software-startup-flow",

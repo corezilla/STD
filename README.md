@@ -81,7 +81,7 @@ manifest。完整接入规则见 [`docs/adoption.md`](docs/adoption.md)。
 总体系统设计的概览、适用性、状态/证据、图和信息安全写法及正反例见
 [`docs/architecture-design-authoring-guide.md`](docs/architecture-design-authoring-guide.md)。
 AI 编写入口采用“通用方法 + 模板类型专项”：先读
-[`docs/ai-authoring-guide.md`](docs/ai-authoring-guide.md)（`0.2.0-draft.6`），
+[`docs/ai-authoring-guide.md`](docs/ai-authoring-guide.md)（`0.2.0-draft.7`），
 再按其中的映射选择主专项和项目已采用模板，不需要通读全部指南。
 14 类专项覆盖当前 47 个模板，同类模板共享方法，计划、报告和决定仍保留不同完成边界；
 精确导航见 [`docs/ai-authoring-guides.json`](docs/ai-authoring-guides.json)。
@@ -132,7 +132,7 @@ AI 指南按能力贯通章节、先复用并核对现有契约，再交接双�
 诊断在 §11，替代依赖与环回在 §10.4。系统约束由 §3.2 分配、§13.6 验证、§17.2 承接为
 下级设计与验收任务。机制未定时先预设计，不能只登记待定或以局部测试关闭系统目标。
 
-新增[软件系统设计说明书模板](templates/design/software-system-design.md) `design.software-system`，独立版本 `0.3.0`（待发布）。
+新增[软件系统设计说明书模板](templates/design/software-system-design.md) `design.software-system`，独立版本 `0.3.1`（待发布）。
 现有章节内新增应用环境、启动、业务、配置、停止和数据流六张 SVG/PNG 图例；标题目录不变。
 每个重要流程必须有图、正文和异常分支；先用一节真实方案检验写作质量，再扩展全篇。
 方法及完整虚构样稿见[软件 AI 指南](docs/ai-guides/software-system.md)和[启动与恢复示例](docs/examples/software-startup-design-example.md)。
