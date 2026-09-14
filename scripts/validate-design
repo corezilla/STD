@@ -251,6 +251,11 @@ def validate_metadata(path: Path, schema: dict, catalog: dict, project_root: Pat
         document = None
 
     template_id = data.get("template_id")
+    version_major = str(data.get("template_version", "")).split(".")[0]
+    if template_id == "design.definition" and version_major.isdigit() and int(version_major) >= 2:
+        if data.get("design_level") != "module" or data.get("domain") != ["software"]:
+            errors.append(issue("metadata.module-scope", path,
+                                "design.definition 2.x 及以后要求 module 层级与 software 领域"))
     relative_template = catalog["templates"].get(template_id)
     expected_template_version = catalog.get("template_versions", {}).get(template_id)
     if relative_template is None:

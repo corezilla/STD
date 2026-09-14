@@ -22,7 +22,7 @@
 | 软件产品/软件领域的整体方案、子系统分工和运行部署是什么 | `design.software-system` |
 | 一个行为如何跨多个组件端到端运行、失败和恢复 | `design.system-mechanism` |
 | 软件子系统整体怎样实现：总体方案、软件架构、运行组织与模块协作 | `design.subsystem` |
-| 一个模块或组件具体如何实现和测试 | `design.definition` |
+| 一个软件模块具体如何实现和测试 | `design.definition` |
 | 板卡/硬件如何满足电气、机械、热和制造约束 | `design.hardware` |
 | FPGA/RTL 如何实现数据面与控制面 | `design.fpga` |
 | 数据对象、字段、单位和编码如何定义 | `design.data-dictionary` |

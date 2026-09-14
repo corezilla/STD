@@ -14,6 +14,12 @@ FPGA 与板卡图的 PNG 位于[共享资产目录](../../docs/assets/system-des
 
 ## 软件分层图
 
+新建软件架构优先使用[英文组件分层 SVG](software-system-layered-example.svg)及其[PNG 展示](software-system-layered-example.png)。
+EX-INSPECT/v1 为虚构 Target / Planned / NOT_RUN：左侧 UI/业务/驱动/按需系统层，框内 WebUI、CLI 等正式英文组件名，
+只表达组成。分层须来自真实架构，不能把“直属模块、内部子系统、既有支撑”当成上下层，也不能机械保留全部示例组件。
+绘制步骤与反例见[软件系统 AI 指南 §4](../../docs/ai-guides/software-system.md#4-图例与写法示例)。
+下文 EX-SW-01 的旧 SVG 保留为历史布局参考，其中文职责标签不作为新架构图的组件命名示范。
+
 软件系统模板 0.3.0 在原章节内补充六幅 EX-SEARCH/v1 连续图例；参考总体模板的白底蓝灰样式、图注和图后正文，全部为 Target / Planned / NOT_RUN。应用场景不是内部组成，数据视图不是部署拓扑。原 EX-SOFTWARE-LAYERS 与 EX-SW-01 图仍是独立案例，不能合并成 EX-SEARCH 的组成。
 
 | 软件模板位置 | SVG 源 / PNG 展示 | 表达目的 |

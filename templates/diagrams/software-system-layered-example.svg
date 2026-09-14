@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="840" viewBox="0 0 1280 840" role="img" aria-labelledby="title desc">
+  <title id="title">软件架构示例：UI、业务、驱动与系统分层</title>
+  <desc id="desc">虚构组成示例。UI 层有 WebUI、CLI；业务层有 InspectionService、ImageAnalyzer；驱动层有 CameraDriver、AcquisitionDriver；按需系统层有 Bootloader、BSP。仅表示逻辑分层与组成，不表示调用关系或独立进程。</desc>
+  <style>
+    text {font-family:'PingFang SC','Helvetica Neue',Arial,sans-serif;fill:#20364e}
+    .title {font-size:32px;font-weight:600}
+    .layer {font-size:25px;font-weight:600;text-anchor:end}
+    .name {font-size:27px;font-weight:600;text-anchor:middle}
+    .note {font-size:17px;fill:#65788b}
+    .panel {stroke-width:1.5}
+    .component {stroke-width:1.3}
+  </style>
+  <rect width="1280" height="840" fill="#ffffff"/>
+  <text x="210" y="61" class="title">软件架构示例</text>
+  <text x="1218" y="59" class="note" text-anchor="end">EX-INSPECT/v1 · Target</text>
+
+  <g id="ui-layer">
+    <text x="169" y="183" class="layer">UI 层</text>
+    <rect x="210" y="106" width="1010" height="135" rx="14" fill="#f0f6fd" stroke="#bccfe5" class="panel"/>
+    <rect x="234" y="130" width="469" height="87" rx="10" fill="#dceafb" stroke="#9dbbdb" class="component"/>
+    <rect x="727" y="130" width="469" height="87" rx="10" fill="#dceafb" stroke="#9dbbdb" class="component"/>
+    <text x="468.5" y="184" class="name">WebUI</text>
+    <text x="961.5" y="184" class="name">CLI</text>
+  </g>
+
+  <g id="business-layer">
+    <text x="169" y="348" class="layer">业务层</text>
+    <rect x="210" y="271" width="1010" height="135" rx="14" fill="#eef5fa" stroke="#b6ccdc" class="panel"/>
+    <rect x="234" y="295" width="469" height="87" rx="10" fill="#c8deef" stroke="#8aafcb" class="component"/>
+    <rect x="727" y="295" width="469" height="87" rx="10" fill="#c8deef" stroke="#8aafcb" class="component"/>
+    <text x="468.5" y="349" class="name">InspectionService</text>
+    <text x="961.5" y="349" class="name">ImageAnalyzer</text>
+  </g>
+
+  <g id="driver-layer">
+    <text x="169" y="513" class="layer">驱动层</text>
+    <rect x="210" y="436" width="1010" height="135" rx="14" fill="#edf3f9" stroke="#b6c6d7" class="panel"/>
+    <rect x="234" y="460" width="469" height="87" rx="10" fill="#c5d6e8" stroke="#8aa5c1" class="component"/>
+    <rect x="727" y="460" width="469" height="87" rx="10" fill="#c5d6e8" stroke="#8aa5c1" class="component"/>
+    <text x="468.5" y="514" class="name">CameraDriver</text>
+    <text x="961.5" y="514" class="name">AcquisitionDriver</text>
+  </g>
+
+  <g id="system-layer">
+    <text x="169" y="672" class="layer">系统层</text>
+    <text x="169" y="700" class="note" text-anchor="end">按需定制</text>
+    <rect x="210" y="601" width="1010" height="135" rx="14" fill="#f3f5f7" stroke="#c1cbd4" class="panel"/>
+    <rect x="234" y="625" width="469" height="87" rx="10" fill="#dce2e8" stroke="#a4b2c0" class="component"/>
+    <rect x="727" y="625" width="469" height="87" rx="10" fill="#dce2e8" stroke="#a4b2c0" class="component"/>
+    <text x="468.5" y="679" class="name">Bootloader</text>
+    <text x="961.5" y="679" class="name">BSP</text>
+  </g>
+  <text x="210" y="788" class="note">仅表示分层与组成；组件名为虚构示例，不表示独立进程或调用顺序。</text>
+  <text x="210" y="816" class="note">系统层仅在项目承担相应定制时保留，普通操作系统不作为自研组件展开。</text>
+</svg>

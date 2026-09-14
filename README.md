@@ -86,7 +86,7 @@ AI 编写入口采用“通用方法 + 模板类型专项”：先读
 14 类专项覆盖当前 47 个模板，同类模板共享方法，计划、报告和决定仍保留不同完成边界；
 精确导航见 [`docs/ai-authoring-guides.json`](docs/ai-authoring-guides.json)。
 从 HIFM v0.3 迁入的系统方法保留为
-[`docs/ai-system-design-authoring-guide.md`](docs/ai-system-design-authoring-guide.md)（`0.7.0-draft.2`）；
+[`docs/ai-system-design-authoring-guide.md`](docs/ai-system-design-authoring-guide.md)（`0.7.0-draft.3`）；
 机制方法已独立到 [`docs/ai-guides/system-mechanism.md`](docs/ai-guides/system-mechanism.md)。
 这些是方法草案，待实际任务验证，不是新模板，不改变项目已采用的 STD/模板版本，
 也不自动授权提交、发布或运行。公共规则只在通用指南维护，专项解释本类型的实际设计/取证方法。
@@ -132,7 +132,8 @@ AI 指南按能力贯通章节、先复用并核对现有契约，再交接双�
 诊断在 §11，替代依赖与环回在 §10.4。系统约束由 §3.2 分配、§13.6 验证、§17.2 承接为
 下级设计与验收任务。机制未定时先预设计，不能只登记待定或以局部测试关闭系统目标。
 
-新增[软件系统设计说明书模板](templates/design/software-system-design.md) `design.software-system`，独立版本 `0.3.1`（待发布）。
+新增[软件系统设计说明书模板](templates/design/software-system-design.md) `design.software-system`，独立版本 `0.3.2`（待发布）。
+软件 AI 指南补充架构分层、正式英文组件命名、图后说明与反例检查，并提供 UI/业务/驱动/按需系统层 SVG 图例；不按对象类型或历史属性分层。
 现有章节内新增应用环境、启动、业务、配置、停止和数据流六张 SVG/PNG 图例；标题目录不变。
 每个重要流程必须有图、正文和异常分支；先用一节真实方案检验写作质量，再扩展全篇。
 方法及完整虚构样稿见[软件 AI 指南](docs/ai-guides/software-system.md)和[启动与恢复示例](docs/examples/software-startup-design-example.md)。
@@ -153,7 +154,9 @@ AI 指南按能力贯通章节、先复用并核对现有契约，再交接双�
 默认生成到 `docs/30_subsystem_design`，共用[软件子系统与模块 AI 指南](docs/ai-guides/unit-design.md)。
 旧子系统文档不自动迁移，板卡/FPGA 对象直接采用专项模板。软件系统设计使用独立模板，不用软件子系统模板代替。
 
-`design.definition` 为待发布 `1.3.0`，明确易失状态也需生命周期设计；`design.hardware` 与 `design.fpga` 增加上级约束承接、
+`design.definition` 为待发布 `2.0.0`《软件模块设计说明书》，保留 15 个主章，补齐逐章指导、重要过程图与连续教学样稿；
+配套子系统与模块 AI 指南为 `0.9.0-draft.2`，增加模块试写流程、历史问题复发检查和[异步模块连续案例](docs/examples/module-async-export-example.md)。新版模块生成限制软件模块层级，并保留内容寻址的教学参考；构建装配、生命周期预算及四类恢复动作分别核对。旧采用实例不自动升级。
+`design.hardware` 与 `design.fpga` 增加上级约束承接、
 本地落实和系统组合验收，当前为待发布 `1.2.0`，不要求另建通用单元文档。
 `design.system-mechanism`（总体系统机制设计）为待发布 `2.3.0`，数据与接口分章，16 个主章保留既有约束和段落式指导，
 补齐拓扑/身份、资源寿命、维护命令、测试控制/隔离与能力级双方承接；采用短封面和文末控制记录。

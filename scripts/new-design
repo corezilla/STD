@@ -62,7 +62,7 @@ def main() -> int:
     parser.add_argument("--migration-map-ref")
     parser.add_argument("--reviewed-commit")
     parser.add_argument("--parent-document-id", help="直属父设计 Document ID；不表示模板类型、依赖或目录层数")
-    parser.add_argument("--level", help="设计层级；design.system/design.software-system 默认 system，design.subsystem 默认 subsystem，其他模板默认 cross-level")
+    parser.add_argument("--level", help="设计层级；design.system/design.software-system 默认 system，design.subsystem 默认 subsystem，design.definition 默认 module，其他模板默认 cross-level")
     parser.add_argument("--domain", action="append", default=[])
     args = parser.parse_args()
     if args.parent_document_id is not None:
@@ -71,7 +71,9 @@ def main() -> int:
         if args.parent_document_id == args.name:
             parser.error("父文档不能是文档自身")
     if args.level is None:
-        args.level = {"design.system": "system", "design.software-system": "system", "design.subsystem": "subsystem"}.get(args.template, "cross-level")
+        args.level = {"design.system": "system", "design.software-system": "system", "design.subsystem": "subsystem", "design.definition": "module"}.get(args.template, "cross-level")
+    if args.template == "design.definition" and not args.domain:
+        args.domain = ["software"]
     if args.template == "design.subsystem" and args.level != "subsystem":
         parser.error("design.subsystem 必须使用 subsystem 层级；模块使用 design.definition 或领域专项模板")
 
@@ -101,6 +103,9 @@ def main() -> int:
     template_version = catalog.get("template_versions", {}).get(args.template)
     if template_version is None:
         parser.error(f"template ID 缺少独立版本: {args.template}")
+    if args.template == "design.definition" and int(template_version.split(".")[0]) >= 2:
+        if args.level != "module" or args.domain != ["software"]:
+            parser.error("design.definition 2.x 及以后仅用于 level=module、domain=software")
 
     project_root = args.project_root.resolve() if args.project_root else None
     if args.output:
@@ -143,6 +148,15 @@ def main() -> int:
         "supersedes": args.supersedes, "date": last_modified_at,
     }
     content = template_bytes.decode()
+    # Preserve the exact adopted teaching source, not a mutable main URL. The
+    # .md.txt suffix distinguishes template reference bytes from design instances.
+    reference_path = None
+    if args.template == "design.definition" and int(template_version.split(".")[0]) >= 2:
+        digest = hashlib.sha256(template_bytes).hexdigest()
+        reference_path = output / ".std-template-references" / digest / "design-definition.md.txt"
+        reference_link = f"[已采用模板 {template_version} 的完整教学源（SHA-256 {digest}）](.std-template-references/{digest}/design-definition.md.txt)"
+        content = content.replace("文末 EX-MODULE/v1", reference_link + "中的 EX-MODULE/v1")
+        content = content.replace("文末类型仅为教学投影", reference_link + "中的类型仅为教学投影")
     # Visible teaching samples belong to the STD template, not the new project's
     # design or asset tree. Keep its writing slots/help, but omit marked samples.
     example_begin = "<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->"
@@ -164,6 +178,11 @@ def main() -> int:
     output.mkdir(parents=True, exist_ok=True)
     if document_path.exists() or metadata_path.exists():
         parser.error("目标文档或 metadata 已存在；生成器不会覆盖")
+    if reference_path is not None:
+        if reference_path.exists() and reference_path.read_bytes() != template_bytes:
+            parser.error("已采用模板参考快照与摘要不符；拒绝覆盖")
+        reference_path.parent.mkdir(parents=True, exist_ok=True)
+        reference_path.write_bytes(template_bytes)
 
     document_path.write_text(content)
     metadata = {

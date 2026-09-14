@@ -106,7 +106,7 @@ class SoftwareSystemTemplateTests(unittest.TestCase):
             md = (base / "example-software.md").read_text()
             self.assertEqual(meta["template_id"], "design.software-system")
             self.assertEqual(meta["document_type"], "design.software-system")
-            self.assertEqual(meta["template_version"], "0.3.1")
+            self.assertEqual(meta["template_version"], "0.3.2")
             self.assertEqual(meta["template_sha256"], hashlib.sha256(TEMPLATE.read_bytes()).hexdigest())
             self.assertEqual(meta["design_level"], "system")
             self.assertEqual(meta["domain"], ["software"])
@@ -163,13 +163,41 @@ class SoftwareSystemTemplateTests(unittest.TestCase):
     def test_catalog_navigation_and_pending_markers_are_updated(self):
         catalog = json.loads((ROOT / "templates/catalog.json").read_text())
         self.assertEqual(catalog["templates"]["design.software-system"], "design/software-system-design.md")
-        self.assertEqual(catalog["template_versions"]["design.software-system"], "0.3.1")
+        self.assertEqual(catalog["template_versions"]["design.software-system"], "0.3.2")
         for name in ("README.md", "docs/template-selection.md", "docs/ai-system-design-authoring-guide.md",
                      "docs/ai-guides/unit-design.md"):
             text = (ROOT / name).read_text()
             self.assertIn("design.software-system", text)
             self.assertNotIn("软件系统专用模板待建立", text)
             self.assertNotIn("软件系统专用模板尚待建立", text)
+
+
+    def test_architecture_method_separates_layers_objects_and_names(self):
+        guide = (ROOT / "docs/ai-guides/software-system.md").read_text()
+        for term in ("先形成架构，再选择样式", "先定视图和边界", "先识别真实组成",
+                     "用一致的架构依据分层", "框内写具体英文组件名", "图后说明，再做语义复审",
+                     "直属模块", "内部子系统", "都不能作为上下架构层", "不强制四层",
+                     "WebUI", "CLI", "不以英文字符或色块数量自动判合格"):
+            self.assertIn(term, guide)
+        chapter = TEMPLATE.read_text().split("### 3.1 软件系统架构", 1)[1].split("### 3.2", 1)[0]
+        self.assertIn("软件系统 AI 指南 §4", chapter)
+        self.assertIn("不能用“直属模块、内部子系统、既有公共支撑”", chapter)
+        self.assertLess(chapter.index("software-system-layered-example.png"),
+                        chapter.index("software-design-composition.svg"))
+        self.assertIn("不是完整软件架构范例", chapter)
+
+    def test_new_layer_sample_has_actual_english_component_names(self):
+        import xml.etree.ElementTree as ET
+        svg = ROOT / "templates/diagrams/software-system-layered-example.svg"
+        tree = ET.parse(svg)
+        ns = {"s": "http://www.w3.org/2000/svg"}
+        names = ["".join(node.itertext()) for node in tree.findall('.//s:text[@class="name"]', ns)]
+        self.assertEqual(names, ["WebUI", "CLI", "InspectionService", "ImageAnalyzer",
+                                 "CameraDriver", "AcquisitionDriver", "Bootloader", "BSP"])
+        self.assertTrue(all(name.isascii() for name in names))
+        self.assertIn("按需定制", svg.read_text())
+        self.assertIn("普通操作系统不作为自研组件展开", svg.read_text())
+        self.assertTrue(svg.with_suffix(".png").read_bytes().startswith(b"\x89PNG\r\n\x1a\n"))
 
 
 if __name__ == "__main__":
