@@ -20,6 +20,7 @@
     "design.software-system": {"system": "docs/20_system_design"},
     "design.system-mechanism": "docs/20_system_design/mechanisms",
     "design.subsystem": {"subsystem": "docs/30_subsystem_design"},
+    "design.implementation": {"module": "docs/50_implementation_design"},
     "design.definition": {
       "system": "docs/20_system_design",
       "subsystem": "docs/30_subsystem_design",
@@ -62,6 +63,7 @@
       "requirements": "software/<component>/docs/requirements",
       "architecture": "software/<component>/docs/architecture",
       "modules": "software/<component>/docs/modules",
+      "isd": "software/<component>/docs/isd",
       "interfaces": "software/<component>/docs/interfaces",
       "verification": "software/<component>/docs/verification",
       "operations": "software/<component>/docs/operations",

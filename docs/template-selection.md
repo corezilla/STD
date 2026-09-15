@@ -23,6 +23,7 @@
 | 一个行为如何跨多个组件端到端运行、失败和恢复 | `design.system-mechanism` |
 | 软件子系统整体怎样实现：总体方案、软件架构、运行组织与模块协作 | `design.subsystem` |
 | 一个软件模块具体如何实现和测试 | `design.definition` |
+| 已确定模块方案如何落实到文件、关键函数、算法和测试 | `design.implementation`（可选ISD；模块设计足够详细时兼作） |
 | 板卡/硬件如何满足电气、机械、热和制造约束 | `design.hardware` |
 | FPGA/RTL 如何实现数据面与控制面 | `design.fpga` |
 | 数据对象、字段、单位和编码如何定义 | `design.data-dictionary` |
@@ -128,6 +129,12 @@ Document ID，并保留信息项到承载位置的映射。不得只写 N/A 或�
 新建软件子系统设计使用 `design.subsystem`。既有采用 `design.definition` 的子系统文档继续有效，
 不因新增模板主动迁移。若设计对象本身就是板卡或 FPGA 程序，直接采用专项模板，不重复编写子系统文档。
 跨软件、固件、硬件的共同分工由总体系统设计及其机制统筹；软件子系统只引用外部领域接口，不承包其内部设计。
+
+ISD是同一模块的可选实现视图，不插入新的对象层级。默认一个模块一份，可覆盖多个源文件；
+模块设计已达到实现深度时兼作ISD，按信息项映射章节，不重复建文。独立稿使用
+`design.implementation`、`design_level=module`、`domain=software`，parent仍指向模块直属父对象设计；
+同模块的模块设计通过正文来源表引用。完整规则见[ISD规范](isd-standard.md)，
+编写入口见[ISD AI指南](ai-guides/implementation-design.md)。旧单文件ISD不自动迁移。
 
 ## 3. 当前项目映射
 

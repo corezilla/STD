@@ -53,6 +53,33 @@
       "pattern": "^[a-f0-9]{7,64}$"
     },
     "parent_document_id": {"type": ["string", "null"], "description": "直属父对象的设计 Document ID，不是依赖或模板类型。软件子系统承接软件系统，下接软件模块，不采用递归子系统；完整父链由显式 hierarchy 检查核对，不计算子系统深度。"},
+    "design_object_id": {"type": ["string", "null"], "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"},
+    "implementation_view_of_document_id": {"type": ["string", "null"], "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"},
+    "volume_of_document_id": {"type": ["string", "null"], "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"},
+    "implementation_specification": {
+      "type": "object", "additionalProperties": false,
+      "required": ["mode", "document_id", "coverage_mapping", "reason", "decision_ref"],
+      "properties": {
+        "mode": {"enum": ["embedded", "separate", "not_required", "missing"]},
+        "document_id": {"type": ["string", "null"], "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"},
+        "reason": {"type": ["string", "null"]},
+        "decision_ref": {"type": ["string", "null"]},
+        "coverage_mapping": {
+          "type": "array", "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["item", "document_id", "anchor", "applicability", "reason", "decision_ref"],
+            "properties": {
+              "item": {"enum": ["scope", "structure", "data", "functions", "algorithms", "lifecycle", "resources", "security", "persistence", "verification"]},
+              "document_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"},
+              "anchor": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]*$"},
+              "applicability": {"enum": ["applicable", "not_applicable"]},
+              "reason": {"type": ["string", "null"]},
+              "decision_ref": {"type": ["string", "null"]}
+            }
+          }
+        }
+      }
+    },
     "supersedes": {"type": ["string", "null"]},
     "created_at": {"type": "string", "format": "date"},
     "last_modified_at": {"type": "string", "format": "date"}

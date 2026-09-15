@@ -15,6 +15,19 @@ GUIDE = ROOT / "docs/ai-guides/unit-design.md"
 
 
 class ModuleTemplateTests(unittest.TestCase):
+    def test_recovery_semantics_align_across_software_design_chain(self):
+        for filename in ("software-system-design.md", "subsystem-design.md", "design-definition.md"):
+            text = (ROOT / "templates/design" / filename).read_text()
+            with self.subTest(template=filename):
+                for term in ("状态查询", "同请求重放", "执行者接管", "新业务重试",
+                             "权威幂等记录", "完整参数", "不新增执行", "参数冲突" if filename != "design-definition.md" else "冲突参数"):
+                    self.assertIn(term, text)
+                self.assertNotIn("只有确认旧执行者停止或已隔离，并满足幂等/去重条件才可重试", text)
+                self.assertNotIn("先确认旧执行者停止或隔离，满足幂等/去重条件才重试", text)
+        guide = (ROOT / "docs/ai-guides/software-system.md").read_text()
+        self.assertIn("重放无需先停止", guide)
+        self.assertNotIn("确认旧执行者停止/隔离和副作用条件后才决定重试", guide)
+
     def test_new_module_rejects_invalid_level_and_domain_before_writes(self):
         for options in (("--level", "system"), ("--domain", "hardware"),
                         ("--domain", "software", "--domain", "hardware")):
@@ -192,7 +205,7 @@ class ModuleTemplateTests(unittest.TestCase):
             meta_path = next(Path(directory).rglob("module-example.metadata.json"))
             meta = json.loads(meta_path.read_text())
             text = meta_path.with_name("module-example.md").read_text()
-            self.assertEqual(meta["template_version"], "2.0.0")
+            self.assertEqual(meta["template_version"], "2.1.0")
             self.assertEqual(meta["template_sha256"], hashlib.sha256(TEMPLATE.read_bytes()).hexdigest())
             self.assertEqual(meta["design_level"], "module")
             self.assertEqual(meta["domain"], ["software"])

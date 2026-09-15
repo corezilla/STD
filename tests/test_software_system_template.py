@@ -86,7 +86,7 @@ class SoftwareSystemTemplateTests(unittest.TestCase):
         for term in ("parent_document_id 可为空", "design_level=system", "不递归软件子系统",
                      "S01", "M201", "M001", "上级 Mechanism ID", "前置依赖", "预设计",
                      "自由度", "结果已知性", "访问安全", "操作终态", "资源释放", "重新准入",
-                     "旧执行者停止或已隔离", "事实来源", "独立 Oracle", "prompt",
+                     "旧执行者停止或被可靠隔离", "不要求先停止原执行者", "事实来源", "独立 Oracle", "prompt",
                      "并发测试与环境隔离", "自动化", "回滚", "指标", "日志", "自检",
                      "全部必需消费者", "request/response", "NOT_IMPLEMENTED", "唯一机器定义",
                      "Modeled/Simulated/Measured", "普通操作系统", "公共库"):
@@ -106,7 +106,7 @@ class SoftwareSystemTemplateTests(unittest.TestCase):
             md = (base / "example-software.md").read_text()
             self.assertEqual(meta["template_id"], "design.software-system")
             self.assertEqual(meta["document_type"], "design.software-system")
-            self.assertEqual(meta["template_version"], "0.3.2")
+            self.assertEqual(meta["template_version"], "0.3.3")
             self.assertEqual(meta["template_sha256"], hashlib.sha256(TEMPLATE.read_bytes()).hexdigest())
             self.assertEqual(meta["design_level"], "system")
             self.assertEqual(meta["domain"], ["software"])
@@ -163,7 +163,7 @@ class SoftwareSystemTemplateTests(unittest.TestCase):
     def test_catalog_navigation_and_pending_markers_are_updated(self):
         catalog = json.loads((ROOT / "templates/catalog.json").read_text())
         self.assertEqual(catalog["templates"]["design.software-system"], "design/software-system-design.md")
-        self.assertEqual(catalog["template_versions"]["design.software-system"], "0.3.2")
+        self.assertEqual(catalog["template_versions"]["design.software-system"], "0.3.3")
         for name in ("README.md", "docs/template-selection.md", "docs/ai-system-design-authoring-guide.md",
                      "docs/ai-guides/unit-design.md"):
             text = (ROOT / name).read_text()

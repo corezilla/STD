@@ -1098,7 +1098,7 @@ B.4 设计约束与关键假设
         readonly = {"usage-overview", "collaboration", "objects", "sequence", "state-lifecycle", "failure-recovery", "test-path"}
         effects = {"effect-flow", "cleanup-dependencies"}
         names = readonly | effects
-        self.assertEqual(len(blocks), 13)  # twelve existing cases plus a removable native-case entry
+        self.assertEqual(len(blocks), 14)  # also remove the formerly unmarked FAIL-001 teaching row
         seen = set()
         for block in blocks:
             self.assertNotIn("<details>", block)
@@ -1191,6 +1191,17 @@ B.4 设计约束与关键假设
             cover = content.split("<!-- STD_DOCUMENT_COVER_BEGIN -->", 1)[1].split("<!-- STD_DOCUMENT_COVER_END -->", 1)[0]
             self.assertEqual(len(re.findall(r"^\| [^|]+ \|", cover, re.MULTILINE)), 9)  # header + 8 fields
             self.assertEqual(content.count("<details>"), 32)
+            visible = re.sub(r"<details>.*?</details>", "", content, flags=re.DOTALL)
+            visible = re.sub(r"<!--.*?-->", "", visible, flags=re.DOTALL)
+            for instruction in ("本模板名称为", "先核查附录 A", "逐类型重复", "按每个成员重复",
+                                "统一状态规则", "复审顺序", "修改后的一致性回查", "正式文档须替换", "FAIL-001"):
+                self.assertNotIn(instruction, visible)
+            # Beyond structural headings and empty tables no stock product prose
+            # or authoring instructions should survive this generated scaffold.
+            self.assertEqual([line for line in visible.splitlines()
+                              if line.strip() and not line.startswith(("#", "|"))], [])
+            self.assertIn("先核查附录 A", content)  # guidance is retained, not deleted
+            self.assertIn("Authority", content)
             self.assertIn("<!-- STD_DOCUMENT_CONTROL_BEGIN -->", content)
             validation = subprocess.run([str(ROOT / "scripts/validate-design"), directory, "--json"],
                                         capture_output=True, text=True)

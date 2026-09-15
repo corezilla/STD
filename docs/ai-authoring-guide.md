@@ -10,7 +10,7 @@
 
 初次完整编写：先读本指南，再根据实际交付物读取**一个主专项指南**、项目已采用的模板及其全部编写建议；最后读该任务需要的项目来源。不是先读全部指南，也不是按项目名称选模板。续写或局部修改先读现有记录、对应方法和当前差异，只检查受影响内容及直接依赖，不重跑完整写作流程。
 
-下表覆盖当前目录中的 47 个模板。相近模板共享专项，但保留各自的输入、产物和完成条件。一个任务产出多种文档时，分别按对应专项处理；跨领域只读被依赖的部分，不重复创建同一内容的规范来源。
+下表覆盖当前目录中的 48 个模板。相近模板共享专项，但保留各自的输入、产物和完成条件。一个任务产出多种文档时，分别按对应专项处理；跨领域只读被依赖的部分，不重复创建同一内容的规范来源。
 
 | 主专项指南 | 适用 Template ID |
 |---|---|
@@ -18,6 +18,7 @@
 | [软件系统设计](ai-guides/software-system.md) | `design.software-system` |
 | [总体系统机制设计](ai-guides/system-mechanism.md) | `design.system-mechanism` |
 | [软件子系统与模块](ai-guides/unit-design.md) | `design.subsystem`、`design.definition` |
+| [软件实现规格设计（ISD）](ai-guides/implementation-design.md) | `design.implementation` |
 | [硬件、制造与板级评审](ai-guides/hardware.md) | `design.hardware`、`hardware.manufacturing`、`hardware.bom`、`review.schematic-pcb` |
 | [FPGA 程序与实现报告](ai-guides/fpga.md) | `design.fpga`、`assurance.fpga-implementation-report` |
 | [工程管理](ai-guides/management.md) | `management.project-plan`、`management.tailoring`、`management.development-plan`、`management.semp`、`management.configuration-plan`、`management.risk-plan`、`management.quality-plan`、`management.safety-plan`、`management.security-plan` |

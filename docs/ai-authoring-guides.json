@@ -3,6 +3,12 @@
   "common_guide": "docs/ai-authoring-guide.md",
   "families": [
     {
+      "id": "implementation",
+      "title": "软件实现规格设计（ISD）",
+      "guide": "docs/ai-guides/implementation-design.md",
+      "template_ids": ["design.implementation"]
+    },
+    {
       "id": "system",
       "title": "总体系统设计",
       "guide": "docs/ai-system-design-authoring-guide.md",

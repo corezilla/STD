@@ -251,6 +251,10 @@ def validate_metadata(path: Path, schema: dict, catalog: dict, project_root: Pat
         document = None
 
     template_id = data.get("template_id")
+    if template_id == "design.implementation":
+        if data.get("design_level") != "module" or data.get("domain") != ["software"]:
+            errors.append(issue("metadata.isd-scope", path,
+                                "design.implementation 要求 module 层级与 software 领域"))
     version_major = str(data.get("template_version", "")).split(".")[0]
     if template_id == "design.definition" and version_major.isdigit() and int(version_major) >= 2:
         if data.get("design_level") != "module" or data.get("domain") != ["software"]:
@@ -459,6 +463,20 @@ def validate_design_hierarchy(records: list[tuple[Path, dict]]) -> tuple[list[di
         if data.get("template_id") == "design.software-system" and level != "system":
             errors.append(issue("hierarchy.type", path, "design.software-system 必须保持 design_level=system"))
         parent = data.get("parent_document_id")
+        if data.get("template_id") == "design.implementation":
+            if parent is None:
+                errors.append(issue("hierarchy.isd-parent", path, "ISD 必须关联模块直属父对象设计，同模块设计只作来源引用"))
+                continue
+            if parent in by_id:
+                parent_data = by_id[parent][1]
+                permitted = (parent_data.get("template_id"), parent_data.get("design_level")) in {
+                    ("design.software-system", "system"), ("design.subsystem", "subsystem"),
+                    ("design.system", "system"),
+                }
+                if not permitted or parent_data.get("domain") != ["software"]:
+                    errors.append(issue("hierarchy.isd-parent", path,
+                                        "ISD 的父设计必须是软件系统/软件子系统；模块设计及同对象 ISD 不能成为父层级"))
+                    continue
         if level == "subsystem" and parent is None:
             errors.append(issue("hierarchy.parent-required", path, "软件子系统需要直属软件系统父设计"))
             continue
@@ -500,6 +518,164 @@ def validate_design_hierarchy(records: list[tuple[Path, dict]]) -> tuple[list[di
     return errors, parent_links
 
 
+def validate_isd_delivery(records: list[tuple[Path, dict]]) -> list[dict]:
+    """Opt-in, closed-input ISD identity and delivery slots; not semantic approval."""
+    errors = []
+    by_id = {}
+    for path, data in records:
+        key = data.get("document_id")
+        if isinstance(key, str):
+            if key in by_id:
+                return [issue("isd.duplicate-id", path, "Document ID 不唯一，无法检查 ISD 关系")]
+            by_id[key] = (path, data)
+    active = {k: v for k, v in by_id.items() if v[1].get("status") not in {"superseded", "retired"}}
+    def fail(path, code, message):
+        errors.append(issue("isd." + code, path, message))
+    def clean(value):
+        return isinstance(value, str) and bool(value.strip()) and not re.search(
+            r"TODO|TBD|待填|待定|\{\{|^[-—]+$", value, re.I)
+    def section(key, anchor):
+        if key not in active or not isinstance(anchor, str):
+            return ""
+        path = active[key][0]
+        document = path.with_name(path.name.removesuffix(".metadata.json") + ".md")
+        try:
+            text = document.read_text()
+        except OSError:
+            return ""
+        text = re.sub(r"<details\b[^>]*>.*?</details>", "", text, flags=re.S | re.I)
+        text = re.sub(r"<!--.*?-->", "", text, flags=re.S)
+        marker = re.compile(r'<a\s+id=["\']' + re.escape(anchor) + r'["\']\s*></a>')
+        matches = list(marker.finditer(text))
+        if len(matches) != 1:
+            return ""
+        return re.split(r'(?m)^#{1,6} |<a\s+id=', text[matches[0].end():], maxsplit=1)[0]
+    def rows(body):
+        result = []
+        for line in body.splitlines():
+            if line.strip().startswith("|") and line.strip().endswith("|"):
+                cells = [x.strip() for x in line.strip()[1:-1].split("|")]
+                if not all(re.fullmatch(r":?-+:?", x) for x in cells):
+                    result.append(cells)
+        return result[1:] if result else []
+    def content(body):
+        return any(all(clean(c) for c in row) for row in rows(body)) or any(
+            clean(line) and not line.lstrip().startswith(("|", "#", "```"))
+            for line in body.splitlines())
+    def decision(ref, project):
+        if not isinstance(ref, str) or "#" not in ref:
+            return False
+        doc, anchor = ref.split("#", 1)
+        return (doc in active and active[doc][1].get("project") == project
+                and active[doc][1].get("status") in {"accepted", "released"}
+                and content(section(doc, anchor)))
+    modules = {k: v for k, v in active.items() if v[1].get("template_id") == "design.definition"
+               and v[1].get("design_level") == "module" and v[1].get("domain") == ["software"]}
+    views = {k: v for k, v in active.items() if v[1].get("template_id") == "design.implementation"}
+    objects = {}
+    for key, (path, data) in modules.items():
+        obj = data.get("design_object_id")
+        if not clean(obj):
+            fail(path, "object", "模块必须登记 design_object_id")
+        elif (data.get("project"), obj) in objects:
+            fail(path, "object-conflict", "同项目同模块对象存在多个现行模块设计")
+        else:
+            objects[(data.get("project"), obj)] = key
+    roots = {}
+    for key, (path, data) in views.items():
+        module_id = data.get("implementation_view_of_document_id")
+        module = modules.get(module_id, (None, {}))[1] if isinstance(module_id, str) else {}
+        if (not module or not clean(data.get("design_object_id"))
+                or any(data.get(field) != module.get(field) for field in
+                       ("project", "design_object_id", "parent_document_id"))):
+            fail(path, "view-of", "ISD 必须关联同项目、同模块对象、同直属父对象的现行模块设计")
+            continue
+        volume = data.get("volume_of_document_id")
+        root_id = volume or key
+        root = views.get(root_id, (None, {}))[1] if isinstance(root_id, str) else {}
+        if volume and (root_id == key or not root or root.get("volume_of_document_id") is not None
+                       or any(root.get(f) != data.get(f) for f in
+                              ("project", "design_object_id", "parent_document_id", "implementation_view_of_document_id"))):
+            fail(path, "volume", "分卷必须直接关联同模块的 ISD 入口，不能自指、嵌套或跨对象")
+        if not volume:
+            if module_id in roots:
+                fail(path, "root-conflict", "同模块存在冲突的多个独立 ISD 入口")
+            roots[module_id] = key
+        spec = module.get("implementation_specification") or {}
+        if not isinstance(spec, dict) or spec.get("mode") != "separate" or spec.get("document_id") != root_id:
+            fail(path, "reciprocal", "模块 separate 登记必须反向指向 ISD 唯一入口")
+    required = {"scope", "structure", "data", "functions", "algorithms", "lifecycle",
+                "resources", "security", "persistence", "verification"}
+    for key, (path, data) in modules.items():
+        spec = data.get("implementation_specification")
+        if not isinstance(spec, dict):
+            fail(path, "registration", "缺少 implementation_specification；不能猜测兼作或尚未编写")
+            continue
+        mode, target = spec.get("mode"), spec.get("document_id")
+        if mode == "missing" or mode not in {"embedded", "separate", "not_required"}:
+            fail(path, "missing", "实现规格登记为 missing，未达到 ISD 交付要求")
+            continue
+        if mode == "not_required":
+            if target is not None or spec.get("coverage_mapping") or not clean(spec.get("reason")) or not decision(spec.get("decision_ref"), data.get("project")):
+                fail(path, "exemption", "not_required 需理由及可定位的已接受决定；不得同时指向实现规格")
+            continue
+        if mode == "embedded" and target != key:
+            fail(path, "embedded", "embedded 必须指向自身模块文档")
+        if mode == "separate" and (not isinstance(target, str) or roots.get(key) != target):
+            fail(path, "separate", "separate 必须指向存在且反向关联的唯一 ISD 入口")
+        allowed = {key} if mode == "embedded" else {
+            v for v, (_, d) in views.items() if d.get("implementation_view_of_document_id") == key
+            and (v == target or d.get("volume_of_document_id") == target)}
+        if not isinstance(target, str) or target not in allowed:
+            continue
+        handoff = rows(section(target, "isd-handoff"))
+        if not handoff or not all(len(r) == 6 and all(clean(c) for c in r) for r in handoff):
+            fail(path, "handoff", "isd-handoff 承接矩阵必须有完整六列数据，不能只有表头或占位")
+        mapping = spec.get("coverage_mapping", [])
+        if not isinstance(mapping, list) or any(not isinstance(r, dict) for r in mapping):
+            fail(path, "coverage", "coverage_mapping 必须为信息项列表")
+            continue
+        items = [r.get("item") for r in mapping]
+        if len(items) != len(required) or set(str(i) for i in items) != required:
+            fail(path, "coverage", "十个 ISD 信息项必须各登记一次，不能遗漏或重复")
+        used = {target}
+        for entry in mapping:
+            doc, anchor, item = entry.get("document_id"), entry.get("anchor"), entry.get("item")
+            if not isinstance(doc, str) or doc not in allowed:
+                fail(path, "coverage-target", "覆盖项只能指向本实现规格或其直属分卷")
+                continue
+            used.add(doc)
+            body = section(doc, anchor)
+            if not content(body):
+                fail(path, "empty", f"{item}: 缺少唯一锚点或实际正文，帮助块/表头不计内容")
+            if entry.get("applicability") == "not_applicable":
+                if item not in {"algorithms", "persistence", "security"} or not clean(entry.get("reason")) or not decision(entry.get("decision_ref"), data.get("project")):
+                    fail(path, "applicability", f"{item}: 不适用需允许的条件项、理由及已接受决定")
+                continue
+            if entry.get("applicability") != "applicable":
+                fail(path, "applicability", f"{item}: 必须声明适用性")
+            if item in {"security", "persistence"} and not any(
+                    len(r) == 7 and all(clean(c) for c in r) for r in rows(body)):
+                fail(path, "conditional-table", f"{item}: 适用时必须有完整七列实现落点表")
+            if item == "verification":
+                checks = rows(body)
+                if not checks:
+                    fail(path, "verification", "验证表不能为空")
+                for row in checks:
+                    if len(row) != 8 or not all(clean(c) for c in row):
+                        fail(path, "verification", "验证表要求八列，包括 Expected/Actual/Verdict/Run")
+                        continue
+                    verdict = row[5].strip('`').upper()
+                    if verdict not in {"PASS", "FAIL", "NOT_RUN", "BLOCKED"}:
+                        fail(path, "verdict", "Verdict 必须是 PASS/FAIL/NOT_RUN/BLOCKED")
+                    if verdict in {"PASS", "FAIL"} and any(
+                            re.search(r"NOT_RUN|BLOCKED|^N/A$|未执行", row[i], re.I) for i in (4, 7)):
+                        fail(path, "evidence", "运行判定需 Actual/Evidence 及 Run ID，不能填未运行")
+        if allowed - used:
+            fail(path, "unused-volume", "分卷必须在入口覆盖映射中登记实际信息项")
+    return errors
+
+
 def baseline_fingerprints(path: Path | None) -> set[str]:
     if path is None:
         return set()
@@ -517,6 +693,8 @@ def main() -> int:
     parser.add_argument("--require-immutable-std", action="store_true")
     parser.add_argument("--check-design-hierarchy", action="store_true",
                         help="显式检查所提供完整设计父链；缺父、环、跨项目和子系统类型错误均失败")
+    parser.add_argument("--check-isd-delivery", action="store_true",
+                        help="显式检查完整模块/ISD输入的关联、采用模式及非空交付槽位；同时检查父链")
     parser.add_argument("--baseline", type=Path, help="已批准的历史问题指纹基线")
     parser.add_argument("--write-baseline", type=Path, help="把当前问题写为候选基线")
     parser.add_argument("--json", nargs="?", const="-", metavar="FILE",
@@ -566,9 +744,14 @@ def main() -> int:
             errors.extend(validate_markdown(document, data))
     errors.extend(validate_conformance_refs(metadata_records, project_root))
     hierarchy_parent_links = {}
-    if args.check_design_hierarchy:
+    if args.check_design_hierarchy or args.check_isd_delivery:
         hierarchy_errors, hierarchy_parent_links = validate_design_hierarchy(metadata_records)
         errors.extend(hierarchy_errors)
+    if args.check_isd_delivery:
+        try:
+            errors.extend(validate_isd_delivery(metadata_records))
+        except (TypeError, ValueError, AttributeError) as exc:
+            errors.append(issue("isd.invalid-registration", roots[0], f"登记结构非法，无法完成交付检查: {exc}"))
 
     decision_schema = load_json(ROOT / "schemas/review-decision.schema.json")
     decision_paths = sorted({path for root in roots for path in discover(root, ".review-decision.json")})
@@ -619,6 +802,7 @@ def main() -> int:
         "new_error_count": len(new_errors), "inherited_error_count": len(inherited_errors),
         "checked_metadata": len(metadata_paths), "checked_markdown": len(markdown_paths),
         "checked_decisions": len(decision_paths),
+        "isd_delivery_checked": args.check_isd_delivery,
         "issues": errors,
     }
     if args.json:
