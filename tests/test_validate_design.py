@@ -152,7 +152,7 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
         fields = set(re.findall(r"^\| ([^|]+?) \|", front, re.MULTILINE)) - {"文档字段"}
         self.assertEqual(fields, expected)
         self.assertEqual(fields, self.validator.COMPACT_COVER_FIELDS)
-        self.assertLessEqual(len(front.splitlines()), 14)
+        self.assertLessEqual(len(front.splitlines()), 16)
         self.assertTrue(body.lstrip().startswith("## 1. 文档说明\n"))
         headings = re.findall(r"^#{2,3} (.+)$", system, re.MULTILINE)
         self.assertEqual(headings[:4], [
@@ -270,7 +270,7 @@ B.4 设计约束与关键假设
 附录 C. 编写与交付检查""".splitlines()
         self.assertEqual(re.findall(r"^#{2,3} (.+)$", system, re.MULTILINE), expected)
         catalog = json.loads((ROOT / "templates/catalog.json").read_text())
-        self.assertEqual(catalog["template_versions"]["design.system"], "8.3.0")
+        self.assertEqual(catalog["template_versions"]["design.system"], "8.3.1")
 
     def test_system_reordering_keeps_business_preconditions_and_risk_handoff(self):
         system = (ROOT / "templates/design/architecture-design.md").read_text()
@@ -1199,7 +1199,7 @@ B.4 设计约束与关键假设
             # Beyond structural headings and empty tables no stock product prose
             # or authoring instructions should survive this generated scaffold.
             self.assertEqual([line for line in visible.splitlines()
-                              if line.strip() and not line.startswith(("#", "|"))], [])
+                              if line.strip() and not line.startswith(("#", "|", "> STD 使用入口："))], [])
             self.assertIn("先核查附录 A", content)  # guidance is retained, not deleted
             self.assertIn("Authority", content)
             self.assertIn("<!-- STD_DOCUMENT_CONTROL_BEGIN -->", content)

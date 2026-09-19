@@ -1,6 +1,8 @@
 <!-- STD_DOCUMENT_COVER_BEGIN -->
 # {{document_title}}
 
+> STD 使用入口：[STD 主说明与执行流程](../../README.md)。这是工程文档标准模板；作者先读入口，再按项目已采用版本读取适用规范和专项指南。
+
 | 文档字段 | 值 |
 |---|---|
 | Document ID | `{{document_id}}` |

@@ -35,7 +35,7 @@
 
 ## 4. 图例与写法示例
 
-测试规格工作稿 0.2.0 的十章均有段落式指导与完成条件；Case Matrix 分开设计 V、Case、
+测试规格工作稿 0.2.1 的十章均有段落式指导与完成条件；Case Matrix 分开设计 V、Case、
 backend/环境和 Run。可参考[软硬件案例 §7](../examples/host-fpga-transfer-example.md#verification)
 将一条共同保证交给模型、原生布局及真实平台分别检查。未实现/未执行的 backend 保留在
 独立承接分母；目录 PASS、模型 PASS 和 C 布局检查均不能代替真实排空、时序或互操作证据。

@@ -38,6 +38,7 @@ class SubsystemTemplateTests(unittest.TestCase):
 
     def test_generated_subsystem_default_path_identity_and_validation(self):
         with tempfile.TemporaryDirectory() as directory:
+            (Path(directory) / "README.md").write_text('# Example\n<a id="std-entry"></a>\n')
             result = subprocess.run(self.command(directory), capture_output=True, text=True)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             base = Path(directory) / "docs/30_subsystem_design"
@@ -45,7 +46,7 @@ class SubsystemTemplateTests(unittest.TestCase):
             meta = json.loads((base / "example-subsystem.metadata.json").read_text())
             self.assertEqual(meta["design_level"], "subsystem")
             self.assertEqual(meta["template_id"], "design.subsystem")
-            self.assertEqual(meta["template_version"], "0.6.1")
+            self.assertEqual(meta["template_version"], "0.6.2")
             self.assertEqual(meta["template_sha256"], hashlib.sha256(TEMPLATE.read_bytes()).hexdigest())
             self.assertEqual(meta["source_path"], "docs/30_subsystem_design/example-subsystem.md")
             self.assertNotIn("{{", md)

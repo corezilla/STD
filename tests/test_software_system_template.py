@@ -26,7 +26,7 @@ class SoftwareSystemTemplateTests(unittest.TestCase):
         chapters = re.findall(r"(?m)^## (\d+)\. (.+)$", text)
         self.assertEqual([int(number) for number, _ in chapters], list(range(1, 18)))
         sections = re.split(r"(?m)^#{2,3} ", text)[1:]
-        self.assertEqual(len(sections), 57)
+        self.assertEqual(len(sections), 58)
         for section in sections:
             with self.subTest(section=section.splitlines()[0]):
                 self.assertEqual(section.count("<details>"), 1)
@@ -76,8 +76,8 @@ class SoftwareSystemTemplateTests(unittest.TestCase):
         body = text.split("派生来源：", 1)[0]
         for ref in re.findall(r"§(\d+(?:\.\d+)*)", body):
             self.assertIn(ref, headings)
-        self.assertEqual(text.count("<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->"), 11)
-        self.assertEqual(text.count("<!-- STD_TEMPLATE_EXAMPLE_END -->"), 11)
+        self.assertEqual(text.count("<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->"), 12)
+        self.assertEqual(text.count("<!-- STD_TEMPLATE_EXAMPLE_END -->"), 12)
         for ref in re.findall(r"\]\(([^)]+)\)", text):
             self.assertTrue((TEMPLATE.parent / ref).resolve().is_file(), ref)
 
@@ -97,8 +97,29 @@ class SoftwareSystemTemplateTests(unittest.TestCase):
                      "逐能力", "事实来源", "不可", "全部必需消费者", "真实项目"):
             self.assertIn(term, guide)
 
+    def test_ui_design_and_cli_example_are_separate_and_actionable(self):
+        text = TEMPLATE.read_text()
+        ui = text.split("### 4.3 UI 设计（适用时）", 1)[1].split("## 5.", 1)[0]
+        for term in ["页面导航图", "共享框架布局图", "每个主要页面", "布局图/线框图",
+                     "每个重要UI流程", "Page ID", "权威数据Owner", "晚到响应", "键盘",
+                     "无自有图形界面", "可编辑图源"]:
+            self.assertIn(term, ui)
+        cli = text.split("### 4.2 页面、命令与交互反馈", 1)[1].split("### 4.3", 1)[0]
+        for term in ["EX-CLI/v1", "NOT_RUN", "```mermaid", "当前目录", "stdout", "stderr",
+                     "--request-id req-001", "RESULT_UNKNOWN", "退出码仍为0", "不自动重发"]:
+            self.assertIn(term, cli)
+        with tempfile.TemporaryDirectory() as directory:
+            generated = subprocess.run(self.command(directory), capture_output=True, text=True)
+            self.assertEqual(generated.returncode, 0, generated.stderr)
+            doc = next((Path(directory) / "docs").rglob("example-software.md")).read_text()
+            self.assertIn("### 4.3 UI 设计（适用时）", doc)
+            self.assertIn("Page ID / 页面名称", doc)
+            self.assertNotIn("taskctl task submit", doc)
+            self.assertNotIn("EX-CLI/v1", doc)
+
     def test_generated_top_level_defaults_short_cover_and_validation(self):
         with tempfile.TemporaryDirectory() as directory:
+            (Path(directory) / "README.md").write_text('# Example\n<a id="std-entry"></a>\n')
             generated = subprocess.run(self.command(directory), capture_output=True, text=True)
             self.assertEqual(generated.returncode, 0, generated.stderr)
             base = Path(directory) / "docs/20_system_design"
@@ -106,7 +127,7 @@ class SoftwareSystemTemplateTests(unittest.TestCase):
             md = (base / "example-software.md").read_text()
             self.assertEqual(meta["template_id"], "design.software-system")
             self.assertEqual(meta["document_type"], "design.software-system")
-            self.assertEqual(meta["template_version"], "0.3.3")
+            self.assertEqual(meta["template_version"], "0.4.1")
             self.assertEqual(meta["template_sha256"], hashlib.sha256(TEMPLATE.read_bytes()).hexdigest())
             self.assertEqual(meta["design_level"], "system")
             self.assertEqual(meta["domain"], ["software"])
@@ -127,6 +148,7 @@ class SoftwareSystemTemplateTests(unittest.TestCase):
 
     def test_domain_mode_generation_and_parent_chain(self):
         with tempfile.TemporaryDirectory() as directory:
+            (Path(directory) / "README.md").write_text('# Example\n<a id="std-entry"></a>\n')
             parent = self.command(directory, "example-total")
             parent[parent.index("design.software-system")] = "design.system"
             self.assertEqual(subprocess.run(parent, capture_output=True).returncode, 0)
@@ -163,7 +185,7 @@ class SoftwareSystemTemplateTests(unittest.TestCase):
     def test_catalog_navigation_and_pending_markers_are_updated(self):
         catalog = json.loads((ROOT / "templates/catalog.json").read_text())
         self.assertEqual(catalog["templates"]["design.software-system"], "design/software-system-design.md")
-        self.assertEqual(catalog["template_versions"]["design.software-system"], "0.3.3")
+        self.assertEqual(catalog["template_versions"]["design.software-system"], "0.4.1")
         for name in ("README.md", "docs/template-selection.md", "docs/ai-system-design-authoring-guide.md",
                      "docs/ai-guides/unit-design.md"):
             text = (ROOT / name).read_text()

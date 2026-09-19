@@ -191,11 +191,12 @@ class ModuleTemplateTests(unittest.TestCase):
         text = re.sub(r"<details>.*?</details>", "", text, flags=re.S)
         text = re.sub(r"<!--.*?-->", "", text, flags=re.S)
         prose = [line.strip() for line in text.splitlines()
-                 if line.strip() and not line.startswith(("#", "|"))]
+                 if line.strip() and not line.startswith(("#", "|", "> STD 使用入口："))]
         self.assertEqual(prose, ["文档控制信息（与封面和 metadata 保持一致）："])
 
     def test_generation_short_cover_control_and_no_fictional_body(self):
         with tempfile.TemporaryDirectory() as directory:
+            (Path(directory) / "README.md").write_text('# Example\n<a id="std-entry"></a>\n')
             command = [str(ROOT / "scripts/new-design"), "--project", "example",
                        "--template", "design.definition", "--name", "module-example",
                        "--project-root", directory, "--repository", "example/repo",
@@ -205,7 +206,7 @@ class ModuleTemplateTests(unittest.TestCase):
             meta_path = next(Path(directory).rglob("module-example.metadata.json"))
             meta = json.loads(meta_path.read_text())
             text = meta_path.with_name("module-example.md").read_text()
-            self.assertEqual(meta["template_version"], "2.1.0")
+            self.assertEqual(meta["template_version"], "2.1.1")
             self.assertEqual(meta["template_sha256"], hashlib.sha256(TEMPLATE.read_bytes()).hexdigest())
             self.assertEqual(meta["design_level"], "module")
             self.assertEqual(meta["domain"], ["software"])

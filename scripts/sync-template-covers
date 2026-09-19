@@ -21,14 +21,15 @@ COMPACT_FIELDS = {
 
 def split_cover(cover: str) -> tuple[str, str]:
     """Derive both display blocks from the same shared field source."""
-    front = [BEGIN, "# {{document_title}}", "", "| 文档字段 | 值 |", "|---|---|"]
+    navigation = [line for line in cover.splitlines() if line.startswith("> STD 使用入口：")]
+    front = [BEGIN, "# {{document_title}}", "", *navigation, "", "| 文档字段 | 值 |", "|---|---|"]
     back = [CONTROL_BEGIN, "| 文档字段 | 值 |", "|---|---|"]
     notes = []
     for line in cover.splitlines():
         match = re.match(r"^\| ([^|]+?) \|", line)
         if match and match[1] != "文档字段":
             (front if match[1] in COMPACT_FIELDS else back).append(line)
-        elif line.startswith(">"):
+        elif line.startswith(">") and not line.startswith("> STD 使用入口："):
             notes.append(line)
     front.append(END)
     back.extend(["", *notes, CONTROL_END])

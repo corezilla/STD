@@ -7,7 +7,9 @@ import argparse
 import datetime as dt
 import hashlib
 import json
+import os
 import re
+from urllib.parse import quote
 from pathlib import Path
 
 
@@ -158,6 +160,15 @@ def main() -> int:
         "supersedes": args.supersedes, "date": last_modified_at,
     }
     content = template_bytes.decode()
+    # Keep a neutral cover navigation link, not author instructions. Project
+    # README resolves the adopted STD revision without pointing at mutable main.
+    entry_root = project_root if project_root is not None else ROOT
+    entry_link = quote(Path(os.path.relpath((entry_root / "README.md").resolve(), output.resolve())).as_posix(), safe="/.-_")
+    content = content.replace(
+        "> STD 使用入口：[STD 主说明与执行流程](../../README.md)。这是工程文档标准模板；作者先读入口，再按项目已采用版本读取适用规范和专项指南。",
+        f"> STD 使用入口：[项目采用说明与标准导航]({entry_link}#std-entry)" if project_root is not None
+        else f"> STD 使用入口：[STD 主说明与执行流程]({entry_link}#std-entry)",
+    )
     # Preserve the exact adopted teaching source, not a mutable main URL. The
     # .md.txt suffix distinguishes template reference bytes from design instances.
     reference_path = None

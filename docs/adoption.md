@@ -18,6 +18,38 @@ STD 管模板；项目管理填写后的设计事实。两者的 authority 不�
 
 ## 2. 项目必须提交的文件
 
+<a id="readme-entry"></a>
+
+### 项目 README 的靠前入口
+
+在项目标题和简短介绍之后、目录及安装/使用说明之前，放置以下 STD 采用说明。
+完整项目入口可复制 [README 模板](../templates/_shared/project-readme.md) 到项目根 `README.md`，
+再填写真实项目内容；已有 README 只合并 STD 入口，不整体覆盖。该模板是仓库入口脚手架，
+不是 catalog 注册的工程文档，不生成独立 metadata。以下片段也可直接并入已有 README。
+
+不能只放在文末、handoff 或某个工具专用文件中。此入口适用于 OpenCode、Codex 及其他阅读 Markdown 的作者。
+将占位内容替换为实际锁定版本与固定 commit 链接；也可链接随项目提供的同版本 STD README，
+但不能链接可变的 main/latest 作为采用依据。不包含凭据或本机专有绝对路径。
+
+```markdown
+<a id="std-entry"></a>
+
+## 工程文档标准：STD
+
+本项目采用 STD `<adopted-version>`，固定来源见 [std.lock.json](docs/std.lock.json)。
+STD 提供工程文档模板、编写规范、AI 指南与检查工具；它不代替项目设计决定。
+编写或修改文档前，先读 [STD 主说明与执行流程](https://github.com/corezilla/STD/blob/<full-source-revision>/README.md)，
+再按任务选择已采用的模板、通用指南及专项指南，依据项目事实完成正文、图和适用检查。
+不自动检查或跟随最新 STD/模板；只有用户明确要求升级才重新对齐。
+结构检查通过不等于设计质量、实现或运行验证通过；提交和发布仍需遵循用户授权。
+```
+
+每个新文档封面应保留指向本项目 `README.md#std-entry` 的相对链接，再由此入口定位锁定的 STD
+主说明。模板原件封面则直接链接同一 STD 来源树的 README。移动文档时同步修正相对链接；
+手工复制或生成模板后须核查这条链路。STD 版本仍只在项目层登记，不重新加入单文档版本字段。
+接入和评审时实际沿“文档封面 → 项目 README → 锁定 STD README → 指南/模板”打开检查，
+缺失入口或断链应修正；不能仅凭锁文件存在宣称新 Agent 已能找到标准。
+
 项目必须提交`docs/std.lock.json`、`docs/std-source-manifest.json`、已启用的模板实例及其同名`.metadata.json`。不要为未启用的文档类型预建空目录。
 
 混合软硬件项目使用`docs/repository-layout.md`的完整目录规范，纯软件项目使用`docs/software-project-layout.md`。两份规范的每个目录均在目录行后用`#`说明职责，并定义`notes/`、`materials/`、`interfaces/`、`tests/`和本地数据区的边界。
