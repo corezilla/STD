@@ -23,7 +23,7 @@
 │   ├── 40_module_design/         # 包、模块和组件内部设计
 │   ├── 50_implementation_design/ # 类、文件、算法和关键实现单元设计
 │   ├── 60_interfaces/            # 接口目录、ICD和机器契约索引
-│   ├── 70_verification/          # 测试计划、规格、步骤、报告和验收
+│   ├── 70_verification/          # 测试计划、规格、规程和验收要求；报告随测试保存
 │   ├── 80_operations/            # 安装、部署、运行、维护和发布手册
 │   ├── 90_decisions/             # ADR和已批准技术决策
 │   ├── 91_reviews/               # 正式设计、代码和发布评审记录
@@ -53,10 +53,15 @@
 │   └── schemas/                  # 配置字段类型、约束和版本
 ├── tests/                        # 可执行测试、harness、fixture和oracle
 │   ├── unit/                     # 函数、类和小模块隔离测试
+│   │   └── <module-id>/          # 模块ID，内含用例与reports/<run-id>/
 │   ├── contract/                 # API、Schema、事件和兼容契约测试
+│   │   └── reports/              # 本类报告，按Run ID分开
 │   ├── integration/              # 多模块和外部依赖集成测试
+│   │   └── reports/              # 集成测试报告，按Run ID分开
 │   ├── system/                   # 完整软件系统端到端测试
+│   │   └── reports/              # 系统测试报告，按Run ID分开
 │   ├── acceptance/               # 用户或客户验收自动化
+│   │   └── reports/              # 验收测试报告，按Run ID分开
 │   ├── fixtures/                 # 小型、稳定、可提交的测试输入
 │   └── common/                   # 公共harness、helper和oracle
 ├── deploy/                       # 容器、Kubernetes、systemd、IaC和环境模板
@@ -113,9 +118,13 @@
 │       └── tests/                # 包单元、兼容和发布验证
 ├── tests/                        # 跨Owner和平台级可执行测试
 │   ├── contract/                 # 跨Owner公共契约测试
+│   │   └── reports/              # 公共契约测试报告，按Run ID分开
 │   ├── integration/              # 多服务集成和依赖联调测试
+│   │   └── reports/              # 集成测试报告，按Run ID分开
 │   ├── system/                   # 平台端到端测试
+│   │   └── reports/              # 系统测试报告，按Run ID分开
 │   └── acceptance/               # 平台用户或客户验收自动化
+│       └── reports/              # 验收测试报告，按Run ID分开
 ├── deploy/                       # 平台级环境、网络、编排和IaC
 ├── experiments/                  # 可复现实验manifest、runner和分析代码
 ├── knowledge-base/               # 可选：项目或产品的静态知识网站
@@ -149,10 +158,18 @@ knowledge-base/
 
 ## 5. 关键边界
 
-- `docs/70_verification/`保存测试计划和正式报告；`tests/`保存可执行测试。
+- `docs/70_verification/`保存计划、规格和规程；每类测试保存自己的代码与报告，例如 `tests/system/reports/<run-id>/`，不集中到根 `tests/reports/`。
 - `interfaces/`保存机器可读公共契约；consumer只引用，不复制Schema。
 - 组件内部单元测试随组件共置；根`tests/`只保存跨Owner契约、集成、系统和验收测试。
 - `configs/`和`deploy/`不保存token、证书和生产secret。
 - `migrations/`是软件数据/状态迁移，不是文档迁移。
 - `.local/`、`build/`、`dist/`和`.cache/`不进入Git。
 - 项目可按语言生态调整`src/`内部结构，但不得改变顶层Owner和authority边界。
+
+模块单元测试可集中为 `tests/unit/<module-id>/`，或随实际服务/应用/库共置为
+`services/<service>/tests/unit/<module-id>/` 等；各自保留 `reports/<run-id>/`，不复制同一测试。
+混合项目目录中的 `<component>` 指构建/交付单元，不是设计模块；目录须映射实际 Module ID。
+多服务布局中各级 `tests/` 也遵循这套报告归属规则。
+正式Markdown报告和metadata可入Git，机器输出默认放各Run下 `artifacts/` 或CI制品库，
+不要忽略整个报告目录。完整文件样例、Case与Run关联及保留规则见
+[测试目录与报告分工](repository-layout.md#411-按测试类型保存报告)和[系统测试示例](repository-layout.md#412-系统测试的文件级示例)。

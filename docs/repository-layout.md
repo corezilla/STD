@@ -32,12 +32,11 @@
 │   ├── 40_module_design/          # 未采用Owner共置时的模块设计
 │   ├── 50_implementation_design/  # 文件、类、RTL单元等实现级设计
 │   ├── 60_interfaces/             # ICD、接口目录、边界说明和契约索引
-│   ├── 70_verification/           # V&V和正式测试文档，不存测试源码
+│   ├── 70_verification/           # V&V计划、规格和规程；测试报告随测试保存
 │   │   ├── plans/                 # 验证策略、范围、资源和排期
 │   │   ├── specifications/        # Case、输入、Oracle和覆盖要求
 │   │   ├── procedures/            # 测试环境、步骤和操作方法
-│   │   ├── reports/               # 执行结果、偏差、结论和证据索引
-│   │   └── acceptance/            # 客户或项目验收计划与结论
+│   │   └── acceptance/            # 客户或项目验收计划与判定标准，报告随测试保存
 │   ├── 80_operations/             # 安装、用户、运维、维护、Bring-up和发布资料
 │   ├── 90_decisions/              # ADR和已批准的重要技术决策
 │   ├── 91_reviews/                # 正式评审包、发现、决定和关闭记录
@@ -75,16 +74,16 @@
 │   │   │   └── mechanisms/        # 跨多个软件组件的调度、恢复、数据流等机制
 │   │   ├── 30_subsystem_design/   # 软件子系统划分、责任、依赖和组合关系
 │   │   ├── 60_interfaces/         # 软件接口目录及对顶层机器契约的引用
-│   │   ├── 70_verification/       # 软件域测试策略、规格、报告和质量Gate
+│   │   ├── 70_verification/       # 软件域测试策略、规格、规程和质量Gate
 │   │   ├── 80_operations/         # 软件域构建、安装、部署、运行和维护说明
 │   │   └── 91_reviews/            # 软件架构、集成、质量和发布评审记录
-│   └── <component>/               # 一个可独立维护的软件组件、服务或应用
+│   └── <component>/               # 构建/交付单元：服务、应用或库；不是设计模块层级
 │       ├── docs/                  # 该组件专属需求、设计、接口消费和评审
 │       │   ├── requirements/      # 分配给该组件的功能和质量需求
 │       │   ├── architecture/      # 组件边界、依赖、状态、线程和数据流
 │       │   ├── modules/           # 组件内部包、模块、类和关键算法设计
 │       │   ├── interfaces/        # 组件提供/消费接口及公共契约引用
-│       │   ├── verification/      # 组件测试设计、覆盖、结果和已知限制
+│       │   ├── verification/      # 组件测试计划、规格、规程及报告链接
 │       │   ├── operations/        # 组件配置、部署、诊断、升级和恢复说明
 │       │   └── reviews/           # 组件需求、设计、实现和发布评审记录
 │       ├── src/                   # 该组件的产品实现源码
@@ -157,15 +156,17 @@
 │   └── tools/                     # BOM、ERC/DRC、PCB检查和制造导出工具
 ├── tests/                         # 跨软件、固件、硬件的可执行验证
 │   ├── static/                    # 文档、路径、源码、RTL和策略静态检查
+│   │   ├── reports/               # 本类检查报告，按Run ID分开
 │   │   ├── documents/             # 文档结构、metadata、链接和追踪检查
 │   │   ├── source/                # 软件源码格式、依赖和禁止模式检查
 │   │   ├── rtl/                   # HDL lint、CDC/RDC规则和约束静态检查
 │   │   └── repository/            # 路径、命名、许可证和仓库策略检查
 │   ├── unit/                      # 可在单一模块边界完成的自动化测试
-│   │   ├── software/              # 软件函数、类和模块单元测试
-│   │   ├── firmware/              # RTL模块、嵌入式函数和固件单元测试
-│   │   └── models/                # 算法、容量、性能和参考模型单元测试
+│   │   └── <module-id>/           # 被测模块ID；固件等使用其实际设计对象ID
+│   │       ├── cases/             # 模块可执行用例，可按语言框架调整
+│   │       └── reports/           # 该模块测试报告，按Run ID分开
 │   ├── contract/                  # ABI、IDL、Schema、寄存器和协议契约测试
+│   │   ├── reports/               # 本类契约测试报告，按Run ID分开
 │   │   ├── api/                   # HTTP、RPC、SDK和命令接口契约测试
 │   │   ├── abi/                   # 二进制布局、符号和调用约定测试
 │   │   ├── idl/                   # Proto、消息和代码生成一致性测试
@@ -174,15 +175,18 @@
 │   │   ├── protocols/             # 总线、队列、DMA、网络和时序协议测试
 │   │   └── compatibility/         # 版本、升级、降级和向后兼容测试
 │   ├── subsystem/                 # 单个软件、FPGA或板卡子系统闭环测试
+│   │   ├── reports/               # 本类对象闭环测试报告，按对象ID及Run ID区分
 │   │   ├── software/              # 单个软件子系统在隔离依赖下的闭环测试
 │   │   ├── firmware/              # FPGA/MCU固件子系统仿真或板上测试
 │   │   └── hardware/              # 单板、接口、电源或热子系统测试
 │   ├── integration/               # 软件-固件、固件-板卡等跨域集成测试
+│   │   ├── reports/               # 集成测试报告，按Run ID分开
 │   │   ├── software-software/     # 服务、引擎、驱动和工具之间的集成测试
 │   │   ├── software-firmware/     # Host软件、Driver、固件和寄存器联调
 │   │   ├── firmware-hardware/     # 固件与板卡接口、时钟、复位和外设联调
 │   │   └── hardware-system/       # 板卡、主机、机箱、网络和电源集成测试
 │   ├── system/                    # 整机、真实拓扑和端到端场景测试
+│   │   ├── reports/               # 系统测试报告，按Run ID分开
 │   │   ├── functional/            # 完整系统功能和业务场景验证
 │   │   ├── performance/           # 吞吐、时延、容量、带宽和功耗验证
 │   │   ├── reliability/           # 稳定性、耐久性、压力和寿命测试
@@ -190,6 +194,7 @@
 │   │   ├── security/              # 权限、隔离、输入安全和攻击面测试
 │   │   └── interoperability/      # 不同平台、版本和第三方设备互操作测试
 │   ├── acceptance/                # 项目、客户或生产验收自动化
+│   │   ├── reports/               # 验收测试报告及结论，按Run ID分开
 │   │   ├── product/               # 产品规格与发布Gate验收测试
 │   │   ├── customer/              # 合同、客户场景和现场验收测试
 │   │   └── manufacturing/         # 生产、装配、出厂和批次验收测试
@@ -256,16 +261,77 @@ hardware/boards/<board>/docs/       # 板卡专属设计、BOM、制造和验证
 - 投资人PPT放 `materials/investors/`，板卡单页放 `materials/products/`。
 - 完整竞品分析放 `docs/15_evaluation/competitive-analysis/`，销售竞品卡放
   `materials/sales/competitive-battlecards/`。
-- `docs/70_verification/` 放计划和报告，`tests/` 放可执行测试，本地数据根放大型运行证据。
+- `docs/70_verification/` 放计划、规格和规程；可执行测试及其报告按测试类型共置，大型证据可存外部数据区。
 - 简单项目可把契约放 `docs/60_interfaces/contracts/`；需要codegen或多域消费时使用顶层
   `interfaces/`，根文档只保留索引。
 - `docs/migration/std-YYYYMMDD/` 和 `docs/98_migration/` 都可作为迁移区，validator不按目录名禁止。
 
 ### 4.1 测试authority
 
-- `software/<component>/tests/`和`firmware/<product>/tests/`是Owner内部单元、组件和局部契约测试的默认authority。
+- `software/<component>/tests/`和`firmware/<product>/tests/`是Owner内部单元、组件和局部契约测试的默认authority；内部同样按测试类型组织报告。
 - 根`tests/`是跨Owner契约、集成、系统和验收测试的默认authority。小项目可在tailoring中选择全部集中，但不得在根目录和Owner目录维护两份同一测试。
-- `tests/fixtures/`只保存小型、稳定、可提交的输入；大型数据、原始运行输出和证据包分别放本地数据根的`datasets/`、`runs/`和`evidence/`。
+- `tests/fixtures/`只保存跨测试共享的小型稳定输入；专用输入随对应测试保存。大型数据和原始证据可存本地数据根或CI制品存储，所属测试报告仍提供可定位的证据引用。
+
+`<component>` 是代码的构建/交付单元（服务、应用或库），不等于软件子系统或软件模块。
+设计层级以对象ID和父链为准；一个服务可包含多个模块。采用集中测试时，软件模块测试使用
+`tests/unit/<module-id>/`，例如 `tests/unit/M001/`；采用组件共置时使用
+`software/<component>/tests/unit/<module-id>/`。同一测试只选一处维护，不能两边复制。
+测试清单或规格须关联 Module ID 与实际代码对象，不从目录名猜测设计层级。
+
+#### 4.1.1 按测试类型保存报告
+
+每类测试有自己的 `reports/`，不建立根 `tests/reports/` 作为所有测试的默认汇总处。
+系统、集成、契约和验收分别使用 `tests/system/reports/`、`tests/integration/reports/`、
+`tests/contract/reports/` 和 `tests/acceptance/reports/`；模块使用 `tests/unit/<module-id>/reports/`。
+按Run ID分目录，避免并行运行或重跑覆盖旧证据。`cases/`可按框架调整，报告归属不变。
+
+机器报告（JSON、JUnit XML、HTML、覆盖率）和人工评审结论均由所属测试目录维护；正式报告仍按
+STD报告模板编写，并保存metadata，不因放在tests下而免除文档控制。需要验收/发布评审时引用
+这里的唯一报告，不在 `docs/70_verification/reports/` 再维护副本。
+跨类型结论可以在现有评审包汇总并引用各报告，不重抄原始结果。
+这里的报告指测试执行/验收报告；FPGA综合、布局布线、时序收敛等实现报告仍是独立的工程交付物，
+沿用 `assurance.fpga-implementation-report` 的领域落位，不把它冒充系统或板上测试报告。
+
+默认不提交可再生的大型输出、敏感日志或整包运行制品。推荐将机器输出放在
+`reports/<run-id>/artifacts/` 并针对该子目录配置ignore或CI保留策略；不要一概忽略整个
+`reports/`，否则会漏掉应提交的正式报告及metadata。正式报告记录Run ID、被测commit、环境、
+Case ID、实际结果、判定和证据位置；外部证据记录稳定制品ID/URI、摘要和保留要求，不只写本机临时路径。
+既有项目不自动搬迁历史报告；采用新布局时保留旧引用，避免制造两份权威报告。
+
+#### 4.1.2 系统测试的文件级示例
+
+以下为虚构软件任务服务的落位示例，不要求项目创建不存在的文件或额外测试框架：
+
+```text
+docs/70_verification/
+├── plans/system-test-plan.md                 # 范围、资源、阶段、进入/退出条件
+├── specifications/system-test-specification.md # Case ID、前提、输入和独立判据
+└── procedures/system-test-procedure.md       # 部署、复位、执行、收集和清理方法
+tests/
+├── system/
+│   ├── cases/test_cancel_release.py          # 执行SYS-CANCEL-001并检查资源释放
+│   ├── fixtures/task-input.json              # 小型固定输入，不保存实际运行结果
+│   ├── environments/compose.yaml             # 本套测试环境的可执行定义
+│   └── reports/run-001/
+│       ├── system-test-report.md             # 本次结论、失败与未运行项、证据索引
+│       ├── system-test-report.metadata.json  # 正式报告的文档身份、版本和来源
+│       └── artifacts/                        # 默认不入Git；CI保留或转外部证据库
+│           ├── results.json                 # 各Case的expected、actual和verdict
+│           ├── junit.xml                    # 测试框架输出（适用时）
+│           └── logs/                        # 脱敏日志和诊断输出
+├── integration/
+│   ├── cases/test_api_worker.py              # API与Worker的边界联调
+│   └── reports/run-002/                     # 集成测试自己的报告与证据
+└── unit/M001/
+    ├── cases/test_task_state.py              # M001内部状态转换的单元测试
+    └── reports/run-003/                     # M001自己的报告与证据
+```
+
+计划、规格和规程同样有同名metadata，图中省略。链路是：系统要求/V → 规格中的
+`SYS-CANCEL-001` → `test_cancel_release.py` 的用例入口 → `run-001` 的实际结果 → 本次报告。
+报告引用既有预期，不为通过测试而修改Oracle；未执行保留NOT_RUN，不能伪造结果。
+不要求每个Case单独建文或每次开发试跑都写正式Markdown报告；保留框架报告即可，正式阶段按需
+形成评审结论。集成测试和模块测试沿用同样关联方法，但测试对象及验证边界不同，局部通过不代表系统通过。
 
 ### 4.2 文档与工程数据
 

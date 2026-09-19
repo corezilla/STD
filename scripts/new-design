@@ -20,9 +20,13 @@ STATUSES = {
 }
 
 
-def default_directory(template_id: str, level: str) -> Path:
+def default_directory(template_id: str, level: str, test_scope: str | None = None) -> Path:
     policy = json.loads((ROOT / "templates/path-policy.json").read_text())
     configured = policy["default_paths"][template_id]
+    if template_id == "assurance.test-report":
+        if test_scope not in configured:
+            raise ValueError("测试报告须用 --test-scope 指定测试类型，或 --output 指定所属测试报告目录；模块测试使用 --output tests/unit/<module-id>/reports/<run-id>")
+        return Path(configured[test_scope])
     if isinstance(configured, dict):
         configured = configured.get(level)
         if configured is None:
@@ -48,6 +52,8 @@ def main() -> int:
                         help="项目根目录；未给 --output 时按 STD 推荐结构自动选择目录")
     parser.add_argument("--output", type=Path,
                         help="显式指定输出目录；可与 --project-root 一起使用以生成仓库相对路径")
+    parser.add_argument("--test-scope", choices=["static", "unit", "contract", "subsystem", "integration", "system", "acceptance"],
+                        help="assurance.test-report 的测试类型；unit或Owner共置报告须用 --output 指定对象目录")
     parser.add_argument("--title")
     parser.add_argument("--authority")
     parser.add_argument("--owner", required=True)
@@ -70,6 +76,8 @@ def main() -> int:
     parser.add_argument("--level", help="设计层级；design.system/design.software-system 默认 system，design.subsystem 默认 subsystem，design.definition 默认 module，其他模板默认 cross-level")
     parser.add_argument("--domain", action="append", default=[])
     args = parser.parse_args()
+    if args.test_scope and args.template != "assurance.test-report":
+        parser.error("--test-scope 仅用于 assurance.test-report")
     for value in (args.design_object_id, args.implementation_view_of_document_id, args.volume_of_document_id):
         if value is not None and not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]*", value):
             parser.error("ISD 关联参数必须是合法对象/文档 ID")
@@ -124,7 +132,7 @@ def main() -> int:
         output = args.output
     else:
         try:
-            output = project_root / default_directory(args.template, args.level)
+            output = project_root / default_directory(args.template, args.level, args.test_scope)
         except ValueError as exc:
             parser.error(str(exc))
 

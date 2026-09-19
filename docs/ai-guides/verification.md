@@ -1,11 +1,21 @@
 # 验证与验收 AI 编写指南
 
-版本：0.3.0-draft.1 · 日期：2026-09-12 · 状态：方法草案，待实际写作任务验证
+版本：0.3.0-draft.2 · 日期：2026-09-19 · 状态：方法草案，待实际写作任务验证
 
 主模板：`assurance.vv-plan`、`assurance.test-plan`、`assurance.test-specification`、`assurance.test-procedure`、`assurance.test-report`、`assurance.acceptance-plan`、`assurance.acceptance-report`。
 先读[通用 AI 编写指南](../ai-authoring-guide.md)，再读项目已采用的对应模板。本文补充本类型的工作方法，不重复公共来源、权限和状态规则，不自动升级项目模板。
 
 ## 1. 输入与边界
+
+开始前确认测试类型、被测对象ID和唯一测试目录。计划/规格/规程保存在 `docs/70_verification/`；
+系统报告在 `tests/system/reports/<run-id>/`，集成报告在 `tests/integration/reports/<run-id>/`，
+模块报告在 `tests/unit/<module-id>/reports/<run-id>/` 或Owner共置的同类路径。
+不要集中到根 `tests/reports/`，也不要在文档目录复制一份正式结论。`component` 表示服务、应用或库
+等构建/交付单元，不等于Module ID；确认代码与设计对象映射。
+框架输出与正式报告可共置，正式Markdown报告必须保留metadata；大型或敏感原始输出放Run下的
+`artifacts/` 或受控CI存储，明确摘要和保留要求，不能通过忽略整个reports目录漏交正式文档。
+沿要求/V → Case → 可执行入口 → Run结果 → 报告检查完整性，未运行项保持NOT_RUN，
+局部通过不替代系统验收。具体例子见[目录规范](../repository-layout.md#412-系统测试的文件级示例)。
 
 读取固定需求/设计/契约基线、被测对象与配置、风险、测试环境和真实可用的控制/观测接口。先确定要验证哪个保证，以及不依赖被测实现同一逻辑的正确性判据。被测范围、模拟边界和生产环境不能混为一谈。
 
