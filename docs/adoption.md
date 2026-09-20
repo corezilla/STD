@@ -46,6 +46,7 @@ STD 管模板；项目管理填写后的设计事实。两者的 authority 不�
 STD 提供工程文档模板、编写规范、AI 指南与检查工具；它不代替项目设计决定。
 编写或修改文档前，先读 [STD 主说明与执行流程](https://github.com/corezilla/STD/blob/<full-source-revision>/README.md)，
 再按任务选择已采用的模板、通用指南及专项指南，依据项目事实完成正文、图和适用检查。
+开始任务前必须读取[项目规范总索引](docs/00_management/standards/README.md)，再读本任务适用的生效规范。
 不自动检查或跟随最新 STD/模板；只有用户明确要求升级才重新对齐。
 结构检查通过不等于设计质量、实现或运行验证通过；提交和发布仍需遵循用户授权。
 ```
@@ -57,6 +58,11 @@ STD 提供工程文档模板、编写规范、AI 指南与检查工具；它不�
 缺失入口或断链应修正；不能仅凭锁文件存在宣称新 Agent 已能找到标准。
 
 项目必须提交`docs/std.lock.json`、`docs/std-source-manifest.json`、已启用的模板实例及其同名`.metadata.json`。不要为未启用的文档类型预建空目录。
+
+项目规范默认放在 `docs/00_management/standards/`，总索引 `README.md` 为强制入口；根README靠前
+链接总索引，每份规范开头反向链接总索引。无自定义规范也须明确说明，不造空规范。
+已有合理目录可保留，但须唯一登记；新增/移动/升级/废止必须同步索引。未登记、断链或生效不清
+不能通过规范交付检查，完整字段及STD裁剪边界见[项目规范强制索引](project-standards.md)。
 
 混合软硬件项目使用`docs/repository-layout.md`的完整目录规范，纯软件项目使用`docs/software-project-layout.md`。两份规范的每个目录均在目录行后用`#`说明职责，并定义`notes/`、`materials/`、`interfaces/`、`tests/`和本地数据区的边界。
 

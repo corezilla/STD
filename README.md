@@ -17,6 +17,8 @@ STD 是工程文档的标准、模板、编写指南和校验工具库，不是�
 任何 Agent 只要读到一个模板，都应先沿模板开头的链接到这里，再按以下顺序工作。
 
 1. **确认采用来源与任务边界。** 先读目标项目 README、`docs/std.lock.json` 和已有文档 metadata，
+   并从项目README靠前入口读取项目规范总索引，再读本任务适用的生效规范；目录、反向链接和强制检查
+   见[项目规范索引规则](docs/project-standards.md)。不得漏读项目规则或未经批准覆盖STD。
    使用项目已采用的 STD revision、模板版本及来源清单。普通编写或修改不检查最新版，
    不自动升级。首次接入按[接入规则](docs/adoption.md)明确采用来源；资料缺失或相互冲突时报告缺口，
    不声称已符合标准，也不自行扩大修改范围。
@@ -118,7 +120,7 @@ manifest。完整接入规则见 [`docs/adoption.md`](docs/adoption.md)。
 总体系统设计的概览、适用性、状态/证据、图和信息安全写法及正反例见
 [`docs/architecture-design-authoring-guide.md`](docs/architecture-design-authoring-guide.md)。
 AI 编写入口采用“通用方法 + 模板类型专项”：先读
-[`docs/ai-authoring-guide.md`](docs/ai-authoring-guide.md)（`0.2.0-draft.7`），
+[`docs/ai-authoring-guide.md`](docs/ai-authoring-guide.md)（`0.2.0-draft.8`），
 再按其中的映射选择主专项和项目已采用模板，不需要通读全部指南。
 15 类专项覆盖当前 48 个模板，同类模板共享方法，计划、报告和决定仍保留不同完成边界；
 精确导航见 [`docs/ai-authoring-guides.json`](docs/ai-authoring-guides.json)。

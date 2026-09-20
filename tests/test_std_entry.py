@@ -12,6 +12,36 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class STDEntryTests(unittest.TestCase):
+    def test_project_standards_index_is_mandatory_and_bidirectional(self):
+        readme = (ROOT / "templates/_shared/project-readme.md").read_text()
+        link = "docs/00_management/standards/README.md"
+        self.assertLess(readme.index(link), readme.index("## 当前范围与状态"))
+        policy = (ROOT / "docs/project-standards.md").read_text()
+        index = (ROOT / "templates/_shared/project-standards-index.md").read_text()
+        standard = (ROOT / "templates/_shared/project-standard.md").read_text()
+        for field in ("规范ID", "文件链接", "版本", "状态", "适用范围", "触发任务", "Owner", "STD关系"):
+            self.assertIn(field, index)
+        self.assertIn("[项目规范总索引](README.md)", standard.split("## ", 1)[0])
+        self.assertIn("../../../README.md#std-entry", index)
+        for requirement in ("未登记", "同一变更", "反向链接", "当前无项目自定义规范", "未经批准不得覆盖STD",
+                            "更宽松", "结构测试不能替代", "目录外共置规范", "替代关系"):
+            self.assertIn(requirement, policy)
+        for filename in ("docs/adoption.md", "docs/repository-layout.md", "docs/software-project-layout.md",
+                         "docs/ai-authoring-guide.md"):
+            self.assertIn("project-standards.md", (ROOT / filename).read_text())
+        # Instantiate the README/index/standard navigation without relying on a
+        # particular agent client. Semantic review remains a manual obligation.
+        with tempfile.TemporaryDirectory() as temporary:
+            project = Path(temporary)
+            directory = project / "docs/00_management/standards"
+            directory.mkdir(parents=True)
+            (project / "README.md").write_text(readme)
+            (directory / "README.md").write_text(index)
+            (directory / "coding-standard.md").write_text(standard)
+            self.assertTrue((project / link).is_file())
+            self.assertEqual((directory / "../../../README.md").resolve(), (project / "README.md").resolve())
+            self.assertTrue((directory / "README.md").is_file())
+
     def test_every_registered_cover_links_to_main_readme(self):
         catalog = json.loads((ROOT / "templates/catalog.json").read_text())
         sync = runpy.run_path(str(ROOT / "scripts/sync-template-covers"))

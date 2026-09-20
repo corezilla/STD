@@ -15,6 +15,7 @@
 │   └── workflows/                # 自动构建、检查、测试和发布流水线
 ├── docs/                         # 项目需求、架构、设计、验证和运维文档
 │   ├── 00_management/            # 项目、开发、配置、风险和质量管理
+│   │   └── standards/            # 项目自定义规范；README.md为强制总索引
 │   ├── 10_requirements/          # 用户需求、ConOps、SRS和追踪关系
 │   ├── 15_evaluation/            # 技术选型、PoC、性能和竞品分析
 │   ├── 20_system_design/         # 软件系统架构、边界和质量属性
@@ -157,6 +158,9 @@ knowledge-base/
 执行站点构建、内部链接、资源存在性和重复页面路径检查。
 
 ## 5. 关键边界
+
+项目规范放在 `docs/00_management/standards/`，其中README.md为强制总索引。
+根README靠前链接总索引，每份规范开头反向链接，详见[项目规范强制索引](project-standards.md)。
 
 - `docs/70_verification/`保存计划、规格和规程；每类测试保存自己的代码与报告，例如 `tests/system/reports/<run-id>/`，不集中到根 `tests/reports/`。
 - `interfaces/`保存机器可读公共契约；consumer只引用，不复制Schema。

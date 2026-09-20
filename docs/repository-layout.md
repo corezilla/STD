@@ -19,6 +19,7 @@
 ├── .github/                       # GitHub PR、Issue、CODEOWNERS、CI和协作配置
 ├── docs/                          # 项目级、系统级和跨工程域权威文档
 │   ├── 00_management/             # 项目、开发、配置、风险、质量和安全管理计划
+│   │   └── standards/             # 项目自定义规范；README.md为强制总索引
 │   ├── 10_requirements/           # Stakeholder Needs、ConOps、需求规格和追踪
 │   ├── 15_evaluation/             # 可行性、技术选型、容量性能、竞品和trade-off证据
 │   ├── 20_system_design/          # 系统边界、架构、分解和跨子系统设计
@@ -256,6 +257,9 @@ hardware/boards/<board>/docs/       # 板卡专属设计、BOM、制造和验证
 `docs/30_*`、`40_*`、`50_*`；同一文档类型只能选择一个 canonical 位置。
 
 ## 4. 边界说明
+
+项目规范目录、根README靠前入口、逐规范反向链接和阻断检查见
+[项目规范强制索引](project-standards.md)。无自定义规范也须在总索引明确说明。
 
 - `notes/` 记录沟通过程；产生正式需求或决定后提升到需求、ADR或Owner设计文档。
 - 投资人PPT放 `materials/investors/`，板卡单页放 `materials/products/`。
