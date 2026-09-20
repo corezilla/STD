@@ -60,3 +60,19 @@ class STDEntryTests(unittest.TestCase):
         self.assertLess(main.index('id="std-entry"'), main.index("## 核心规则"))
         for term in ("确认采用来源", "选择正确的文档", "读取编写方法", "检查实际交付", "按授权交付"):
             self.assertIn(term, main)
+
+    def test_readme_environment_handoff_has_concrete_delivery_slots(self):
+        text = (ROOT / "templates/_shared/project-readme.md").read_text()
+        self.assertLess(text.index("## 工程文档标准：STD"), text.index("## 开发与调试环境"))
+        self.assertLess(text.index("## 开发与调试环境"), text.index("## 快速开始"))
+        environment = text.split("## 开发与调试环境", 1)[1].split("## 快速开始", 1)[0]
+        sections = environment.split("### ")[1:]
+        self.assertEqual(len(sections), 5)
+        for section in sections:
+            self.assertIn("<!--", section)
+            self.assertIn("|---|", section)
+        for term in ("只读检查命令及执行目录", "维护责任人 / 最后核实日期", "副作用 / 所需确认",
+                     "分支/commit确认入口", "密码、token、私钥", "公开README", "唯一来源",
+                     "tests/system/reports/<run-id>/", "不依赖旧会话", "记录与实测不符",
+                     "记录本身不授予", "共享设备预约及并发隔离"):
+            self.assertIn(term, environment)
