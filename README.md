@@ -46,6 +46,11 @@ STD 是工程文档的标准、模板、编写指南和校验工具库，不是�
 
 ## 核心规则
 
+**GitNexus 检索入口：** 已接入GitNexus MCP的Agent先用 `list_repos` 找到 `STD`，读取
+`gitnexus://repo/STD/context`，再显式指定 `repo: "STD"` 按文件路径读取本README及适用规范。
+调用示例、客户端连接和版本核对见[GitNexus快速导航](docs/gitnexus-navigation.md)。
+代码搜索无结果不代表规范不存在；检索到的当前版本不得自动替代项目锁定版本。
+
 1. STD 仓库是模板、Schema 和校验工具的权威来源。
 2. 项目通过确定性工具生成文档实例，并把实例提交到自己的仓库。
 3. 每个项目采用记录固定 STD 来源版本；每个文档实例固定模板 ID、模板版本和来源哈希。
