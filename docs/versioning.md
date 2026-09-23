@@ -16,6 +16,11 @@
 | Contract/Schema Version | 机器契约自身 | 兼容性和契约规则决定 |
 | Git Commit/Tag | Git | 不可变证据，不是语义版本 |
 
+STD 的规范、模板、Schema、工具或执行指南只要作为一个新的统一发布快照交付，必须递增
+`VERSION` 中的 STD Version；同一发布批次的多项改动只递增一次。仅处于未发布工作树或评审候选中的
+改动可以暂不递增，但不得称为新的 STD 发布版。若发布批次修改了模板，还必须同时按第 4 章独立递增
+对应 Template Version；STD Version 的递增不能代替模板版本递增，反之亦然。
+
 ## 3. 项目采用 STD
 
 1. 项目 README 必须以人可读方式写明当前采用的 STD Version；`STD` 和反引号包裹的版本号

@@ -69,15 +69,16 @@ class ModuleTemplateTests(unittest.TestCase):
         text = TEMPLATE.read_text()
         numbers = re.findall(r"(?m)^## (\d+)\. ", text)
         self.assertEqual(numbers, [str(n) for n in range(1, 16)])
-        sections = re.split(r"(?m)^#{2,3} ", text)[1:]
-        self.assertEqual(len(sections), 18)  # 15 chapters, inherited constraints, mechanism appendix, teaching appendix
+        sections = re.split(r"(?m)^## ", text)[1:]
+        self.assertEqual(len(sections), 17)  # 15 chapters, mechanism appendix, teaching appendix
         for section in sections:
             with self.subTest(heading=section.splitlines()[0]):
-                self.assertEqual(section.count("<details>"), 1)
-                self.assertEqual(section.count("</details>"), 1)
+                main = section.split("\n### ", 1)[0]
+                self.assertEqual(main.count("<details>"), 1)
+                self.assertEqual(main.count("</details>"), 1)
                 for label in ("本节目的", "必须写清楚", "编写规范", "抽象示例", "完成条件"):
-                    self.assertIn(f"**{label}**", section)
-                norm = section.split("**编写规范**：", 1)[1].split("\n\n", 1)[0]
+                    self.assertIn(f"**{label}**", main)
+                norm = main.split("**编写规范**：", 1)[1].split("\n\n", 1)[0]
                 self.assertGreater(len(norm), 55)
                 self.assertTrue(section.split("</details>", 1)[1].strip())
 
@@ -116,7 +117,7 @@ class ModuleTemplateTests(unittest.TestCase):
         for term in ("request/response/error", "封面/metadata", "漏掉 response",
                      "规格未定义是设计缺口", "NOT_IMPLEMENTED", "NOT_RUN",
                      "§6 数据、§13 实现任务及 §14 验证", "backend", "独立 Oracle",
-                     "设计验证项 V", "Case", "环境/配置", "Run/证据", "并行隔离"):
+                     "设计验证要求 VRC", "Case", "环境/配置", "Run/证据", "并行隔离"):
             self.assertIn(term, text)
         self.assertIn("接口语义、错误行为和测试向量完成评审后两端可并行实现", text)
 
@@ -192,7 +193,10 @@ class ModuleTemplateTests(unittest.TestCase):
         text = re.sub(r"<!--.*?-->", "", text, flags=re.S)
         prose = [line.strip() for line in text.splitlines()
                  if line.strip() and not line.startswith(("#", "|", "> STD 使用入口："))]
-        self.assertEqual(prose, ["文档控制信息（与封面和 metadata 保持一致）："])
+        self.assertIn("文档控制信息（与封面和 metadata 保持一致）：", prose)
+        self.assertTrue(all(line == "文档控制信息（与封面和 metadata 保持一致）："
+                            or re.match(r"^- \*\*[^*]+\*\*：$", line)
+                            for line in prose), prose)
 
     def test_generation_short_cover_control_and_no_fictional_body(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -206,7 +210,7 @@ class ModuleTemplateTests(unittest.TestCase):
             meta_path = next(Path(directory).rglob("module-example.metadata.json"))
             meta = json.loads(meta_path.read_text())
             text = meta_path.with_name("module-example.md").read_text()
-            self.assertEqual(meta["template_version"], "2.3.0")
+            self.assertEqual(meta["template_version"], "2.4.0")
             self.assertEqual(meta["template_sha256"], hashlib.sha256(TEMPLATE.read_bytes()).hexdigest())
             self.assertEqual(meta["design_level"], "module")
             self.assertEqual(meta["domain"], ["software"])
@@ -236,6 +240,71 @@ class ModuleTemplateTests(unittest.TestCase):
                                      capture_output=True, text=True)
             self.assertNotEqual(checked.returncode, 0)
             self.assertIn("metadata.module-scope", checked.stdout)
+
+    def test_service_surface_fixed_records_and_real_demo_are_available(self):
+        text = TEMPLATE.read_text()
+        for term in ("服务端点型模块", "HTTP/RPC 端点集", "5.2 内部调用过程",
+                     "5.3 文件间接口契约", "5.4 服务提供方式", "5.5 依赖方向",
+                     "字段名/类型/必填性/单位/范围", "13.1 文件分解（设计 → 代码文件）",
+                     "15.ISD · 实现规格采用方式", "N/A — 父系统机制清单核对结果",
+                     "RISK-<MODULE>-<nnn>"):
+            self.assertIn(term, text)
+        section2 = text.split("## 2. ", 1)[1].split("## 3. ", 1)[0]
+        self.assertNotIn("| Function ID | 调用方 |", section2)
+        self.assertIn("### 2.N `F-<MODULE>-<NAME>`", section2)
+        appendix = text.split("## 附录 A.", 1)[1].split("文档控制信息", 1)[0]
+        self.assertNotIn("| 来源机制 Document ID", appendix)
+        self.assertIn("#### A.N `<Mechanism Document ID>` / `<Requirement ID>`", appendix)
+
+        demo = ROOT / "demo/llmtier-module-design"
+        for name, document_id in (("http-api-design", "http-api"), ("web-ui-design", "web-ui")):
+            document = demo / "docs/40_module_design" / f"{name}.md"
+            metadata = json.loads((document.with_name(f"{name}.metadata.json")).read_text())
+            self.assertEqual(metadata["document_id"], document_id)
+            self.assertEqual(metadata["template_version"], "2.3.0")
+            self.assertEqual(metadata["status"], "draft")
+            for reference in re.findall(r"!?\[[^]]*\]\((\.\./assets/[^)]+)\)", document.read_text()):
+                self.assertTrue((document.parent / reference).resolve().is_file(), reference)
+
+    def test_record_format_and_cross_document_id_namespaces_are_consistent(self):
+        writing = (ROOT / "docs/design-writing-guide.md").read_text()
+        ai_guide = (ROOT / "docs/ai-authoring-guide.md").read_text()
+        mechanism = (ROOT / "templates/design/system-mechanism-design.md").read_text()
+        mechanism_guide = (ROOT / "docs/ai-guides/system-mechanism.md").read_text()
+        for term in ("固定格式段落", "同一文档内同一类记录", "M-<MECH>-DI-<nnn>",
+                     "RISK-<scope>-<nnn>", "CON-<scope>-<nnn>"):
+            self.assertIn(term, writing)
+        self.assertIn("六个以上字段", ai_guide)
+        for source in (mechanism, mechanism_guide):
+            for term in ("M-<MECH>-DI-<nnn>", "RISK-<MECH>-<nnn>",
+                         "CON-<MECH>-<nnn>"):
+                self.assertIn(term, source)
+        self.assertIn("模板 `2.6.0`", mechanism_guide)
+        self.assertIn("版本：0.8.0-draft.1", mechanism_guide)
+
+    def test_module_record_scaffolds_are_consistent_and_demo_version_is_bounded(self):
+        text = TEMPLATE.read_text()
+        for heading in ("#### 1.1.N `<Constraint ID>`", "#### 3.N `<Surface ID>`",
+                        "#### 4.N `<Dependency ID>`", "#### 6.N `<Data ID / Type>`",
+                        "#### 8.N `<Rule ID>`", "#### 9.N `<Interface ID>`",
+                        "#### 10.N `<Failure / Concurrency ID>`",
+                        "#### 12.N `<Capacity / Performance ID>`",
+                        "#### 14.N `VRC-<MODULE>-<nnn>`",
+                        "#### 15.N `RISK-<MODULE>-<nnn>`"):
+            self.assertIn(heading, text)
+        for old_header in ("| Constraint ID / 上级基线与决定状态 |", "| Surface ID |",
+                           "| 依赖/参与方 |", "| 数据/状态 |", "| Rule ID |",
+                           "| Interface |", "| 场景 |", "| 指标 |",
+                           "| Function/Rule/Constraint |", "| ID | 问题 |"):
+            self.assertNotIn(old_header, text)
+        for namespace in ("F-<MODULE>-<nnn-or-name>", "IF-<MODULE>-<nnn>",
+                          "VRC-<MODULE>-<nnn>", "RISK-<MODULE>-<nnn>",
+                          "CON-<MODULE>-<nnn>"):
+            self.assertIn(namespace, text)
+        self.assertIn("§3 已登记且需要本模块常驻承载的操作面", text)
+        demo_readme = (ROOT / "demo/llmtier-module-design/README.md").read_text()
+        self.assertIn("仅示范实际模块设计的表达方法", demo_readme)
+        self.assertIn("不得照抄本样板的旧字段", demo_readme)
 
 
 if __name__ == "__main__":
