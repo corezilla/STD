@@ -1037,8 +1037,10 @@ B.4 设计约束与关键假设
             "由唯一契约明确", "旧 Worker 恢复", "迟到结果", "新旧执行交叠",
         ):
             self.assertIn(prompt, guidance.replace("\n", ""))
-        for prompt in ("已有结果则不重试", "停止或隔离且幂等/去重成立", "unknown/blocked", "拒绝旧写入"):
-            self.assertIn(prompt, body)
+        self.assertIn("| Failure ID / 检测方 |", body)
+        side_effect = (ROOT / "docs/examples/mechanism-side-effect-example.md").read_text()
+        for prompt in ("不能自动重放旧任务", "FENCED", "不能以客户端超时", "迟到写入"):
+            self.assertIn(prompt, side_effect)
         verification = content.split("## 15. 验证、上线与回滚\n", 1)[1].split("\n## ", 1)[0]
         for prompt in ("FAIL-001", "旧 Worker 恢复", "副作用不重复", "无法确认则阻塞或转人工"):
             self.assertIn(prompt, verification)
@@ -1093,29 +1095,29 @@ B.4 设计约束与关键假设
 
     def test_mechanism_figures_have_visible_prose_safe_svg_and_bound_exports(self):
         content = (ROOT / "templates/design/system-mechanism-design.md").read_text()
+        readonly_example = (ROOT / "docs/examples/mechanism-readonly-observation-example.md").read_text()
+        side_effect_example = (ROOT / "docs/examples/mechanism-side-effect-example.md").read_text()
+        host_fpga_example = (ROOT / "docs/examples/host-fpga-transfer-example.md").read_text()
         blocks = re.findall(r"<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->(.*?)<!-- STD_TEMPLATE_EXAMPLE_END -->",
                             content, re.DOTALL)
         readonly = {"usage-overview", "collaboration", "objects", "sequence", "state-lifecycle", "failure-recovery", "test-path"}
         effects = {"effect-flow", "cleanup-dependencies"}
         names = readonly | effects
-        self.assertEqual(len(blocks), 14)  # also remove the formerly unmarked FAIL-001 teaching row
-        seen = set()
-        for block in blocks:
-            self.assertNotIn("<details>", block)
-            self.assertIn("Target / Planned / NOT_RUN", block)
-            self.assertIn("不是第二份协议", block)
-            paths = re.findall(r"!\[[^]]*\]\(([^)]+\.png)\)", block)
-            if not paths:  # API, five-axis and verification teaching blocks are text/tables.
-                self.assertIn("mechanism-side-effect-example.md", block)
-                continue
-            self.assertEqual(len(paths), 1)
-            png = (ROOT / "templates/design" / paths[0]).resolve()
-            self.assertTrue(png.is_file())
-            seen.add(png.stem)
-            self.assertIn(f"../diagrams/mechanism/{png.stem}.svg", block)
-            self.assertIn("#88-完整小例两个单元的只读版本核对" if png.stem in readonly
-                          else "mechanism-side-effect-example.md", block)
-        self.assertEqual(seen, names)
+        self.assertEqual(len(blocks), 1)
+        navigation = blocks[0]
+        for reference in ("mechanism-readonly-observation-example.md",
+                          "mechanism-side-effect-example.md", "host-fpga-transfer-example.md"):
+            self.assertIn(reference, navigation)
+        self.assertNotIn("![", content)
+        self.assertLess(len(content.splitlines()), 1050)
+        for name in readonly:
+            self.assertIn(f"system-mechanism-authoring/{name}.png", readonly_example)
+            self.assertIn(f"diagrams/mechanism/{name}.svg", readonly_example)
+        for name in effects:
+            self.assertIn(name, side_effect_example)
+        for term in ("跨 Owner、软件—FPGA—板卡承接变体", "F-XFER-TOP", "B-XFER",
+                     "这里仅说明交接语义，不复制"):
+            self.assertIn(term, host_fpga_example)
         exports = json.loads((ROOT / "docs/assets/system-mechanism-authoring/exports.json").read_text())
         self.assertEqual((exports["width"], exports["height"]), (1440, 840))
         self.assertEqual(len(exports["exports"]), 9)
@@ -1145,11 +1147,11 @@ B.4 设计约束与关键假设
                           else "EX-EXPORT-01/v1", svg_bytes.decode())
 
     def test_mechanism_example_preserves_test_order_and_volatile_boundary(self):
-        content = (ROOT / "templates/design/system-mechanism-design.md").read_text()
-        sample = content.split("图 6：", 1)[1].split("<!-- STD_TEMPLATE_EXAMPLE_END -->", 1)[0]
-        positions = [sample.index(text) for text in ("arm B", "协议路径调用后", "已 hit", "撤销延迟")]
+        content = (ROOT / "docs/examples/mechanism-readonly-observation-example.md").read_text()
+        sample = content.split("## 6. 测试路径和独立判据", 1)[1].split("## 7.", 1)[0]
+        positions = [sample.index(text) for text in ("arm B", "真实入口调用后", "hit", "release 延迟")]
         self.assertEqual(positions, sorted(positions))
-        self.assertIn("不保留 CLOSED 记录", content)
+        self.assertIn("不建立持久历史", content)
         self.assertIn("新观测", content)
         state = (ROOT / "templates/diagrams/mechanism/state-lifecycle.svg").read_text()
         self.assertIn("不保存 CLOSED 记录", state)

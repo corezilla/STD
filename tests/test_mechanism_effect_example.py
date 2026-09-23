@@ -474,9 +474,10 @@ class MechanismEffectExampleTests(unittest.TestCase):
         text = (ROOT / "templates/design/system-mechanism-design.md").read_text()
         opening = text.split("## 1.", 1)[1].split("## 2.", 1)[0]
         participants = text.split("## 3.", 1)[1].split("## 4.", 1)[0]
-        self.assertIn("usage-overview.png", opening)
-        self.assertNotIn("collaboration.png", opening)
-        self.assertIn("collaboration.png", participants)
+        self.assertIn("用途概览图放本节", opening)
+        self.assertNotIn("collaboration.png", participants)
+        readonly = (ROOT / "docs/examples/mechanism-readonly-observation-example.md").read_text()
+        self.assertLess(readonly.index("usage-overview.png"), readonly.index("collaboration.png"))
         example = EXAMPLE.read_text()
         self.assertIn("EX-V6", example)
         self.assertIn("未实现；执行 NOT_RUN", example)

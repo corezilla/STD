@@ -126,10 +126,14 @@ class AIAuthoringGuidesTests(unittest.TestCase):
                         "### 14.3 责任单元间接口契约", "### 14.4 下级设计输入清单"):
             self.assertIn(heading, mechanism)
         for term in ("已有机器源", "无机器源 Proposed", "已发生/可能副作用",
-                     "HTTP/RPC", "A.2 纯软件 API 机制裁剪示例"):
+                     "HTTP/RPC", "A.2 纯软件 API 机制裁剪示例",
+                     "至少一份代表输入", "只写跨对象交接语义", "不复述或另建简化版本",
+                     "M-INFER-DI-001", "Mechanism Document ID + Requirement ID"):
             self.assertIn(term, mechanism)
         self.assertIn("## 附录 A. 机制承接表", module)
-        for term in ("§14.1–14.4", "附录 A 逐行承接", "纯软件项目也使用同一模板"):
+        self.assertIn("Mechanism Document ID + 机制第 14.4 节的精确 Requirement ID", module)
+        for term in ("§14.1–14.4", "精确逐行承接", "纯软件项目也使用同一模板",
+                     "不是可选示例", "外部案例只示范方法", "双向 join"):
             self.assertIn(term, guide)
 
     def test_mechanism_parent_tree_is_not_the_dependency_graph(self):

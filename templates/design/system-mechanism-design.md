@@ -16,12 +16,11 @@
 <!-- STD_DOCUMENT_COVER_END -->
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-**教学入口选择｜Target / Planned / NOT_RUN**：以下是方法导航，不是第二份协议。
-只读协作见本模板 EX-OBS 图文，有副作用的收口见
-[EX-EXPORT](../../docs/examples/mechanism-side-effect-example.md)；软硬件交接见
-[Host—驱动—FPGA 案例](../../docs/examples/host-fpga-transfer-example.md)。后者演示原生布局、
-完成可见性和停止/排空，不是芯片内部架构或已实现的板卡协议。选择与本机制相符的路径，
-不要求每份文档实现全部案例。批量写作方法见已采用指南 §10。
+**教学入口选择｜Target / Planned / NOT_RUN**：完整案例已外移，模板只保留方法导航。
+只读协作见[跨单元只读观测案例](../../docs/examples/mechanism-readonly-observation-example.md)，
+有副作用的收口见[EX-EXPORT](../../docs/examples/mechanism-side-effect-example.md)，软硬件交接见
+[Host—驱动—FPGA 案例](../../docs/examples/host-fpga-transfer-example.md)。案例不是项目协议、实现或测试证据；
+选择与真实机制相符的路径，不要求每份文档实现全部案例。
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 1. 机制摘要：解决什么问题
@@ -56,21 +55,6 @@
 <!-- 用连续段落说明何时使用、处理什么及得到什么；用途概览图放本节，参与方职责图放 §3。 -->
 
 
-
-<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-**用途图例｜虚构 EX-OBS-01/v1，Target / Planned / NOT_RUN**
-
-![使用场景—处理范围—输出结果](../../docs/assets/system-mechanism-authoring/usage-overview.png)
-
-图 U1：维护或变更前核对运行版本，读取既定目标并返回逐目标结果。这个图先回答何时用、处理什么、
-得到什么；参与方与 authority 见 §3，不在开篇用职责拓扑替代用途。[可编辑 SVG](../diagrams/mechanism/usage-overview.svg)。
-
-使用者不是为了“调用 M”而查询，而是要辨认目标当前运行版本与无法采样的对象，为下一步维护判断提供输入。
-处理范围仅限只读采样，输出明确区分完整、部分、无成功采样及入口拒绝，不升级配置、不保存历史。
-本图不证明所有目标同一时刻一致，也不证明未响应目标已失效。详细公共契约仍唯一见
-[EX-OBS-01/v1](../../docs/ai-system-design-authoring-guide.md#88-完整小例两个单元的只读版本核对)；
-本图是解释视图，不是第二份协议，不是实现或测试证据。
-<!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 2. 使用场景与功能
 
@@ -109,21 +93,6 @@
 **完成条件**：能为每项权威事实和跨边界决定找到唯一责任与实际承接位置；所有消费者的前提已核对。
 
 </details>
-
-<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-**图文样板｜虚构 EX-OBS-01/v1，Target / Planned / NOT_RUN**
-
-![只读版本查询的参与方与协作边界](../../docs/assets/system-mechanism-authoring/collaboration.png)
-
-图 1：谁发起、谁汇总、谁拥有事实。蓝色实线表示请求方向，灰色虚线表示响应方向。 [可编辑 SVG](../diagrams/mechanism/collaboration.svg)。
-
-运维者通过既有管理主机上的命令调用 M；M 按固定清单先查询 A、再查询 B，并返回每个目标的结果。A、B 各自拥有本地版本事实，M 只拥有本轮临时采样上下文，不建立新的版本数据库。两条目标路径不代表并行采样；具体先后见图 3。选择顺序采样降低编排复杂度，但承担较长的最坏响应时间。
-
-六图使用同一只读教学机制；完整字段、操作、错误和命令唯一见
-[AI 指南的 EX-OBS-01/v1 定义](../../docs/ai-system-design-authoring-guide.md#88-完整小例两个单元的只读版本核对)。
-图是解释视图，不是第二份协议，也不表示已有实现或测试结果。生成项目实例时移除这些教学块，
-按真实设计绘制项目图；保留样式不能保留虚构事实。
-<!-- STD_TEMPLATE_EXAMPLE_END -->
 
 <!-- 说明参与方为何这样分工，再登记 authority 与边界。 -->
 
@@ -236,22 +205,6 @@
 | 类型成员 ID / Object / Contract baseline | Producer → Consumers | 完整定义定位 | identity / 版本 | 复制/变换/保存与释放 | Authority |
 |---|---|---|---|---|---|
 
-<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-**图文样板｜虚构 EX-OBS-01/v1，Target / Planned / NOT_RUN**
-
-![Sample 到 Report 的只读对象转换](../../docs/assets/system-mechanism-authoring/objects.png)
-
-图 2：事实、采样副本和汇总对象的区别。箭头表示数据复制或变换，不表示执行时序。 [可编辑 SVG](../diagrams/mechanism/objects.svg)。
-
-目标短时持锁复制本地 tuple，随即解锁；M 收到并完整校验响应后才接纳 Sample。M 以 A、B 固定顺序组合结果；错误项不补造 sample。Report 明确标记 non_atomic，不能据此推导跨目标一致性或持久历史。图只展开 A 成功的代表分支，A 错误时同样保留其 ERROR 位置，不因缺失 Sample 删目标。图中的临时对象不是新增持久存储；退出或关闭轮次后按正文的资源规则释放。
-
-六图使用同一只读教学机制；完整字段、操作、错误和命令唯一见
-[AI 指南的 EX-OBS-01/v1 定义](../../docs/ai-system-design-authoring-guide.md#88-完整小例两个单元的只读版本核对)。
-图是解释视图，不是第二份协议，也不表示已有实现或测试结果。生成项目实例时移除这些教学块，
-按真实设计绘制项目图；保留样式不能保留虚构事实。
-<!-- STD_TEMPLATE_EXAMPLE_END -->
-
-
 
 
 ### 4.1 类型目录与完整字段
@@ -352,11 +305,11 @@
 
 **必须写清楚**：每个操作的请求/响应/事件/错误、权限、校验顺序及合法下一步。
 
-**编写规范**：按实际 API/CLI/信号适用条件展开，不为填表创建新入口。类型使用 §4 成员 ID，签名与完整阅读视图绑定版本/hash；CLI 补参数、默认、互斥、输出/退出码和执行位置，硬件补标准号/版本/项目绑定及适用电气/时序。沿具体请求演练定位、校验、动作、确认与失败，不把 accepted 当完成，不只保留成功样本。
+**编写规范**：按实际 API/CLI/信号适用条件展开，不为填表创建新入口。类型使用 §4 成员 ID，签名与完整阅读视图绑定版本/hash；CLI 补参数、默认、互斥、输出/退出码和执行位置，硬件补标准号/版本/项目绑定及适用电气/时序。必须选择至少一份代表输入，从真实入口逐步走完定位、校验、动作、确认、失败出口和清理，并保留完整输入、每步已知事实、返回及合法下一步；只列字段或 happy path 不算调用演练。无法完成演练时回到共同设计补齐，不把 accepted 当完成。
 
 **抽象示例**：虚构 IF-EXPORT#OP01 prepare 的 args 为 PrepareArgs；原 ID 改 payload 得 ERR06/CONFLICT，核查原记录而不覆盖。
 
-**完成条件**：双方不需口头补字段或猜错误处理；下游实现前 Proposed 契约已落盘。
+**完成条件**：代表输入已从调用入口走到可观察终态或有依据的阻塞，双方不需口头补字段或猜错误处理；至少一个失败/取消分支使用同一对象身份完成演练；下游实现前 Proposed 契约已落盘。
 
 </details>
 
@@ -369,25 +322,6 @@
 |---|---|---|---|---|
 
 <!-- 在此给出完整正常请求/响应、跨字段失败实例及双方逐步调用。 -->
-
-<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-**接口实例｜虚构 EX-EXPORT-01/v1，Target / Planned / NOT_RUN**
-
-[完整有副作用案例 EX-EXPORT-01/v1](../../docs/examples/mechanism-side-effect-example.md) §4 唯一定义传输、身份、完整字段、七项操作、跨字段约束与错误。
-下面是同一次 prepare 的完整请求和响应样本，不是第二份协议；字段类型、参数冻结、调用权限及下一步
-必须回查该定义，不能只凭一个 happy-path JSON 宣称接口可调用。
-
-```json
-{"protocol":"EX-EXPORT-01/v1","request_id":"q1","agent_instance":"agent-a1","operation_id":"op-001","op":"prepare","args":{"slot_id":"slot-1","payload":"demo"}}
-{"protocol":"EX-EXPORT-01/v1","request_id":"q1","agent_instance":"agent-a1","operation_id":"op-001","ok":true,"state":{"phase":"PREPARED","result":"NOT_STARTED","access":"OPEN","evidence":"PENDING","disposition":null,"resource":"HELD","admission":"BLOCKED"},"output":null}
-```
-
-接收方按 agent_instance、调用 UID 和 operation_id 定位实例，再按冻结的 slot/payload 判断重复或冲突。
-PREPARED 只证明私有槽已预留，尚未执行，也未安全释放；合法下一步可 execute 或直接 stop 取消。
-同 op-001 改 payload 返回 CONFLICT，错误响应不带成功 state/output。完整错误对和双方逐步调用见
-[案例的正常调用及跨字段错误实例](../../docs/examples/mechanism-side-effect-example.md#43-正常调用实例)。
-新增调用者不能靠换 request_id 绕过防重放；请求/响应关联错位时不得消费另一实例结果。
-<!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 6. 正常端到端流程
 
@@ -406,38 +340,9 @@ PREPARED 只证明私有槽已预留，尚未执行，也未安全释放；合�
 
 </details>
 
-<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-**图文样板｜虚构 EX-OBS-01/v1，Target / Planned / NOT_RUN**
-
-![只读查询正常时序](../../docs/assets/system-mechanism-authoring/sequence.png)
-
-图 3：EX-OP1 与两次 EX-OP2 的顺序关系。虚线为响应；纵向位置表示先后，不按时间比例绘制。 [可编辑 SVG](../diagrams/mechanism/sequence.svg)。
-
-命令端等待一次 EX-OP1；M 在通过入口检查后才取得轮次槽位并分配 observation_id，然后先 A 后 B。每个目标响应均完成校验后才进入汇总；完整成功时返回 COMPLETE。命令退出码由 Report outcome 决定，不能只看 HTTP 200。进入错误分支时仍保留已确认的采样，详见图 5。
-
-六图使用同一只读教学机制；完整字段、操作、错误和命令唯一见
-[AI 指南的 EX-OBS-01/v1 定义](../../docs/ai-system-design-authoring-guide.md#88-完整小例两个单元的只读版本核对)。
-图是解释视图，不是第二份协议，也不表示已有实现或测试结果。生成项目实例时移除这些教学块，
-按真实设计绘制项目图；保留样式不能保留虚构事实。
-<!-- STD_TEMPLATE_EXAMPLE_END -->
-
 | Process / Step | 执行方 → 接收方 | 前置/输入 | 判断与动作 | 状态/对象变化 | 确认、期限、失败出口 |
 |---|---|---|---|---|---|
 
-
-<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-**端到端完整例｜虚构 EX-EXPORT-01/v1，Target / Planned / NOT_RUN**
-
-![准备、执行、响应丢失、停止、取证与释放](../../docs/assets/system-mechanism-authoring/effect-flow.png)
-
-图 E1：[可编辑 SVG](../diagrams/mechanism/effect-flow.svg)。规范唯一见[完整有副作用案例 EX-EXPORT-01/v1](../../docs/examples/mechanism-side-effect-example.md) §3–6，
-本图不是第二份协议。正常路径经过准备、执行、停止、保全、交付和释放；响应丢失分支先核对原操作，
-安全停止后允许取证封结为不可恢复，选择丢弃再释放，不重执行原请求。
-
-图中 stop 关闭 W 的新写准入并排空，不等待取证；超时只能返回 STOPPING，不能画成已安全停止。
-collect 尚为 PENDING 时不能进入收口；release 清理失败时仍保留槽位。主路径、取消与回退的前置范围
-通过 EX-R3/EX-R6 关联，失败详情引用案例 §6，不再复制另一份终结政策。
-<!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ### 6.1 交叠请求、跨轮次与生命周期边界
 
@@ -500,47 +405,12 @@ collect 尚为 PENDING 时不能进入收口；release 清理失败时仍保留�
 
 </details>
 
-<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-**图文样板｜虚构 EX-OBS-01/v1，Target / Planned / NOT_RUN**
-
-![查询轮次与资源生命周期](../../docs/assets/system-mechanism-authoring/state-lifecycle.png)
-
-图 4：M 存活时的内存轮次状态。实线是正常转换，虚线是客户端取消后的终止，不是返回成功；进程退出时上下文消失，不保留 CLOSED 记录。 [可编辑 SVG](../diagrams/mechanism/state-lifecycle.svg)。
-
-只有入口检查通过且获得 M 槽位才开始本轮。A 或 B 的成功/错误都可结束该阶段；整轮预算耗尽时未完成目标记超时，未发出的查询不再发出，直接进入结果汇总。汇总时根据成功数生成 outcome，而不是重新采样。正常发送结束或终止时关闭本地 I/O、释放 M 槽位；目标占用独立受其 700 ms 限制，不能由本地 CLOSED 推导目标已停。
-
-六图使用同一只读教学机制；完整字段、操作、错误和命令唯一见
-[AI 指南的 EX-OBS-01/v1 定义](../../docs/ai-system-design-authoring-guide.md#88-完整小例两个单元的只读版本核对)。
-图是解释视图，不是第二份协议，也不表示已有实现或测试结果。生成项目实例时移除这些教学块，
-按真实设计绘制项目图；保留样式不能保留虚构事实。
-<!-- STD_TEMPLATE_EXAMPLE_END -->
-
 | From | Event | Guard / 原子边界 | To | Writer | Side effect / 资源变化 | 非法/迟到转换结果 |
 |---|---|---|---|---|---|---|
 
 | INV-ID | 可验证断言（量词、条件和预期必须明确） | Enforcement / 事实来源 | 反例输入/违反后的结果 | 验证项 |
 |---|---|---|---|---|
 
-
-<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-**条件依赖例｜虚构 EX-EXPORT-01/v1，Target / Planned / NOT_RUN**
-
-![停止、取证、交付或丢弃、释放的依赖](../../docs/assets/system-mechanism-authoring/cleanup-dependencies.png)
-
-图 E2：[可编辑 SVG](../diagrams/mechanism/cleanup-dependencies.svg)。[完整有副作用案例 EX-EXPORT-01/v1](../../docs/examples/mechanism-side-effect-example.md) EX-R3/EX-R6
-是唯一规则，本图不是第二份协议。stop 不依赖 collect/finalize；collect 依赖访问安全；release 只等待
-已经选择的分支完成，不等待另一个不适用分支。关闭 Worker 写入入口，不应同时撤销调用者的取证/丢弃权限。
-
-| 分支 | 有效终结依赖 | 应主动排除的错误 |
-|---|---|---|
-| 正常交付 | FENCED → 取证封结 → deliver → release | 仅有 SUCCEEDED 就提前释放 |
-| 取消/回退 | FENCED → 取证封结 → discard → release | 还等待从未选择的 deliver 成功 |
-| 安全未确认 | STOPPING 保留槽位，继续核对或转人工 | stop 等取证、取证又等 stop |
-| 证据不可恢复但安全已确认 | UNKNOWN + FENCED → discard → release | 把旧结果 UNKNOWN 当作永远不能安全释放 |
-
-每个等待都标事件生产者、期限和合法出口；“或分支完成”不能写成全局 AND。资源与终态的关系按
-实际机制定义，不能把本例私有暂存的可丢弃性推广到外部业务副作用。
-<!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ### 8.1 资源预留、交付、释放与复位
 
@@ -598,57 +468,6 @@ collect 尚为 PENDING 时不能进入收口；release 清理失败时仍保留�
 
 | Failure ID / 检测方 | 失败点与传播 | 结果已知性 | 已发生/可能副作用 | 访问安全/证据 | 操作终态 | 资源释放 | 重新准入/重试条件 |
 |---|---|---|---|---|---|---|---|
-
-<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-**条件式失败教学行｜Target / Planned / NOT_RUN（不是项目登记）**
-
-本行示范失败维度的区分，不是第二份协议；实际收口规则参考
-[有副作用案例](../../docs/examples/mechanism-side-effect-example.md)。
-
-| Failure ID / 检测方 | 失败点与传播 | 结果已知性 | 访问安全/证据 | 操作终态 | 资源释放 | 重新准入/重试条件 |
-|---|---|---|---|---|---|---|
-| FAIL-001 / 契约指定监控方 | Worker 失联，向上游报告结果未知 | 已有结果则不重试，返回原结果；否则 UNKNOWN | 独立确认停止或隔离；拒绝旧写入 | 按契约确认结果或封结未知；不得伪造成功 | 无安全证明则保持隔离 | 旧操作重执行须停止或隔离且幂等/去重成立；条件不足 unknown/blocked |
-
-按实际入口覆盖 timeout、取消、重复调用/投递、部分成功、重启和 UnknownOutcome；
-不存在的消息投递等行为按附录 A 记录不适用。上表 FAIL-001 是有副作用机制的条件式教学反例，
-不是下列只读示例的 Worker 或新增任务协议。正式文档须替换为真实失败项。
-<!-- STD_TEMPLATE_EXAMPLE_END -->
-
-<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-**图文样板｜虚构 EX-OBS-01/v1，Target / Planned / NOT_RUN**
-
-![只读查询的部分结果与未知结果](../../docs/assets/system-mechanism-authoring/failure-recovery.png)
-
-图 5：两类失败不能合并。左路 M 仍可汇总；右路 M 退出，旧轮次不可恢复。 [可编辑 SVG](../diagrams/mechanism/failure-recovery.svg)。
-
-A 已成功但 B 超时时，只要 M 仍存活并完成响应，就返回 A OK / B DEADLINE_EXCEEDED 的 PARTIAL Report，命令退出 2。M 若在响应前退出，客户端不能断言目标失败，旧 Report 也没有持久副本可供读取；命令记录通信错误。以后获准的新手动查询使用新的 observation_id，既不重放原请求，也不证明旧目标已停；此结论只适用于本例无业务副作用且资源限时清理的查询。
-
-六图使用同一只读教学机制；完整字段、操作、错误和命令唯一见
-[AI 指南的 EX-OBS-01/v1 定义](../../docs/ai-system-design-authoring-guide.md#88-完整小例两个单元的只读版本核对)。
-图是解释视图，不是第二份协议，也不表示已有实现或测试结果。生成项目实例时移除这些教学块，
-按真实设计绘制项目图；保留样式不能保留虚构事实。
-<!-- STD_TEMPLATE_EXAMPLE_END -->
-
-
-<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-**五轴异常核对例｜虚构 EX-EXPORT-01/v1，Target / Planned / NOT_RUN**
-
-[完整有副作用案例 EX-EXPORT-01/v1](../../docs/examples/mechanism-side-effect-example.md) §6 展开“完成响应与凭据丢失，但写入已安全停止”。这不是第二份协议，
-也不是把 UNKNOWN 改写成成功；以下五项必须分别给结论和依据：
-
-| 轴 | 示例结论 | 依据或仍未关闭的部分 |
-|---|---|---|
-| 结果已知性 | UNKNOWN | 完成凭据不可恢复，不能确认旧业务结果 |
-| 访问安全 | FENCED | authority 关闭新写且确认在途为零，不是客户端超时 |
-| 操作终态 | FINALIZED(discard) | 已安全、取证封结，明确放弃交付 |
-| 资源释放 | RELEASED | 私有文件清理确认、槽归还，防重放记录保留 |
-| 重新准入 | ELIGIBLE | 本操作不再阻塞资源；显式新任务/新 ID 仍检查此刻容量，不自动重放旧操作 |
-
-如果无法证明门禁或排空，访问安全仍未知、资源保持隔离，结果已知性则保留已有证据的结论；如果仅证据不可恢复而安全可独立证明，
-按实际契约允许封结与清理，不等待不可能恢复的证据。EX-R5 的来源封口和转换表说明这些事实如何产生：
-本例成功读取封口快照后确认无有效凭据才到 UNRECOVERABLE；无法读取仍为 PENDING，不以超时替代判定。
-对涉及副作用、取证和资源收口的机制，将 EX-V3/EX-T3 作为反例测试入口，不能只测恢复成功；只读机制按附录 A 裁剪。
-<!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 10. 并发、排序与容量
 
@@ -847,7 +666,7 @@ A 已成功但 B 超时时，只要 M 仍存活并完成响应，就返回 A OK 
 
 **必须写清楚**：每个跨对象接口的成员 ID/基线、提供者、全部消费者、调用或事件形态、固定语义与错误，以及期限、取消和重复边界。
 
-**编写规范**：引用 §5 和机器目录的同一成员，不复制字段；接口缺失时是机制设计缺口，不写成模块自由发挥。进程内函数也要说明参数、结果和错误责任；没有跨对象接口时说明为何所有行为在单一对象内闭合。
+**编写规范**：本节只写跨对象交接语义、调用方向、提供/消费责任和机制固定的边界；完整签名、字段、编码和错误码由 §5 与机器目录唯一维护，本节只引用同一成员 ID/基线，不复述或另建简化版本。接口缺失时是机制设计缺口，不写成模块自由发挥。进程内函数也要说明交接责任；没有跨对象接口时说明为何所有行为在单一对象内闭合。
 
 **抽象示例**：Router.admit 交付许可和候选，退出上下文释放许可；它不承诺后端已执行，也不把 429 改成 provider failure。
 
@@ -867,9 +686,9 @@ A 已成功但 B 超时时，只要 M 仍存活并完成响应，就返回 A OK 
 
 **本节目的**：形成可由每份下级设计逐行承接的稳定要求集合，连接纵向机制视图与横向模块视图。
 
-**必须写清楚**：承接对象和文档、来源能力/步骤/约束/接口、必须负责和提供/消费的内容、必须深化的问题、自由度及本地/组合验证交接。
+**必须写清楚**：每行唯一的下级要求 ID、承接对象和文档、来源能力/步骤/约束/接口、必须负责和提供/消费的内容、必须深化的问题、自由度及本地/组合验证交接。
 
-**编写规范**：每行给稳定来源 ID，粒度以一个下级对象能独立承接和验证为准；不把代码文件或私有 helper 猜进要求侧。模块设计附录 A 使用相同语义逐行反向登记，发现遗漏或冲突回到本节裁决。
+**编写规范**：为每行分配在本文内唯一且版本内稳定的 Requirement ID（例如 `M-INFER-DI-001`），并关联稳定来源 ID；粒度以一个下级对象能独立承接和验证为准，不把代码文件或私有 helper 猜进要求侧。模块设计附录 A 必须以 Mechanism Document ID + Requirement ID 精确反向登记，不能只写“§14.4”或复制一段近似文字；发现遗漏或冲突回到本节裁决。
 
 **抽象示例**：M-API 承接 terminal 唯一性和断开清理，必须深化背压与帧缓冲；内部缓冲容器可选，但对外事件顺序不可改变。
 
@@ -877,8 +696,8 @@ A 已成功但 B 超时时，只要 M 仍存活并完成响应，就返回 A OK 
 
 </details>
 
-| 承接对象 ID / 下级设计文档 | 来源 Capability / Step / Constraint / 接口成员 | 必须负责的行为与保证 | 必须提供/消费的接口 | 下级必须展开的问题 | 允许自行决定的范围 | 本地验证 / 组合验证交接 |
-|---|---|---|---|---|---|---|
+| 下级要求 ID | 承接对象 ID / 下级设计文档 | 来源 Capability / Step / Constraint / 接口成员 | 必须负责的行为与保证 | 必须提供/消费的接口 | 下级必须展开的问题 | 允许自行决定的范围 | 本地验证 / 组合验证交接 |
+|---|---|---|---|---|---|---|---|
 
 <!-- 模块设计“机制承接表”必须逐行引用本表来源；代码文件/symbol 属于落实侧，不在机制文档猜测。 -->
 
@@ -907,37 +726,6 @@ A 已成功但 B 超时时，只要 M 仍存活并完成响应，就返回 A OK 
 <!-- 每项设计验证项同时绑定接口/类型成员 ID 与固定源基线；Case、环境和 Run 分开，局部 backend 通过不关闭组合目标。 -->
 
 <!-- 按真实能力填写；未运行写 NOT_RUN，不把教学例子当已验证用例。 -->
-
-<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-**图文样板｜虚构 EX-OBS-01/v1，Target / Planned / NOT_RUN**
-
-![查询机制的测试控制与独立判据](../../docs/assets/system-mechanism-authoring/test-path.png)
-
-图 6：用受控输入驱动被测真实链路，独立核对输出，并检查清理。紫色虚线仅表示测试控制关系。 [可编辑 SVG](../diagrams/mechanism/test-path.svg)。
-
-测试先固定目标 tuple 与可信身份并 arm B 的受控延迟；从真实 CLI→M→目标协议路径调用后，确认指定请求已 hit，才把超时结果计作该故障的覆盖。独立 Oracle 比较预置 A 事实、B 超时错误、PARTIAL outcome 和退出码 2。延迟夹具是测试环境能力，不是该生产协议新提供的命令；具体实现及可用性须验证。测试结束撤销延迟、终止残留连接并确认槽位归还。测试逻辑采用模拟目标时只能证明模拟范围，不能改称真实设备或生产验证。
-
-六图使用同一只读教学机制；完整字段、操作、错误和命令唯一见
-[AI 指南的 EX-OBS-01/v1 定义](../../docs/ai-system-design-authoring-guide.md#88-完整小例两个单元的只读版本核对)。
-图是解释视图，不是第二份协议，也不表示已有实现或测试结果。生成项目实例时移除这些教学块，
-按真实设计绘制项目图；保留样式不能保留虚构事实。
-<!-- STD_TEMPLATE_EXAMPLE_END -->
-
-
-<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-**验证汇聚例｜虚构 EX-EXPORT-01/v1，Target / Planned / NOT_RUN**
-
-[完整有副作用案例 EX-EXPORT-01/v1](../../docs/examples/mechanism-side-effect-example.md) §7 是本例验证项汇聚入口，不是第二份协议。设计项、用例、环境和记录分别关联：
-
-| 设计项/规则 | 用例承接 | 环境要求 | 实现与执行记录 |
-|---|---|---|---|
-| EX-V3 / R4、R5、R7：未知结果可安全收口 | EX-T3：丢响应/凭据→独立停止证明→discard/release；旧 ID 不重执行 | EX-ENV-M 逻辑模型；EX-ENV-P 真实写入门禁/IPC | 模型代码可执行，结果以实际命令输出为准；真实实现未完成/NOT_RUN |
-| EX-V4 / R3、R6：分支无循环等待 | EX-T4：取消不等 deliver，PENDING 不提前清理 | EX-ENV-M；真实并发需额外环境 | 模型验证不能关闭真实并发保证 |
-| EX-V6 / R2、R8：实际越权与旧实例隔离 | EX-T6：旧写/错误 UID/重启拒绝 | EX-ENV-P，尚未提供 | 用例未实现，执行 NOT_RUN；需要执行但环境不可用时 BLOCKED |
-
-正式文档逐项汇聚设计要求→Case→环境→Run/证据；分记未实现、未执行、失败和有依据的不适用。
-局部通过不能关闭系统要求，模型 PASS 不关闭真实强制点。改变规则后核对这些关联和反例，不只重算覆盖率。
-<!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ### 15.1 输入构造、故障控制与独立判据
 
