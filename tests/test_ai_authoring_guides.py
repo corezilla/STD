@@ -118,6 +118,20 @@ class AIAuthoringGuidesTests(unittest.TestCase):
             self.assertNotIn("维护入口在 §11.2", text)
             self.assertNotIn("包含 15 章写作顺序", text)
 
+    def test_mechanism_decomposes_requirements_and_software_tailoring(self):
+        mechanism = (ROOT / "templates/design/system-mechanism-design.md").read_text()
+        module = (ROOT / "templates/design/design-definition.md").read_text()
+        guide = (ROOT / "docs/ai-guides/system-mechanism.md").read_text()
+        for heading in ("### 14.1 参与方到架构对象映射", "### 14.2 功能和步骤到责任单元分配",
+                        "### 14.3 责任单元间接口契约", "### 14.4 下级设计输入清单"):
+            self.assertIn(heading, mechanism)
+        for term in ("已有机器源", "无机器源 Proposed", "已发生/可能副作用",
+                     "HTTP/RPC", "A.2 纯软件 API 机制裁剪示例"):
+            self.assertIn(term, mechanism)
+        self.assertIn("## 附录 A. 机制承接表", module)
+        for term in ("§14.1–14.4", "附录 A 逐行承接", "纯软件项目也使用同一模板"):
+            self.assertIn(term, guide)
+
     def test_mechanism_parent_tree_is_not_the_dependency_graph(self):
         template = (ROOT / "templates/design/architecture-design.md").read_text()
         section = template.split("### 3.4 系统机制清单与文档映射", 1)[1].split("## 4.", 1)[0]

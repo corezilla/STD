@@ -1046,7 +1046,7 @@ B.4 设计约束与关键假设
     def test_mechanism_every_section_has_paragraph_guidance_and_body(self):
         content = (ROOT / "templates/design/system-mechanism-design.md").read_text()
         headings = list(re.finditer(r"^#{2,3} (.+)$", content, re.MULTILINE))
-        self.assertEqual(len(headings), 32)
+        self.assertEqual(len(headings), 38)
         self.assertEqual(re.findall(r"^## (\d+)\.", content, re.MULTILINE),
                          [str(n) for n in range(1, 17)])
         for index, heading in enumerate(headings):
@@ -1190,7 +1190,7 @@ B.4 设计约束与关键假设
                 self.assertNotIn(marker, content)
             cover = content.split("<!-- STD_DOCUMENT_COVER_BEGIN -->", 1)[1].split("<!-- STD_DOCUMENT_COVER_END -->", 1)[0]
             self.assertEqual(len(re.findall(r"^\| [^|]+ \|", cover, re.MULTILINE)), 9)  # header + 8 fields
-            self.assertEqual(content.count("<details>"), 32)
+            self.assertEqual(content.count("<details>"), 38)
             visible = re.sub(r"<details>.*?</details>", "", content, flags=re.DOTALL)
             visible = re.sub(r"<!--.*?-->", "", visible, flags=re.DOTALL)
             for instruction in ("本模板名称为", "先核查附录 A", "逐类型重复", "按每个成员重复",

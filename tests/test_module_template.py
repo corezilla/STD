@@ -70,7 +70,7 @@ class ModuleTemplateTests(unittest.TestCase):
         numbers = re.findall(r"(?m)^## (\d+)\. ", text)
         self.assertEqual(numbers, [str(n) for n in range(1, 16)])
         sections = re.split(r"(?m)^#{2,3} ", text)[1:]
-        self.assertEqual(len(sections), 17)  # 15 chapters, inherited constraints, teaching appendix
+        self.assertEqual(len(sections), 18)  # 15 chapters, inherited constraints, mechanism appendix, teaching appendix
         for section in sections:
             with self.subTest(heading=section.splitlines()[0]):
                 self.assertEqual(section.count("<details>"), 1)
@@ -173,7 +173,7 @@ class ModuleTemplateTests(unittest.TestCase):
                      "实线表示同步调用", "虚线表示", "不必一一对应", "不自动增加正式设计层级",
                      "结构图不能被文件树或流程图替代", "STD_TEMPLATE_EXAMPLE_BEGIN"):
             self.assertIn(term, section)
-        appendix = text.split("## 附录 A.", 1)[1]
+        appendix = text.split("## 附录 B.", 1)[1]
         for path in ("core", "validate", "filter", "order"):
             self.assertIn(f"| src/select/{path}（语言后缀待定） |", appendix)
 
@@ -206,7 +206,7 @@ class ModuleTemplateTests(unittest.TestCase):
             meta_path = next(Path(directory).rglob("module-example.metadata.json"))
             meta = json.loads(meta_path.read_text())
             text = meta_path.with_name("module-example.md").read_text()
-            self.assertEqual(meta["template_version"], "2.1.1")
+            self.assertEqual(meta["template_version"], "2.2.0")
             self.assertEqual(meta["template_sha256"], hashlib.sha256(TEMPLATE.read_bytes()).hexdigest())
             self.assertEqual(meta["design_level"], "module")
             self.assertEqual(meta["domain"], ["software"])
@@ -222,8 +222,9 @@ class ModuleTemplateTests(unittest.TestCase):
             self.assertTrue(references)
             for reference in references:
                 self.assertEqual((meta_path.parent / reference).read_bytes(), TEMPLATE.read_bytes())
-            for removed in ("{{", "```mermaid", "图 M-P1", "图 M-S1", "src/select/validate", "附录 A.", "STD_TEMPLATE_EXAMPLE_BEGIN"):
+            for removed in ("{{", "```mermaid", "图 M-P1", "图 M-S1", "src/select/validate", "附录 B.", "STD_TEMPLATE_EXAMPLE_BEGIN"):
                 self.assertNotIn(removed, text)
+            self.assertIn("## 附录 A. 机制承接表", text)
             checked = subprocess.run([str(ROOT / "scripts/validate-design"), directory, "--json"],
                                      capture_output=True, text=True)
             self.assertEqual(checked.returncode, 0, checked.stdout + checked.stderr)
