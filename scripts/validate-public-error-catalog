@@ -1,0 +1,106 @@
+#!/usr/bin/env python3
+"""Opt-in structural check for a system design's public error catalog."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import re
+from pathlib import Path
+
+
+START = "<!-- STD_PUBLIC_ERROR_CATALOG_BEGIN -->"
+END = "<!-- STD_PUBLIC_ERROR_CATALOG_END -->"
+FIELDS = (
+    "定义与适用范围", "触发条件与判定者", "结果与副作用", "错误载荷",
+    "调用方动作", "模块承接", "唯一来源与兼容", "验证",
+)
+RECORD = re.compile(r"^\*\*([A-Za-z][A-Za-z0-9_.:-]+) · ([^*]+)\*\*$")
+FIELD = re.compile(r"^- \*\*([^*]+)\*\*：(.+)$")
+PLACEHOLDER = re.compile(r"<[^>]+>|\b(?:TODO|TBD)\b", re.I)
+
+
+def validate_public_error_catalog(source: str) -> dict:
+    """Validate declared records and their local interface/downstream index."""
+    issues: list[str] = []
+    if source.count(START) != 1 or source.count(END) != 1:
+        return {"ok": False, "errors": ["目录边界标记必须各出现一次"], "error_ids": []}
+    before, tail = source.split(START, 1)
+    body, after = tail.split(END, 1)
+    if source.index(START) > source.index(END):
+        return {"ok": False, "errors": ["目录边界顺序错误"], "error_ids": []}
+    del before
+
+    records: dict[str, dict[str, str]] = {}
+    codes: dict[str, str] = {}
+    current: str | None = None
+    for raw in body.splitlines():
+        line = raw.strip()
+        if not line:
+            continue
+        if line.startswith("N/A") and current is None:
+            continue
+        match = RECORD.fullmatch(line)
+        if match:
+            error_id, code = match.groups()
+            if error_id in records:
+                issues.append(f"重复 Error ID: {error_id}")
+            if code in codes:
+                issues.append(f"重复错误代码值: {code} ({codes[code]}, {error_id})")
+            if PLACEHOLDER.search(line):
+                issues.append(f"未填错误记录: {error_id}")
+            records[error_id] = {}
+            codes[code] = error_id
+            current = error_id
+            continue
+        match = FIELD.fullmatch(line)
+        if match and current:
+            key, value = match.groups()
+            if key in records[current]:
+                issues.append(f"{current} 重复字段: {key}")
+            records[current][key] = value.strip()
+            if PLACEHOLDER.search(value):
+                issues.append(f"{current} 未填字段: {key}")
+        else:
+            issues.append(f"错误目录无法解析的行: {line[:80]}")
+    if not records:
+        if "N/A" not in body or "tailoring" not in body.lower():
+            issues.append("无公共错误码时须在目录中写 N/A、边界及 tailoring decision")
+    for error_id, fields in records.items():
+        for key in FIELDS:
+            if not fields.get(key):
+                issues.append(f"{error_id} 缺少字段: {key}")
+
+    # The four-column index follows the catalog, before the next Markdown heading.
+    index = after.split("\n## ", 1)[0]
+    indexed: set[str] = set()
+    for raw in index.splitlines():
+        line = raw.strip()
+        if not line.startswith("|") or line.startswith("|---") or line.startswith("| Error ID"):
+            continue
+        cells = [cell.strip() for cell in line.strip("|").split("|")]
+        if len(cells) != 4:
+            issues.append("错误承接索引必须为四列")
+            continue
+        error_id = cells[0]
+        if error_id not in records:
+            issues.append(f"索引引用未定义 Error ID: {error_id}")
+        indexed.add(error_id)
+        if any(not cell or PLACEHOLDER.search(cell) for cell in cells):
+            issues.append(f"{error_id} 承接索引存在空值或占位符")
+    for error_id in records.keys() - indexed:
+        issues.append(f"{error_id} 缺少接口/下级/验证承接索引")
+    return {"ok": not issues, "errors": issues, "error_ids": sorted(records)}
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("document", type=Path)
+    args = parser.parse_args()
+    result = validate_public_error_catalog(args.document.read_text(encoding="utf-8"))
+    print(json.dumps(result, ensure_ascii=False, indent=2))
+    return 0 if result["ok"] else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

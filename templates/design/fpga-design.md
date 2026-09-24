@@ -109,6 +109,8 @@ flowchart LR
 
 ## 4. 控制面、CSR 与软件交互
 
+<!-- 编写建议：先列 RTL 拥有和引用的 Data/Type ID、CSR/Command/Status/Interface Member ID 及其唯一机器源；每项说明字段/位宽、复位值、访问权限、读写副作用、时钟域、握手和错误指示。驱动将状态转换成系统 Error ID 的边界必须明确，RTL 私有异常不直接冒充公共错误码。 -->
+
 | Register/Command | Writer | Effect | Readback | Illegal access | Authority |
 |---|---|---|---|---|---|
 | `CONTROL.start` | Driver | start accepted job | busy/status | ignored + error | register spec |
@@ -121,6 +123,8 @@ flowchart LR
 |---|---|---|---|---|
 
 ## 5. 内部协议、状态机和 backpressure
+
+<!-- 编写建议：先列模块间 Interface/Member ID、发送/接收端、数据类型、valid/ready 或其他握手、顺序/背压/超时和拒绝条件；已有协议/类型引用固定来源，新增本地信号逐字段定义。接口错误须追到 CSR/事件或上级 Error ID 映射，不止写 `error`。 -->
 
 | State | Event/Guard | Next | Output/action | timeout/error |
 |---|---|---|---|---|

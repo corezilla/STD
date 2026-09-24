@@ -116,6 +116,8 @@ flowchart LR
 
 <details><summary>编写要求与完成条件</summary>
 
+先列承接的公共 Data/Type/Error ID 与固定来源，以及本 ISD 新增的私有类型；后者逐字段定义语言表示、初值/范围/不变量、所有权、寿命与错误出口。公共结构只落实到代码字段与转换点，不修改上级语义。
+
 给私有结构逐字段类型、单位、初值、范围、不变量及 owner。只有原生 ABI、持久二进制、寄存器或跨语言布局适用时才展开字节、位宽、`sizeof`、端序和对齐；Python 对象、JSON、HTTP 等纯软件逻辑结构写 `N/A + 原因 + authority`，不为满足模板虚构 ABI。公共类型引用 interfaces 源 ID/selector/version/hash，不复制形成第二份权威。画输入、工作区、输出的创建/借用/释放和失败路径；持久状态另给事件、Guard、动作和退出。完成条件是成功及失败都无无主对象。
 </details>
 
@@ -146,6 +148,8 @@ flowchart LR
 <a id="isd-functions"></a>
 
 <details><summary>编写要求与完成条件</summary>
+
+先列每个上级 Interface/Member ID 对应的文件、symbol、调用方和实现状态；逐函数完整说明输入结构及字段校验、互斥输出、每个 Error ID 的具体触发分支、载荷、状态/副作用、异常传播和验证入口。公共错误值及含义由系统目录和机器源唯一维护。
 
 逐关键函数给签名、完整参数、成功返回、错误返回、前置条件、上下文、副作用、幂等和 ownership。输入必须落实到参数或成员 ID、数据结构 authority、字段约束、校验位置及校验失败结果；输出必须列出互斥结果变体、数据结构、字段不变量、后置条件和寿命。每个错误写清触发条件、错误类型/代码、稳定消息或 payload 字段、优先级以及当时的状态和副作用，不能只写“返回错误”或异常名称。每项还必须明确 `thread-safe`、`reentrant`、nested-call policy、transaction participation、blocking/timeout；未知就作为设计缺口，不能由编码者猜测。简单无状态函数可分组，有副作用或共享状态的函数须单独说明。接口输入与输出逐项引用权威成员；内部 helper 明确拿到原始请求还是已校验值。不能以“见代码”省略当前尚未确定的设计。
 

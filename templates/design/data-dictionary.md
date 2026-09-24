@@ -47,6 +47,8 @@
 
 ## 3. Entity / Object Catalog
 
+<!-- 编写建议：本节列全本文负责解释的 Data/Type ID、对象边界、提供/消费方及唯一机器源；§4 逐字段写类型、必填/可空、范围/单位、枚举、条件有效性与含义，§5 列每个状态和错误值及未知值行为，§6–§9 说明身份、关系、编码与寿命。本文是字段阅读视图，不拥有操作接口；接口按成员 ID 引用本类型，不在词典里另定签名。 -->
+
 | ID | Name | Owner | Lifecycle | Persistence | Schema source |
 |---|---|---|---|---|---|
 | <!-- TODO --> | | | | | |
@@ -63,6 +65,8 @@
 | <!-- TODO --> | | | | | | |
 
 ## 5. Enum、Status 与 Error Values
+
+<!-- 编写建议：系统公共错误逐码引用系统设计 Error ID、代码值、机器源和调用方动作；本节可解释数据字典视图，但不能改变系统定义。对每个枚举列出合法值、保留值、未知值处理和兼容边界。 -->
 
 | Type | Value | Meaning | Producer | Consumer behavior for unknown value |
 |---|---|---|---|---|

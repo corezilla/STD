@@ -13,6 +13,7 @@
 设计同时交付人能读懂的正文与 Agent 能精确检索的契约：
 正文成员 ID ↔ 接口目录 ↔ 完整机器定义 → 下游实现与验证。统一标识、目录字段、覆盖/版本和来源分工见[接口与数据规格映射规范](interface-data-mapping-standard.md)。
 实际契约不能是 TODO 路径，完整阅读视图从唯一源生成或核对，不能另改一套字段。
+逐层必须显式列出的 Data/Type、Interface/Member 及系统公共 Error ID，按[设计数据结构、接口与系统错误码描述规范](design-data-interface-format.md)核对；错误码是公共数据结构，总体或纯软件系统层逐码定义，下级只按同一 ID 承接。
 系统还须先登记机制 ID、上级 Mechanism ID、Document ID、预定文件名及前置依赖，逐份写作时保持映射；父子归属与依赖分开，Planned 不冒充已成文。
 
 ## 2. 编写顺序

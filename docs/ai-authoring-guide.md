@@ -1,6 +1,6 @@
 # 通用 AI 编写指南
 
-版本：0.2.0-draft.8 · 日期：2026-09-21 · 状态：方法草案，待各类实际写作任务验证
+版本：0.2.0-draft.9 · 日期：2026-09-24 · 状态：方法草案，待各类实际写作任务验证
 
 本指南是 STD 的 AI 写作入口，适用于设计、计划、分析、规格、报告和操作文档。它说明 Agent 如何核查输入、解决写作背后的问题、成文并检查；**模板规定交付内容，专项指南说明该类内容怎样设计或取证，项目事实及已批准决定提供实际输入。** 指南不是产品决定、执行授权或新的审批平台。
 
@@ -37,6 +37,7 @@
 | [交付与运维](ai-guides/operations.md) | `operations.release`、`operations.version-description`、`operations.user-manual`、`operations.installation-deployment`、`operations.operations-manual`、`operations.maintenance`、`operations.bring-up` |
 
 精确映射由 [AI 指南映射表](ai-authoring-guides.json)记录，与[模板目录](../templates/catalog.json)做完整性检查；这里只是导航，不新增生成器或运行时机制。如何选择文档层级见[模板选择规则](template-selection.md)，共同质量规则见[设计文档编写规范](design-writing-guide.md)。
+每次设计写作还须从对应模板的数据与接口入口建立 ID 清单，并按[数据、接口与公共错误码规范](design-data-interface-format.md)双向走查系统定义、下级落实和验证。公共错误码在系统层作为公共数据结构逐码定义，不得留给各模块自行解释。
 
 遇到尚无专项的新增模板，应先明确其交付责任，补齐映射或把适用关系标为待定；不能静默套用系统设计指南。专项可共享，模板不必各建一份指南。模板章节、必需信息项和已批准 tailoring 优先于方法举例；发现冲突应报告具体两处，不能由指南悄悄豁免模板要求或扩张产品范围。
 

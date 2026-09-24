@@ -86,6 +86,8 @@
 
 ## 3. 功能框图、数据流与控制流
 
+<!-- 编写建议：先列板级数据/控制/电源对象及方向；跨板卡或跨器件的共享类型、状态与错误指示引用上级 Data/Type/Error ID 和固定来源。本层拥有的信号逐项给位宽、电平、时序、复位及失效含义，不套软件数据库字段。 -->
+
 ```mermaid
 flowchart LR
     HOST[Host] -->|PCIe data| FPGA[FPGA/SoC]
@@ -104,6 +106,8 @@ flowchart LR
 记录正式料号、封装、生命周期、供应风险、替代料和 qualification 状态。
 
 ## 5. 外部接口
+
+<!-- 编写建议：先列所有连接器/端口的 Interface/Member ID、提供和消费器件、唯一规范来源；逐项说明引脚/信号、方向、电平、时序、协议版本、保护、错误与测试。系统公共错误码若经驱动上报，明确硬件指示到 Error ID 的映射责任，而不在板卡文档私设公共代码值。 -->
 
 | Interface | Connector/Pin | Protocol/Level | Direction | Rate/Timing | Protection | Authority |
 |---|---|---|---|---|---|---|

@@ -46,7 +46,7 @@ class SubsystemTemplateTests(unittest.TestCase):
             meta = json.loads((base / "example-subsystem.metadata.json").read_text())
             self.assertEqual(meta["design_level"], "subsystem")
             self.assertEqual(meta["template_id"], "design.subsystem")
-            self.assertEqual(meta["template_version"], "0.6.2")
+            self.assertEqual(meta["template_version"], "0.7.0")
             self.assertEqual(meta["template_sha256"], hashlib.sha256(TEMPLATE.read_bytes()).hexdigest())
             self.assertEqual(meta["source_path"], "docs/30_subsystem_design/example-subsystem.md")
             self.assertNotIn("{{", md)

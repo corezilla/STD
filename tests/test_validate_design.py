@@ -219,6 +219,7 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
 9.2 描述符与元数据流
 9.3 状态表、缓存与持久化
 9.4 容量与带宽计算
+9.5 系统公共错误码目录与下级承接
 10. 接口与通信协议
 10.1 接口总表
 10.2 数据面接口
@@ -270,7 +271,7 @@ B.4 设计约束与关键假设
 附录 C. 编写与交付检查""".splitlines()
         self.assertEqual(re.findall(r"^#{2,3} (.+)$", system, re.MULTILINE), expected)
         catalog = json.loads((ROOT / "templates/catalog.json").read_text())
-        self.assertEqual(catalog["template_versions"]["design.system"], "8.3.1")
+        self.assertEqual(catalog["template_versions"]["design.system"], "8.4.0")
 
     def test_system_reordering_keeps_business_preconditions_and_risk_handoff(self):
         system = (ROOT / "templates/design/architecture-design.md").read_text()
