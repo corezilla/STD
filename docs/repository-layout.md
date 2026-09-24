@@ -87,7 +87,7 @@
 │       │   ├── verification/      # 组件测试计划、规格、规程及报告链接
 │       │   ├── operations/        # 组件配置、部署、诊断、升级和恢复说明
 │       │   └── reviews/           # 组件需求、设计、实现和发布评审记录
-│       ├── src/                   # 该组件的产品实现源码
+│       ├── src/                   # 该组件源码；有子系统用<subsystem>/<module>/，否则用<module>/
 │       ├── include/               # 该组件对外公开头文件或SDK接口，按需启用
 │       ├── tests/                 # 该组件内部单元、组件和局部契约测试
 │       ├── configs/               # 该组件默认配置、示例和Schema
@@ -277,16 +277,19 @@ hardware/boards/<board>/docs/       # 板卡专属设计、BOM、制造和验证
 - `tests/fixtures/`只保存跨测试共享的小型稳定输入；专用输入随对应测试保存。大型数据和原始证据可存本地数据根或CI制品存储，所属测试报告仍提供可定位的证据引用。
 
 `<component>` 是代码的构建/交付单元（服务、应用或库），不等于软件子系统或软件模块。
-设计层级以对象ID和父链为准；一个服务可包含多个模块。采用集中测试时，软件模块测试使用
-`tests/unit/<module-id>/`，例如 `tests/unit/M001/`；采用组件共置时使用
-`software/<component>/tests/unit/<module-id>/`。同一测试只选一处维护，不能两边复制。
-测试清单或规格须关联 Module ID 与实际代码对象，不从目录名猜测设计层级。
+设计层级以对象ID和父链为准；一个服务可包含多个模块。每个软件源码根（混合项目中为
+`software/<component>/src/`）有软件子系统时使用`src/<subsystem>/<module>/`，模块直接属于软件
+系统时使用`src/<module>/`。两级占位符是稳定的代码目录名，不用设计ID充当目录名；同一模块
+只保留一处源码。采用集中测试时，软件模块测试使用`tests/unit/<module>/`，例如
+`tests/unit/task-scheduler/`；采用组件共置时使用`software/<component>/tests/unit/<module>/`。
+同一测试只选一处维护，不能两边复制。测试目录名须在其Owner内唯一；测试清单或规格须关联
+Module ID、实际源码目录与被测对象，不从目录名猜测设计层级。
 
 #### 4.1.1 按测试类型保存报告
 
 每类测试有自己的 `reports/`，不建立根 `tests/reports/` 作为所有测试的默认汇总处。
 系统、集成、契约和验收分别使用 `tests/system/reports/`、`tests/integration/reports/`、
-`tests/contract/reports/` 和 `tests/acceptance/reports/`；模块使用 `tests/unit/<module-id>/reports/`。
+`tests/contract/reports/` 和 `tests/acceptance/reports/`；模块使用 `tests/unit/<module>/reports/`。
 按Run ID分目录，避免并行运行或重跑覆盖旧证据。`cases/`可按框架调整，报告归属不变。
 
 机器报告（JSON、JUnit XML、HTML、覆盖率）和人工评审结论均由所属测试目录维护；正式报告仍按

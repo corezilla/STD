@@ -123,7 +123,7 @@ tailoring manifest 和项目文档索引中记录即可。
   `templates/path-policy.json` 选择推荐目录；使用 `--project-root <project> --output <dir>` 可显式
   沿用项目自定义路径，同时保持封面中的 Canonical Path 为仓库相对路径。
 - 具体组件、固件产品或板卡采用Owner共置时，根据`domain_owned_path_patterns`把占位符替换为真实名称，并通过`--output`指定目标目录；生成器的无参默认只代表项目级或领域级文档。
-- 测试报告随测试保存：`assurance.test-report` 自动落位需给 `--test-scope system|integration|contract|subsystem|static|acceptance`，不能靠 `--level` 猜测测试类型；模块报告及Owner共置使用 `--output <project>/tests/unit/<module-id>/reports/<run-id>` 等精确路径。`assurance.acceptance-report` 默认在 `tests/acceptance/reports/`。各次运行推荐用 `--output` 选择独立Run目录，避免覆盖。计划、规格和规程仍在 `docs/70_verification/`；正式报告同样提交metadata，不另建报告副本。
+- 测试报告随测试保存：`assurance.test-report` 自动落位需给 `--test-scope system|integration|contract|subsystem|static|acceptance`，不能靠 `--level` 猜测测试类型；模块报告及Owner共置使用 `--output <project>/tests/unit/<module>/reports/<run-id>` 等精确路径。`<module>`为代码目录名，须映射Module ID。`assurance.acceptance-report` 默认在 `tests/acceptance/reports/`。各次运行推荐用 `--output` 选择独立Run目录，避免覆盖。计划、规格和规程仍在 `docs/70_verification/`；正式报告同样提交metadata，不另建报告副本。
 - 修改：只在项目仓库内修改文档实例。
 - 升级：只在用户明确要求对齐新 STD 或新模板版本时进行。固定新 revision、重新生成临时候选并人工审阅 diff；禁止直接覆盖项目内容。自动 `upgrade-template` 尚未实现，不得把它写成现有能力。
 

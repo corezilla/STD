@@ -3,7 +3,7 @@
 STD 面向软件、硬件、固件、FPGA 和软硬件协同项目，提供项目管理、需求、总体系统设计、总体系统机制设计、
 子系统设计、模块设计、接口契约、验证测试、评审、发布和运维所需的版本化模板。
 
-当前 `0.1.0-draft.30` 优先覆盖：
+当前 `0.1.0-draft.31` 优先覆盖：
 
 - Slinky，以及与其协作的 Piko、LLMTier；
 - HIFM，包括软件、DPU-SIM、FPGA/RTL、板卡和系统验证。
@@ -116,7 +116,10 @@ manifest。完整接入规则见 [`docs/adoption.md`](docs/adoption.md)。
 
 [`docs/repository-layout.md`](docs/repository-layout.md) 给出了完整项目仓库的推荐目录和文档默认落位，
 纯软件项目见 [`docs/software-project-layout.md`](docs/software-project-layout.md)；
-项目可通过 `--output` 沿用既有结构，并在 tailoring 中记录。封面、版本状态和 GitHub Review 规则分别见
+项目可通过 `--output` 沿用既有结构，并在 tailoring 中记录。
+软件源码默认按 `src/<subsystem>/<module>/` 或 `src/<module>/` 组织，模块单元测试按
+`tests/unit/<module>/` 组织；目录名须与稳定 Module ID 建立映射。
+封面、版本状态和 GitHub Review 规则分别见
 [`docs/document-control.md`](docs/document-control.md) 与
 [`docs/github-workflow.md`](docs/github-workflow.md)。
 版本域、项目采用和模板独立版本见 [`docs/versioning.md`](docs/versioning.md)；
@@ -224,7 +227,7 @@ AI 指南按能力贯通章节、先复用并核对现有契约，再交接双�
 系统保留端到端原理与关键阶段，机制文档唯一维护详细状态转换及参与方协议。
 本轮受影响模板及各自版本见下方复审记录，未列入的模板版本不变；上述机制复审不新增模板种类或审批流程；新增子系统模板见上文。
 模板保留每节可折叠的段落式指导与完成条件；生成器默认将系统文档层级设为 `system`。
-上述改进统一发布为 STD `0.1.0-draft.30`；既有 `draft.26` 来源/RAG 清单作为历史不可变证据保留，
+上述改进原随 STD `0.1.0-draft.30` 发布；既有 `draft.26` 来源/RAG 清单作为历史不可变证据保留，
 不回写为新版本。已采用旧版的项目继续使用原版本，只有用户要求升级时才评估章节映射与内容差异。
 
 ## 接口映射与机制预先规划
@@ -235,7 +238,7 @@ AI 指南按能力贯通章节、先复用并核对现有契约，再交接双�
 [完整虚构案例](docs/examples/interfaces/README.md)给出字段/签名/错误、双向定位和正反例。
 检查器从源签名推导角色与完整性，并复用原封面/metadata 身份；注释不再拥有独立文档版本。
 本轮版本、15→16 章迁移与实际检查范围见[复审记录](docs/interface-data-mapping-review.md)；
-既有项目 lock 不自动升级，也不复制私密产品协议；项目只有在用户明确要求后才采用 `draft.30`。
+既有项目 lock 不自动升级，也不复制私密产品协议；项目只有在用户明确要求后才采用 `draft.31`。
 
 ## 批量机制写作准备
 

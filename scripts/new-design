@@ -25,7 +25,7 @@ def default_directory(template_id: str, level: str, test_scope: str | None = Non
     configured = policy["default_paths"][template_id]
     if template_id == "assurance.test-report":
         if test_scope not in configured:
-            raise ValueError("测试报告须用 --test-scope 指定测试类型，或 --output 指定所属测试报告目录；模块测试使用 --output tests/unit/<module-id>/reports/<run-id>")
+            raise ValueError("测试报告须用 --test-scope 指定测试类型，或 --output 指定所属测试报告目录；模块测试使用 --output tests/unit/<module>/reports/<run-id>")
         return Path(configured[test_scope])
     if isinstance(configured, dict):
         configured = configured.get(level)

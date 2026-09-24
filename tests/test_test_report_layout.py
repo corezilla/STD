@@ -36,8 +36,8 @@ class TestReportLayoutTests(unittest.TestCase):
                 self.assertEqual(list(Path(temporary).iterdir()), [])
 
     def test_module_and_owner_reports_keep_metadata_and_are_validated(self):
-        for relative in ("tests/unit/M001/reports/run-001",
-                         "software/task-service/tests/unit/M001/reports/run-001"):
+        for relative in ("tests/unit/task-scheduler/reports/run-001",
+                         "software/task-service/tests/unit/task-scheduler/reports/run-001"):
             with self.subTest(path=relative), tempfile.TemporaryDirectory() as temporary:
                 root = Path(temporary)
                 (root / "README.md").write_text('# Example\n<a id="std-entry"></a>\n')
@@ -70,9 +70,11 @@ class TestReportLayoutTests(unittest.TestCase):
 
     def test_layout_docs_explain_files_ids_and_retention(self):
         text = (ROOT / "docs/repository-layout.md").read_text()
-        for term in ("tests/system/reports/", "tests/integration/reports/", "tests/unit/<module-id>/reports/",
+        for term in ("tests/system/reports/", "tests/integration/reports/", "tests/unit/<module>/reports/",
+                     "src/<subsystem>/<module>/", "src/<module>/",
                      "构建/交付单元", "SYS-CANCEL-001", "system-test-report.metadata.json", "artifacts/",
                      "不要一概忽略整个", "不要求每个Case", "既有项目不自动搬迁"):
             self.assertIn(term, text)
+        self.assertNotIn("tests/unit/<module-id>/", text)
         policy = json.loads((ROOT / "templates/path-policy.json").read_text())
         self.assertNotIn("docs/70_verification/reports", json.dumps(policy))
