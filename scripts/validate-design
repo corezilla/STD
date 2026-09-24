@@ -582,6 +582,15 @@ def validate_isd_delivery(records: list[tuple[Path, dict]]) -> list[dict]:
         return result
     def complete_record(record, required):
         return all(name in record and clean(record[name]) for name in required)
+    def template_version_at_least(document, minimum):
+        raw = document.get("template_version")
+        if not isinstance(raw, str):
+            return False
+        try:
+            current = tuple(int(part) for part in raw.split("-", 1)[0].split("."))
+        except ValueError:
+            return False
+        return current >= minimum
     def decision(ref, project):
         if not isinstance(ref, str) or "#" not in ref:
             return False
@@ -648,6 +657,13 @@ def validate_isd_delivery(records: list[tuple[Path, dict]]) -> list[dict]:
             and (v == target or d.get("volume_of_document_id") == target)}
         if not isinstance(target, str) or target not in allowed:
             continue
+        strict_isd_03 = (mode == "separate"
+                         and active[target][1].get("template_id") == "design.implementation"
+                         and template_version_at_least(active[target][1], (0, 3, 0)))
+        strict_isd_04 = (strict_isd_03
+                         and template_version_at_least(active[target][1], (0, 4, 0)))
+        strict_isd_05 = (strict_isd_04
+                         and template_version_at_least(active[target][1], (0, 5, 0)))
         handoff_body = section(target, "isd-handoff")
         handoff_rows = rows(handoff_body)
         handoff_records = fixed_records(handoff_body)
@@ -680,6 +696,44 @@ def validate_isd_delivery(records: list[tuple[Path, dict]]) -> list[dict]:
                 continue
             if entry.get("applicability") != "applicable":
                 fail(path, "applicability", f"{item}: 必须声明适用性")
+            if strict_isd_03 and item == "functions":
+                function_fields = {"文件 / symbol / 可见性", "原成员 ID 或私有来源",
+                                   "完整签名与 caller", "副作用 / 执行上下文 / 幂等性",
+                                   "输入输出 ownership 与寿命", "Thread-safe / reentrant",
+                                   "Nested-call policy", "Transaction participation",
+                                   "Blocking / timeout / cancellation", "实现状态 / 验证项"}
+                if strict_isd_05:
+                    function_fields |= {"输入参数 / 数据结构 authority",
+                                        "输入约束 / 校验顺序 / 失败映射",
+                                        "成功输出 / 数据结构 / 后置条件",
+                                        "错误输出 / 触发条件 / 优先级"}
+                else:
+                    function_fields |= {"前置条件与校验顺序", "返回 / 错误优先级"}
+                if strict_isd_04:
+                    function_fields |= {"不可改变的规则 / Constraint ID", "实现自由度"}
+                error_fields = {"底层异常 / 失败事实", "模块是否处理及处理函数",
+                                "Typed 异常与原生异常所有权",
+                                "宿主 / public payload 或状态码",
+                                "日志级别 / 脱敏 / 关联字段", "是否可重试及前提",
+                                "状态与副作用影响 / 验证项"}
+                function_records = fixed_records(body)
+                if not any(complete_record(record, function_fields) for record in function_records):
+                    fail(path, "function-contract", "0.3.0+ ISD 必须有完整函数并发契约记录")
+                if not any(complete_record(record, error_fields) for record in function_records):
+                    fail(path, "error-propagation", "0.3.0+ ISD 必须有完整错误传播记录")
+            if strict_isd_05 and item == "algorithms" and not re.search(
+                    r"```mermaid\s+(?:flowchart|sequenceDiagram)\b", body):
+                fail(path, "process-diagram", "0.5.0+ ISD 的重要流程必须至少提供一张流程图或时序图")
+            if strict_isd_05 and item == "resources":
+                configuration_fields = {"适用性 / 固定 authority", "配置 key / 来源 / 优先级",
+                                        "类型 / 单位 / 默认值 / 范围 / 字段约束",
+                                        "读取 / 解析 / 校验 symbol",
+                                        "生效点 / reload / 原子性 / 在途操作",
+                                        "缺失 / 非法 / 部分更新的错误出口",
+                                        "敏感值存储 / 日志脱敏", "验证项"}
+                if not any(complete_record(record, configuration_fields)
+                           for record in fixed_records(body)):
+                    fail(path, "configuration", "0.5.0+ ISD 必须有完整配置实现记录或逐字段 N/A 边界")
             if item in {"security", "persistence"}:
                 legacy = any(len(r) == 7 and all(clean(c) for c in r) for r in rows(body))
                 required_fields = ({"原规则 / 事务", "原子范围 / 事务外副作用",
@@ -692,6 +746,29 @@ def validate_isd_delivery(records: list[tuple[Path, dict]]) -> list[dict]:
                 if not legacy and not any(complete_record(record, required_fields)
                                           for record in fixed_records(body)):
                     fail(path, "conditional-record", f"{item}: 适用时必须有完整固定字段实现记录")
+            if strict_isd_03 and item == "persistence":
+                persistence_records = fixed_records(body)
+                policy_fields = {"Schema authority / 当前版本事实来源", "允许的升级模式",
+                                 "明确不接受的迁移模式", "兼容边界",
+                                 "失败后的系统状态与责任方"}
+                schema_fields = {"原规则", "升级 / 降级策略", "接受 / 拒绝条件",
+                                 "源 / 目标版本与转换函数", "拒绝后如何处理", "验证项"}
+                if (not any(complete_record(record, policy_fields) for record in persistence_records)
+                        or not any(complete_record(record, schema_fields)
+                                   for record in persistence_records)):
+                    fail(path, "schema-policy", "0.3.0+ 持久化 ISD 必须有策略决定及完整 schema 规则")
+                state_headers = {"库状态", "判定事实", "启动结果", "是否允许重跑及条件"}
+                required_states = {"空库", "版本匹配", "版本不匹配", "无版本表旧库",
+                                   "部分初始化", "完整性失败"}
+                state_rows = []
+                for table in tables(body):
+                    header = {re.sub(r"\s+", " ", cell.strip()) for cell in table[0]}
+                    if state_headers <= header:
+                        state_rows.extend(table[1:])
+                covered_states = {row[0] for row in state_rows
+                                  if len(row) == 4 and all(clean(cell) for cell in row)}
+                if not required_states <= covered_states:
+                    fail(path, "schema-states", "0.3.0+ 持久化 ISD 必须完整覆盖六类库状态分支")
             if item == "verification":
                 checks = []
                 for table in tables(body):
@@ -701,11 +778,15 @@ def validate_isd_delivery(records: list[tuple[Path, dict]]) -> list[dict]:
                         checks.extend(table[1:])
                 records = fixed_records(body)
                 verification_fields = {"Rule / 成员", "V / Case / Vector", "输入 / 故障 / 环境",
-                                       "Oracle / Expected", "Actual / Evidence", "Verdict",
-                                       "测试入口 / 清理", "Run ID / Status"}
-                fixed_checks = [record for record in records if verification_fields & set(record)]
+                                       "Actual / Evidence", "Verdict", "测试入口 / 清理",
+                                       "Run ID / Status"}
+                oracle_fields = {"Oracle / Expected", "独立 Oracle / Expected"}
+                fixed_checks = [record for record in records
+                                if (verification_fields | oracle_fields) & set(record)]
                 if not checks and not fixed_checks:
                     fail(path, "verification", "验证记录不能为空")
+                if strict_isd_04 and not fixed_checks:
+                    fail(path, "verification", "0.4.0+ ISD 必须使用含独立 Oracle 的固定字段验证记录")
                 normalized = []
                 for row in checks:
                     if len(row) != 8 or not all(clean(c) for c in row):
@@ -713,7 +794,12 @@ def validate_isd_delivery(records: list[tuple[Path, dict]]) -> list[dict]:
                         continue
                     normalized.append((row[4], row[5], row[7]))
                 for record in fixed_checks:
-                    if not complete_record(record, verification_fields):
+                    required_verification = set(verification_fields)
+                    if strict_isd_04:
+                        required_verification.add("独立 Oracle / Expected")
+                    elif not any(clean(record.get(field)) for field in oracle_fields):
+                        required_verification.add("Oracle / Expected")
+                    if not complete_record(record, required_verification):
                         fail(path, "verification", "验证项必须完整填写八个固定字段")
                         continue
                     normalized.append((record["Actual / Evidence"], record["Verdict"],
@@ -726,6 +812,15 @@ def validate_isd_delivery(records: list[tuple[Path, dict]]) -> list[dict]:
                             re.search(r"NOT_RUN|BLOCKED|^N/A$|未执行", value, re.I)
                             for value in (actual, run)):
                         fail(path, "evidence", "运行判定需 Actual/Evidence 及 Run ID，不能填未运行")
+        if strict_isd_04:
+            status_body = section(target, "isd-status")
+            status_fields = {"上游承接状态 / 固定来源", "本层派生状态 / 事实依据",
+                             "§2 Current / Target", "§3 / §5 文件与函数状态",
+                             "§9 任务 / Actual / Verdict / Run", "§10 汇总状态",
+                             "差异解释 / Owner / 收敛动作"}
+            if not any(complete_record(record, status_fields)
+                       for record in fixed_records(status_body)):
+                fail(path, "status-lineage", "0.4.0+ ISD 必须区分上游承接状态与本层派生状态")
         if allowed - used:
             fail(path, "unused-volume", "分卷必须在入口覆盖映射中登记实际信息项")
     return errors

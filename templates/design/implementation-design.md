@@ -75,7 +75,7 @@ greenfield 或设计先行且不存在既有实现时，不制造 Current，也�
 - **Current 行为**：<!-- TODO -->
 - **Target 改动与理由**：<!-- TODO -->
 - **原规则 / 成员 ID**：<!-- TODO -->
-- **实现状态**：<!-- Planned / Implemented；与 §5、§8–§10 一致 -->
+- **实现状态**：<!-- PLANNED / IN_PROGRESS / IMPLEMENTED；与 §5、§8–§10 一致 -->
 
 ## 3. 文件、内部组件与调用关系
 
@@ -108,7 +108,7 @@ flowchart LR
 - **可见性**：<!-- public / private / generated -->
 - **调用与类型依赖**：<!-- TODO -->
 - **构建目标 / 生成源 / 输出**：<!-- TODO -->
-- **实现状态**：<!-- Planned / Implemented -->
+- **实现状态**：<!-- PLANNED / IN_PROGRESS / IMPLEMENTED -->
 
 ## 4. 内部数据与所有权
 
@@ -147,7 +147,7 @@ flowchart LR
 
 <details><summary>编写要求与完成条件</summary>
 
-逐关键函数给签名、完整参数、返回、错误优先级、前置条件、上下文、副作用、幂等和 ownership。每项还必须明确 `thread-safe`、`reentrant`、nested-call policy、transaction participation、blocking/timeout；未知就作为设计缺口，不能由编码者猜测。简单无状态函数可分组，有副作用或共享状态的函数须单独说明。接口输入与输出逐项引用权威成员；内部 helper 明确拿到原始请求还是已校验值。不能以“见代码”省略当前尚未确定的设计。
+逐关键函数给签名、完整参数、成功返回、错误返回、前置条件、上下文、副作用、幂等和 ownership。输入必须落实到参数或成员 ID、数据结构 authority、字段约束、校验位置及校验失败结果；输出必须列出互斥结果变体、数据结构、字段不变量、后置条件和寿命。每个错误写清触发条件、错误类型/代码、稳定消息或 payload 字段、优先级以及当时的状态和副作用，不能只写“返回错误”或异常名称。每项还必须明确 `thread-safe`、`reentrant`、nested-call policy、transaction participation、blocking/timeout；未知就作为设计缺口，不能由编码者猜测。简单无状态函数可分组，有副作用或共享状态的函数须单独说明。接口输入与输出逐项引用权威成员；内部 helper 明确拿到原始请求还是已校验值。不能以“见代码”省略当前尚未确定的设计。
 
 本章同时维护错误传播矩阵的实现视图：从底层异常或失败事实追到模块处理、typed/native 异常所有权、宿主/public error、日志和 retry。规则的业务语义仍由上游唯一维护；本层只落实准确抛出、捕获和映射位置。
 </details>
@@ -177,15 +177,19 @@ sequenceDiagram
 - **文件 / symbol / 可见性**：<!-- TODO -->
 - **原成员 ID 或私有来源**：<!-- TODO -->
 - **完整签名与 caller**：<!-- TODO -->
-- **前置条件与校验顺序**：<!-- TODO -->
-- **返回 / 错误优先级**：<!-- TODO -->
+- **输入参数 / 数据结构 authority**：<!-- 逐参数写 ID、类型/结构、来源、必填性、单位/编码、ownership 与寿命 -->
+- **输入约束 / 校验顺序 / 失败映射**：<!-- 范围、不变量、字段间约束、校验 symbol；每个失败映射到 Error ID -->
+- **成功输出 / 数据结构 / 后置条件**：<!-- 互斥返回变体、字段、有效范围、状态变化、ownership 与寿命 -->
+- **错误输出 / 触发条件 / 优先级**：<!-- Error ID、类型/代码、稳定 message/payload 字段；什么条件返回什么错误 -->
 - **副作用 / 执行上下文 / 幂等性**：<!-- TODO -->
 - **输入输出 ownership 与寿命**：<!-- TODO -->
+- **不可改变的规则 / Constraint ID**：<!-- TODO；继承的行为、不变量、预算或错误语义 -->
+- **实现自由度**：<!-- TODO；允许选择的数据结构、私有 helper、库或局部优化边界 -->
 - **Thread-safe / reentrant**：<!-- yes/no/conditional + 条件 -->
 - **Nested-call policy**：<!-- allowed/forbidden + 锁/事务边界 -->
 - **Transaction participation**：<!-- none/owner/joins existing/creates new -->
 - **Blocking / timeout / cancellation**：<!-- TODO -->
-- **实现状态 / 验证项**：<!-- Planned/Implemented；VRC... -->
+- **实现状态 / 验证项**：<!-- PLANNED / IN_PROGRESS / IMPLEMENTED；VRC... -->
 
 ### 5.2 错误传播矩阵
 
@@ -236,6 +240,29 @@ return OK(borrow(input[6 : 6+length_be]), 6+length_be)
 ```
 
 输入 `01 01 00 00 00 02 41 42` 得length=2、借用payload=`41 42`、consumed=8。只收到前7字节得NEED_MORE；长度字段为65时仅头部就INVALID。先限制长度再加6，不把未知u32直接加到小类型。
+
+下面是另一类可复用的有状态过程图例。它不是项目接口定义，只示范一张图如何同时表达入口、校验、幂等重放、持久提交点、响应丢失和错误出口；项目须替换成自己的 Process、Function、Data 和 Error ID。
+
+```mermaid
+flowchart TD
+    A["CMD-001 submit(request_id, payload)"] --> B{"输入结构、权限和期限有效?"}
+    B -->|否| E1["ERR-INPUT / ERR-AUTH<br/>无持久副作用"]
+    B -->|是| C{"request_id 已存在?"}
+    C -->|已完成| R1["返回原 ResultRecord<br/>不新增执行"]
+    C -->|执行中| R2["返回 ACCEPTED + status_ref<br/>不新增执行"]
+    C -->|不存在| D["事务内写 CommandRecord=PENDING"]
+    D --> X["执行副作用并记录结果"]
+    X -->|成功| K["事务提交 ResultRecord=SUCCEEDED"]
+    X -->|确定失败| F["事务提交 ResultRecord=FAILED + ErrorPayload"]
+    X -->|结果未知| U["标记 UNKNOWN<br/>禁止直接新业务重试"]
+    K --> S{"响应是否送达?"}
+    S -->|是| OK["返回 SUCCEEDED + result"]
+    S -->|否| Q["调用 query(request_id)<br/>读取权威记录"]
+    F --> ER["返回稳定 error_code/message/details"]
+    U --> Q
+```
+
+配套正文至少说明：`request_id` 的格式和唯一性、`payload` 的字段及限制、`ResultRecord`/`ErrorPayload` 的 authority，`ERR-INPUT` 与 `ERR-AUTH` 的判定顺序，事务提交前后分别能返回什么，`UNKNOWN` 如何收敛，以及 query/replay/takeover/new attempt 哪些会新增执行。图中的每个节点和出口都应能回到 §5 的 Function/Error ID、§4 的 Data ID 与 §9 的 Vector。
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ### 6.N `<Process / Rule ID>` · <过程或算法名称>
@@ -302,7 +329,7 @@ schema 演进与拒绝语义为持久化模块必填。先写策略决定，明�
 - **兼容边界**：<!-- 新程序读旧库、旧程序读新库、跨版本跳跃 -->
 - **失败后的系统状态与责任方**：<!-- TODO -->
 
-##### 7.2.2.N `<Schema Rule ID>` · <演进或拒绝规则>
+#### 7.2.2.N `<Schema Rule ID>` · <演进或拒绝规则>
 
 - **原规则**：<!-- TODO -->
 - **升级 / 降级策略**：<!-- TODO -->
@@ -353,14 +380,25 @@ schema 演进与拒绝语义为持久化模块必填。先写策略决定，明�
 
 <details><summary>编写要求与完成条件</summary>
 
-写明工具链/语言、库版本、产物、编译链接条件、导出/私有范围和宿主如何初始化、注入及销毁。既有框架写实际调用点，内部模块引用原构建目标，不强建新库。峰值含输入、工作区、结果、并发副本及未知占用；上限来自原预算，超限行为确定。未测量不标Measured。
+写明配置、工具链/语言、库版本、产物、编译链接条件、导出/私有范围和宿主如何初始化、注入及销毁。适用配置必须落实 key、来源与优先级、类型/默认值/范围、读取和校验 symbol、生效点与 reload 原子性、非法值出口及敏感值处理；不能让编码者自行发明配置语义。没有本地配置时写明由哪个上级或宿主 authority 提供固定值。既有框架写实际调用点，内部模块引用原构建目标，不强建新库。峰值含输入、工作区、结果、并发副本及未知占用；上限来自原预算，超限行为确定。未测量不标Measured。
 
 引用模块设计的环境和预算基线，逐项落到本实现：软件/库版本、硬件与虚拟化、依赖和数据规模；初始化、复位、启动、排队/运行、停止、清理的起止事件、单调计时点、分段预算及总期限。重试不重置总期限，等待或清理超限给具体出口，未确认安全不得释放。明确冷/热启动、并发启动峰值、共享额度扣减/归还及仍由宿主承担的范围，不重新制定上级政策。涉及 LLM 时关联所需能力、上下文与最大输出、请求量、并发和排队/调用预算，并定位请求构造、限额申请与超限处理函数；不适用时说明实际边界。
 
 教学例目标为C++20的既有解析库，测试目标包含frame_decoder.cc；复杂度O(1)、payload零拷贝，无堆工作区，输入和输出视图存储归caller。示例不规定项目语言或预算。
 </details>
 
-### 8.N `<Resource / Build ID>` · <资源或装配项>
+### 8.1 配置实现（条件项）
+
+- **适用性 / 固定 authority**：<!-- applicable；或 N/A + 上级/宿主固定值来源 -->
+- **配置 key / 来源 / 优先级**：<!-- file/env/CLI/API；同一 key 的覆盖顺序 -->
+- **类型 / 单位 / 默认值 / 范围 / 字段约束**：<!-- TODO -->
+- **读取 / 解析 / 校验 symbol**：<!-- TODO -->
+- **生效点 / reload / 原子性 / 在途操作**：<!-- 启动时或运行时；失败是否保持旧配置 -->
+- **缺失 / 非法 / 部分更新的错误出口**：<!-- Error ID、状态与副作用 -->
+- **敏感值存储 / 日志脱敏**：<!-- N/A 或实际处理 -->
+- **验证项**：<!-- VRC... -->
+
+### 8.2.N `<Resource / Build ID>` · <资源或装配项>
 
 - **目标文件 / 产物 / 构建目标**：<!-- TODO -->
 - **工具链 / 语言 / 依赖版本**：<!-- TODO -->
@@ -377,7 +415,7 @@ schema 演进与拒绝语义为持久化模块必填。先写策略决定，明�
 
 <details><summary>编写要求与完成条件</summary>
 
-将规则/接口→设计V→Case→Vector→独立Oracle→环境/Run对应。每个vector保留独立expected/actual和判定；case是测试主题，不把所有分支混成“通过”。给实际或Planned测试入口、输入构造、故障注入、清理及预期结果。局部PASS不代替宿主/子系统组合。任务按依赖排列，说明完成条件，不要求未实现模块先有运行PASS。
+将规则/接口→设计V→Case→Vector→独立Oracle→环境/Run对应。每个 vector 保留独立 expected/actual 和判定；Oracle 必须来自本层可观察输出、状态或独立参考，若依赖被测私有中间状态或调用同一被测函数反算，则属于耦合断言，不能关闭验证项。case是测试主题，不把所有分支混成“通过”。给实际或 Planned 测试入口、输入构造、故障注入、清理及预期结果。局部 PASS 不代替宿主/子系统组合。任务按依赖排列，说明完成条件，不要求未实现模块先有运行 PASS。
 
 允许在依赖边界使用受控替身、故障点、可控时钟及调度来制造提交失败、进程崩溃、响应丢失等条件；从正常入口建立前置事实，再记录注入点/时刻、故障语义、观察结果和复位方法。禁止直接修改业务终态以伪造正常流程通过。构造旧版本数据可作为明确标注的恢复/升级测试fixture，但不能冒充本轮真实执行留下的记录。模型与真实进程/存储测试分别标明覆盖，不把模拟崩溃当真实持久性验证。
 
@@ -411,7 +449,7 @@ EX-ISD/v1，以下全为预期向量，NOT_RUN；同一公开decode_one入口，
 - **Rule / 成员**：<!-- TODO -->
 - **V / Case / Vector**：<!-- TODO -->
 - **输入 / 故障 / 环境**：<!-- TODO -->
-- **Oracle / Expected**：<!-- TODO -->
+- **独立 Oracle / Expected**：<!-- 本层可观察事实或独立参考；不得由同一被测实现反算 -->
 - **Actual / Evidence**：<!-- NOT_RUN 或真实结果/证据 -->
 - **Verdict**：<!-- PASS / FAIL / NOT_RUN / BLOCKED -->
 - **测试入口 / 清理**：<!-- TODO -->
@@ -426,7 +464,8 @@ EX-ISD/v1，以下全为预期向量，NOT_RUN；同一公开decode_one入口，
 - **不可改变的规则**：<!-- TODO -->
 - **实施动作**：<!-- TODO -->
 - **完成检查**：<!-- TODO -->
-- **实现 / 验证状态**：<!-- Planned / Implemented；NOT_RUN / PASS... -->
+- **实现状态**：<!-- PLANNED / IN_PROGRESS / IMPLEMENTED -->
+- **验证状态 / Run**：<!-- NOT_RUN / PASS / FAIL / BLOCKED + Run ID -->
 
 ## 10. 映射、复核与未决项
 
@@ -440,7 +479,9 @@ EX-ISD/v1，以下全为预期向量，NOT_RUN；同一公开decode_one入口，
 
 未决项必须能找到Owner、最晚关闭阶段/截止Gate、阻断范围、分析或决策引用、所需输入和下一步选择判据。可直接引用现有问题台账的稳定ID及对应记录，不另建一套；缺负责人或关闭时点不能只写“后续处理”，关键规格未决不判设计完成。
 
-同一对象在 §2 Current/Target（适用时）、§3/§5 实现映射、§9 任务与验证、§10 汇总中的状态必须可解释一致。设计期 `Planned`、`NOT_IMPLEMENTED` 与 `NOT_RUN` 是合法且彼此不同的状态；已有代码不自动证明本 ISD 的目标实现完成，测试 PASS 也不能反推设计已批准。发现差异时记录基线、原因、责任方和收敛动作。
+同一对象在 §2 Current/Target（适用时）、§3/§5 实现映射、§9 任务与验证、§10 汇总中的状态必须可解释一致。实现状态统一为 `PLANNED / IN_PROGRESS / IMPLEMENTED`，验证状态统一为 `NOT_RUN / PASS / FAIL / BLOCKED`；两类状态不能合并为一个“完成”字段。已有代码不自动证明本 ISD 的目标实现完成，测试 PASS 也不能反推设计已批准。逐项区分继承的上游状态与本层依据实现事实派生的状态；发现差异时记录基线、原因、责任方和收敛动作。
+
+编码就绪判定不是“章节已填写”。开始实现前，关键函数的输入/输出/错误、数据不变量、重要流程及异常出口、并发/事务/清理、配置、构建与宿主接入必须已确定，或明确标为阻断编码的未决项；不得让编码人员在实现时自行决定跨模块行为、公共错误、配置语义或安全政策。非阻断的私有命名、局部数据结构和 helper 拆分可保留为已声明的实现自由度。
 </details>
 
 ### 10.1.N `<Mapping ID>` · <模块或成员映射>
@@ -450,12 +491,17 @@ EX-ISD/v1，以下全为预期向量，NOT_RUN；同一公开decode_one入口，
 - **提供或消费 / backend**：<!-- TODO -->
 - **实际位置或 Planned 计划位置**：<!-- TODO -->
 - **验证项**：<!-- TODO -->
-- **状态**：<!-- TODO -->
+- **实现状态**：<!-- PLANNED / IN_PROGRESS / IMPLEMENTED -->
+- **验证状态 / Run**：<!-- NOT_RUN / PASS / FAIL / BLOCKED + Run ID -->
 
 ### 10.2 状态一致性复核
 
+<a id="isd-status"></a>
+
 #### 10.2.N `<Status Check ID>` · <对象或规则>
 
+- **上游承接状态 / 固定来源**：<!-- 上游设计或契约声明了什么；版本/锚点 -->
+- **本层派生状态 / 事实依据**：<!-- 本 ISD 根据文件、symbol、构建或 Run 得出什么 -->
 - **§2 Current / Target**：<!-- applicable 时填写；否则 N/A + 决定引用 -->
 - **§3 / §5 文件与函数状态**：<!-- TODO -->
 - **§9 任务 / Actual / Verdict / Run**：<!-- TODO -->
@@ -465,6 +511,7 @@ EX-ISD/v1，以下全为预期向量，NOT_RUN；同一公开decode_one入口，
 ### 10.3.N `<Issue / Risk ID>` · <未决问题>
 
 - **既有台账引用 / 具体缺口 / 反例**：<!-- TODO -->
+- **风险等级 / 判定依据**：<!-- Critical / High / Medium / Low；影响与概率依据 -->
 - **Owner**：<!-- TODO -->
 - **最晚关闭阶段 / 截止 Gate**：<!-- TODO -->
 - **阻断范围**：<!-- TODO -->

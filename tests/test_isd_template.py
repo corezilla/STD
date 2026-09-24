@@ -38,7 +38,7 @@ class ISDTemplateTests(unittest.TestCase):
             self.assertEqual(metadata["design_level"], "module")
             self.assertEqual(metadata["domain"], ["software"])
             self.assertEqual(metadata["parent_document_id"], "PARSER_DESIGN")
-            self.assertEqual(metadata["template_version"], "0.3.0")
+            self.assertEqual(metadata["template_version"], "0.5.0")
             digest = hashlib.sha256(TEMPLATE.read_bytes()).hexdigest()
             self.assertEqual(metadata["template_sha256"], digest)
             snapshot = output / ".std-template-references" / digest / "implementation-design.md.txt"
@@ -85,12 +85,14 @@ class ISDTemplateTests(unittest.TestCase):
         text = TEMPLATE.read_text()
         self.assertEqual(text.count("<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->"), 5)
         self.assertEqual(text.count("<!-- STD_TEMPLATE_EXAMPLE_END -->"), 5)
-        self.assertEqual(text.count("```mermaid"), 4)
+        self.assertEqual(text.count("```mermaid"), 5)
         self.assertIn("frame_decoder.h", text)
         self.assertNotIn("frame_types.h", text)
         self.assertNotIn("version/kind/length或INVALID", text)
         for term in ["decode_one", "consumed=8", "INVALID VERSION", "借用", "Planned",
-                     "关键函数", "错误优先级", "构建目标", "NOT_RUN", "Case", "selector"]:
+                     "关键函数", "错误优先级", "输入参数 / 数据结构 authority",
+                     "错误输出 / 触发条件 / 优先级", "配置实现", "构建目标",
+                     "NOT_RUN", "Case", "selector"]:
             self.assertIn(term, text)
 
     def test_standard_defines_combined_and_split_authority(self):
@@ -199,7 +201,11 @@ class ISDTemplateTests(unittest.TestCase):
                          "symlink", "磁盘耗尽", "greenfield", "brownfield"]:
                 self.assertIn(term.lower(), lowered)
         for term in ["记录型 → 固定字段段落；矩阵型 → 表格", "Actual / Evidence",
-                     "Metadata 与 coverage", "docs/50_implementation_design/<name>.isd.md"]:
+                     "Metadata 与 coverage", "docs/50_implementation_design/<name>.isd.md",
+                     "不可改变的规则 / Constraint ID", "实现自由度",
+                     "独立 Oracle / Expected", "上游承接状态 / 固定来源",
+                     "本层派生状态 / 事实依据", "风险等级 / 判定依据",
+                     "PLANNED / IN_PROGRESS / IMPLEMENTED"]:
             self.assertIn(term, template)
         for header in ["| Rule/成员 |", "| 问题ID/既有台账引用 |",
                        "| 模块/原成员ID |", "| 函数/文件 |"]:

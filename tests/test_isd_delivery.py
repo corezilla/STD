@@ -34,9 +34,11 @@ class ISDDeliveryTests(unittest.TestCase):
         return (self.root / (data["document_id"] + ".metadata.json"), data)
 
     def table(self, cells, headers=None):
-        headers = headers or ["column" + str(i) for i in range(len(cells))]
+        data_rows = cells if cells and isinstance(cells[0], list) else [cells]
+        headers = headers or ["column" + str(i) for i in range(len(data_rows[0]))]
         return "| " + " | ".join(headers) + " |\n" + \
-               "|" + "---|" * len(cells) + "\n| " + " | ".join(cells) + " |\n"
+               "|" + "---|" * len(headers) + "\n" + "".join(
+                   "| " + " | ".join(row) + " |\n" for row in data_rows)
 
     def write_body(self, doc):
         text = '<a id="isd-handoff"></a>\n' + self.table(["R1", "MOD v1", "decode", "source", "inline", "V1"])
@@ -70,7 +72,7 @@ class ISDDeliveryTests(unittest.TestCase):
             if item == "verification":
                 text += record("9.1.1 V1", [
                     ("Rule / 成员", "R1"), ("V / Case / Vector", "V1/C1/v1"),
-                    ("输入 / 故障 / 环境", "input"), ("Oracle / Expected", "expected"),
+                    ("输入 / 故障 / 环境", "input"), ("独立 Oracle / Expected", "expected"),
                     ("Actual / Evidence", "NOT_RUN"), ("Verdict", "NOT_RUN"),
                     ("测试入口 / 清理", "test"), ("Run ID / Status", "NOT_RUN"),
                 ])
@@ -83,6 +85,57 @@ class ISDDeliveryTests(unittest.TestCase):
                     ("恢复入口 / 判定记录 / 重复恢复条件", "recover / ledger / idempotent"),
                     ("验证项", "V1"),
                 ])
+                text += record("7.2.2 Schema policy", [
+                    ("Schema authority / 当前版本事实来源", "schema table"),
+                    ("允许的升级模式", "initialize only"),
+                    ("明确不接受的迁移模式", "no incremental upgrade"),
+                    ("兼容边界", "same version only"),
+                    ("失败后的系统状态与责任方", "refuse start / owner"),
+                ])
+                text += record("7.2.2.1 S1", [
+                    ("原规则", "schema v1"), ("升级 / 降级策略", "none"),
+                    ("接受 / 拒绝条件", "accept v1; reject other"),
+                    ("源 / 目标版本与转换函数", "v1 / v1 / none"),
+                    ("拒绝后如何处理", "refuse start"), ("验证项", "V1"),
+                ])
+                text += self.table(
+                    [["空库", "no tables", "initialize", "yes after cleanup"],
+                     ["版本匹配", "version=v1", "start", "not needed"],
+                     ["版本不匹配", "version!=v1", "refuse", "no"],
+                     ["无版本表旧库", "tables without version", "refuse", "no"],
+                     ["部分初始化", "subset of tables", "refuse", "after cleanup"],
+                     ["完整性失败", "integrity check fails", "refuse", "after restore"]],
+                    ["库状态", "判定事实", "启动结果", "是否允许重跑及条件"])
+            elif item == "functions":
+                text += record("5.1.1 F1", [
+                    ("文件 / symbol / 可见性", "store.py/open/public"),
+                    ("原成员 ID 或私有来源", "IF-1"),
+                    ("完整签名与 caller", "open(path) / host"),
+                    ("前置条件与校验顺序", "validate path then open"),
+                    ("返回 / 错误优先级", "handle / path before storage"),
+                    ("输入参数 / 数据结构 authority", "path / PathSpec IF-1"),
+                    ("输入约束 / 校验顺序 / 失败映射", "non-empty then normalized / E1"),
+                    ("成功输出 / 数据结构 / 后置条件", "StorageHandle / database open"),
+                    ("错误输出 / 触发条件 / 优先级", "E1 INVALID_PATH before E2 STORAGE_BUSY"),
+                    ("副作用 / 执行上下文 / 幂等性", "opens DB / caller thread / idempotent"),
+                    ("输入输出 ownership 与寿命", "caller path / module handle"),
+                    ("不可改变的规则 / Constraint ID", "CON-M201-001"),
+                    ("实现自由度", "private connection helper"),
+                    ("Thread-safe / reentrant", "yes / no"),
+                    ("Nested-call policy", "forbidden inside transaction"),
+                    ("Transaction participation", "creates new"),
+                    ("Blocking / timeout / cancellation", "blocking / 1s / none"),
+                    ("实现状态 / 验证项", "Planned / V1"),
+                ])
+                text += record("5.2.1 E1", [
+                    ("底层异常 / 失败事实", "database locked"),
+                    ("模块是否处理及处理函数", "translate in open"),
+                    ("Typed 异常与原生异常所有权", "module owns StorageBusy"),
+                    ("宿主 / public payload 或状态码", "SERVICE_BUSY"),
+                    ("日志级别 / 脱敏 / 关联字段", "warning / redact path / request_id"),
+                    ("是否可重试及前提", "yes after backoff"),
+                    ("状态与副作用影响 / 验证项", "no commit / V1"),
+                ])
             elif item == "security":
                 text += record("7.3.1.1 S1", [
                     ("原规则", "R1"), ("可信输入 / 敏感字段 / 检查对象", "request"),
@@ -91,8 +144,30 @@ class ISDDeliveryTests(unittest.TestCase):
                     ("日志 / 指标 / trace 口径及触发", "counter on reject"),
                     ("验证项", "V1"),
                 ])
+            elif item == "algorithms":
+                text += "```mermaid\nflowchart TD\nA[request] --> B[validate]\nB --> C[result]\n```\n"
+            elif item == "resources":
+                text += record("8.1 Configuration", [
+                    ("适用性 / 固定 authority", "applicable / MOD#configuration"),
+                    ("配置 key / 来源 / 优先级", "db.path / file then CLI"),
+                    ("类型 / 单位 / 默认值 / 范围 / 字段约束", "path / none / existing parent"),
+                    ("读取 / 解析 / 校验 symbol", "load_config / validate_path"),
+                    ("生效点 / reload / 原子性 / 在途操作", "startup / no reload / atomic snapshot"),
+                    ("缺失 / 非法 / 部分更新的错误出口", "E1 / no state change"),
+                    ("敏感值存储 / 日志脱敏", "path redacted"),
+                    ("验证项", "V1"),
+                ])
             else:
                 text += "decode receives immutable input and returns the first validated frame.\n"
+        text += '\n<a id="isd-status"></a>\n' + record("10.2.1 ST1", [
+            ("上游承接状态 / 固定来源", "MOD draft / MOD#status"),
+            ("本层派生状态 / 事实依据", "PLANNED / no source yet"),
+            ("§2 Current / Target", "N/A / target specified"),
+            ("§3 / §5 文件与函数状态", "PLANNED"),
+            ("§9 任务 / Actual / Verdict / Run", "PLANNED / NOT_RUN / NOT_RUN / NOT_RUN"),
+            ("§10 汇总状态", "PLANNED / NOT_RUN"),
+            ("差异解释 / Owner / 收敛动作", "none / Owner / implement"),
+        ])
         (self.root / (doc + ".md")).write_text(text)
 
     def codes(self):
@@ -102,7 +177,70 @@ class ISDDeliveryTests(unittest.TestCase):
         self.assertEqual(self.codes(), set())
 
     def test_fixed_record_delivery_is_valid(self):
+        self.view["template_version"] = "0.4.0"
         self.write_fixed_body("ISD")
+        self.assertEqual(self.codes(), set())
+
+    def test_version_03_requires_function_schema_and_state_records(self):
+        self.view["template_version"] = "0.3.0"
+        self.write_fixed_body("ISD")
+        path = self.root / "ISD.md"
+        original = path.read_text()
+        cases = [
+            ("Thread-safe / reentrant**：yes / no", "Thread-safe / reentrant**：TODO",
+             "isd.function-contract"),
+            ("底层异常 / 失败事实**：database locked", "底层异常 / 失败事实**：TODO",
+             "isd.error-propagation"),
+            ("允许的升级模式**：initialize only", "允许的升级模式**：TODO",
+             "isd.schema-policy"),
+            ("| 完整性失败 | integrity check fails | refuse | after restore |",
+             "| 完整性失败 | TODO | refuse | after restore |", "isd.schema-states"),
+        ]
+        for old, new, code in cases:
+            with self.subTest(code=code):
+                path.write_text(original.replace(old, new))
+                self.assertIn(code, self.codes())
+        path.write_text(original)
+
+    def test_version_04_requires_constraint_freedom_independent_oracle_and_status_lineage(self):
+        self.view["template_version"] = "0.4.0"
+        self.write_fixed_body("ISD")
+        path = self.root / "ISD.md"
+        original = path.read_text()
+        cases = [
+            ("不可改变的规则 / Constraint ID**：CON-M201-001",
+             "不可改变的规则 / Constraint ID**：TODO", "isd.function-contract"),
+            ("独立 Oracle / Expected**：expected", "独立 Oracle / Expected**：TODO",
+             "isd.verification"),
+            ("本层派生状态 / 事实依据**：PLANNED / no source yet",
+             "本层派生状态 / 事实依据**：TODO", "isd.status-lineage"),
+        ]
+        for old, new, code in cases:
+            with self.subTest(code=code):
+                path.write_text(original.replace(old, new))
+                self.assertIn(code, self.codes())
+        path.write_text(original)
+
+    def test_version_05_requires_io_contract_diagram_and_configuration(self):
+        self.view["template_version"] = "0.5.0"
+        self.write_fixed_body("ISD")
+        path = self.root / "ISD.md"
+        original = path.read_text()
+        cases = [
+            ("输入参数 / 数据结构 authority**：path / PathSpec IF-1",
+             "输入参数 / 数据结构 authority**：TODO", "isd.function-contract"),
+            ("```mermaid\nflowchart TD", "```text\nflowchart TD", "isd.process-diagram"),
+            ("配置 key / 来源 / 优先级**：db.path / file then CLI",
+             "配置 key / 来源 / 优先级**：TODO", "isd.configuration"),
+        ]
+        for old, new, code in cases:
+            with self.subTest(code=code):
+                path.write_text(original.replace(old, new))
+                self.assertIn(code, self.codes())
+        path.write_text(original)
+
+    def test_pre_03_isd_keeps_legacy_delivery_compatibility(self):
+        self.view["template_version"] = "0.2.1"
         self.assertEqual(self.codes(), set())
 
     def test_embedded_delivery_is_valid(self):
