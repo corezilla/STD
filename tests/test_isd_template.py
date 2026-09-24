@@ -34,16 +34,16 @@ class ISDTemplateTests(unittest.TestCase):
             result = self.generate(directory)
             self.assertEqual(result.returncode, 0, result.stderr)
             output = Path(directory) / "docs/50_implementation_design"
-            metadata = json.loads((output / "FRAME_ISD.metadata.json").read_text())
+            metadata = json.loads((output / "FRAME_ISD.isd.metadata.json").read_text())
             self.assertEqual(metadata["design_level"], "module")
             self.assertEqual(metadata["domain"], ["software"])
             self.assertEqual(metadata["parent_document_id"], "PARSER_DESIGN")
-            self.assertEqual(metadata["template_version"], "0.2.1")
+            self.assertEqual(metadata["template_version"], "0.3.0")
             digest = hashlib.sha256(TEMPLATE.read_bytes()).hexdigest()
             self.assertEqual(metadata["template_sha256"], digest)
             snapshot = output / ".std-template-references" / digest / "implementation-design.md.txt"
             self.assertEqual(snapshot.read_bytes(), TEMPLATE.read_bytes())
-            document = (output / "FRAME_ISD.md").read_text()
+            document = (output / "FRAME_ISD.isd.md").read_text()
             self.assertNotIn("EX-ISD/v1", document)
             self.assertNotIn("{{", document)
             self.assertIn(".std-template-references/", document)
@@ -61,7 +61,7 @@ class ISDTemplateTests(unittest.TestCase):
     def test_existing_document_is_not_overwritten(self):
         with tempfile.TemporaryDirectory() as directory:
             self.assertEqual(self.generate(directory).returncode, 0)
-            path = Path(directory) / "docs/50_implementation_design/FRAME_ISD.md"
+            path = Path(directory) / "docs/50_implementation_design/FRAME_ISD.isd.md"
             before = path.read_bytes()
             self.assertNotEqual(self.generate(directory).returncode, 0)
             self.assertEqual(path.read_bytes(), before)
@@ -71,7 +71,7 @@ class ISDTemplateTests(unittest.TestCase):
         catalog = json.loads((ROOT / "templates/catalog.json").read_text())
         with tempfile.TemporaryDirectory() as directory:
             self.assertEqual(self.generate(directory).returncode, 0)
-            path = Path(directory) / "docs/50_implementation_design/FRAME_ISD.metadata.json"
+            path = Path(directory) / "docs/50_implementation_design/FRAME_ISD.isd.metadata.json"
             original = json.loads(path.read_text())
             for level, domain, rejected in [("module", ["software"], False),
                                              ("system", ["software"], True),
@@ -145,7 +145,7 @@ class ISDTemplateTests(unittest.TestCase):
                 self.assertIn(term, text)
         for term in ["上游信息项", "固定来源", "权威位置", "验证位置", "这些不能推迟"]:
             self.assertIn(term, standard)
-        self.assertIn("ISD细化内容/章节", template)
+        self.assertIn("ISD 细化内容 / 章节", template)
         self.assertIn("单位/窗口/重置", template)
         self.assertIn("location/symbol为null", guide)
         self.assertEqual(len(re.findall(r"^## \d+\.", template, re.M)), 10)
@@ -188,13 +188,31 @@ class ISDTemplateTests(unittest.TestCase):
         self.assertIn("持久提交后响应丢失", guide)
         self.assertIn("FrameDecoder无持久状态", guide)
 
+    def test_stateful_software_and_readable_record_requirements(self):
+        template = TEMPLATE.read_text()
+        standard = (ROOT / "docs/isd-standard.md").read_text()
+        guide = (ROOT / "docs/ai-guides/implementation-design.md").read_text()
+        for text in (template, standard, guide):
+            lowered = text.lower()
+            for term in ["schema 演进", "不接受的迁移模式", "版本不匹配", "部分初始化",
+                         "thread-safe", "reentrant", "nested-call", "错误传播",
+                         "symlink", "磁盘耗尽", "greenfield", "brownfield"]:
+                self.assertIn(term.lower(), lowered)
+        for term in ["记录型 → 固定字段段落；矩阵型 → 表格", "Actual / Evidence",
+                     "Metadata 与 coverage", "docs/50_implementation_design/<name>.isd.md"]:
+            self.assertIn(term, template)
+        for header in ["| Rule/成员 |", "| 问题ID/既有台账引用 |",
+                       "| 模块/原成员ID |", "| 函数/文件 |"]:
+            self.assertNotIn(header, template)
+        self.assertIn("| 库状态 | 判定事实 | 启动结果 | 是否允许重跑及条件 |", template)
+
     def test_generated_open_issues_keep_owner_gate_and_analysis_columns(self):
-        columns = ["问题ID/既有台账引用", "Owner", "最晚关闭阶段/截止Gate",
-                   "分析/决策引用", "所需输入/下一步选择判据", "解决动作/完成条件"]
+        columns = ["既有台账引用 / 具体缺口 / 反例", "Owner", "最晚关闭阶段 / 截止 Gate",
+                   "分析 / 决策引用", "所需输入 / 下一步选择判据", "解决动作 / 完成条件"]
         with tempfile.TemporaryDirectory() as directory:
             result = self.generate(directory)
             self.assertEqual(result.returncode, 0, result.stderr)
-            text = (Path(directory) / "docs/50_implementation_design/FRAME_ISD.md").read_text()
+            text = (Path(directory) / "docs/50_implementation_design/FRAME_ISD.isd.md").read_text()
             visible = re.sub(r"<details>[\s\S]*?</details>", "", text)
             for term in columns:
                 self.assertIn(term, visible)

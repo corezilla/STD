@@ -73,7 +73,8 @@ class STDEntryTests(unittest.TestCase):
                         "--owner", "owner", "--author", "author", "--repository", "example/repo"],
                         capture_output=True, text=True)
                     self.assertEqual(result.returncode, 0, result.stderr)
-                    text = (output / "example.md").read_text()
+                    suffix = ".isd.md" if template_id == "design.implementation" else ".md"
+                    text = (output / ("example" + suffix)).read_text()
                     cover = text.split("<!-- STD_DOCUMENT_COVER_END -->", 1)[0]
                     link = re.search(r"\[项目采用说明与标准导航\]\(([^)]+)\)", cover)[1]
                     self.assertTrue(link.endswith("#std-entry"))

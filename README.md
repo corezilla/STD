@@ -3,7 +3,7 @@
 STD 面向软件、硬件、固件、FPGA 和软硬件协同项目，提供项目管理、需求、总体系统设计、总体系统机制设计、
 子系统设计、模块设计、接口契约、验证测试、评审、发布和运维所需的版本化模板。
 
-当前 `0.1.0-draft.27` 优先覆盖：
+当前 `0.1.0-draft.28` 优先覆盖：
 
 - Slinky，以及与其协作的 Piko、LLMTier；
 - HIFM，包括软件、DPU-SIM、FPGA/RTL、板卡和系统验证。
@@ -132,6 +132,9 @@ AI 编写入口采用“通用方法 + 模板类型专项”：先读
 软件模块需要独立实现规格时使用可选的 [`ISD模板`](templates/design/implementation-design.md)，
 配套 [`ISD规范`](docs/isd-standard.md) 和 [`AI编写指南`](docs/ai-guides/implementation-design.md)。
 默认一模块一份，覆盖多个文件；模块设计已足够详细时兼作，不重复增加设计层级。
+`design.implementation` 当前为 `0.3.0`：greenfield 不虚构 Current，状态型/持久化模块必须展开
+函数并发契约、错误传播、schema 演进拒绝语义、库状态分支和本地持久化安全；记录型内容采用
+固定字段段落，状态矩阵才使用表格。配套 ISD 规范与专项指南均为 `0.3.0-draft.1`。
 从 HIFM v0.3 迁入的系统方法保留为
 [`docs/ai-system-design-authoring-guide.md`](docs/ai-system-design-authoring-guide.md)（`0.7.0-draft.4`）；
 机制方法已独立到 [`docs/ai-guides/system-mechanism.md`](docs/ai-guides/system-mechanism.md)。
@@ -220,7 +223,7 @@ AI 指南按能力贯通章节、先复用并核对现有契约，再交接双�
 系统保留端到端原理与关键阶段，机制文档唯一维护详细状态转换及参与方协议。
 本轮受影响模板及各自版本见下方复审记录，未列入的模板版本不变；上述机制复审不新增模板种类或审批流程；新增子系统模板见上文。
 模板保留每节可折叠的段落式指导与完成条件；生成器默认将系统文档层级设为 `system`。
-上述改进统一发布为 STD `0.1.0-draft.27`；既有 `draft.26` 来源/RAG 清单作为历史不可变证据保留，
+上述改进统一发布为 STD `0.1.0-draft.28`；既有 `draft.26` 来源/RAG 清单作为历史不可变证据保留，
 不回写为新版本。已采用旧版的项目继续使用原版本，只有用户要求升级时才评估章节映射与内容差异。
 
 ## 接口映射与机制预先规划
@@ -231,7 +234,7 @@ AI 指南按能力贯通章节、先复用并核对现有契约，再交接双�
 [完整虚构案例](docs/examples/interfaces/README.md)给出字段/签名/错误、双向定位和正反例。
 检查器从源签名推导角色与完整性，并复用原封面/metadata 身份；注释不再拥有独立文档版本。
 本轮版本、15→16 章迁移与实际检查范围见[复审记录](docs/interface-data-mapping-review.md)；
-既有项目 lock 不自动升级，也不复制私密产品协议；项目只有在用户明确要求后才采用 `draft.27`。
+既有项目 lock 不自动升级，也不复制私密产品协议；项目只有在用户明确要求后才采用 `draft.28`。
 
 ## 批量机制写作准备
 

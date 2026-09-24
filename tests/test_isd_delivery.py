@@ -33,8 +33,9 @@ class ISDDeliveryTests(unittest.TestCase):
     def record(self, data):
         return (self.root / (data["document_id"] + ".metadata.json"), data)
 
-    def table(self, cells):
-        return "| " + " | ".join("column" + str(i) for i in range(len(cells))) + " |\n" + \
+    def table(self, cells, headers=None):
+        headers = headers or ["column" + str(i) for i in range(len(cells))]
+        return "| " + " | ".join(headers) + " |\n" + \
                "|" + "---|" * len(cells) + "\n| " + " | ".join(cells) + " |\n"
 
     def write_body(self, doc):
@@ -42,9 +43,54 @@ class ISDDeliveryTests(unittest.TestCase):
         for i in ITEMS:
             text += '\n<a id="isd-' + i + '"></a>\n'
             if i == "verification":
-                text += self.table(["R1", "V1/C1/v1", "input", "expected", "NOT_RUN", "NOT_RUN", "test", "NOT_RUN"])
+                text += self.table(
+                    ["R1", "V1/C1/v1", "input", "expected", "NOT_RUN", "NOT_RUN", "test", "NOT_RUN"],
+                    ["Rule/成员", "V / Case / Vector", "输入/故障/环境", "Oracle/Expected",
+                     "Actual/Evidence", "Verdict", "测试入口/清理", "Run ID/Status"])
             elif i in {"security", "persistence"}:
                 text += self.table(["R1", "input", "check", "reject", "transform", "boundary", "V1"])
+            else:
+                text += "decode receives immutable input and returns the first validated frame.\n"
+        (self.root / (doc + ".md")).write_text(text)
+
+    def write_fixed_body(self, doc):
+        def record(title, fields):
+            return "#### " + title + "\n\n" + "\n".join(
+                "- **" + key + "**：" + value for key, value in fields) + "\n"
+        text = '<a id="isd-handoff"></a>\n' + record("1.2.1 H1", [
+            ("上游信息项 / 规则 ID", "R1"),
+            ("固定来源 / 版本 / 锚点 / 摘要", "MOD v1"),
+            ("ISD 细化内容 / 章节", "decode"),
+            ("唯一权威位置", "source"),
+            ("实现自由度", "inline"),
+            ("原 V/Case 及本地验证位置", "V1"),
+        ])
+        for item in ITEMS:
+            text += '\n<a id="isd-' + item + '"></a>\n'
+            if item == "verification":
+                text += record("9.1.1 V1", [
+                    ("Rule / 成员", "R1"), ("V / Case / Vector", "V1/C1/v1"),
+                    ("输入 / 故障 / 环境", "input"), ("Oracle / Expected", "expected"),
+                    ("Actual / Evidence", "NOT_RUN"), ("Verdict", "NOT_RUN"),
+                    ("测试入口 / 清理", "test"), ("Run ID / Status", "NOT_RUN"),
+                ])
+            elif item == "persistence":
+                text += record("7.2.1.1 P1", [
+                    ("原规则 / 事务", "R1"), ("原子范围 / 事务外副作用", "row / none"),
+                    ("开始 / 提交 / 回滚函数", "begin/commit/rollback"),
+                    ("持久提交点 / 对外响应点", "commit / return"),
+                    ("响应丢失后的权威核对", "read record"),
+                    ("恢复入口 / 判定记录 / 重复恢复条件", "recover / ledger / idempotent"),
+                    ("验证项", "V1"),
+                ])
+            elif item == "security":
+                text += record("7.3.1.1 S1", [
+                    ("原规则", "R1"), ("可信输入 / 敏感字段 / 检查对象", "request"),
+                    ("检查函数 / 时点", "check before write"),
+                    ("拒绝 / 宿主交付出口", "reject"), ("脱敏 / 禁止输出", "redact"),
+                    ("日志 / 指标 / trace 口径及触发", "counter on reject"),
+                    ("验证项", "V1"),
+                ])
             else:
                 text += "decode receives immutable input and returns the first validated frame.\n"
         (self.root / (doc + ".md")).write_text(text)
@@ -54,12 +100,27 @@ class ISDDeliveryTests(unittest.TestCase):
 
     def test_separate_and_embedded_are_valid(self):
         self.assertEqual(self.codes(), set())
+
+    def test_fixed_record_delivery_is_valid(self):
+        self.write_fixed_body("ISD")
+        self.assertEqual(self.codes(), set())
+
+    def test_embedded_delivery_is_valid(self):
         self.records.pop()
         spec = self.module["implementation_specification"]
         spec.update(mode="embedded", document_id="MOD")
         for row in spec["coverage_mapping"]:
             row["document_id"] = "MOD"
         self.write_body("MOD")
+        self.assertEqual(self.codes(), set())
+
+    def test_fixed_verification_record_allows_supporting_matrix(self):
+        self.write_fixed_body("ISD")
+        path = self.root / "ISD.md"
+        body = path.read_text()
+        marker = '<a id="isd-verification"></a>\n'
+        matrix = self.table(["empty database", "schema absent", "initialize"])
+        path.write_text(body.replace(marker, marker + matrix, 1))
         self.assertEqual(self.codes(), set())
 
     def test_wrong_module_project_object_or_parent_is_rejected(self):
@@ -132,7 +193,7 @@ class ISDDeliveryTests(unittest.TestCase):
         start = body.index('<a id="isd-persistence">')
         end = body.index('<a id="isd-verification">')
         path.write_text(body[:start] + '<a id="isd-persistence"></a>\nNo stored state.\n' + body[end:])
-        self.assertIn("isd.conditional-table", self.codes())
+        self.assertIn("isd.conditional-record", self.codes())
         entry.update(applicability="not_applicable", reason="stateless library", decision_ref="TAILOR#scope")
         self.assertIn("isd.applicability", self.codes())
         d = dict(document_id="TAILOR", project="p", status="accepted", template_id="management.tailoring")
@@ -164,6 +225,8 @@ class ISDDeliveryTests(unittest.TestCase):
         report = json.loads(result.stdout)
         self.assertTrue(report["isd_delivery_checked"])
         self.assertTrue(any(i["code"] == "isd.view-of" for i in report["issues"]))
+        self.assertTrue((self.root / "docs/50_implementation_design/EMPTY.isd.md").is_file())
+        self.assertTrue((self.root / "docs/50_implementation_design/EMPTY.isd.metadata.json").is_file())
 
 
 if __name__ == "__main__":

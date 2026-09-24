@@ -148,8 +148,9 @@ def main() -> int:
         except ValueError:
             parser.error(f"{label} 必须是 YYYY-MM-DD")
 
-    document_path = output / f"{args.name}.md"
-    metadata_path = output / f"{args.name}.metadata.json"
+    document_stem = f"{args.name}.isd" if args.template == "design.implementation" else args.name
+    document_path = output / f"{document_stem}.md"
+    metadata_path = output / f"{document_stem}.metadata.json"
     source_path = repository_relative(document_path, project_root)
     replacements = {
         "document_title": title, "document_id": args.name,

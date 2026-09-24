@@ -549,19 +549,39 @@ def validate_isd_delivery(records: list[tuple[Path, dict]]) -> list[dict]:
         matches = list(marker.finditer(text))
         if len(matches) != 1:
             return ""
-        return re.split(r'(?m)^#{1,6} |<a\s+id=', text[matches[0].end():], maxsplit=1)[0]
-    def rows(body):
-        result = []
+        return re.split(r'<a\s+id=', text[matches[0].end():], maxsplit=1)[0]
+    def tables(body):
+        result, current = [], []
         for line in body.splitlines():
             if line.strip().startswith("|") and line.strip().endswith("|"):
                 cells = [x.strip() for x in line.strip()[1:-1].split("|")]
                 if not all(re.fullmatch(r":?-+:?", x) for x in cells):
-                    result.append(cells)
-        return result[1:] if result else []
+                    current.append(cells)
+            elif current:
+                result.append(current)
+                current = []
+        if current:
+            result.append(current)
+        return result
+    def rows(body):
+        return [row for table in tables(body) for row in table[1:]]
     def content(body):
         return any(all(clean(c) for c in row) for row in rows(body)) or any(
             clean(line) and not line.lstrip().startswith(("|", "#", "```"))
             for line in body.splitlines())
+    def fixed_records(body):
+        result = []
+        for block in re.split(r"(?m)^#{3,6}\s+", body)[1:]:
+            fields = {}
+            for line in block.splitlines()[1:]:
+                match = re.match(r"\s*-\s+\*\*(.+?)\*\*\s*[：:]\s*(.*)", line)
+                if match:
+                    fields[re.sub(r"\s+", " ", match.group(1).strip())] = match.group(2).strip()
+            if fields:
+                result.append(fields)
+        return result
+    def complete_record(record, required):
+        return all(name in record and clean(record[name]) for name in required)
     def decision(ref, project):
         if not isinstance(ref, str) or "#" not in ref:
             return False
@@ -628,9 +648,15 @@ def validate_isd_delivery(records: list[tuple[Path, dict]]) -> list[dict]:
             and (v == target or d.get("volume_of_document_id") == target)}
         if not isinstance(target, str) or target not in allowed:
             continue
-        handoff = rows(section(target, "isd-handoff"))
-        if not handoff or not all(len(r) == 6 and all(clean(c) for c in r) for r in handoff):
-            fail(path, "handoff", "isd-handoff 承接矩阵必须有完整六列数据，不能只有表头或占位")
+        handoff_body = section(target, "isd-handoff")
+        handoff_rows = rows(handoff_body)
+        handoff_records = fixed_records(handoff_body)
+        handoff_fields = {"上游信息项 / 规则 ID", "固定来源 / 版本 / 锚点 / 摘要",
+                          "ISD 细化内容 / 章节", "唯一权威位置", "实现自由度",
+                          "原 V/Case 及本地验证位置"}
+        if not ((handoff_rows and all(len(r) == 6 and all(clean(c) for c in r) for r in handoff_rows))
+                or any(complete_record(record, handoff_fields) for record in handoff_records)):
+            fail(path, "handoff", "isd-handoff 必须有完整六字段承接记录，不能只有表头或占位")
         mapping = spec.get("coverage_mapping", [])
         if not isinstance(mapping, list) or any(not isinstance(r, dict) for r in mapping):
             fail(path, "coverage", "coverage_mapping 必须为信息项列表")
@@ -654,22 +680,51 @@ def validate_isd_delivery(records: list[tuple[Path, dict]]) -> list[dict]:
                 continue
             if entry.get("applicability") != "applicable":
                 fail(path, "applicability", f"{item}: 必须声明适用性")
-            if item in {"security", "persistence"} and not any(
-                    len(r) == 7 and all(clean(c) for c in r) for r in rows(body)):
-                fail(path, "conditional-table", f"{item}: 适用时必须有完整七列实现落点表")
+            if item in {"security", "persistence"}:
+                legacy = any(len(r) == 7 and all(clean(c) for c in r) for r in rows(body))
+                required_fields = ({"原规则 / 事务", "原子范围 / 事务外副作用",
+                                    "开始 / 提交 / 回滚函数", "持久提交点 / 对外响应点",
+                                    "响应丢失后的权威核对", "恢复入口 / 判定记录 / 重复恢复条件", "验证项"}
+                                   if item == "persistence" else
+                                   {"原规则", "可信输入 / 敏感字段 / 检查对象", "检查函数 / 时点",
+                                    "拒绝 / 宿主交付出口", "脱敏 / 禁止输出",
+                                    "日志 / 指标 / trace 口径及触发", "验证项"})
+                if not legacy and not any(complete_record(record, required_fields)
+                                          for record in fixed_records(body)):
+                    fail(path, "conditional-record", f"{item}: 适用时必须有完整固定字段实现记录")
             if item == "verification":
-                checks = rows(body)
-                if not checks:
-                    fail(path, "verification", "验证表不能为空")
+                checks = []
+                for table in tables(body):
+                    header = {re.sub(r"\s+", " ", cell.strip()) for cell in table[0]}
+                    if ({"Actual/Evidence", "Verdict"} <= header
+                            and any(name in header for name in {"Run ID/Status", "Run/状态"})):
+                        checks.extend(table[1:])
+                records = fixed_records(body)
+                verification_fields = {"Rule / 成员", "V / Case / Vector", "输入 / 故障 / 环境",
+                                       "Oracle / Expected", "Actual / Evidence", "Verdict",
+                                       "测试入口 / 清理", "Run ID / Status"}
+                fixed_checks = [record for record in records if verification_fields & set(record)]
+                if not checks and not fixed_checks:
+                    fail(path, "verification", "验证记录不能为空")
+                normalized = []
                 for row in checks:
                     if len(row) != 8 or not all(clean(c) for c in row):
-                        fail(path, "verification", "验证表要求八列，包括 Expected/Actual/Verdict/Run")
+                        fail(path, "verification", "旧版验证表要求八列，包括 Expected/Actual/Verdict/Run")
                         continue
-                    verdict = row[5].strip('`').upper()
+                    normalized.append((row[4], row[5], row[7]))
+                for record in fixed_checks:
+                    if not complete_record(record, verification_fields):
+                        fail(path, "verification", "验证项必须完整填写八个固定字段")
+                        continue
+                    normalized.append((record["Actual / Evidence"], record["Verdict"],
+                                       record["Run ID / Status"]))
+                for actual, raw_verdict, run in normalized:
+                    verdict = raw_verdict.strip('`').upper()
                     if verdict not in {"PASS", "FAIL", "NOT_RUN", "BLOCKED"}:
                         fail(path, "verdict", "Verdict 必须是 PASS/FAIL/NOT_RUN/BLOCKED")
                     if verdict in {"PASS", "FAIL"} and any(
-                            re.search(r"NOT_RUN|BLOCKED|^N/A$|未执行", row[i], re.I) for i in (4, 7)):
+                            re.search(r"NOT_RUN|BLOCKED|^N/A$|未执行", value, re.I)
+                            for value in (actual, run)):
                         fail(path, "evidence", "运行判定需 Actual/Evidence 及 Run ID，不能填未运行")
         if allowed - used:
             fail(path, "unused-volume", "分卷必须在入口覆盖映射中登记实际信息项")
