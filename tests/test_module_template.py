@@ -195,7 +195,7 @@ class ModuleTemplateTests(unittest.TestCase):
                  if line.strip() and not line.startswith(("#", "|", "> STD 使用入口："))]
         self.assertIn("文档控制信息（与封面和 metadata 保持一致）：", prose)
         self.assertTrue(all(line == "文档控制信息（与封面和 metadata 保持一致）："
-                            or re.match(r"^- \*\*[^*]+\*\*：$", line)
+                            or re.match(r"^- \*\*[^*]+\*\*：?$", line)
                             for line in prose), prose)
 
     def test_generation_short_cover_control_and_no_fictional_body(self):
@@ -210,7 +210,7 @@ class ModuleTemplateTests(unittest.TestCase):
             meta_path = next(Path(directory).rglob("module-example.metadata.json"))
             meta = json.loads(meta_path.read_text())
             text = meta_path.with_name("module-example.md").read_text()
-            self.assertEqual(meta["template_version"], "2.7.0")
+            self.assertEqual(meta["template_version"], "3.0.0")
             self.assertEqual(meta["template_sha256"], hashlib.sha256(TEMPLATE.read_bytes()).hexdigest())
             self.assertEqual(meta["design_level"], "module")
             self.assertEqual(meta["domain"], ["software"])
@@ -279,13 +279,13 @@ class ModuleTemplateTests(unittest.TestCase):
             for term in ("M-<MECH>-DI-<nnn>", "RISK-<MECH>-<nnn>",
                          "CON-<MECH>-<nnn>"):
                 self.assertIn(term, source)
-        self.assertIn("模板 `2.9.0`", mechanism_guide)
-        self.assertIn("版本：0.8.0-draft.4", mechanism_guide)
+        self.assertIn("模板 `3.0.0`", mechanism_guide)
+        self.assertIn("版本：0.8.0-draft.5", mechanism_guide)
 
     def test_module_record_scaffolds_are_consistent_and_demo_version_is_bounded(self):
         text = TEMPLATE.read_text()
         for heading in ("#### 1.1.N `<Constraint ID>`", "#### 3.N `<Surface ID>`",
-                        "#### 4.N `<Dependency ID>`", "#### 6.2.N `<Data ID / Type>`",
+                        "#### 4.N `<Dependency ID>`", "#### 6.2.N `<真实结构名>`",
                         "#### 8.N `<Rule ID>`", "#### `<真实函数名、完整签名或 HTTP/RPC 路由>`",
                         "#### 10.N `<Failure / Concurrency ID>`",
                         "#### 12.N `<Capacity / Performance ID>`",
