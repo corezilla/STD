@@ -1,6 +1,6 @@
 # ISD AI编写指南
 
-版本：0.5.0-draft.2。主模板：`design.implementation` 0.6.0；对象为软件模块的实现视图。
+版本：0.5.0-draft.3。主模板：`design.implementation` 0.7.0；对象为软件模块的实现视图。
 
 ## 1. 输入与边界
 

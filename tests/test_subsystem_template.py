@@ -24,7 +24,7 @@ class SubsystemTemplateTests(unittest.TestCase):
     def test_every_section_has_paragraph_guidance_and_completion(self):
         text = TEMPLATE.read_text()
         sections = re.split(r"(?m)^#{2,3} ", text)[1:]
-        self.assertEqual(len(sections), 43)  # 14 chapters, two appendices, twenty-seven subsection guides
+        self.assertEqual(len(sections), 47)  # 14 chapters, two appendices, thirty-one subsection guides
         for section in sections:
             with self.subTest(heading=section.splitlines()[0]):
                 self.assertEqual(section.count("<details>"), 1)
@@ -46,7 +46,7 @@ class SubsystemTemplateTests(unittest.TestCase):
             meta = json.loads((base / "example-subsystem.metadata.json").read_text())
             self.assertEqual(meta["design_level"], "subsystem")
             self.assertEqual(meta["template_id"], "design.subsystem")
-            self.assertEqual(meta["template_version"], "0.7.0")
+            self.assertEqual(meta["template_version"], "0.8.0")
             self.assertEqual(meta["template_sha256"], hashlib.sha256(TEMPLATE.read_bytes()).hexdigest())
             self.assertEqual(meta["source_path"], "docs/30_subsystem_design/example-subsystem.md")
             self.assertNotIn("{{", md)
@@ -144,8 +144,8 @@ class SubsystemTemplateTests(unittest.TestCase):
         text = TEMPLATE.read_text()
         expected = {
             "1.6": ("Process/Step ID", "不要求照搬章号", "系统已定内容"),
-            "5.1": ("逻辑键", "私有字段", "不为模板新增数据库"),
-            "5.2": ("Data/Stage ID", "实际复制", "前后形态"),
+            "5.5": ("逻辑键", "私有字段", "不为模板新增数据库"),
+            "5.6": ("Data/Stage ID", "实际复制", "前后形态"),
             "9.1": ("身份传播", "更新", "失败", "本地检查"),
             "10.1": ("客户端", "生效", "恢复责任"),
             "11.1": ("窗口", "代次", "不重新定义同名信号"),

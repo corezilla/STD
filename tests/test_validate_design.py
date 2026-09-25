@@ -214,21 +214,25 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
 8.2 模块处理说明
 8.3 时序、资源与跨域设计
 8.4 开发、仿真与调试平台
-9. 数据、描述符与存储结构
-9.1 业务数据流
-9.2 描述符与元数据流
-9.3 状态表、缓存与持久化
-9.4 容量与带宽计算
-9.5 系统公共错误码目录与下级承接
+9. 数据结构设计
+9.1 数据结构清单
+9.2 数据结构定义
+9.3 状态、所有权与生命周期
+9.4 示例与验证
+9.5 业务数据流
+9.6 描述符与元数据流
+9.7 状态表、缓存与持久化策略
+9.8 容量与带宽计算
+9.9 公共编码与跨单元互通
+9.10 系统公共错误码目录与下级承接
 10. 接口与通信协议
 10.1 接口总表
 10.2 数据面接口
 10.3 控制与管理接口
 10.4 维护与调试接口
-10.5 公共数据结构与编码
-10.6 硬件连接与项目选项
-10.7 配置与启动环境接口
-10.8 接口组合与兼容性
+10.5 硬件连接与项目选项
+10.6 配置与启动环境接口
+10.7 接口组合与兼容性
 11. 可靠性、维护与升级
 11.1 故障模型与可靠性机制
 11.2 运行统计、日志与故障定位
@@ -271,7 +275,7 @@ B.4 设计约束与关键假设
 附录 C. 编写与交付检查""".splitlines()
         self.assertEqual(re.findall(r"^#{2,3} (.+)$", system, re.MULTILINE), expected)
         catalog = json.loads((ROOT / "templates/catalog.json").read_text())
-        self.assertEqual(catalog["template_versions"]["design.system"], "8.4.0")
+        self.assertEqual(catalog["template_versions"]["design.system"], "8.5.0")
 
     def test_system_reordering_keeps_business_preconditions_and_risk_handoff(self):
         system = (ROOT / "templates/design/architecture-design.md").read_text()
@@ -340,7 +344,7 @@ B.4 设计约束与关键假设
         required_sections = (
             "文档说明", "系统概览", "产品应用与设计目标", "功能与需求实现概览",
             "重要过程", "硬件实现方案", "软件实现方案",
-            "可编程逻辑与专用处理单元", "数据、描述符与存储结构", "接口与通信协议",
+            "可编程逻辑与专用处理单元", "数据结构设计", "接口与通信协议",
             "可靠性、维护与升级", "性能、扩展与兼容性", "可测试性与验收设计",
             "信息安全架构", "结构、热、工艺与安全设计", "实现计划", "设计决策、风险与未决项",
         )
@@ -385,8 +389,9 @@ B.4 设计约束与关键假设
             "3.3.1": "对象身份与拓扑", "3.3.2": "管理诊断访问与共享故障域",
             "5.1.1": "跨组件操作与统筹", "5.1.2": "参与方确认与异常收敛",
             "10.2.1": "单项操作与消息定义", "10.4.1": "用户命令逐项定义",
-            "10.5": "公共数据结构与编码", "10.6": "硬件连接与项目选项",
-            "10.7": "配置与启动环境接口", "10.8": "接口组合与兼容性",
+            "9.9": "公共编码与跨单元互通", "9.10": "系统公共错误码目录与下级承接",
+            "10.5": "硬件连接与项目选项", "10.6": "配置与启动环境接口",
+            "10.7": "接口组合与兼容性",
             "11.2.1.1": "检查项目与适用范围", "11.2.1.2": "依赖顺序与路径覆盖",
             "11.2.1.3": "结果汇总与退出恢复", "11.2.2": "指标与日志契约",
             "11.2.3": "跨组件关联、时间与快照",
@@ -404,7 +409,7 @@ B.4 设计约束与关键假设
                 self.assertGreater(len(advice.strip()), 100)
                 self.assertTrue(body.strip().startswith(("|", "<!--")), title)
         tailoring = system.split("### B.2", 1)[1].split("### B.3", 1)[0]
-        for condition in ("§10.6", "纯软件", "单组件", "不新增通用平台", "不能因机制尚未实现"):
+        for condition in ("§10.5", "纯软件", "单组件", "不新增通用平台", "不能因机制尚未实现"):
             self.assertIn(condition, tailoring)
 
     def test_shared_contracts_and_runtime_coordination_are_not_deferred(self):
@@ -1051,7 +1056,7 @@ B.4 设计约束与关键假设
     def test_mechanism_every_section_has_paragraph_guidance_and_body(self):
         content = (ROOT / "templates/design/system-mechanism-design.md").read_text()
         headings = list(re.finditer(r"^#{2,3} (.+)$", content, re.MULTILINE))
-        self.assertEqual(len(headings), 38)
+        self.assertEqual(len(headings), 41)
         self.assertEqual(re.findall(r"^## (\d+)\.", content, re.MULTILINE),
                          [str(n) for n in range(1, 17)])
         for index, heading in enumerate(headings):
@@ -1076,7 +1081,7 @@ B.4 设计约束与关键假设
         checks = {
             "3.3": ("地址不等于身份", "共享故障/复位域", "映射"),
             "5": ("accepted", "durable", "released", "每个成功和错误"),
-            "4.3": ("节点断电", "持久", "所有权", "安全复用"),
+            "4.6": ("节点断电", "持久", "所有权", "安全复用"),
             "6.1": ("启动未就绪", "在途", "并发裁决"),
             "8.1": ("联合资源", "安全复用", "排空确认"),
             "10": ("推导", "共享开销", "背压", "不等于"),
@@ -1195,7 +1200,7 @@ B.4 设计约束与关键假设
                 self.assertNotIn(marker, content)
             cover = content.split("<!-- STD_DOCUMENT_COVER_BEGIN -->", 1)[1].split("<!-- STD_DOCUMENT_COVER_END -->", 1)[0]
             self.assertEqual(len(re.findall(r"^\| [^|]+ \|", cover, re.MULTILINE)), 9)  # header + 8 fields
-            self.assertEqual(content.count("<details>"), 38)
+            self.assertEqual(content.count("<details>"), 41)
             visible = re.sub(r"<details>.*?</details>", "", content, flags=re.DOTALL)
             visible = re.sub(r"<!--.*?-->", "", visible, flags=re.DOTALL)
             for instruction in ("本模板名称为", "先核查附录 A", "逐类型重复", "按每个成员重复",

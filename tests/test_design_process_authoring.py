@@ -30,7 +30,7 @@ class DesignProcessAuthoringTests(unittest.TestCase):
         "7.2": "software-query-flow",
         "7.3": "software-configuration-flow",
         "7.4": "software-stop-flow",
-        "8.1": "software-data-flow",
+        "8.5": "software-data-flow",
     }
 
     def test_six_diagrams_have_sources_previews_and_chapter_prose(self):

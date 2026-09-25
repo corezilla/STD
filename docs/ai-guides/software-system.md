@@ -1,8 +1,8 @@
 # 软件系统设计 AI 编写指南
 
-版本：0.4.0-draft.2 · 日期：2026-09-24 · 状态：方法草案，待实际项目试写验证
+版本：0.4.0-draft.3 · 日期：2026-09-25 · 状态：方法草案，待实际项目试写验证
 
-主模板：`design.software-system`，独立版本 `0.5.0`。先读[通用 AI 编写指南](../ai-authoring-guide.md)，
+主模板：`design.software-system`，独立版本 `0.6.0`。先读[通用 AI 编写指南](../ai-authoring-guide.md)，
 再读项目已采用的[软件系统模板](../../templates/design/software-system-design.md)及其全部编写建议。
 本指南从总体系统设计的产品先行、预设计、过程推演与下游承接方法派生，不要求通读总体模板的硬件专业章。
 本次只使用 STD 已有通用材料和虚构案例，不依赖或读取保密 demo；教学内容不代表项目设计决定。
@@ -141,7 +141,7 @@ UI 层为 WebUI、CLI；业务层为 InspectionService、ImageAnalyzer；驱动�
 | 一次业务怎样结束 | [查询 SVG](../../templates/diagrams/software-query-flow.svg) | §7.2 正常、拒绝、中断与共同清理；本例只读，不推导写入安全 |
 | 配置何时生效 | [配置 SVG](../../templates/diagrams/software-configuration-flow.svg) | §7.3 明确热更新或重启选择、在途边界和失败时可用性 |
 | 停止后能否重启 | [停止 SVG](../../templates/diagrams/software-stop-flow.svg) | §7.4 关闭入口、在途退出、资源释放、退出确认；未确认不能重启 |
-| 数据怎样变换与释放 | [数据 SVG](../../templates/diagrams/software-data-flow.svg) | §8.1 区分磁盘、共享内存与每请求对象，关联峰值及寿命 |
+| 数据怎样变换与释放 | [数据 SVG](../../templates/diagrams/software-data-flow.svg) | §8.5 区分磁盘、共享内存与每请求对象，关联峰值及寿命 |
 | 系统包含哪些对象 | [软件直属组成 SVG](../../templates/diagrams/software-design-composition.svg) | 层次、对象/父对象 ID、类型、图后职责；不加调用箭头 |
 | 左侧层名、实际组件布局 | [英文组件分层 SVG](../../templates/diagrams/software-system-layered-example.svg) | 按真实职责分层，框内正式英文名；无图标无调用线，不按对象类型分层 |
 | 同一对象如何运行和交接 | [软件运行交互 SVG](../../templates/diagrams/software-design-runtime.svg) | 承载进程/实例、箭头方向、交接语义与接口 ID；不从组成图猜进程 |

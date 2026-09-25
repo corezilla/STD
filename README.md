@@ -3,7 +3,7 @@
 STD 面向软件、硬件、固件、FPGA 和软硬件协同项目，提供项目管理、需求、总体系统设计、总体系统机制设计、
 子系统设计、模块设计、接口契约、验证测试、评审、发布和运维所需的版本化模板。
 
-当前 `0.1.0-draft.32` 优先覆盖：
+当前 `0.1.0-draft.33` 优先覆盖：
 
 - Slinky，以及与其协作的 Piko、LLMTier；
 - HIFM，包括软件、DPU-SIM、FPGA/RTL、板卡和系统验证。
@@ -137,12 +137,12 @@ AI 编写入口采用“通用方法 + 模板类型专项”：先读
 软件模块需要独立实现规格时使用可选的 [`ISD模板`](templates/design/implementation-design.md)，
 配套 [`ISD规范`](docs/isd-standard.md) 和 [`AI编写指南`](docs/ai-guides/implementation-design.md)。
 默认一模块一份，覆盖多个文件；模块设计已足够详细时兼作，不重复增加设计层级。
-`design.implementation` 当前为 `0.6.0`：greenfield 不虚构 Current，函数输入/输出/错误、重要流程图、配置落点及状态型/持久化实现必须展开
+`design.implementation` 当前为 `0.7.0`：greenfield 不虚构 Current，函数输入/输出/错误、重要流程图、配置落点及状态型/持久化实现必须展开
 函数并发契约、错误传播、schema 演进拒绝语义、库状态分支和本地持久化安全；记录型内容采用
 固定字段段落，状态矩阵才使用表格；交付检查强制关键函数并发契约、错误传播、schema 策略和六类库状态。
-ISD 规范为 `0.5.0-draft.1`，专项指南为 `0.5.0-draft.2`。
+ISD 规范为 `0.5.0-draft.1`，专项指南为 `0.5.0-draft.3`。
 从 HIFM v0.3 迁入的系统方法保留为
-[`docs/ai-system-design-authoring-guide.md`](docs/ai-system-design-authoring-guide.md)（`0.7.0-draft.5`）；
+[`docs/ai-system-design-authoring-guide.md`](docs/ai-system-design-authoring-guide.md)（`0.7.0-draft.6`）；
 机制方法已独立到 [`docs/ai-guides/system-mechanism.md`](docs/ai-guides/system-mechanism.md)。
 这些是方法草案，待实际任务验证，不是新模板，不改变项目已采用的 STD/模板版本，
 也不自动授权提交、发布或运行。公共规则只在通用指南维护，专项解释本类型的实际设计/取证方法。
@@ -151,7 +151,7 @@ ISD 规范为 `0.5.0-draft.1`，专项指南为 `0.5.0-draft.2`。
 局部修订只检查受影响内容和直接依赖，不重跑完整写作流程；原生图源与生成式插画分别维护，
 架构视图、实现状态和验证结果分别记录。
 
-当前 `design.system`（总体系统设计）为 `8.4.0`，保留 `7.0.0` 的 17 个通用主章。
+当前 `design.system`（总体系统设计）为 `8.5.0`，保留 `7.0.0` 的 17 个通用主章。
 正文仍采用八项必要字段的短封面，附录 A 保存控制信息与导航，附录 B 保存输入/适用性，
 附录 C 保存编写与交付检查。保留各节的段落式编写建议、完成条件及已确认的原创教学图。
 
@@ -188,9 +188,9 @@ AI 指南按能力贯通章节、先复用并核对现有契约，再交接双�
 诊断在 §11，替代依赖与环回在 §10.4。系统约束由 §3.2 分配、§13.6 验证、§17.2 承接为
 下级设计与验收任务。机制未定时先预设计，不能只登记待定或以局部测试关闭系统目标。
 
-新增[软件系统设计说明书模板](templates/design/software-system-design.md) `design.software-system`，独立版本 `0.5.0`，含独立的 §4.3 UI 设计。
+新增[软件系统设计说明书模板](templates/design/software-system-design.md) `design.software-system`，独立版本 `0.6.0`，含独立的 §4.3 UI 设计。
 软件 AI 指南补充架构分层、正式英文组件命名、图后说明与反例检查，并提供 UI/业务/驱动/按需系统层 SVG 图例；不按对象类型或历史属性分层。
-现有章节内新增应用环境、启动、业务、配置、停止和数据流六张 SVG/PNG 图例；标题目录不变。
+现有主章内新增应用环境、启动、业务、配置、停止和数据流六张 SVG/PNG 图例；17 个主章保持不变，数据小节按统一结构调整。
 每个重要流程必须有图、正文和异常分支；先用一节真实方案检验写作质量，再扩展全篇。
 方法及完整虚构样稿见[软件 AI 指南](docs/ai-guides/software-system.md)和[启动与恢复示例](docs/examples/software-startup-design-example.md)。
 从总体模板派生为 17 个软件主章及文末附录，共 59 处段落式编写建议、示例和完成条件。
@@ -200,7 +200,7 @@ AI 指南按能力贯通章节、先复用并核对现有契约，再交接双�
 默认生成到 `docs/20_system_design`，配套[软件系统 AI 指南](docs/ai-guides/software-system.md)与两幅可编辑 SVG。
 初版仍需真实项目试写，不因结构检查通过声称设计质量或运行验证通过。
 
-新增 [软件子系统设计模板](templates/design/subsystem-design.md) `design.subsystem`，独立版本 `0.7.0`，
+新增 [软件子系统设计模板](templates/design/subsystem-design.md) `design.subsystem`，独立版本 `0.8.0`，
 14 个主章以概要设计为中心：第1章集中输入、第2章第0层整体架构、第3章第1层分层与模块设计、运行设计、数据/接口/配置、
 调试维护、部署测试和性能；保留系统约束及下游承接，含同一虚构软件的上下文/整体架构/分层模块三图与逐节指导，不替代模块详细设计。
 0.5.0 到 0.6.0 的旧新章节映射见模板附录 A，已有项目不自动迁移。
@@ -210,11 +210,13 @@ AI 指南按能力贯通章节、先复用并核对现有契约，再交接双�
 默认生成到 `docs/30_subsystem_design`，共用[软件子系统与模块 AI 指南](docs/ai-guides/unit-design.md)。
 旧子系统文档不自动迁移，板卡/FPGA 对象直接采用专项模板。软件系统设计使用独立模板，不用软件子系统模板代替。
 
-`design.definition` 为 `2.5.0`《软件模块设计说明书》，保留 15 个主章；服务型模块可把 HTTP/RPC 端点集登记为操作面，§5–7 显式展开内部组成、文件调用、文件间接口与字段级数据结构，§13 固定文件分解和实现步骤。功能及附录 A 机制承接采用可读的固定字段段落，并登记 ISD 采用模式；附录 A 用 Mechanism Document ID + Requirement ID 精确承接机制 §14.4，落实到正文、接口、文件/symbol 和验证。
-配套子系统与模块 AI 指南为 `0.13.0-draft.2`，增加模块试写流程、历史问题复发检查、[异步模块连续案例](docs/examples/module-async-export-example.md)以及经授权的 [LLMTier M001/M002 实证样板](demo/llmtier-module-design/README.md)。新版模块生成限制软件模块层级，并保留内容寻址的教学参考；构建装配、生命周期预算及四类恢复动作分别核对。旧采用实例不自动升级。
+`design.definition` 为 `2.6.0`《软件模块设计说明书》，保留 15 个主章；服务型模块可把 HTTP/RPC 端点集登记为操作面，§5–7 显式展开内部组成、文件调用、文件间接口与字段级数据结构，§13 固定文件分解和实现步骤。功能及附录 A 机制承接采用可读的固定字段段落，并登记 ISD 采用模式；附录 A 用 Mechanism Document ID + Requirement ID 精确承接机制 §14.4，落实到正文、接口、文件/symbol 和验证。
+配套子系统与模块 AI 指南为 `0.13.0-draft.3`，增加模块试写流程、历史问题复发检查、[异步模块连续案例](docs/examples/module-async-export-example.md)以及经授权的 [LLMTier M001/M002 实证样板](demo/llmtier-module-design/README.md)。新版模块生成限制软件模块层级，并保留内容寻址的教学参考；构建装配、生命周期预算及四类恢复动作分别核对。旧采用实例不自动升级。
 `design.hardware` 与 `design.fpga` 增加上级约束承接、
 本地落实和系统组合验收，当前均为 `1.3.0`，不要求另建通用单元文档。
-`design.system-mechanism`（总体/纯软件系统机制设计）为 `2.7.0`，数据与接口分章，16 个主章保留既有约束和段落式指导，编写指令与教学内容隔离于项目正文；§5.1 强制用代表输入完成调用演练，§14 固定为参与方映射、步骤责任、跨单元接口和下级设计输入四段式要求侧，纯软件 API 裁剪示例放附录 A；下级要求、风险和约束使用不同 ID 命名空间。
+`design.system-mechanism`（总体/纯软件系统机制设计）为 `2.8.0`，数据与接口分章，16 个主章保留既有约束和段落式指导，编写指令与教学内容隔离于项目正文；§5.1 强制用代表输入完成调用演练，§14 固定为参与方映射、步骤责任、跨单元接口和下级设计输入四段式要求侧，纯软件 API 裁剪示例放附录 A；下级要求、风险和约束使用不同 ID 命名空间。
+
+上述六类软件设计文档的数据主章统一名为“数据结构设计”，基础小节依次为清单、定义、状态/所有权/生命周期、示例与验证；总体、系统、机制、子系统、模块和 ISD 只在其后增加本层必要的专有内容。公共字段与系统错误码仅由唯一来源定义，下级用相同 ID 承接；详见[设计数据结构、接口与系统错误码描述规范](docs/design-data-interface-format.md)。
 模板同时补齐机器源/Proposed 两种数据定义分支、拓扑/身份、资源寿命、维护 API/命令、测试控制/隔离与双向承接；采用短封面和文末控制记录。
 九幅[可复用机制图形](templates/diagrams/mechanism/README.md)由外部教学案例完整展示：
 [只读观测案例](docs/examples/mechanism-readonly-observation-example.md)使用开篇用途图和六幅关系图，
