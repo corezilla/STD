@@ -167,6 +167,10 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
             self.assertGreater(system.index(heading), system.index("## 17."))
         self.assertNotRegex(system, r"§1\.[3-6]|### 1\.[3-6]")
         self.assertIn("EX-SCENE-01｜流水线视觉检测的逻辑应用场景", system)
+        self.assertNotIn("```mermaid", system)
+        data_chapter = system.split("## 9. 数据结构设计\n", 1)[1].split("\n## 10.", 1)[0]
+        self.assertLess(data_chapter.index("InspectionErrorCode"), data_chapter.index("InspectionState"))
+        self.assertEqual(data_chapter.count("InspectionError {"), 1)
 
     def test_system_outline_matches_adopted_product_first_structure(self):
         # Freeze the agreed generic outline; CI must not depend on a project checkout.
@@ -215,19 +219,15 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
 8.3 时序、资源与跨域设计
 8.4 开发、仿真与调试平台
 9. 数据结构设计
-9.1 公共基础类型与枚举（适用时）
-9.2 业务与操作数据结构（适用时）
+9.1 错误类型、公共基础类型与枚举（适用时）
+9.2 业务、操作与运行状态数据结构（适用时）
 9.3 配置与规则数据结构（适用时）
 9.4 通信报文结构（适用时）
 9.5 设备与 FPGA 表项结构（适用时）
-9.6 运行状态数据结构（适用时）
-9.7 数据库表结构（适用时）
-9.8 错误码与错误结构（适用时）
-9.9 业务数据流
-9.10 描述符与元数据流
-9.11 状态表、缓存与持久化策略
-9.12 容量与带宽计算
-9.13 公共编码与跨单元互通
+9.6 数据库表结构（适用时）
+9.7 业务数据与元数据流
+9.8 状态表、缓存与持久化策略
+9.9 容量与带宽计算
 10. 接口设计
 10.1 软件接口（适用时）
 10.2 消息与数据流接口（适用时）
@@ -391,7 +391,7 @@ B.4 设计约束与关键假设
         expected = {
             "3.3.1": "对象身份与拓扑", "3.3.2": "管理诊断访问与共享故障域",
             "5.1.1": "跨组件操作与统筹", "5.1.2": "参与方确认与异常收敛",
-            "9.13": "公共编码与跨单元互通",
+            "9.2": "业务、操作与运行状态数据结构（适用时）",
             "10.5": "接口组合与兼容性",
             "11.2.1.1": "检查项目与适用范围", "11.2.1.2": "依赖顺序与路径覆盖",
             "11.2.1.3": "结果汇总与退出恢复", "11.2.2": "指标与日志契约",

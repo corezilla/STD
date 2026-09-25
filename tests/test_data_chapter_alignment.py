@@ -24,6 +24,12 @@ SHARED_SECTIONS = (
     "数据库表结构（适用时）",
     "错误码与错误结构（适用时）",
 )
+SYSTEM_SECTIONS = (
+    "错误类型、公共基础类型与枚举（适用时）",
+    "业务、操作与运行状态数据结构（适用时）",
+    *SHARED_SECTIONS[2:5],
+    SHARED_SECTIONS[6],
+)
 
 
 class DataChapterAlignmentTests(unittest.TestCase):
@@ -33,9 +39,10 @@ class DataChapterAlignmentTests(unittest.TestCase):
                 text = (ROOT / "templates/design" / filename).read_text()
                 self.assertIn(f"## {chapter}. 数据结构设计\n", text)
                 headings = re.findall(rf"^### {chapter}\.(\d+) (.+)$", text, re.M)
+                expected = SYSTEM_SECTIONS if filename == "architecture-design.md" else SHARED_SECTIONS
                 self.assertEqual(
-                    headings[:8],
-                    [(str(index), title) for index, title in enumerate(SHARED_SECTIONS, 1)],
+                    headings[:len(expected)],
+                    [(str(index), title) for index, title in enumerate(expected, 1)],
                 )
                 numbers = [number for number, _ in headings]
                 self.assertEqual(len(numbers), len(set(numbers)))
@@ -46,9 +53,9 @@ class DataChapterAlignmentTests(unittest.TestCase):
                     self.assertIn(term, chapter_text)
 
     def test_system_error_catalogs_remain_in_data_chapters(self):
-        for filename, chapter, subsection in (
-            ("architecture-design.md", 9, 8),
-            ("software-system-design.md", 8, 8),
+        for filename, chapter, subsection, title in (
+            ("architecture-design.md", 9, 1, "错误类型、公共基础类型与枚举（适用时）"),
+            ("software-system-design.md", 8, 8, "错误码与错误结构（适用时）"),
         ):
             with self.subTest(template=filename):
                 text = (ROOT / "templates/design" / filename).read_text()
@@ -56,7 +63,7 @@ class DataChapterAlignmentTests(unittest.TestCase):
                     "\n## ", 1
                 )[0]
                 self.assertIn(
-                    f"### {chapter}.{subsection} 错误码与错误结构（适用时）",
+                    f"### {chapter}.{subsection} {title}",
                     data_chapter,
                 )
                 self.assertIn("STD_PUBLIC_ERROR_CATALOG_BEGIN", data_chapter)
