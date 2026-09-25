@@ -430,8 +430,10 @@ class InterfaceMappingTests(unittest.TestCase):
                 self.assertNotIn("EX-EXPORT-DESIGN", body)
             else:
                 self.assertIn("## 5. 接口设计", body)
-                self.assertIn("必填/默认/null", body)
-                self.assertIn("request/response/event 类型 ID", body)
+                self.assertIn("### 5.1 软件接口（适用时）", body)
+                self.assertIn("### 5.2 消息与数据流接口（适用时）", body)
+                self.assertIn("Interface/Member ID", body)
+                self.assertIn("Data/Type ID", body)
 
     def test_generated_companion_templates_bind_current_version_and_keep_guidance(self):
         catalog = validator.read_json(ROOT / "templates/catalog.json")

@@ -37,7 +37,7 @@
 | [交付与运维](ai-guides/operations.md) | `operations.release`、`operations.version-description`、`operations.user-manual`、`operations.installation-deployment`、`operations.operations-manual`、`operations.maintenance`、`operations.bring-up` |
 
 精确映射由 [AI 指南映射表](ai-authoring-guides.json)记录，与[模板目录](../templates/catalog.json)做完整性检查；这里只是导航，不新增生成器或运行时机制。如何选择文档层级见[模板选择规则](template-selection.md)，共同质量规则见[设计文档编写规范](design-writing-guide.md)。
-每次设计写作还须从对应模板的数据与接口入口建立 ID 清单，并按[数据、接口与公共错误码规范](design-data-interface-format.md)双向走查系统定义、下级落实和验证。公共错误码在系统层作为公共数据结构逐码定义，不得留给各模块自行解释。
+每次设计写作须从对应模板的数据与接口入口核对 ID，并按[数据、接口与公共错误码规范](design-data-interface-format.md)双向走查系统定义、下级落实和验证。六类软件设计文档的接口章按实际形态分类，以真实名称或调用形式为标题，逐接口在一处写完定义、交互、错误、实例和验证；不另造接口清单或调用方反向索引，具体调用链由流程图和正文表达。公共错误码在系统层作为公共数据结构逐码定义，不得留给各模块自行解释。
 
 遇到尚无专项的新增模板，应先明确其交付责任，补齐映射或把适用关系标为待定；不能静默套用系统设计指南。专项可共享，模板不必各建一份指南。模板章节、必需信息项和已批准 tailoring 优先于方法举例；发现冲突应报告具体两处，不能由指南悄悄豁免模板要求或扩张产品范围。
 

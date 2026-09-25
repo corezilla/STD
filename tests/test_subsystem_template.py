@@ -24,7 +24,7 @@ class SubsystemTemplateTests(unittest.TestCase):
     def test_every_section_has_paragraph_guidance_and_completion(self):
         text = TEMPLATE.read_text()
         sections = re.split(r"(?m)^#{2,3} ", text)[1:]
-        self.assertEqual(len(sections), 47)  # 14 chapters, two appendices, thirty-one subsection guides
+        self.assertEqual(len(sections), 50)  # 14 chapters, two appendices, thirty-four subsection guides
         for section in sections:
             with self.subTest(heading=section.splitlines()[0]):
                 self.assertEqual(section.count("<details>"), 1)
@@ -46,7 +46,7 @@ class SubsystemTemplateTests(unittest.TestCase):
             meta = json.loads((base / "example-subsystem.metadata.json").read_text())
             self.assertEqual(meta["design_level"], "subsystem")
             self.assertEqual(meta["template_id"], "design.subsystem")
-            self.assertEqual(meta["template_version"], "0.8.0")
+            self.assertEqual(meta["template_version"], "0.9.0")
             self.assertEqual(meta["template_sha256"], hashlib.sha256(TEMPLATE.read_bytes()).hexdigest())
             self.assertEqual(meta["source_path"], "docs/30_subsystem_design/example-subsystem.md")
             self.assertNotIn("{{", md)

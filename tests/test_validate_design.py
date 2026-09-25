@@ -225,14 +225,12 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
 9.8 容量与带宽计算
 9.9 公共编码与跨单元互通
 9.10 系统公共错误码目录与下级承接
-10. 接口与通信协议
-10.1 接口总表
-10.2 数据面接口
-10.3 控制与管理接口
-10.4 维护与调试接口
-10.5 硬件连接与项目选项
-10.6 配置与启动环境接口
-10.7 接口组合与兼容性
+10. 接口设计
+10.1 软件接口（适用时）
+10.2 消息与数据流接口（适用时）
+10.3 硬件与固件接口（适用时）
+10.4 人机与维护接口（适用时）
+10.5 接口组合与兼容性
 11. 可靠性、维护与升级
 11.1 故障模型与可靠性机制
 11.2 运行统计、日志与故障定位
@@ -275,7 +273,7 @@ B.4 设计约束与关键假设
 附录 C. 编写与交付检查""".splitlines()
         self.assertEqual(re.findall(r"^#{2,3} (.+)$", system, re.MULTILINE), expected)
         catalog = json.loads((ROOT / "templates/catalog.json").read_text())
-        self.assertEqual(catalog["template_versions"]["design.system"], "8.5.0")
+        self.assertEqual(catalog["template_versions"]["design.system"], "8.6.0")
 
     def test_system_reordering_keeps_business_preconditions_and_risk_handoff(self):
         system = (ROOT / "templates/design/architecture-design.md").read_text()
@@ -344,7 +342,7 @@ B.4 设计约束与关键假设
         required_sections = (
             "文档说明", "系统概览", "产品应用与设计目标", "功能与需求实现概览",
             "重要过程", "硬件实现方案", "软件实现方案",
-            "可编程逻辑与专用处理单元", "数据结构设计", "接口与通信协议",
+            "可编程逻辑与专用处理单元", "数据结构设计", "接口设计",
             "可靠性、维护与升级", "性能、扩展与兼容性", "可测试性与验收设计",
             "信息安全架构", "结构、热、工艺与安全设计", "实现计划", "设计决策、风险与未决项",
         )
@@ -355,7 +353,7 @@ B.4 设计约束与关键假设
         lines = system.splitlines()
         headings = [
             index for index, line in enumerate(lines)
-            if line.startswith(("## ", "### ", "#### ", "##### "))
+            if line.startswith(("## ", "### ", "#### ", "##### ")) and not line.startswith("#### `<")
         ]
         self.assertGreater(len(headings), len(required_sections))
         for position, index in enumerate(headings):
@@ -388,10 +386,8 @@ B.4 设计约束与关键假设
         expected = {
             "3.3.1": "对象身份与拓扑", "3.3.2": "管理诊断访问与共享故障域",
             "5.1.1": "跨组件操作与统筹", "5.1.2": "参与方确认与异常收敛",
-            "10.2.1": "单项操作与消息定义", "10.4.1": "用户命令逐项定义",
             "9.9": "公共编码与跨单元互通", "9.10": "系统公共错误码目录与下级承接",
-            "10.5": "硬件连接与项目选项", "10.6": "配置与启动环境接口",
-            "10.7": "接口组合与兼容性",
+            "10.5": "接口组合与兼容性",
             "11.2.1.1": "检查项目与适用范围", "11.2.1.2": "依赖顺序与路径覆盖",
             "11.2.1.3": "结果汇总与退出恢复", "11.2.2": "指标与日志契约",
             "11.2.3": "跨组件关联、时间与快照",
@@ -409,7 +405,7 @@ B.4 设计约束与关键假设
                 self.assertGreater(len(advice.strip()), 100)
                 self.assertTrue(body.strip().startswith(("|", "<!--")), title)
         tailoring = system.split("### B.2", 1)[1].split("### B.3", 1)[0]
-        for condition in ("§10.5", "纯软件", "单组件", "不新增通用平台", "不能因机制尚未实现"):
+        for condition in ("§10.3", "纯软件", "单组件", "不新增通用平台", "不能因机制尚未实现"):
             self.assertIn(condition, tailoring)
 
     def test_shared_contracts_and_runtime_coordination_are_not_deferred(self):
@@ -816,7 +812,7 @@ B.4 设计约束与关键假设
             maintenance.index("#### 11.2.1 自检与诊断设计"),
             maintenance.index("### 11.3 升级与回滚"),
         )
-        debugging = system.split("### 10.4 维护与调试接口\n", 1)[1].split("\n## ", 1)[0]
+        debugging = system.split("### 10.4 人机与维护接口（适用时）\n", 1)[1].split("\n### 10.5 ", 1)[0]
         self.assertIn("替代依赖/旁路/环回", debugging)
         self.assertIn("指示灯", debugging)
         self.assertIn("责任模块", debugging)
@@ -845,7 +841,7 @@ B.4 设计约束与关键假设
             ),
             "7.4 页面与交互（如适用）": ("线框图", "结果未知", "取消", "刷新", "服务端授权"),
             "8.3 时序、资源与跨域设计": ("单侧复位", "数据与描述符", "在途数据", "业务恢复"),
-            "10.3 控制与管理接口": ("调用位置", "部分成功", "响应丢失", "无法查到结果"),
+            "10.1 软件接口（适用时）": ("调用位置", "部分成功", "响应丢失", "无法查到结果"),
             "11.1 故障模型与可靠性机制": ("共同失效点", "误判", "保护机制自身失效", "选择理由"),
             "11.3 升级与回滚": ("不可逆点", "控制者中途退出", "旧版无法读取", "逐阶段失败"),
             "12.1 性能模型与预算": ("共享资源", "吞吐上界", "排队", "内存峰值", "可复算推导"),
@@ -1056,7 +1052,7 @@ B.4 设计约束与关键假设
     def test_mechanism_every_section_has_paragraph_guidance_and_body(self):
         content = (ROOT / "templates/design/system-mechanism-design.md").read_text()
         headings = list(re.finditer(r"^#{2,3} (.+)$", content, re.MULTILINE))
-        self.assertEqual(len(headings), 41)
+        self.assertEqual(len(headings), 44)
         self.assertEqual(re.findall(r"^## (\d+)\.", content, re.MULTILINE),
                          [str(n) for n in range(1, 17)])
         for index, heading in enumerate(headings):
@@ -1117,7 +1113,7 @@ B.4 设计约束与关键假设
                           "mechanism-side-effect-example.md", "host-fpga-transfer-example.md"):
             self.assertIn(reference, navigation)
         self.assertNotIn("![", content)
-        self.assertLess(len(content.splitlines()), 1050)
+        self.assertLess(len(content.splitlines()), 1120)
         for name in readonly:
             self.assertIn(f"system-mechanism-authoring/{name}.png", readonly_example)
             self.assertIn(f"diagrams/mechanism/{name}.svg", readonly_example)
@@ -1200,16 +1196,16 @@ B.4 设计约束与关键假设
                 self.assertNotIn(marker, content)
             cover = content.split("<!-- STD_DOCUMENT_COVER_BEGIN -->", 1)[1].split("<!-- STD_DOCUMENT_COVER_END -->", 1)[0]
             self.assertEqual(len(re.findall(r"^\| [^|]+ \|", cover, re.MULTILINE)), 9)  # header + 8 fields
-            self.assertEqual(content.count("<details>"), 41)
+            self.assertEqual(content.count("<details>"), 44)
             visible = re.sub(r"<details>.*?</details>", "", content, flags=re.DOTALL)
             visible = re.sub(r"<!--.*?-->", "", visible, flags=re.DOTALL)
             for instruction in ("本模板名称为", "先核查附录 A", "逐类型重复", "按每个成员重复",
                                 "统一状态规则", "复审顺序", "修改后的一致性回查", "正式文档须替换", "FAIL-001"):
                 self.assertNotIn(instruction, visible)
-            # Beyond structural headings and empty tables no stock product prose
-            # or authoring instructions should survive this generated scaffold.
+            # Structural headings and per-interface field prompts remain, but no
+            # stock product prose or authoring instructions survive.
             self.assertEqual([line for line in visible.splitlines()
-                              if line.strip() and not line.startswith(("#", "|", "> STD 使用入口："))], [])
+                              if line.strip() and not line.startswith(("#", "|", "- **", "> STD 使用入口："))], [])
             self.assertIn("先核查附录 A", content)  # guidance is retained, not deleted
             self.assertIn("Authority", content)
             self.assertIn("<!-- STD_DOCUMENT_CONTROL_BEGIN -->", content)
