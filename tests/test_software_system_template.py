@@ -24,11 +24,15 @@ class SoftwareSystemTemplateTests(unittest.TestCase):
     def test_outline_and_every_section_have_paragraph_guidance(self):
         text = TEMPLATE.read_text()
         chapters = re.findall(r"(?m)^## (\d+)\. (.+)$", text)
-        self.assertEqual([int(number) for number, _ in chapters], list(range(1, 18)))
+        self.assertEqual([int(number) for number, _ in chapters], list(range(1, 17)))
         sections = re.split(r"(?m)^#{2,3} ", text)[1:]
-        self.assertEqual(len(sections), 67)
+        self.assertEqual(len(sections), 64)
         for section in sections:
             with self.subTest(section=section.splitlines()[0]):
+                if section.startswith("3.6 功能设计"):
+                    section = section.split("#### 3.6.1", 1)[0]
+                if section.startswith("8.4 人机与维护接口"):
+                    section = section.split("#### 8.4.1", 1)[0]
                 self.assertEqual(section.count("<details>"), 1)
                 self.assertEqual(section.count("</details>"), 1)
                 for label in ("本节目的", "必须写清楚", "编写规范", "抽象示例", "完成条件"):
@@ -50,28 +54,28 @@ class SoftwareSystemTemplateTests(unittest.TestCase):
                    "![虚构软件系统的直属组成]", "### 3.2 组成与职责",
                    "### 3.3 总体方案、选择依据与替代方案",
                    "### 3.4 约束分配与下游保证", "### 3.5 机制清单与文档映射",
-                   "## 4. 功能与用户交互设计", "## 5. 子系统与直属模块概要设计",
-                   "### 5.1 直属对象概要设计", "## 6. 运行组织与部署设计")
+                   "### 3.6 功能设计", "## 4. 子系统与直属模块概要设计",
+                   "### 4.1 直属对象概要设计", "## 5. 运行组织与部署设计")
         positions = [text.index(item) for item in ordered]
         self.assertEqual(positions, sorted(positions))
         self.assertEqual(text.count("software-design-composition.svg"), 1)
         self.assertEqual(text.count("| 对象 ID / 类型 / 父对象 |"), 1)
         runtime = text.index("software-design-runtime.svg")
-        self.assertGreater(runtime, text.index("## 6. 运行组织与部署设计"))
-        self.assertLess(runtime, text.index("## 7. 重要过程"))
+        self.assertGreater(runtime, text.index("## 5. 运行组织与部署设计"))
+        self.assertLess(runtime, text.index("## 6. 重要过程"))
         guide = (ROOT / "docs/ai-guides/software-system.md").read_text()
         self.assertIn("全系统架构图放在模板 §3.1 正文开头", guide)
         self.assertIn("对象总表在 §3.2 唯一维护", guide)
         for stale in ("§5 讲静态组成", "§3.2 → §5.1", "§5 直属组成"):
             self.assertNotIn(stale, guide)
         selection = (ROOT / "docs/template-selection.md").read_text()
-        for route in ("软件系统模板 §3.5", "软件系统 §9", "软件系统模板 §3.4",
+        for route in ("软件系统模板 §3.5", "软件系统 §8", "软件系统模板 §3.4",
                       "纯软件顶层的跨组件机制也使用 `design.system-mechanism`"):
             self.assertIn(route, selection)
 
     def test_cross_references_and_assets_resolve(self):
         text = TEMPLATE.read_text()
-        headings = set(re.findall(r"(?m)^#{2,3} (\d+(?:\.\d+)*)\.? ", text))
+        headings = set(re.findall(r"(?m)^#{2,4} (\d+(?:\.\d+)*)\.? ", text))
         # Source-derivation references point to the original template, not this outline.
         body = text.split("派生来源：", 1)[0]
         for ref in re.findall(r"§(\d+(?:\.\d+)*)", body):
@@ -98,25 +102,34 @@ class SoftwareSystemTemplateTests(unittest.TestCase):
                      "逐能力", "事实来源", "不可", "全部必需消费者", "真实项目"):
             self.assertIn(term, guide)
 
-    def test_ui_design_and_cli_example_are_separate_and_actionable(self):
+    def test_ui_and_cli_contracts_live_only_in_interface_chapter(self):
         text = TEMPLATE.read_text()
-        ui = text.split("### 4.3 UI 设计（适用时）", 1)[1].split("## 5.", 1)[0]
+        functions = text.split("### 3.6 功能设计", 1)[1].split("## 4.", 1)[0]
+        self.assertIn("#### 3.6.2 用户任务与功能结果", functions)
+        self.assertNotIn("### 3.7", functions)
+        self.assertNotIn("inspectctl task status", functions)
+        self.assertNotIn("llmtier-webui-nav.png", functions)
+        ui = text.split("#### 8.4.2 WebUI（适用时）", 1)[1].split("#### 8.4.N", 1)[0]
         for term in ["页面导航图", "共享框架布局图", "每个主要页面", "布局图/线框图",
-                     "每个重要UI流程", "Page ID", "权威数据Owner", "晚到响应", "键盘",
-                     "无自有图形界面", "可编辑图源"]:
+                     "每个重要 UI 任务", "Page ID", "数据 Owner", "晚到响应",
+                     "llmtier-webui-nav.png", "llmtier-webui-frame.png",
+                     "llmtier-webui-page-layouts.png", "可编辑 SVG 源"]:
             self.assertIn(term, ui)
-        cli = text.split("### 4.2 页面、命令与交互反馈", 1)[1].split("### 4.3", 1)[0]
-        for term in ["EX-CLI/v1", "NOT_RUN", "```mermaid", "当前目录", "stdout", "stderr",
-                     "--request-id req-001", "RESULT_UNKNOWN", "退出码仍为0", "不自动重发"]:
+        cli = text.split("#### 8.4.1 CLI（适用时）", 1)[1].split("#### 8.4.2", 1)[0]
+        for term in ["inspectctl task status", "CLI-TASK-STATUS", "QueryTask", "§7.6",
+                     "§7.8", "--task", "TASK_NOT_FOUND", "PERMISSION_DENIED",
+                     "UNAVAILABLE", "退出码", "已配置服务端地址"]:
             self.assertIn(term, cli)
         with tempfile.TemporaryDirectory() as directory:
             generated = subprocess.run(self.command(directory), capture_output=True, text=True)
             self.assertEqual(generated.returncode, 0, generated.stderr)
             doc = next((Path(directory) / "docs").rglob("example-software.md")).read_text()
-            self.assertIn("### 4.3 UI 设计（适用时）", doc)
+            self.assertIn("#### 3.6.2 用户任务与功能结果", doc)
+            self.assertIn("#### 8.4.1 CLI（适用时）", doc)
+            self.assertIn("#### 8.4.2 WebUI（适用时）", doc)
             self.assertIn("Page ID / 页面名称", doc)
-            self.assertNotIn("taskctl task submit", doc)
-            self.assertNotIn("EX-CLI/v1", doc)
+            self.assertNotIn("CLI-TASK-STATUS", doc)
+            self.assertNotIn("LLMTier WebUI 导航、框架和主要视图示例", doc)
 
     def test_generated_top_level_defaults_short_cover_and_validation(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -128,7 +141,7 @@ class SoftwareSystemTemplateTests(unittest.TestCase):
             md = (base / "example-software.md").read_text()
             self.assertEqual(meta["template_id"], "design.software-system")
             self.assertEqual(meta["document_type"], "design.software-system")
-            self.assertEqual(meta["template_version"], "1.1.0")
+            self.assertEqual(meta["template_version"], "2.0.0")
             self.assertEqual(meta["template_sha256"], hashlib.sha256(TEMPLATE.read_bytes()).hexdigest())
             self.assertEqual(meta["design_level"], "system")
             self.assertEqual(meta["domain"], ["software"])
@@ -186,7 +199,7 @@ class SoftwareSystemTemplateTests(unittest.TestCase):
     def test_catalog_navigation_and_pending_markers_are_updated(self):
         catalog = json.loads((ROOT / "templates/catalog.json").read_text())
         self.assertEqual(catalog["templates"]["design.software-system"], "design/software-system-design.md")
-        self.assertEqual(catalog["template_versions"]["design.software-system"], "1.1.0")
+        self.assertEqual(catalog["template_versions"]["design.software-system"], "2.0.0")
         for name in ("README.md", "docs/template-selection.md", "docs/ai-system-design-authoring-guide.md",
                      "docs/ai-guides/unit-design.md"):
             text = (ROOT / name).read_text()

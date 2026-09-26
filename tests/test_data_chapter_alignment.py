@@ -11,7 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 TEMPLATES = {
     "architecture-design.md": 9,
-    "software-system-design.md": 8,
+    "software-system-design.md": 7,
     "system-mechanism-design.md": 4,
     "subsystem-design.md": 5,
     "design-definition.md": 6,
@@ -58,7 +58,7 @@ class DataChapterAlignmentTests(unittest.TestCase):
     def test_system_error_catalogs_remain_in_data_chapters(self):
         for filename, chapter, subsection, title in (
             ("architecture-design.md", 9, 1, "错误类型、公共基础类型与枚举（适用时）"),
-            ("software-system-design.md", 8, 8, "错误码与错误结构（适用时）"),
+            ("software-system-design.md", 7, 8, "错误码与错误结构（适用时）"),
         ):
             with self.subTest(template=filename):
                 text = (ROOT / "templates/design" / filename).read_text()

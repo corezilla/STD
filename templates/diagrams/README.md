@@ -29,7 +29,7 @@ EX-INSPECT/v1 为虚构 Target / Planned / NOT_RUN：左侧 UI/业务/驱动/按
 | §7.2 | [业务 SVG](software-query-flow.svg) / [PNG](software-query-flow.png) | 只读查询、返回与中断清理 |
 | §7.3 | [配置 SVG](software-configuration-flow.svg) / [PNG](software-configuration-flow.png) | 选择重启生效后的停止与重新就绪 |
 | §7.4 | [停止 SVG](software-stop-flow.svg) / [PNG](software-stop-flow.png) | 在途退出、释放与重启前确认 |
-| 软件系统 §8.5 | [数据 SVG](software-data-flow.svg) / [PNG](software-data-flow.png) | 文件、共享表与请求结果的生命周期 |
+| 软件系统 §7.9 | [数据 SVG](software-data-flow.svg) / [PNG](software-data-flow.png) | 文件、共享表与请求结果的生命周期 |
 
 修改 SVG 的 title/desc、步骤 ID、对象名、条件和线条后重新导出同名 PNG，并逐图核对正文。只有启动和停止图包含监督/终止路径，不能把图中“确认退出”替换为“已发送终止”。PNG 不独立修改，图源和展示需保持一致。这些教学图在生成项目文档时自动移除，不成为项目的已完成设计。
 

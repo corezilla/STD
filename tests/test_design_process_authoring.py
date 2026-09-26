@@ -26,11 +26,11 @@ class DesignProcessAuthoringTests(unittest.TestCase):
 
     DIAGRAMS = {
         "2.1": "software-application-context",
-        "7.1": "software-startup-flow",
-        "7.2": "software-query-flow",
-        "7.3": "software-configuration-flow",
-        "7.4": "software-stop-flow",
-        "8.9": "software-data-flow",
+        "6.1": "software-startup-flow",
+        "6.2": "software-query-flow",
+        "6.3": "software-configuration-flow",
+        "6.4": "software-stop-flow",
+        "7.9": "software-data-flow",
     }
 
     def test_six_diagrams_have_sources_previews_and_chapter_prose(self):

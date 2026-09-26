@@ -8,7 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 TEMPLATES = {
     "architecture-design.md": 10,
-    "software-system-design.md": 9,
+    "software-system-design.md": 8,
     "system-mechanism-design.md": 5,
     "subsystem-design.md": 6,
     "design-definition.md": 9,

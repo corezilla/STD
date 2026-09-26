@@ -55,7 +55,7 @@
 机制专用工作步骤见[总体系统机制设计 AI 编写指南](ai-guides/system-mechanism.md)，
 系统全景的执行方法见[总体系统设计 AI 编写指南](ai-system-design-authoring-guide.md)。
 
-`design.software-system` 使用 17 个软件主章：产品、系统概览（先架构图、后组件职责）、功能、对象概要、运行部署、重要过程、
+`design.software-system` 使用 16 个软件主章：产品、系统概览（先架构图、后组件职责，§3.6 功能设计）、对象概要、运行部署、重要过程、
 数据/接口、配置、维护、性能、测试、安全、构建交付、计划及承接。章号以软件模板为准，不套用上文总体章号。
 纯软件顶层不重复建总体稿，领域模式承接总体设计；AI 方法见[软件系统专项](ai-guides/software-system.md)。
 
