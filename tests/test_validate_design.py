@@ -276,7 +276,11 @@ B.4 设计约束与关键假设
 附录 C. 编写与交付检查""".splitlines()
         self.assertEqual(re.findall(r"^#{2,3} (.+)$", system, re.MULTILINE), expected)
         catalog = json.loads((ROOT / "templates/catalog.json").read_text())
-        self.assertEqual(catalog["template_versions"]["design.system"], "9.0.0")
+        self.assertEqual(catalog["template_versions"]["design.system"], "10.0.0")
+        human_interfaces = system.split("### 10.4 人机与维护接口（适用时）\n", 1)[1].split("\n### 10.5 ", 1)[0]
+        self.assertLess(human_interfaces.index("#### 10.4.1 CLI（适用时）"), human_interfaces.index("#### 10.4.2 WebUI（适用时）"))
+        self.assertIn("页面导航图", human_interfaces)
+        self.assertIn("每个重要 UI 流程有流程图或时序图", human_interfaces)
 
     def test_system_reordering_keeps_business_preconditions_and_risk_handoff(self):
         system = (ROOT / "templates/design/architecture-design.md").read_text()

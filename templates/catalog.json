@@ -65,7 +65,7 @@
     "requirements.specification": "0.2.0",
     "requirements.traceability": "0.2.0",
     "evaluation.technical-analysis": "0.2.0",
-    "design.system": "9.0.0",
+    "design.system": "10.0.0",
     "design.software-system": "1.0.0",
     "design.system-mechanism": "3.0.0",
     "design.subsystem": "1.0.0",
