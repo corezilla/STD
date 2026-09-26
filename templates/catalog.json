@@ -1,5 +1,5 @@
 {
-  "catalog_version": "0.1.0-draft.41",
+  "catalog_version": "0.1.0-draft.42",
   "templates": {
     "management.project-plan": "management/project-plan.md",
     "management.tailoring": "management/tailoring-manifest.md",
@@ -69,7 +69,7 @@
     "design.software-system": "2.1.0",
     "design.system-mechanism": "3.3.0",
     "design.subsystem": "1.2.0",
-    "design.definition": "3.2.0",
+    "design.definition": "3.3.0",
     "design.implementation": "1.2.0",
     "design.hardware": "1.4.0",
     "design.fpga": "1.4.0",

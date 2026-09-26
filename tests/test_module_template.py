@@ -130,7 +130,7 @@ class ModuleTemplateTests(unittest.TestCase):
         samples = re.findall(re.escape(begin) + r"(.*?)" + re.escape(end), text, re.S)
         sample = next(block for block in samples if "EX-MODULE/v1" in block and "O1：" in block)
         self.assertEqual(sample.count("```mermaid"), 0)  # figures live alongside each subject
-        self.assertEqual(text.count("```mermaid"), 9)
+        self.assertEqual(text.count("```mermaid"), 11)
         for term in ("EX-MODULE/v1", "M-C1", "M-S1", "M-P1", "M101", "Target", "Planned",
                      "IF-SELECT/v1", "request=SelectRequest", "response=SelectResult",
                      "R-VALID", "R-ORDER", "候选索引为 [0,1]", '"ids":["a1","b2"]',
@@ -147,8 +147,8 @@ class ModuleTemplateTests(unittest.TestCase):
     def test_detailed_figures_are_at_their_chapters_not_only_in_appendix(self):
         text = TEMPLATE.read_text()
         expected = {
-            4: ("M-C1",), 5: ("M-S1",), 6: ("M-D1", "M-D2"), 7: ("M-P1",),
-            8: ("M-ALG1",), 9: ("M-I1",), 10: ("M-X1",), 14: ("M-V1",),
+            4: ("M-C1",), 5: ("M-S1",), 6: ("M-D1", "M-D2", "M-D3"), 7: ("M-P1",),
+            8: ("M-ALG1",), 9: ("M-I1",), 10: ("M-X1", "M-X2"), 14: ("M-V1",),
         }
         for chapter, figures in expected.items():
             section = re.split(r"(?m)^## ", text.split(f"## {chapter}. ", 1)[1], maxsplit=1)[0]
@@ -211,7 +211,7 @@ class ModuleTemplateTests(unittest.TestCase):
             meta_path = next(Path(directory).rglob("module-example.metadata.json"))
             meta = json.loads(meta_path.read_text())
             text = meta_path.with_name("module-example.md").read_text()
-            self.assertEqual(meta["template_version"], "3.2.0")
+            self.assertEqual(meta["template_version"], "3.3.0")
             self.assertEqual(meta["template_sha256"], hashlib.sha256(TEMPLATE.read_bytes()).hexdigest())
             self.assertEqual(meta["design_level"], "module")
             self.assertEqual(meta["domain"], ["software"])
@@ -241,6 +241,23 @@ class ModuleTemplateTests(unittest.TestCase):
                                      capture_output=True, text=True)
             self.assertNotEqual(checked.returncode, 0)
             self.assertIn("metadata.module-scope", checked.stdout)
+
+    def test_conditional_state_and_forward_delivery_are_explicit(self):
+        text = TEMPLATE.read_text()
+        guide = GUIDE.read_text()
+        self.assertEqual(re.findall(r"(?m)^## (\d+)\. ", text), [str(n) for n in range(1, 16)])
+        for fact in ("常驻服务", "跨步骤状态", "§6.7", "持久提交点", "崩溃恢复"):
+            self.assertIn(fact, text)
+        state = text.split("### 6.6 运行状态数据结构", 1)[1].split("### 6.7 ", 1)[0]
+        for requirement in ("状态图和转换表", "Guard 的权威事实来源", "不变量", "迟到/失败出口"):
+            self.assertIn(requirement, state)
+        closure = text.split("### 14.1 正向覆盖与交付闭环", 1)[1].split("### 14.2 验证要求与用例", 1)[0]
+        for field in ("来源与适用性", "选定方案与正文锚点", "§13 实现文件", "§14 VRC", "父级组合验证"):
+            self.assertIn(field, closure)
+        self.assertIn("反向核对", closure)
+        self.assertIn("M-X2", text)
+        self.assertIn("正向覆盖评审清单", guide)
+        self.assertIn("自动检查可提示", guide)
 
     def test_service_surface_fixed_records_and_real_demo_are_available(self):
         text = TEMPLATE.read_text()
@@ -290,7 +307,8 @@ class ModuleTemplateTests(unittest.TestCase):
                         "#### 8.N `<Rule ID>`", "#### `<真实函数名、完整签名或 HTTP/RPC 路由>`",
                         "#### 10.N `<Failure / Concurrency ID>`",
                         "#### 12.N `<Capacity / Performance ID>`",
-                        "#### 14.N `VRC-<MODULE>-<nnn>`",
+                        "#### 14.1.N `<Constraint / Function / Process / Rule / Interface / Error ID>`",
+                        "#### 14.2.N `VRC-<MODULE>-<nnn>`",
                         "#### 15.N `RISK-<MODULE>-<nnn>`"):
             self.assertIn(heading, text)
         for old_header in ("| Constraint ID / 上级基线与决定状态 |", "| Surface ID |",

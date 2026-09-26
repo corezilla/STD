@@ -1002,7 +1002,7 @@ B.4 设计约束与关键假设
     def test_constraint_handoffs_reach_verification_in_all_design_layers(self):
         for name, heading, source_section, column in (
             ("architecture-design.md", "### 13.6 验证覆盖与验收矩阵", "§3.2", "| Target/Constraint ID 与能力范围 |"),
-            ("design-definition.md", "## 14. 测试与验收", "§1.1", "#### 14.N `VRC-<MODULE>-<nnn>`"),
+            ("design-definition.md", "## 14. 测试与验收", "§1.1", "#### 14.2.N `VRC-<MODULE>-<nnn>`"),
             ("system-mechanism-design.md", "## 15. 验证、上线与回滚", "§3.1", "| 设计验证项 / Scenario/Invariant/Constraint |"),
             ("hardware-design.md", "## 12. Verification 与验收", "§1.1", "| Function/Requirement/Constraint ID |"),
             ("fpga-design.md", "## 12. Verification 与验收", "§1.1", "| Function/Invariant/Constraint ID |"),
