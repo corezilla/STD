@@ -16,7 +16,7 @@ from pathlib import Path
 DEFAULT_ROOT = Path(__file__).resolve().parents[1]
 ROLES = {"template", "schema", "tool", "example", "guidance"}
 SOURCE_DIRS = ("docs", "templates", "schemas", "scripts", "examples")
-SOURCE_FILES = ("VERSION", "README.md", "THIRD_PARTY_NOTICES.md", "MIGRATION_HANDOFF.md")
+SOURCE_FILES = ("VERSION", "README.md", "THIRD_PARTY_NOTICES.md")
 EXCLUDED_SOURCE_DIRS = {".git", "__pycache__"}
 EXCLUDED_SOURCE_NAMES = {".DS_Store"}
 

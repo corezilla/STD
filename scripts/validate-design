@@ -26,7 +26,7 @@ EXCLUDED_PARTS = {
     "vendor", "third_party", "build", "dist", "DATA"
 }
 STD_SOURCE_DIRS = ("docs", "templates", "schemas", "scripts", "examples")
-STD_SOURCE_FILES = ("VERSION", "README.md", "THIRD_PARTY_NOTICES.md", "MIGRATION_HANDOFF.md")
+STD_SOURCE_FILES = ("VERSION", "README.md", "THIRD_PARTY_NOTICES.md")
 EXCLUDED_SOURCE_NAMES = {".DS_Store"}
 STATUS_LABELS = {
     "draft": "Draft", "review": "In Review", "accepted": "Approved",

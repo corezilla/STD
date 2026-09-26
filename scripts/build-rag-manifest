@@ -51,7 +51,6 @@ def main() -> int:
     paths = [
         ROOT / "README.md",
         ROOT / "THIRD_PARTY_NOTICES.md",
-        ROOT / "MIGRATION_HANDOFF.md",
         ROOT / "templates/catalog.json",
         ROOT / "templates/path-policy.json"
     ]
