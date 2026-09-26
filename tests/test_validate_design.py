@@ -229,7 +229,7 @@ class ValidateDesignDiscoveryTests(unittest.TestCase):
 9.8 状态表、缓存与持久化策略
 9.9 容量与带宽计算
 10. 接口设计
-10.1 软件接口（适用时）
+10.1 API（适用时）
 10.2 消息与数据流接口（适用时）
 10.3 硬件与固件接口（适用时）
 10.4 人机与维护接口（适用时）
@@ -276,7 +276,7 @@ B.4 设计约束与关键假设
 附录 C. 编写与交付检查""".splitlines()
         self.assertEqual(re.findall(r"^#{2,3} (.+)$", system, re.MULTILINE), expected)
         catalog = json.loads((ROOT / "templates/catalog.json").read_text())
-        self.assertEqual(catalog["template_versions"]["design.system"], "10.0.0")
+        self.assertEqual(catalog["template_versions"]["design.system"], "10.1.0")
         human_interfaces = system.split("### 10.4 人机与维护接口（适用时）\n", 1)[1].split("\n### 10.5 ", 1)[0]
         self.assertLess(human_interfaces.index("#### 10.4.1 CLI（适用时）"), human_interfaces.index("#### 10.4.2 WebUI（适用时）"))
         self.assertIn("页面导航图", human_interfaces)
@@ -850,7 +850,7 @@ B.4 设计约束与关键假设
             ),
             "7.4 页面与交互（如适用）": ("线框图", "结果未知", "取消", "刷新", "服务端授权"),
             "8.3 时序、资源与跨域设计": ("单侧复位", "数据与描述符", "在途数据", "业务恢复"),
-            "10.1 软件接口（适用时）": ("调用位置", "部分成功", "响应丢失", "无法查到结果"),
+            "10.1 API（适用时）": ("调用位置", "部分成功", "响应丢失", "无法查到结果"),
             "11.1 故障模型与可靠性机制": ("共同失效点", "误判", "保护机制自身失效", "选择理由"),
             "11.3 升级与回滚": ("不可逆点", "控制者中途退出", "旧版无法读取", "逐阶段失败"),
             "12.1 性能模型与预算": ("共享资源", "吞吐上界", "排队", "内存峰值", "可复算推导"),

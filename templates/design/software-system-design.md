@@ -1431,12 +1431,12 @@ InspectionError {
 
 | 可选类别 | 具体接口示例（均为虚构） | 适用条件与结果语义 |
 |---|---|---|
-| 软件接口 | `submit_inspection(request: InspectionRequest) -> InspectionSubmission \| InspectionError` | 实际提供函数/端点时采用；合法请求返回 `task_id=t-7`，非法请求返回 `INVALID_REQUEST` |
+| API | `submit_inspection(request: InspectionRequest) -> InspectionSubmission \| InspectionError` | 实际提供函数/端点时采用；合法请求返回 `task_id=t-7`，非法请求返回 `INVALID_REQUEST` |
 | 消息与数据流接口 | `frame.ready(event: FrameReadyEvent) -> DeliveryAck \| DeliveryError` | 实际跨边界发消息时采用；`sequence=42` 被接收则确认 42，队列满则显式拒绝 |
 | 硬件与固件接口 | `route_table_write(index:u16, entry:RouteTableEntry) -> WriteAck \| BusError` | 实际拥有寄存器/RTL 边界时采用；写入完成握手后才可读到新表项 |
 | 人机与维护接口 | `inspectctl status --task t7 -> TaskStatus \| CommandError` | 实际提供 CLI 时采用；存在任务显示 `RUNNING`，未知任务返回 `TASK_NOT_FOUND` |
 
-接口声明中的类型名必须能直接定位到本模板的数据结构设计章或固定外部机器来源；不要只给 ID 让读者猜输入输出。完整的 `submit_inspection` 虚构示例放在软件接口节；请求、成功输出和错误载荷分别在数据结构设计章按归属定义或固定引用，不在接口章维护第二份字段表。
+接口声明中的类型名必须能直接定位到本模板的数据结构设计章或固定外部机器来源；不要只给 ID 让读者猜输入输出。完整的 `submit_inspection` 虚构示例放在 API 节；请求、成功输出和错误载荷分别在数据结构设计章按归属定义或固定引用，不在接口章维护第二份字段表。
 
 
 **以下为本层原有编写要求。**
@@ -1456,7 +1456,7 @@ InspectionError {
 
 <!-- 按适用类别逐接口成节；以真实名称作标题，ID 只作追踪，同一接口的输入、输出、错误、交互和验证留在一处。 -->
 
-### 8.1 软件接口（适用时）
+### 8.1 API（适用时）
 
 <details><summary>编写建议、规范与示例</summary>
 
@@ -1537,7 +1537,9 @@ submit_inspection(
 
 <details><summary>编写建议、规范与示例</summary>
 
-**本节目的**：固定跨边界消息和连续数据的格式与交接行为。
+**本节目的**：固定组件或系统为协作而交换的命令、状态、消息及连续数据的格式与交接行为；内部协作即使使用 HTTP/RPC，也在本节定义，面向使用方的 API 留在 §8.1。
+
+内部协作使用 HTTP/RPC 时，以实际 method + route 或 RPC 方法为标题，在同一记录说明请求/响应、鉴权、协议状态与业务错误映射、超时和版本；不得因传输形式把同一接口再放入 §8.1。
 
 **必须写清楚**：消息身份、格式、确认、顺序、背压、丢失及验证。
 
@@ -1551,7 +1553,7 @@ submit_inspection(
 
 </details>
 
-#### `<真实消息、topic、队列或流名称>`
+#### `<真实协作端点、消息、topic、队列或流名称>`
 
 <!-- 编写建议：同一小节集中描述消息类型、字段来源、发送与接收条件、关联 ID、确认、顺序、重复、丢失和背压。写清异步结果何时才算已知，以及取消或迟到消息的处理，避免只写“发布事件”。 -->
 
@@ -1584,7 +1586,7 @@ submit_inspection(
 
 **完成条件**：两端能按同一约束连接并验证异常时的安全状态。
 
-仅当软件系统确实承担设备/FPGA/固件边界时保留；纯软件系统按 tailoring 省略，不虚构 PCIe、DMA 或寄存器。每条连接在一处写端点、方向、标准版本/项目选项、位宽/电气、时钟复位、时序/握手、错误与恢复；寄存器表或接口控制文件保持唯一 authority。驱动函数作为独立的软件接口在 §8.1 定义，并以 ID 关联，不复制连接合同。
+仅当软件系统确实承担设备/FPGA/固件边界时保留；纯软件系统按 tailoring 省略，不虚构 PCIe、DMA 或寄存器。每条连接在一处写端点、方向、标准版本/项目选项、位宽/电气、时钟复位、时序/握手、错误与恢复；寄存器表或接口控制文件保持唯一 authority。驱动函数作为独立 API 在 §8.1 定义，并以 ID 关联，不复制连接合同。
 
 </details>
 

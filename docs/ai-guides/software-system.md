@@ -2,7 +2,7 @@
 
 版本：0.4.0-draft.7 · 日期：2026-09-26 · 状态：方法草案，待实际项目试写验证
 
-主模板：`design.software-system`，独立版本 `2.0.0`。先读[通用 AI 编写指南](../ai-authoring-guide.md)，
+主模板：`design.software-system`，独立版本 `2.1.0`。先读[通用 AI 编写指南](../ai-authoring-guide.md)，
 再读项目已采用的[软件系统模板](../../templates/design/software-system-design.md)及其全部编写建议。
 本指南从总体系统设计的产品先行、预设计、过程推演与下游承接方法派生，不要求通读总体模板的硬件专业章。
 本次只使用 STD 已有通用材料和虚构案例，不依赖或读取保密 demo；教学内容不代表项目设计决定。

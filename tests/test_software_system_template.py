@@ -141,7 +141,7 @@ class SoftwareSystemTemplateTests(unittest.TestCase):
             md = (base / "example-software.md").read_text()
             self.assertEqual(meta["template_id"], "design.software-system")
             self.assertEqual(meta["document_type"], "design.software-system")
-            self.assertEqual(meta["template_version"], "2.0.0")
+            self.assertEqual(meta["template_version"], "2.1.0")
             self.assertEqual(meta["template_sha256"], hashlib.sha256(TEMPLATE.read_bytes()).hexdigest())
             self.assertEqual(meta["design_level"], "system")
             self.assertEqual(meta["domain"], ["software"])
@@ -199,7 +199,7 @@ class SoftwareSystemTemplateTests(unittest.TestCase):
     def test_catalog_navigation_and_pending_markers_are_updated(self):
         catalog = json.loads((ROOT / "templates/catalog.json").read_text())
         self.assertEqual(catalog["templates"]["design.software-system"], "design/software-system-design.md")
-        self.assertEqual(catalog["template_versions"]["design.software-system"], "2.0.0")
+        self.assertEqual(catalog["template_versions"]["design.software-system"], "2.1.0")
         for name in ("README.md", "docs/template-selection.md", "docs/ai-system-design-authoring-guide.md",
                      "docs/ai-guides/unit-design.md"):
             text = (ROOT / name).read_text()

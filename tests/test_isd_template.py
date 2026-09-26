@@ -38,7 +38,7 @@ class ISDTemplateTests(unittest.TestCase):
             self.assertEqual(metadata["design_level"], "module")
             self.assertEqual(metadata["domain"], ["software"])
             self.assertEqual(metadata["parent_document_id"], "PARSER_DESIGN")
-            self.assertEqual(metadata["template_version"], "1.1.1")
+            self.assertEqual(metadata["template_version"], "1.2.0")
             digest = hashlib.sha256(TEMPLATE.read_bytes()).hexdigest()
             self.assertEqual(metadata["template_sha256"], digest)
             snapshot = output / ".std-template-references" / digest / "implementation-design.md.txt"

@@ -544,7 +544,7 @@ DecodeResult =
 
 | 可选类别 | 具体接口示例（均为虚构） | 适用条件与结果语义 |
 |---|---|---|
-| 软件接口 | `decode_one(input: ByteSpan) -> DecodeResult` | 本模板 FrameDecoder 案例；完整帧返回 `OK`，不足一帧返回 `NEED_MORE`，格式非法返回 `INVALID` |
+| API | `decode_one(input: ByteSpan) -> DecodeResult` | 本模板 FrameDecoder 案例；完整帧返回 `OK`，不足一帧返回 `NEED_MORE`，格式非法返回 `INVALID` |
 | 消息与数据流接口 | `frame.ready(event: FrameReadyEvent) -> DeliveryAck \| DeliveryError` | 实际跨边界发消息时采用；`sequence=42` 被接收则确认 42，队列满则显式拒绝 |
 | 硬件与固件接口 | `route_table_write(index:u16, entry:RouteTableEntry) -> WriteAck \| BusError` | 实际拥有寄存器/RTL 边界时采用；写入完成握手后才可读到新表项 |
 | 人机与维护接口 | `inspectctl status --task t7 -> TaskStatus \| CommandError` | 实际提供 CLI 时采用；存在任务显示 `RUNNING`，未知任务返回 `TASK_NOT_FOUND` |
@@ -594,7 +594,7 @@ sequenceDiagram
 </details>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
-### 5.1 软件接口（适用时）
+### 5.1 API（适用时）
 
 <details><summary>编写建议、规范与示例</summary>
 
@@ -735,7 +735,9 @@ DecodeResult decode_one(std::span<const std::uint8_t> input) noexcept;
 
 <details><summary>编写建议、规范与示例</summary>
 
-**本节目的**：固定跨边界消息和连续数据的格式与交接行为。
+**本节目的**：固定组件或系统为协作而交换的命令、状态、消息及连续数据的格式与交接行为；内部协作即使使用 HTTP/RPC，也在本节定义，面向使用方的 API 留在 §5.1。
+
+内部协作使用 HTTP/RPC 时，以实际 method + route 或 RPC 方法为标题，在同一记录说明请求/响应、鉴权、协议状态与业务错误映射、超时和版本；不得因传输形式把同一接口再放入 §5.1。
 
 **必须写清楚**：消息身份、格式、确认、顺序、背压、丢失及验证。
 
@@ -749,7 +751,7 @@ DecodeResult decode_one(std::span<const std::uint8_t> input) noexcept;
 
 </details>
 
-#### `<真实消息、topic、队列或流名称>`
+#### `<真实协作端点、消息、topic、队列或流名称>`
 
 <!-- 编写建议：先展示消息或流的完整契约，再说明生产与消费时点、序号/关联 ID、投递确认、顺序、重复、丢失和背压语义。逐字段引用 Data ID；对队列满、超时及迟到消息分别说明是否已经产生副作用和谁负责恢复。不存在跨边界消息时给出不适用及依据，不为满足模板虚构队列。 -->
 

@@ -430,7 +430,7 @@ class InterfaceMappingTests(unittest.TestCase):
                 self.assertNotIn("EX-EXPORT-DESIGN", body)
             else:
                 self.assertIn("## 5. 接口设计", body)
-                self.assertIn("### 5.1 软件接口（适用时）", body)
+                self.assertIn("### 5.1 API（适用时）", body)
                 self.assertIn("### 5.2 消息与数据流接口（适用时）", body)
                 self.assertIn("Interface/Member ID", body)
                 self.assertIn("Data/Type ID", body)

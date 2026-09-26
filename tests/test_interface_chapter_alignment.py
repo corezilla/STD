@@ -15,7 +15,7 @@ TEMPLATES = {
     "implementation-design.md": 5,
 }
 SHARED_SECTIONS = (
-    "软件接口（适用时）",
+    "API（适用时）",
     "消息与数据流接口（适用时）",
     "硬件与固件接口（适用时）",
     "人机与维护接口（适用时）",
@@ -38,6 +38,8 @@ class InterfaceChapterAlignmentTests(unittest.TestCase):
                 for term in ("Interface/Member ID", "唯一", "错误", "验证"):
                     self.assertIn(term, body)
                 self.assertNotRegex(body, rf"(?m)^### {chapter}\.\d+ 接口清单$")
+                communication = body.split(f"### {chapter}.2 消息与数据流接口（适用时）\n", 1)[1].split(f"### {chapter}.3 ", 1)[0]
+                self.assertIn("内部协作即使使用 HTTP/RPC", communication)
 
     def test_standard_maps_shared_and_specialized_sections(self):
         standard = (ROOT / "docs/design-data-interface-format.md").read_text()
@@ -50,6 +52,7 @@ class InterfaceChapterAlignmentTests(unittest.TestCase):
             self.assertIn(f"| `{template_id}` |", standard)
         self.assertIn("不逐接口维护全量调用函数反向索引", standard)
         self.assertIn("不把同一接口的定义、交互、异常和示例拆散", standard)
+        self.assertIn("不能只按传输协议判断类别", standard)
 
 
 if __name__ == "__main__":

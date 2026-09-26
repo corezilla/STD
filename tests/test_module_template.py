@@ -211,7 +211,7 @@ class ModuleTemplateTests(unittest.TestCase):
             meta_path = next(Path(directory).rglob("module-example.metadata.json"))
             meta = json.loads(meta_path.read_text())
             text = meta_path.with_name("module-example.md").read_text()
-            self.assertEqual(meta["template_version"], "3.1.0")
+            self.assertEqual(meta["template_version"], "3.2.0")
             self.assertEqual(meta["template_sha256"], hashlib.sha256(TEMPLATE.read_bytes()).hexdigest())
             self.assertEqual(meta["design_level"], "module")
             self.assertEqual(meta["domain"], ["software"])
@@ -280,7 +280,7 @@ class ModuleTemplateTests(unittest.TestCase):
             for term in ("M-<MECH>-DI-<nnn>", "RISK-<MECH>-<nnn>",
                          "CON-<MECH>-<nnn>"):
                 self.assertIn(term, source)
-        self.assertIn("模板 `3.1.0`", mechanism_guide)
+        self.assertIn("模板 `3.2.0`", mechanism_guide)
         self.assertIn("版本：0.8.0-draft.5", mechanism_guide)
 
     def test_module_record_scaffolds_are_consistent_and_demo_version_is_bounded(self):
