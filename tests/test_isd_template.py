@@ -38,7 +38,7 @@ class ISDTemplateTests(unittest.TestCase):
             self.assertEqual(metadata["design_level"], "module")
             self.assertEqual(metadata["domain"], ["software"])
             self.assertEqual(metadata["parent_document_id"], "PARSER_DESIGN")
-            self.assertEqual(metadata["template_version"], "1.0.0")
+            self.assertEqual(metadata["template_version"], "1.1.0")
             digest = hashlib.sha256(TEMPLATE.read_bytes()).hexdigest()
             self.assertEqual(metadata["template_sha256"], digest)
             snapshot = output / ".std-template-references" / digest / "implementation-design.md.txt"
@@ -83,13 +83,20 @@ class ISDTemplateTests(unittest.TestCase):
 
     def test_template_contains_connected_example_and_implementation_details(self):
         text = TEMPLATE.read_text()
-        self.assertEqual(text.count("<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->"), 5)
-        self.assertEqual(text.count("<!-- STD_TEMPLATE_EXAMPLE_END -->"), 5)
+        self.assertEqual(text.count("<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->"),
+                         text.count("<!-- STD_TEMPLATE_EXAMPLE_END -->"))
+        self.assertGreaterEqual(text.count("<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->"), 5)
         self.assertEqual(text.count("```mermaid"), 5)
         self.assertIn("frame_decoder.h", text)
         self.assertNotIn("frame_types.h", text)
         self.assertNotIn("version/kind/length或INVALID", text)
-        for term in ["decode_one", "consumed=8", "INVALID VERSION", "借用", "Planned",
+        teaching_header = (ROOT / "docs/examples/isd-frame-decoder/frame_decoder.h").read_text()
+        reason_declaration = "enum class InvalidReason { Version, Kind, Length };"
+        self.assertIn(reason_declaration, text)
+        self.assertIn(reason_declaration, teaching_header)
+        self.assertNotIn("BAD_MAGIC", text)
+        for term in ["decode_one", "FrameView", "DecodeResult", "InvalidReason",
+                     "consumed=8", "INVALID VERSION", "借用", "Planned",
                      "关键函数", "错误优先级", "输入参数 / 数据结构 authority",
                      "错误输出 / 触发条件 / 优先级", "配置实现", "构建目标",
                      "NOT_RUN", "Case", "selector"]:

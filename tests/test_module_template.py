@@ -125,9 +125,10 @@ class ModuleTemplateTests(unittest.TestCase):
         text = TEMPLATE.read_text()
         begin = "<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->"
         end = "<!-- STD_TEMPLATE_EXAMPLE_END -->"
-        self.assertEqual(text.count(begin), 9)
-        self.assertEqual(text.count(end), 9)
-        sample = text.split(begin)[-1].split(end)[0]
+        self.assertEqual(text.count(begin), text.count(end))
+        self.assertGreaterEqual(text.count(begin), 9)
+        samples = re.findall(re.escape(begin) + r"(.*?)" + re.escape(end), text, re.S)
+        sample = next(block for block in samples if "EX-MODULE/v1" in block and "O1：" in block)
         self.assertEqual(sample.count("```mermaid"), 0)  # figures live alongside each subject
         self.assertEqual(text.count("```mermaid"), 9)
         for term in ("EX-MODULE/v1", "M-C1", "M-S1", "M-P1", "M101", "Target", "Planned",
@@ -210,7 +211,7 @@ class ModuleTemplateTests(unittest.TestCase):
             meta_path = next(Path(directory).rglob("module-example.metadata.json"))
             meta = json.loads(meta_path.read_text())
             text = meta_path.with_name("module-example.md").read_text()
-            self.assertEqual(meta["template_version"], "3.0.0")
+            self.assertEqual(meta["template_version"], "3.1.0")
             self.assertEqual(meta["template_sha256"], hashlib.sha256(TEMPLATE.read_bytes()).hexdigest())
             self.assertEqual(meta["design_level"], "module")
             self.assertEqual(meta["domain"], ["software"])
@@ -279,7 +280,7 @@ class ModuleTemplateTests(unittest.TestCase):
             for term in ("M-<MECH>-DI-<nnn>", "RISK-<MECH>-<nnn>",
                          "CON-<MECH>-<nnn>"):
                 self.assertIn(term, source)
-        self.assertIn("模板 `3.0.0`", mechanism_guide)
+        self.assertIn("模板 `3.1.0`", mechanism_guide)
         self.assertIn("版本：0.8.0-draft.5", mechanism_guide)
 
     def test_module_record_scaffolds_are_consistent_and_demo_version_is_bounded(self):

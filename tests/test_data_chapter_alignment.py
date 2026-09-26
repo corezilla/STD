@@ -1,6 +1,9 @@
 """Keep the software design data chapter aligned across template levels."""
 
 import re
+import subprocess
+import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -80,6 +83,17 @@ class DataChapterAlignmentTests(unittest.TestCase):
         self.assertNotIn("## 4. Field Dictionary", text)
         self.assertIn("在同一处写完定义、字段、约束", text)
         self.assertIn("不拥有操作接口", text)
+        with tempfile.TemporaryDirectory() as directory:
+            result = subprocess.run([
+                sys.executable, str(ROOT / "scripts/new-design"),
+                "--project", "example", "--template", "design.data-dictionary",
+                "--name", "example-data", "--output", directory,
+                "--owner", "example", "--author", "example", "--repository", "example",
+            ], capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            generated = (Path(directory) / "example-data.md").read_text()
+            self.assertNotIn("下列 `Inspection*`", generated)
+            self.assertNotIn("DATA-EX-FRAME-EVENT", generated)
 
     def test_standard_maps_shared_and_specialized_sections(self):
         standard = (ROOT / "docs/design-data-interface-format.md").read_text()

@@ -183,16 +183,16 @@ flowchart LR
 
 | 类别 | 具体示例（均为虚构） | 适用条件与关键约束 |
 |---|---|---|
-| 公共基础类型与枚举 | `TaskState = QUEUED \| RUNNING \| DONE`；示例值 `RUNNING` | 多处共用时采用；`RUNNING` 表示已开始执行，未知值拒绝 |
-| 业务与操作数据结构 | `InspectionRequest {request_id:"r7", image_ref:"asset://image/7"}` | 存在业务载荷时采用；两字段必填，`request_id` 绑定一次业务操作 |
-| 配置与规则数据结构 | `DetectionPolicy {version:3, threshold:0.75}` | 存在受控规则时采用；阈值在 0–1，新版本仅对后续任务生效 |
-| 通信报文结构 | `FrameReadyEvent {frame_id:"f7", sequence:42}` | 存在消息交接时采用；`sequence` 在同一来源内递增，重复号按契约去重 |
-| 设备与 FPGA 表项结构 | `RouteTableEntry {route_id:u12=7, target:u4=2}` | 实际拥有设备/RTL 表项时采用；16 位布局和写入确认均须由机器源定义 |
-| 运行状态数据结构 | `TaskRuntimeState {task_id:"t7", phase:RUNNING}` | 存在跨步骤状态时采用；唯一写者确认 `QUEUED → RUNNING` 后发布 |
-| 数据库表结构 | `inspection_jobs(id TEXT PRIMARY KEY, state TEXT NOT NULL, version INT NOT NULL)` | 实际拥有数据库表时采用；受理回复前提交事务，升级说明版本迁移 |
-| 错误码与错误结构 | `InspectionError {code:QUEUE_FULL, request_id:"r7"}` | 存在错误载荷时采用；公共 `QUEUE_FULL` 逐码定义，拒绝本次新任务 |
+| 公共基础类型与枚举 | `InvalidReason = Version \| Kind \| Length` | FrameDecoder 例子的拒绝原因；值与配套 C++ 教学代码一致，真实项目仍须核对唯一契约 |
+| 业务与操作数据结构 | `FrameView`、`DecodeResult` | 本例的借用输出与互斥结果；输入字节由调用者持有 |
+| 配置与规则数据结构 | 本例无 | 只有实现实际读取受控配置时才保留，不能为填类别虚构配置 |
+| 通信报文结构 | 本例无独立消息 | 帧格式由固定报文契约拥有；实现视图不另造消息字段权威 |
+| 设备与 FPGA 表项结构 | 本例无 | 仅实际接触设备/RTL 表项时保留并引用机器源 |
+| 运行状态数据结构 | 本例无跨调用状态 | 无状态函数不应虚构任务状态或持久身份 |
+| 数据库表结构 | 本例无 | 仅实际拥有持久表时说明事务、恢复和升级落点 |
+| 错误码与错误结构 | `Invalid(reason: InvalidReason, consumed: 0)` | 本例在 `DecodeResult` 中定义错误分支；不重复分配公共错误码 |
 
-结构小节以 `InspectionRequest` 等真实名称为标题：先展示类型声明，再逐字段写类型、必填/范围、跨字段规则、来源、持有者和验证。上表只是简短实例，不是字段全集或机器权威；没有设备或数据库的项目，不要为了填类别发明寄存器或表。
+结构小节以 `FrameView` 等真实名称为标题：先展示类型声明，再逐字段写类型、必填/范围、跨字段规则、来源、持有者和验证。上表只是 FrameDecoder 教学案例的分类速览，不是字段全集或项目机器权威；没有配置、设备或数据库时，不要为填类别虚构对象。
 -->
 
 </details>
@@ -236,6 +236,34 @@ flowchart LR
 - **创建/修改者、所有权、寿命与敏感性**
 - **合法及拒绝实例、V/Case 与证据状态**
 
+<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
+**4.1.1 `InvalidReason`（拒绝原因，虚构）**
+
+```cpp
+enum class InvalidReason { Version, Kind, Length };
+```
+
+- **Data/Type ID、来源**
+
+  `DATA-EX-FRAME-REJECT`；与配套 C++ 教学代码的 `InvalidReason` 对齐。真实项目的码值、编码和版本从固定的帧契约继承，ISD 不重新分配。
+
+- **`Version`**
+
+  头部完整但 `version != 1`；输入不足六字节时先返回 `NEED_MORE`，不得读取不完整头部。
+
+- **`Kind`**
+
+  版本检查通过后 `kind != 1`；不得跳过版本检查直接按未知类型解释载荷。
+
+- **`Length`**
+
+  版本与类型检查通过后，声明的载荷长度超过教学上限；不得据此分配或借用超界片段。载荷字节暂时不足则返回 `NEED_MORE`，不报 `Length`。
+
+- **验证**
+
+  `V-EX-ISD-REJECT-01` 逐值检查触发事实及未改写输入；示例 `NOT_RUN`。
+<!-- STD_TEMPLATE_EXAMPLE_END -->
+
 ### 4.2 业务与操作数据结构（适用时）
 
 <details>
@@ -274,6 +302,64 @@ flowchart LR
 - **代码文件/symbol、编码或投影函数**
 - **创建、借用、修改、释放与失败出口**
 - **合法及拒绝实例、V/Case 与证据状态**
+
+<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
+**4.2.1 `FrameView`（借用输出，虚构）**
+
+```text
+FrameView {
+  kind: uint8,
+  payload: borrowed byte span
+}
+```
+
+- **Data/Type ID、用途与来源**
+
+  `DATA-EX-FRAME-VIEW`；仅示范从输入帧借出的阅读视图。实际字段、编码和版本须由固定机器定义决定，不能从本例推定。
+
+- **`kind`**
+
+  完整帧校验后读取的类型值；实际取值范围以固定报文契约为准。
+
+- **`payload`**
+
+  指向调用方输入存储的只读片段，不复制载荷；调用方改写或释放输入后，此视图立即失效。
+
+- **合法与拒绝实例、验证**
+
+  `OK` 且输入仍有效时读取视图合法；`NEED_MORE` / `INVALID` 返回该视图必须拒绝。`V-EX-ISD-VIEW-01` 检查寿命边界，示例 `NOT_RUN`。
+<!-- STD_TEMPLATE_EXAMPLE_END -->
+
+<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
+**4.2.2 `DecodeResult`（互斥输出，虚构）**
+
+```text
+DecodeResult =
+  OK(view: FrameView, consumed: size_t)
+  | NEED_MORE(consumed: 0)
+  | INVALID(reason: InvalidReason, consumed: 0)
+```
+
+- **Data/Type ID、用途与来源**
+
+  `DATA-EX-DECODE-RESULT`；一次 `decode_one` 调用的互斥结果。本教学案例的 `InvalidReason` 与配套 C++ 代码一致；真实项目的具体码值继承固定报文/错误契约，未确定时须登记设计缺口，不在 ISD 中临时发明。
+
+- **`OK` 输出**
+
+  仅在完整帧通过格式检查时返回；`view` 引用本次输入，`consumed` 是该帧实际占用的正数字节数，不得超过输入长度。
+
+- **`NEED_MORE` 输出**
+
+  输入不足以确定完整帧，`consumed=0`，没有 `view`，调用方可保留原输入等待更多字节。
+
+- **`INVALID` 输出**
+
+  已能判定帧格式不合法，带固定来源的 `reason`，`consumed=0`，没有 `view`；调用方按上级错误策略处理，不由本函数自行跳过未知字节。
+
+- **约束与验证**
+
+  三种结果不得同时出现。`V-EX-ISD-RESULT-01` 分别覆盖完整帧、短输入与非法帧，核对视图有无、`consumed` 和输入未被改写；示例 `NOT_RUN`。
+<!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ### 4.3 配置与规则数据结构（适用时）
 
@@ -446,23 +532,12 @@ flowchart LR
 
 | 可选类别 | 具体接口示例（均为虚构） | 适用条件与结果语义 |
 |---|---|---|
-| 软件接口 | `submit_inspection(request: InspectionRequest) -> InspectionSubmission \| InspectionError` | 实际提供函数/端点时采用；合法请求返回 `task_id=t7`，非法图像返回 `INVALID_IMAGE` |
+| 软件接口 | `decode_one(input: ByteSpan) -> DecodeResult` | 本模板 FrameDecoder 案例；完整帧返回 `OK`，不足一帧返回 `NEED_MORE`，格式非法返回 `INVALID` |
 | 消息与数据流接口 | `frame.ready(event: FrameReadyEvent) -> DeliveryAck \| DeliveryError` | 实际跨边界发消息时采用；`sequence=42` 被接收则确认 42，队列满则显式拒绝 |
 | 硬件与固件接口 | `route_table_write(index:u16, entry:RouteTableEntry) -> WriteAck \| BusError` | 实际拥有寄存器/RTL 边界时采用；写入完成握手后才可读到新表项 |
 | 人机与维护接口 | `inspectctl status --task t7 -> TaskStatus \| CommandError` | 实际提供 CLI 时采用；存在任务显示 `RUNNING`，未知任务返回 `TASK_NOT_FOUND` |
 
-接口声明中的类型名必须能直接定位到前述“数据结构设计”章或固定的外部机器来源；不要只给 ID 让读者猜输入输出。软件接口的多参数写法如下，属于教学示例而非已批准契约：
-
-```text
-submit_inspection(
-  request_id: string,
-  image: ImageRef,
-  model: ModelRef,
-  options: InspectionOptions
-) -> InspectionSubmission | InspectionError
-```
-
-`request_id` 用于同请求判重；`image` 提供图像位置与内容校验值；`model` 固定模型版本；`options` 决定阈值。首次受理返回 `InspectionSubmission{kind:accepted, task_id:t7}`；相同请求重放返回原任务 `kind:existing`，不新增执行；图像校验失败返回 `InspectionError{code:INVALID_IMAGE}`，不创建任务。正式成文时还须在**同一接口小节**逐参数写约束、每种错误的触发事实与下一步，并引用这些结构的唯一字段定义。
+接口声明中的类型名必须能直接定位到本模板的数据结构设计章或固定的上级机器来源；不要只给 ID 让编码者猜输入输出。§5.1 中的 `decode_one` 延续本模板已有的 FrameDecoder 案例，示范代码级函数的逐参数、逐结果和逐错误描述；公共业务语义仍由上级唯一维护。
 -->
 
 </details>
@@ -603,6 +678,40 @@ sequenceDiagram
 - **装配、合法及拒绝实例**
 
   <!-- 初始化位置；独立 Oracle/Expected、Actual/Evidence、Verdict、V/Case/Run -->
+
+<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
+**5.1.1 `ex_isd::decode_one`（代码级函数，虚构）**
+
+```cpp
+DecodeResult decode_one(std::span<const std::uint8_t> input) noexcept;
+```
+
+- **Interface/Member ID、用途与固定来源**
+
+  `IF-EX-DECODE-ONE`；从一次输入中解码一帧。签名是教学投影；真实代码位置、机器契约版本和上级规则 ID 须由项目固定。此函数不新增公开错误码。
+
+- **输入与前提**
+
+  - `input`：只读借用的字节 span；空 span 合法并返回 `NEED_MORE`。非空 span 必须指向调用期间有效的存储，调用者违约的悬空地址或并发写入不伪装成帧格式错误。
+
+  校验顺序为最小头长、头字段、声明的载荷长度、完整载荷；只有能确定完整帧后才构造 `FrameView`。字段位宽、合法值与长度上限引用唯一报文契约。
+
+- **成功输出与保证**
+
+  返回 §4.2 `DecodeResult.OK(view, consumed)`；视图借用本次输入，不延长其寿命，函数不分配堆内存且不修改输入。调用方消费视图后才能改写或释放对应存储。
+
+- **未完成与错误输出**
+
+  输入不足返回 `NEED_MORE(consumed=0)`；格式已确认非法返回 `INVALID(reason, consumed=0)`。两者都不返回视图，也不偷偷跳过输入。`reason` 的固定码值及上层处理由权威契约决定；宿主日志/错误映射需引用同一来源。
+
+- **执行与资源边界**
+
+  同步、无持久副作用；不同调用在输入不共享可写存储时可并发，函数不得保留 span 或借用视图。此教学模型不承担事务、重试或任务接管；运行约束须在真实 ISD 中逐项确定。
+
+- **实现与验证**
+
+  实现应落在项目确定的解码源文件及构建目标；`V-EX-ISD-DECODE-01` 用完整帧、短头、短载荷、非法头和输入寿命向量，从公开入口断言三个互斥结果及输入不变。示例 `NOT_RUN`，不表示真实模块已实现。
+<!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ### 5.2 消息与数据流接口（适用时）
 

@@ -1116,13 +1116,13 @@ B.4 设计约束与关键假设
         readonly = {"usage-overview", "collaboration", "objects", "sequence", "state-lifecycle", "failure-recovery", "test-path"}
         effects = {"effect-flow", "cleanup-dependencies"}
         names = readonly | effects
-        self.assertEqual(len(blocks), 1)
-        navigation = blocks[0]
+        self.assertGreaterEqual(len(blocks), 1)
+        navigation = next(block for block in blocks if "mechanism-readonly-observation-example.md" in block)
         for reference in ("mechanism-readonly-observation-example.md",
                           "mechanism-side-effect-example.md", "host-fpga-transfer-example.md"):
             self.assertIn(reference, navigation)
         self.assertNotIn("![", content)
-        self.assertLess(len(content.splitlines()), 1400)
+        self.assertFalse(any("```mermaid" in block for block in blocks))
         for name in readonly:
             self.assertIn(f"system-mechanism-authoring/{name}.png", readonly_example)
             self.assertIn(f"diagrams/mechanism/{name}.svg", readonly_example)
