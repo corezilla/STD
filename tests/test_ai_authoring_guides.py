@@ -135,6 +135,22 @@ class AIAuthoringGuidesTests(unittest.TestCase):
         for term in ("§14.1–14.4", "精确逐行承接", "纯软件项目也使用同一模板",
                      "不是可选示例", "外部案例只示范方法", "双向 join"):
             self.assertIn(term, guide)
+        for chapter, required in {
+            "3": ("规则由谁裁决", "事务/写入由谁执行", "恢复时谁读取", "只读临时上下文不虚构持久记录"),
+            "5": ("仅列外部服务接口不能替代进程内模块交接", "设计缺口"),
+            "6": ("权威可见点", "提交前后插入中断"),
+            "7": ("只有一个已选外部结果", "设计缺口"),
+            "8": ("提交后但确认前", "具体事件序列"),
+            "9": ("中断前最后持久事实", "重启后查询的身份"),
+            "10": ("数值及单位和作用域", "关闭 Gate"),
+            "14": ("外部服务调用不覆盖内部模块接口", "双向对应"),
+            "15": ("正常向量", "故障/交叠向量", "独立 Oracle"),
+        }.items():
+            section = mechanism.split(f"## {chapter}. ", 1)[1].split("\n## ", 1)[0]
+            for term in required:
+                self.assertIn(term, section, f"§{chapter}: {term}")
+        for term in ("机制内容闭合检查", "跨责任单元交接", "最脆弱窗口", "作者必须按该源真实契约"):
+            self.assertIn(term, guide)
 
     def test_mechanism_parent_tree_is_not_the_dependency_graph(self):
         template = (ROOT / "templates/design/architecture-design.md").read_text()
@@ -185,6 +201,31 @@ class AIAuthoringGuidesTests(unittest.TestCase):
                      "父机制检查组合结果", "不能在各自文档", "不重跑整个项目"):
             self.assertIn(term, guide)
         self.assertIn("host-fpga-transfer-example.md", guide)
+
+    def test_mechanism_diagrams_profile_and_ids_are_local_to_their_sections(self):
+        template = (ROOT / "templates/design/system-mechanism-design.md").read_text()
+        guide = (ROOT / "docs/ai-guides/system-mechanism.md").read_text()
+
+        for chapter, marker in (("1", "用途概览图"), ("3", "参与方协作图"),
+                                ("4", "数据对象图"), ("6", "正常时序图"),
+                                ("8", "状态与资源图"), ("9", "异常处置图"),
+                                ("15", "测试路径图")):
+            section = template.split(f"## {chapter}. ", 1)[1].split("\n## ", 1)[0]
+            self.assertIn("本节应有图", section)
+            self.assertIn(marker, section)
+
+        opening = template.split("## 1. ", 1)[1].split("\n## 2. ", 1)[0]
+        self.assertIn("机制形态与适用性", opening)
+        self.assertIn("本节有用途概览图", opening)
+        for chapter, namespace in (("3.1", "CON-<MECH>-<nnn>"),
+                                   ("14.4", "M-<MECH>-DI-<nnn>"),
+                                   ("16", "RISK-<MECH>-<nnn>")):
+            heading = f"### {chapter} " if chapter != "16" else "## 16. "
+            section = template.split(heading, 1)[1].split("\n## ", 1)[0]
+            self.assertIn(namespace, section)
+        self.assertIn("基线必画", guide)
+        self.assertIn("简单只读可用短表", guide)
+        self.assertIn("§4.5 和 §5.3 可按同一已批准 tailoring decision 裁剪", guide)
 
 
 if __name__ == "__main__":

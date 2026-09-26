@@ -1115,13 +1115,19 @@ B.4 设计约束与关键假设
                             content, re.DOTALL)
         readonly = {"usage-overview", "collaboration", "objects", "sequence", "state-lifecycle", "failure-recovery", "test-path"}
         effects = {"effect-flow", "cleanup-dependencies"}
-        names = readonly | effects
+        scenarios = {"usage-scenarios"}
+        names = readonly | effects | scenarios
         self.assertGreaterEqual(len(blocks), 1)
         navigation = next(block for block in blocks if "mechanism-readonly-observation-example.md" in block)
         for reference in ("mechanism-readonly-observation-example.md",
                           "mechanism-side-effect-example.md", "host-fpga-transfer-example.md"):
             self.assertIn(reference, navigation)
-        self.assertNotIn("![", content)
+        self.assertIn("![图 EX-MECH-SC-01：维护窗口版本核对的三个使用场景]", content)
+        self.assertIn("![图 EX-MECH-RESP-01：版本核对机制的参与方与责任边界]", content)
+        self.assertIn("![图 EX-MECH-FLOW-01：一次正常版本核对的端到端时序]", content)
+        self.assertTrue(all("![" not in part for part in re.split(
+            r"<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->.*?<!-- STD_TEMPLATE_EXAMPLE_END -->",
+            content, flags=re.DOTALL)))
         self.assertFalse(any("```mermaid" in block for block in blocks))
         for name in readonly:
             self.assertIn(f"system-mechanism-authoring/{name}.png", readonly_example)
@@ -1133,7 +1139,7 @@ B.4 设计约束与关键假设
             self.assertIn(term, host_fpga_example)
         exports = json.loads((ROOT / "docs/assets/system-mechanism-authoring/exports.json").read_text())
         self.assertEqual((exports["width"], exports["height"]), (1440, 840))
-        self.assertEqual(len(exports["exports"]), 9)
+        self.assertEqual(len(exports["exports"]), 10)
         self.assertEqual({Path(item["svg"]).stem for item in exports["exports"]}, names)
         for item in exports["exports"]:
             svg_bytes = (ROOT / item["svg"]).read_bytes()
@@ -1156,7 +1162,7 @@ B.4 设计约束与关键假设
                         self.assertTrue(value.startswith("#"))
                     for reference in re.findall(r"url\(#([^)]+)\)", value):
                         self.assertIn(reference, ids)
-            self.assertIn("EX-OBS-01/v1" if Path(item["svg"]).stem in readonly
+            self.assertIn("EX-OBS-01/v1" if Path(item["svg"]).stem in readonly | scenarios
                           else "EX-EXPORT-01/v1", svg_bytes.decode())
 
     def test_mechanism_example_preserves_test_order_and_volatile_boundary(self):
@@ -1181,10 +1187,10 @@ B.4 设计约束与关键假设
         stub = system.split("### 14.1 系统机制写作入口", 1)[1].split("## 15.", 1)[0]
         self.assertIn("ai-guides/system-mechanism.md", stub)
         self.assertNotIn("**这六图如何复用**", stub)
-        for term in ("不要求", "16", "预设计", "独立 Oracle", "不要求六图全画", "900 px",
+        for term in ("不要求", "16", "预设计", "独立 Oracle", "不要求十图全画", "900 px",
                      "SVG 是维护源", "作者自审", "实际字段/行为定义", "未实际开展独立评审"):
             self.assertIn(term, entry)
-        self.assertEqual(len(re.findall(r"\]\(../../templates/diagrams/mechanism/[^)]+\.svg\)", entry)), 9)
+        self.assertEqual(len(re.findall(r"\]\(../../templates/diagrams/mechanism/[^)]+\.svg\)", entry)), 10)
         for reference in re.findall(r"\]\(([^)#]+)(?:#[^)]*)?\)", entry):
             self.assertTrue((guide_path.parent / reference).resolve().is_file(), reference)
 

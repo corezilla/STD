@@ -11,6 +11,12 @@
       "png_sha256": "877df682bd494ce3b444c65952e513523982906f88773592c06e956f187adc63"
     },
     {
+      "svg": "templates/diagrams/mechanism/usage-scenarios.svg",
+      "png": "docs/assets/system-mechanism-authoring/usage-scenarios.png",
+      "svg_sha256": "b071bc0a6b95f084788553c608cb49a78d0631706399a89006c5f391090dd0cf",
+      "png_sha256": "2abe2e2d94c88e2789ced4de88164e4a80b5d65938a323ca11c7a114d07383b7"
+    },
+    {
       "svg": "templates/diagrams/mechanism/effect-flow.svg",
       "png": "docs/assets/system-mechanism-authoring/effect-flow.png",
       "svg_sha256": "8fc62ef1b56387881e2a1e26d8e081f6a1cd08d1d905813e13861a86535c0da4",

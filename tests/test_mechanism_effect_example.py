@@ -475,7 +475,9 @@ class MechanismEffectExampleTests(unittest.TestCase):
         opening = text.split("## 1.", 1)[1].split("## 2.", 1)[0]
         participants = text.split("## 3.", 1)[1].split("## 4.", 1)[0]
         self.assertIn("用途概览图放本节", opening)
-        self.assertNotIn("collaboration.png", participants)
+        self.assertNotIn("collaboration.png", opening)
+        self.assertIn("collaboration.png", participants)
+        self.assertIn("版本核对机制的参与方与责任边界", participants)
         readonly = (ROOT / "docs/examples/mechanism-readonly-observation-example.md").read_text()
         self.assertLess(readonly.index("usage-overview.png"), readonly.index("collaboration.png"))
         example = EXAMPLE.read_text()

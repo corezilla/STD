@@ -1,16 +1,17 @@
 # 总体系统机制设计图形样板
 
 这是一组可编辑 SVG 及其 PNG 展示，不是新模板类型、图形生成服务或产品设计。
-用途图和原六幅关系图共用 **EX-OBS-01/v1 只读版本查询**：Target / Planned / NOT_RUN。
+用途图、使用场景图和原六幅关系图共用 **EX-OBS-01/v1 只读版本查询**：Target / Planned / NOT_RUN。
 公共字段、操作、错误与命令唯一见 [AI 指南完整小例](../../../docs/ai-system-design-authoring-guide.md#88-完整小例两个单元的只读版本核对)。
 新增两图引用 **EX-EXPORT-01/v1 暂存导出**，全部字段与 EX-R1～R8 规则唯一见
 [有副作用完整案例](../../../docs/examples/mechanism-side-effect-example.md)，同为 Target / Planned / NOT_RUN。
-九图分属两个不同案例，不能拼接为同一协议。数值是教学 Specified 值，不是实测指标。
+十图分属两个不同案例，不能拼接为同一协议。数值是教学 Specified 值，不是实测指标。
 所有案例为通用虚构内容，未采用保密 demo。
 
 | 图形源 | 机制模板位置 | 表达的关系 |
 |---|---|---|
 | [usage-overview.svg](usage-overview.svg) | §1 | 使用场景 → 处理范围 → 输出结果 |
+| [usage-scenarios.svg](usage-scenarios.svg) | §2 | 不同使用条件 → 用户动作 → 可观察结果；不画内部时序 |
 | [collaboration.svg](collaboration.svg) | §3 | 触发者、运行参与方、连接及 authority |
 | [objects.svg](objects.svg) | §4 | 本地事实 → Sample → Report；复制、变换及寿命 |
 | [sequence.svg](sequence.svg) | §6 | EX-OP1、顺序的两次 EX-OP2、响应与期限 |
@@ -22,7 +23,7 @@
 
 ## 选择与复用
 
-一个问题选择一种关系图，不要求九图齐全；已有清楚短表即可解释的状态不要再机械画图。
+一个问题选择一种关系图，不要求十图齐全；已有清楚短表即可解释的状态不要再机械画图。
 组成图强调分工，时序图强调先后；数据箭头不冒充时间顺序，状态箭头不等于函数调用。
 图后须用正文解释输入、处理、结果、理由及边界，图不能替代公共契约。
 

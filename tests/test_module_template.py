@@ -280,8 +280,8 @@ class ModuleTemplateTests(unittest.TestCase):
             for term in ("M-<MECH>-DI-<nnn>", "RISK-<MECH>-<nnn>",
                          "CON-<MECH>-<nnn>"):
                 self.assertIn(term, source)
-        self.assertIn("模板 `3.2.0`", mechanism_guide)
-        self.assertIn("版本：0.8.0-draft.5", mechanism_guide)
+        self.assertIn("模板 `3.3.0`", mechanism_guide)
+        self.assertIn("版本：0.8.0-draft.6", mechanism_guide)
 
     def test_module_record_scaffolds_are_consistent_and_demo_version_is_bounded(self):
         text = TEMPLATE.read_text()

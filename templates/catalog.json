@@ -1,5 +1,5 @@
 {
-  "catalog_version": "0.1.0-draft.40",
+  "catalog_version": "0.1.0-draft.41",
   "templates": {
     "management.project-plan": "management/project-plan.md",
     "management.tailoring": "management/tailoring-manifest.md",
@@ -67,7 +67,7 @@
     "evaluation.technical-analysis": "0.2.0",
     "design.system": "10.1.0",
     "design.software-system": "2.1.0",
-    "design.system-mechanism": "3.2.0",
+    "design.system-mechanism": "3.3.0",
     "design.subsystem": "1.2.0",
     "design.definition": "3.2.0",
     "design.implementation": "1.2.0",

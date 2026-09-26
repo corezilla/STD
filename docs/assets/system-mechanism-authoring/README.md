@@ -1,6 +1,6 @@
 # 总体系统机制设计示例展示资产
 
-九个 PNG 均由 [对应 SVG 源](../../../templates/diagrams/mechanism/README.md)本地渲染导出，
+十个 PNG 均由 [对应 SVG 源](../../../templates/diagrams/mechanism/README.md)本地渲染导出，
 仅用于机制模板图文教学。只读版本查询定义唯一见 [AI 指南](../../ai-system-design-authoring-guide.md#88-完整小例两个单元的只读版本核对)，
 暂存导出定义唯一见[完整案例](../../examples/mechanism-side-effect-example.md)。两者都是原创虚构内容，
 不是同一协议，不来源于保密 demo，不是项目实现或运行测试证据。
@@ -8,6 +8,7 @@
 | 展示图 | 对应源 |
 |---|---|
 | [用途概览](usage-overview.png) | `usage-overview.svg` |
+| [使用场景](usage-scenarios.png) | `usage-scenarios.svg` |
 | [协作](collaboration.png) | `collaboration.svg` |
 | [数据对象](objects.png) | `objects.svg` |
 | [正常时序](sequence.png) | `sequence.svg` |
