@@ -139,6 +139,10 @@ greenfield 或设计先行且不存在既有实现时，不制造 Current，也�
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 虚构EX-ISD/v1，FrameDecoder（M201），Target / NOT_IMPLEMENTED / NOT_RUN。同步解析一个帧，不创建线程。
 
+![FrameDecoder 文件与内部组件关系](../diagrams/isd-frame-components.svg)
+
+<details><summary>可编辑的 Mermaid 图源</summary>
+
 ```mermaid
 flowchart LR
  C["Caller"] --> F["frame_decoder.cc<br/>decode_one"]
@@ -147,6 +151,8 @@ flowchart LR
  F --> V["创建借用的payload视图"]
  V -. 类型依赖 .-> T
 ```
+
+</details>
 
 实线为调用/处理，虚线为类型依赖；read_header是私有helper，仍在同一模块。真实项目替换文件及关系，不复制此解析协议。
 <!-- STD_TEMPLATE_EXAMPLE_END -->
@@ -286,6 +292,10 @@ enum class InvalidReason { Version, Kind, Length };
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 EX-ISD/v1 的输入是只读字节 span；FrameView 为 `{kind:u8, payload:borrowed byte span}`。DecodeResult 为互斥分支：OK(view,consumed:size_t)、NEED_MORE(consumed=0)、INVALID(reason,consumed=0)。无堆分配。
 
+![FrameView 借用与输入寿命](../diagrams/isd-frame-view-lifetime.svg)
+
+<details><summary>可编辑的 Mermaid 图源</summary>
+
 ```mermaid
 flowchart LR
  A["Caller 持有输入存储"] --> B["decode_one 只读借用"]
@@ -293,6 +303,8 @@ flowchart LR
  C --> D["Caller 消费 view 后才改写或释放输入"]
  B -->|NEED_MORE 或 INVALID| E["不返回 view；输入保持不变"]
 ```
+
+</details>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 #### 4.2.N `<真实结构名>`
@@ -559,6 +571,10 @@ DecodeResult =
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 教学签名 `DecodeResult decode_one(std::span<const std::uint8_t> input) noexcept`，位于 `ex_isd` 命名空间；非空span要求有效存储，空span允许。数据竞争和悬空地址是调用者违约，不伪装成帧格式错误。借用输出不跨输入寿命。
 
+![decode_one 调用时序](../diagrams/isd-decode-sequence.svg)
+
+<details><summary>可编辑的 Mermaid 图源</summary>
+
 ```mermaid
 sequenceDiagram
  participant C as Caller
@@ -574,6 +590,8 @@ sequenceDiagram
  D-->>C: INVALID / NEED_MORE / OK借用view，三者互斥
  end
 ```
+
+</details>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ### 5.1 软件接口（适用时）
@@ -832,6 +850,10 @@ DecodeResult decode_one(std::span<const std::uint8_t> input) noexcept;
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 EX-ISD/v1规则：头为version:u8、kind:u8、length:u32大端，共6字节；仅version=1、kind=1，payload最多64字节，零长允许。错误优先级为version、kind、length；完整头非法立即INVALID，不等待payload。只解析首帧，余字节交caller。
 
+![decode_one 算法分支](../diagrams/isd-decode-branches.svg)
+
+<details><summary>可编辑的 Mermaid 图源</summary>
+
 ```mermaid
 flowchart TD
  A["input"] --> B{"size小于6?"}
@@ -843,6 +865,8 @@ flowchart TD
  F -->|是| N
  F -->|否| G["OK / payload=input的6至6+length / consumed=6+length"]
 ```
+
+</details>
 
 ```text
 if input.size < 6: return NEED_MORE(0)
@@ -857,6 +881,10 @@ return OK(borrow(input[6 : 6+length_be]), 6+length_be)
 输入 `01 01 00 00 00 02 41 42` 得length=2、借用payload=`41 42`、consumed=8。只收到前7字节得NEED_MORE；长度字段为65时仅头部就INVALID。先限制长度再加6，不把未知u32直接加到小类型。
 
 下面是另一类可复用的有状态过程图例。它不是项目接口定义，只示范一张图如何同时表达入口、校验、幂等重放、持久提交点、响应丢失和错误出口；项目须替换成自己的 Process、Function、Data 和 Error ID。
+
+![有状态提交过程及失败出口](../diagrams/isd-command-lifecycle.svg)
+
+<details><summary>可编辑的 Mermaid 图源</summary>
 
 ```mermaid
 flowchart TD
@@ -876,6 +904,8 @@ flowchart TD
     F --> ER["返回稳定 error_code/message/details"]
     U --> Q
 ```
+
+</details>
 
 配套正文至少说明：`request_id` 的格式和唯一性、`payload` 的字段及限制、`ResultRecord`/`ErrorPayload` 的 authority，`ERR-INPUT` 与 `ERR-AUTH` 的判定顺序，事务提交前后分别能返回什么，`UNKNOWN` 如何收敛，以及 query/replay/takeover/new attempt 哪些会新增执行。图中的每个节点和出口都应能回到 §5 的 Function/Error ID、§4 的 Data ID 与 §9 的 Vector。
 <!-- STD_TEMPLATE_EXAMPLE_END -->

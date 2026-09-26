@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="520" viewBox="0 0 1120 520" role="img" aria-labelledby="title desc">
+ <title id="title">decode_one 算法分支</title><desc id="desc">输入不足六字节返回 NEED_MORE；头部不合法返回 INVALID；payload 未到齐返回 NEED_MORE；完整合法帧返回带借用视图的 OK。</desc>
+ <defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0 9 4.5 0 9" fill="#4676a8"/></marker></defs>
+ <style>text{font-family:system-ui,'PingFang SC',sans-serif;fill:#20344b}.head{font-size:22px;font-weight:600}.body{font-size:17px}.note{font-size:15px;fill:#54708b}.edge{fill:none;stroke:#4676a8;stroke-width:2.6;marker-end:url(#arrow)}</style>
+ <rect width="1120" height="520" fill="#fff"/><text x="30" y="39" class="head">EX-ISD/v1 · decode_one 决策路径</text>
+ <rect x="35" y="80" width="185" height="60" rx="10" fill="#e9f2fb" stroke="#8eabc8"/><text x="127" y="117" text-anchor="middle" class="body">input</text>
+ <rect x="295" y="80" width="250" height="60" rx="10" fill="#dceafb" stroke="#8eabc8"/><text x="420" y="117" text-anchor="middle" class="body">size &lt; 6？</text>
+ <rect x="640" y="62" width="420" height="75" rx="10" fill="#f5f0e6" stroke="#c9b990"/><text x="850" y="96" text-anchor="middle" class="body">NEED_MORE · consumed=0</text><text x="850" y="119" text-anchor="middle" class="note">无 view</text>
+ <rect x="295" y="195" width="250" height="70" rx="10" fill="#dceafb" stroke="#8eabc8"/><text x="420" y="226" text-anchor="middle" class="body">校验 version → kind → length</text><text x="420" y="250" text-anchor="middle" class="note">length ≤ 64</text>
+ <rect x="640" y="195" width="420" height="70" rx="10" fill="#f8eaea" stroke="#d4a6a6"/><text x="850" y="235" text-anchor="middle" class="body">INVALID · consumed=0 · 无 view</text>
+ <rect x="295" y="320" width="250" height="70" rx="10" fill="#dceafb" stroke="#8eabc8"/><text x="420" y="351" text-anchor="middle" class="body">size − 6 &lt; length？</text><text x="420" y="375" text-anchor="middle" class="note">先减再比较，避免溢出</text>
+ <rect x="640" y="425" width="420" height="65" rx="10" fill="#e6f4ed" stroke="#8ab8a0"/><text x="850" y="453" text-anchor="middle" class="body">OK · 借用 payload 视图</text><text x="850" y="477" text-anchor="middle" class="note">consumed = 6 + length</text>
+ <path class="edge" d="M220 110 H295"/><path class="edge" d="M545 110 H640"/><text x="567" y="98" class="note">是</text>
+ <path class="edge" d="M420 140 V195"/><text x="433" y="170" class="note">否</text>
+ <path class="edge" d="M545 230 H640"/><text x="567" y="218" class="note">非法</text>
+ <path class="edge" d="M420 265 V320"/><text x="433" y="294" class="note">合法</text>
+ <path class="edge" d="M545 354 C625 354 610 135 715 135"/><text x="564" y="342" class="note">是</text>
+ <path class="edge" d="M545 377 C620 377 617 457 640 457"/><text x="564" y="390" class="note">否</text>
+</svg>

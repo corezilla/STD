@@ -3,7 +3,7 @@
 STD 面向软件、硬件、固件、FPGA 和软硬件协同项目，提供项目管理、需求、总体系统设计、总体系统机制设计、
 子系统设计、模块设计、接口契约、验证测试、评审、发布和运维所需的版本化模板。
 
-当前 `0.1.0-draft.37` 优先覆盖：
+当前 `0.1.0-draft.38` 优先覆盖：
 
 - Slinky，以及与其协作的 Piko、LLMTier；
 - HIFM，包括软件、DPU-SIM、FPGA/RTL、板卡和系统验证。
@@ -137,7 +137,7 @@ AI 编写入口采用“通用方法 + 模板类型专项”：先读
 软件模块需要独立实现规格时使用可选的 [`ISD模板`](templates/design/implementation-design.md)，
 配套 [`ISD规范`](docs/isd-standard.md) 和 [`AI编写指南`](docs/ai-guides/implementation-design.md)。
 默认一模块一份，覆盖多个文件；模块设计已足够详细时兼作，不重复增加设计层级。
-`design.implementation` 当前为 `1.1.0`：greenfield 不虚构 Current，函数输入/输出/错误、重要流程图、配置落点及状态型/持久化实现必须展开
+`design.implementation` 当前为 `1.1.1`：greenfield 不虚构 Current，函数输入/输出/错误、重要流程图、配置落点及状态型/持久化实现必须展开
 函数并发契约、错误传播、schema 演进拒绝语义、库状态分支和本地持久化安全；记录型内容采用
 固定字段段落，状态矩阵才使用表格；交付检查强制关键函数并发契约、错误传播、schema 策略和六类库状态。
 ISD 规范为 `0.5.0-draft.1`，专项指南为 `0.5.0-draft.5`。
