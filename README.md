@@ -3,7 +3,7 @@
 STD 面向软件、硬件、固件、FPGA 和软硬件协同项目，提供项目管理、需求、总体系统设计、总体系统机制设计、
 子系统设计、模块设计、接口契约、验证测试、评审、发布和运维所需的版本化模板。
 
-当前 `0.1.0-draft.46` 优先覆盖：
+当前 `0.1.0-draft.47` 优先覆盖：
 
 - Slinky，以及与其协作的 Piko、LLMTier；
 - HIFM，包括软件、DPU-SIM、FPGA/RTL、板卡和系统验证。
@@ -249,13 +249,13 @@ AI 指南按能力贯通章节、先复用并核对现有契约，再交接双�
 ## 批量机制写作准备
 
 接口控制与契约规格模板各为 `0.4.0`，测试规格为 `0.2.1`；新增[单模块单元测试设计模板](templates/tests/unit-test-design.md)
-`tests.unit-test-design`（`0.2.0`）：以模块设计的 Function/Constraint/Rule/Interface/Transition/Invariant
+`tests.unit-test-design`（`0.3.0`）：以模块设计的 Function/Constraint/Rule/Interface/Transition/Invariant
 及错误出口 ID 为分母逐 Case 设计输入、fixture、独立 Oracle 与测试代码位置，区分设计/实现/执行/判定四种
 状态，第 5 章按模块事实裁决状态、并发与故障测试的适用性；单元层用例权威归本设计，
 `assurance.test-specification` 继续负责其他层级，附录 A 为全链试填教学样稿。同批新增
-[模块测试设计](templates/tests/module-test-design.md) `tests.module-test-design`（`0.1.0`，整模块组装后
+[模块测试设计](templates/tests/module-test-design.md) `tests.module-test-design`（`0.2.0`，整模块组装后
 测对外接口与内部流程，内部单元真实、边界外依赖替身）与[模块测试计划](templates/tests/module-test-plan.md)
-`tests.module-test-plan`（`0.1.0`，模块范围测试活动的组织与证据汇总，只做索引不复制 Case）。三者逐章提供段落式建议、
+`tests.module-test-plan`（`0.2.0`，模块范围测试活动的组织与证据汇总，只做索引不复制 Case）。三者逐章提供段落式建议、
 完成条件及贯穿示例，不仅保留空标题。[机制 AI 指南 §10](docs/ai-guides/system-mechanism.md#10-批量编写与跨文档复审)
 说明固定一批输入、共享契约唯一修改、父子承接和受影响文档的组合复查，不引入新的写作平台。
 [Host—驱动—FPGA 教学案例](docs/examples/host-fpga-transfer-example.md)给出完整逻辑调用、原生布局、
