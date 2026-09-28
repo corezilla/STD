@@ -2,7 +2,7 @@
 
 版本：0.3.0-draft.2 · 日期：2026-09-19 · 状态：方法草案，待实际写作任务验证
 
-主模板：`assurance.vv-plan`、`assurance.test-plan`、`assurance.test-specification`、`assurance.test-procedure`、`assurance.test-report`、`assurance.acceptance-plan`、`assurance.acceptance-report`。
+主模板：`assurance.vv-plan`、`assurance.test-plan`、`assurance.test-specification`、`assurance.test-procedure`、`assurance.test-report`、`assurance.acceptance-plan`、`assurance.acceptance-report`、`tests.unit-test-design`。
 先读[通用 AI 编写指南](../ai-authoring-guide.md)，再读项目已采用的对应模板。本文补充本类型的工作方法，不重复公共来源、权限和状态规则，不自动升级项目模板。
 
 ## 1. 输入与边界
@@ -36,6 +36,7 @@
 | assurance.vv-plan | 验证策略、层级、责任、覆盖和证据链 | 不写成全部 Case 步骤 |
 | assurance.test-plan | 一批测试的范围、资源、环境、顺序和退出条件 | 计划不是执行报告 |
 | assurance.test-specification | Case 的输入、覆盖点、预期行为、独立判据 | 规范不伪造实际结果 |
+| tests.unit-test-design | 单个软件模块隔离单元测试的逐 Case 设计：来源 ID→Case、fixture、独立 Oracle、测试代码位置与四种状态 | 不是计划、规程或运行报告；单元 PASS 不关闭契约、集成或系统目标 |
 | assurance.test-procedure | 实际执行步骤、位置、前提、参数、记录及清理 | 不能仅列 Case 名 |
 | assurance.test-report | 固定输入上的实际运行、偏差、缺陷和结论 | 保留失败/缺测，不能改预期迁就实现 |
 | assurance.acceptance-plan | 有权验收方认可的范围、判据、责任和例外方式 | 不由测试作者自动批准 |

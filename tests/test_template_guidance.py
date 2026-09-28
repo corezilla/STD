@@ -15,6 +15,7 @@ COMPACT_FAMILIES = (
     "product",
     "requirements",
     "review",
+    "tests",
 )
 
 

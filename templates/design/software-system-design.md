@@ -2285,7 +2285,8 @@ STD 版本只在项目采用记录维护。下表说明方法继承，不是要�
 | Canonical Path | `{{source_path}}` |
 | Supersedes | {{supersedes}} |
 
-> Reviewer、Approver、Approval Date 和 Release Tag 在进入相应状态时填写，不伪造审批。
+> Reviewer、Approver、Approval Date 和 Release Tag 在进入相应状态时填写。Git commit/tag 是
+> 外部不可变证据；不要在文档内容中伪造包含自身的 commit hash。
 <!-- STD_DOCUMENT_CONTROL_END -->
 
 | 文档版本 / 日期 | 变更和设计影响 | 作者 / 评审记录 |

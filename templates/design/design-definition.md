@@ -13,7 +13,6 @@
 | Last Modified Date | `{{last_modified_at}}` |
 | Template ID | `{{template_id}}` |
 | Template Version | `{{template_version}}` |
-
 <!-- STD_DOCUMENT_COVER_END -->
 
 ## 1. 单元摘要：为什么存在
@@ -2214,6 +2213,9 @@ VRC-M101-001/C1 用固定 [a1,b2] 判顺序；VRC-M101-004/C7-C8 检查并发不
 | Repository | `{{source_repository}}` |
 | Canonical Path | `{{source_path}}` |
 | Supersedes | {{supersedes}} |
+
+> Reviewer、Approver、Approval Date 和 Release Tag 在进入相应状态时填写。Git commit/tag 是
+> 外部不可变证据；不要在文档内容中伪造包含自身的 commit hash。
 <!-- STD_DOCUMENT_CONTROL_END -->
 
 <!-- Reviewer、Approver、Approval Date、Release Tag 按真实状态记录；不要伪造包含自身的 commit hash。 -->

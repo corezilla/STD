@@ -1438,4 +1438,7 @@ EX-ISD/v1，以下全为预期向量，NOT_RUN；同一公开decode_one入口，
 | Repository | `{{source_repository}}` |
 | Canonical Path | `{{source_path}}` |
 | Supersedes | {{supersedes}} |
+
+> Reviewer、Approver、Approval Date 和 Release Tag 在进入相应状态时填写。Git commit/tag 是
+> 外部不可变证据；不要在文档内容中伪造包含自身的 commit hash。
 <!-- STD_DOCUMENT_CONTROL_END -->

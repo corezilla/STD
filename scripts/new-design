@@ -73,7 +73,7 @@ def main() -> int:
     parser.add_argument("--design-object-id", help="既有软件模块对象 ID；不是 Document ID")
     parser.add_argument("--implementation-view-of-document-id", help="独立 ISD 对应的同模块设计 Document ID")
     parser.add_argument("--volume-of-document-id", help="ISD 分卷所属的唯一入口 Document ID")
-    parser.add_argument("--level", help="设计层级；design.system/design.software-system 默认 system，design.subsystem 默认 subsystem，design.definition 默认 module，其他模板默认 cross-level")
+    parser.add_argument("--level", help="设计层级；design.system/design.software-system 默认 system，design.subsystem 默认 subsystem，design.definition 与 tests.unit-test-design 默认 module，其他模板默认 cross-level")
     parser.add_argument("--domain", action="append", default=[])
     args = parser.parse_args()
     if args.test_scope and args.template != "assurance.test-report":
@@ -89,7 +89,7 @@ def main() -> int:
         if args.parent_document_id == args.name:
             parser.error("父文档不能是文档自身")
     if args.level is None:
-        args.level = {"design.system": "system", "design.software-system": "system", "design.subsystem": "subsystem", "design.definition": "module", "design.implementation": "module"}.get(args.template, "cross-level")
+        args.level = {"design.system": "system", "design.software-system": "system", "design.subsystem": "subsystem", "design.definition": "module", "design.implementation": "module", "tests.unit-test-design": "module"}.get(args.template, "cross-level")
     if args.template in {"design.definition", "design.implementation"} and not args.domain:
         args.domain = ["software"]
     if args.template == "design.implementation" and (args.level != "module" or args.domain != ["software"]):
@@ -248,7 +248,7 @@ def main() -> int:
         "created_at": created_at,
         "last_modified_at": last_modified_at
     }
-    if args.template in {"design.definition", "design.implementation"}:
+    if args.template in {"design.definition", "design.implementation", "tests.unit-test-design"}:
         metadata["design_object_id"] = args.design_object_id
     if args.template == "design.definition":
         metadata["implementation_specification"] = {

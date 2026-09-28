@@ -147,6 +147,7 @@ ISD是同一模块的可选实现视图，不插入新的对象层级。默认�
 - `vv-plan`：整个产品如何证明需求满足。
 - `test-plan`：某一测试层级的范围、资源、策略、入口和出口。
 - `test-specification`：测试 case、输入、oracle 和覆盖设计。
+- `unit-test-design`：单个软件模块隔离单元测试的逐 Case 设计（输入构造、fixture、独立 Oracle、测试代码位置）；单元 PASS 不关闭组合目标。
 - `test-procedure`：可由执行者逐步操作的程序。
 - `test-report`：一次或一组实际执行结果。
 - `acceptance-*`：客户/产品 authority 的正式验收决定。

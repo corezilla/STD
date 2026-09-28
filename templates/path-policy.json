@@ -54,6 +54,7 @@
     "assurance.acceptance-plan": "docs/70_verification/acceptance",
     "assurance.acceptance-report": "tests/acceptance/reports",
     "assurance.fpga-implementation-report": "firmware/docs/70_verification",
+    "tests.unit-test-design": "docs/70_verification/specifications",
     "review.packet": "docs/91_reviews",
     "review.schematic-pcb": "hardware/docs/91_reviews",
     "decisions.adr": "docs/90_decisions",
