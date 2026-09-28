@@ -17,10 +17,16 @@
     "requirements.traceability": "docs/10_requirements",
     "evaluation.technical-analysis": "docs/15_evaluation",
     "design.system": "docs/20_system_design",
-    "design.software-system": {"system": "docs/20_system_design"},
+    "design.software-system": {
+      "system": "docs/20_system_design"
+    },
     "design.system-mechanism": "docs/20_system_design/mechanisms",
-    "design.subsystem": {"subsystem": "docs/30_subsystem_design"},
-    "design.implementation": {"module": "docs/50_implementation_design"},
+    "design.subsystem": {
+      "subsystem": "docs/30_subsystem_design"
+    },
+    "design.implementation": {
+      "module": "docs/50_implementation_design"
+    },
     "design.definition": {
       "system": "docs/20_system_design",
       "subsystem": "docs/30_subsystem_design",
@@ -64,7 +70,9 @@
     "operations.installation-deployment": "docs/80_operations/deployment",
     "operations.operations-manual": "docs/80_operations/manuals",
     "operations.maintenance": "docs/80_operations/manuals",
-    "operations.bring-up": "docs/80_operations/bring-up"
+    "operations.bring-up": "docs/80_operations/bring-up",
+    "tests.module-test-design": "docs/70_verification/specifications",
+    "tests.module-test-plan": "docs/70_verification/plans"
   },
   "domain_owned_path_patterns": {
     "software_component": {

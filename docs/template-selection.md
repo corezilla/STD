@@ -148,6 +148,8 @@ ISD是同一模块的可选实现视图，不插入新的对象层级。默认�
 - `test-plan`：某一测试层级的范围、资源、策略、入口和出口。
 - `test-specification`：测试 case、输入、oracle 和覆盖设计。
 - `unit-test-design`：单个软件模块隔离单元测试的逐 Case 设计（输入构造、fixture、独立 Oracle、测试代码位置）；单元 PASS 不关闭组合目标。
+- `module-test-design`：整模块组装后的测试设计（对外接口与内部流程，内部单元真实、边界外依赖替身）；模块 PASS 不关闭契约/集成/系统。
+- `module-test-plan`：单个模块的测试活动组织（范围、策略、资源、出入口、证据汇总），串联单元/模块设计与上级组合入口。
 - `test-procedure`：可由执行者逐步操作的程序。
 - `test-report`：一次或一组实际执行结果。
 - `acceptance-*`：客户/产品 authority 的正式验收决定。

@@ -33,7 +33,7 @@
 
 <!-- 编写建议（定位结论，比较依据见下）：本模板定位为独立模板，不是通用测试规格的 unit profile。理由：(1) 通用规格的 Case Matrix 是单张索引表，本模板要求逐 Case 成节并给完整函数声明、逐参数输入与独立 Oracle，深度以指导写测试代码为准，通用规格装不下；(2) 本模板的覆盖分母绑定模块设计（design.definition §14）的 Function/Constraint/Rule/Interface/Transition/Invariant 与关键错误出口 ID，并继承其正向覆盖"一个来源 ID 一条记录"的规则，这是模块设计侧特有的承接语义；(3) §3 的替身证明边界（mock 不得证明事务/原子性）、§5 的条件适用裁决是单元隔离层特有的判据。共同字段（范围、环境、判定、证据）按 STD 惯例各自维护编写建议，但权威分工如下，不形成两份同权威测试规格： -->
 
-- **权威分工**：对单个软件模块的单元隔离测试设计，本文件是输入构造、独立 Oracle 与 Case 结构的唯一权威；`assurance.test-specification` 继续负责 contract、integration、system 等层级及跨层级 Case Matrix 汇总，其内容不因本模板而修改。
+- **权威分工**：对单个软件模块的单元隔离测试设计，本文件是输入构造、独立 Oracle 与 Case 结构的唯一权威；整模块组装后的对外接口与内部流程 Case 权威在 `tests.module-test-design`，两者 Case 互不重复写入；`assurance.test-specification` 继续负责 contract、integration、system 等层级及跨层级 Case Matrix 汇总，其内容不因本模板而修改。
 - **与模块设计的关系**：覆盖分母消费 `design.definition` §14.1/§14.2 的来源 ID 与 VRC；规则、约束、接口语义仍以模块设计为唯一权威，本设计只固定其单元层验证实例，不复制规则定义。两者 Expected 不一致时回溯模块设计修订，不在测试侧私改。模块设计 §14.2 的 VRC 已足够且不写测试代码时，可不使用本模板。
 - **不得双写**：项目若已为本模块另立单元层 test-specification，其用例矩阵职能由本设计取代，只在原规格中以引用登记；不得在两处逐格维护同一批 Case 与 Expected。
 - **不强制空壳**：模块的单元用例不需要此深度时（如薄适配层），直接用通用 `assurance.test-specification` 并注明理由；不为本模板保留只有标题的空文档。
