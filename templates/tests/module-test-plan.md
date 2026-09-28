@@ -27,11 +27,15 @@
 > 外部不可变证据；不要在文档内容中伪造包含自身的 commit hash。
 <!-- STD_DOCUMENT_COVER_END -->
 
+<span style="color:#1f6feb"><em>**编写建议**：本模板组织一个模块的测试活动。计划只做索引与状态，不复制 Case、不预填执行结果；被串联的设计文档与报告路径在 §5、§8 登记，未成文的设计以具名缺口登记。</em></span>
+
+> **格式说明**：蓝色斜体为编写建议（指导如何填写，生成实例后保留）；灰色文字为虚构教学示例（以 `STD_TEMPLATE_EXAMPLE` 标记包裹，`new-design` 生成实例时自动剥离，不得当作项目事实或运行证据）；`<!-- TODO -->` 为待填槽位。颜色在 GitHub 等严格渲染器中降级为斜体/普通字，语义不变。
+
 > 本计划绑定单一软件模块：模块对象 ID 经 `--design-object-id` 写入 metadata；模块设计 ID/版本在 §1–2 固定，被串联的设计文档与报告路径在 §5、§8 登记。
 
 ### 模板定位：计划、设计与报告的边界
 
-<!-- 编写建议（定位结论）：本计划固定"一个模块的测试活动如何组织"——范围、策略、环境资源、责任、出入口与证据汇总；逐 Case 的输入构造与独立 Oracle 权威在 tests.unit-test-design 与 tests.module-test-design，本计划不复制 Case；实际执行结果与判定权威在 Run 报告（assurance.test-report 或模块 Owner 报告），本计划任何条目不得写成 PASS/已完成。与通用 assurance.test-plan 的分工：通用计划继续作为层级级/跨模块批量测试的权威；单个模块范围的计划由本模板承担，项目若已为该模块另立通用 test-plan，其该职能由本计划取代，只引用登记，不得双写。计划是管理文档不是授权书：本文件的 Gate 建议不代替批准决定。 -->
+<span style="color:#1f6feb"><em>**编写建议**：本计划固定"一个模块的测试活动如何组织"——范围、策略、环境资源、责任、出入口与证据汇总；逐 Case 输入与 Oracle 权威在 tests.unit-test-design 与 tests.module-test-design，本计划不复制 Case；实际结果权威在 Run 报告，任何条目不得写成 PASS/已完成。与通用 assurance.test-plan 的分工：通用计划仍是层级级/跨模块批量的权威，模块范围计划由本模板承担，已另立通用 test-plan 的项目由本计划取代该职能，不得双写。计划是管理文档不是授权书：Gate 建议不代替批准决定。</em></span>
 
 - **权威分工**：模块范围测试组织以本计划为唯一权威；Case 设计归 `tests.unit-test-design` / `tests.module-test-design`；实际结果归 Run 报告。
 - **串联对象**：本模块的单元测试设计（×N）、模块测试设计（×1）、契约/集成/系统承接入口；未成文的设计文档以具名缺口登记，不用计划冒充设计。
@@ -39,7 +43,7 @@
 
 ### 计划条目状态语义
 
-<!-- 编写建议：计划里的活动/条目只有下列三种状态；执行状态（NOT_RUN/BLOCKED/INVALID）与判定（PASS/FAIL）只存在于设计文档引用的 Run 报告，混入计划即违例。 -->
+<span style="color:#1f6feb"><em>**编写建议**：计划里的活动/条目只有下列三种状态；执行状态（NOT_RUN/BLOCKED/INVALID）与判定（PASS/FAIL）只存在于设计文档引用的 Run 报告，混入计划即违例。</em></span>
 
 | 条目状态 | 含义 | 禁止 |
 |---|---|---|
@@ -47,7 +51,7 @@
 | `Deferred` | 经批准裁剪或延后，有 tailoring 依据与恢复条件 | 无依据的"暂不做" |
 | `Blocked` | 依赖缺失（设计缺口、环境、上游合同） | 不登记缺口就长期挂起 |
 
-<!-- 完成条件：任一条目能报出状态、依据与下一步；计划里没有任何执行结论。 -->
+<span style="color:#1f6feb"><em>**完成条件**：任一条目能报出状态、依据与下一步；计划里没有任何执行结论。</em></span>
 
 ## 1. 目标、范围与测试构成
 
@@ -66,7 +70,7 @@
 | <!-- 契约/集成/系统（交接出口） --> | | | |
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-**示例（虚构）**：
+<span style="color:#6e7681">**示例（虚构）**：</span>
 
 | 构成层 | 设计文档 / 入口（Document ID 或缺口） | 覆盖责任摘要 | 条目状态 |
 |---|---|---|---|
@@ -91,9 +95,9 @@
 - 变更 → 重跑范围规则：<!-- TODO -->
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-**示例（虚构）**：
-- 模块设计 / ISD / 源码 / 依赖基线：EX-MODULE/v1 教学修订；教学 C++ 目标；无外部依赖
-- 变更 → 重跑范围规则：select_ids 签名变化 → 单元＋模块全重跑并通知契约层；I3 排序实现变化 → 仅 I3 单元＋模块层，其余单元不连带
+<span style="color:#6e7681">**示例（虚构）**：</span>
+<span style="color:#6e7681">- 模块设计 / ISD / 源码 / 依赖基线：EX-MODULE/v1 教学修订；教学 C++ 目标；无外部依赖</span>
+<span style="color:#6e7681">- 变更 → 重跑范围规则：select_ids 签名变化 → 单元＋模块全重跑并通知契约层；I3 排序实现变化 → 仅 I3 单元＋模块层，其余单元不连带</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 
@@ -115,7 +119,7 @@
 | <!-- 规则（§8）/ 状态转换（§10）/ 错误出口 --> | | | |
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-**示例（虚构）**：
+<span style="color:#6e7681">**示例（虚构）**：</span>
 
 | 保证类别（来源 ID 族） | 关闭层 | 承接设计文档/入口 | 分母缺口 |
 |---|---|---|---|
@@ -141,7 +145,7 @@
 - 共享资源、隔离与调度：<!-- TODO -->
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-**示例（虚构）**：环境＝教学构建工具链＋冻结构造记录数组，Owner＝模块 Owner；无共享设备；缺编译器时相关构成条目整体 Blocked，不换别的工具链静默执行。
+<span style="color:#6e7681">**示例（虚构）**：环境＝教学构建工具链＋冻结构造记录数组，Owner＝模块 Owner；无共享设备；缺编译器时相关构成条目整体 Blocked，不换别的工具链静默执行。</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 
@@ -161,7 +165,7 @@
 | <!-- normal / boundary / negative / concurrency / recovery / … --> | | |
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-**示例（虚构）**：
+<span style="color:#6e7681">**示例（虚构）**：</span>
 
 | Case 家族 | 设计文档 / 段落（或缺口） | 条目状态 |
 |---|---|---|
@@ -188,7 +192,7 @@
 - 缺陷登记、偏差与重跑规则（重跑不覆盖失败证据）：<!-- TODO -->
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-**示例（虚构）**：入口＝两份设计的 §2 覆盖无未登记缺口且构建可用；出口＝覆盖闭合或缺口均有 Owner/Gate；宿主并发场景到期仍 NOT_RUN——到期改判是违例。
+<span style="color:#6e7681">**示例（虚构）**：入口＝两份设计的 §2 覆盖无未登记缺口且构建可用；出口＝覆盖闭合或缺口均有 Owner/Gate；宿主并发场景到期仍 NOT_RUN——到期改判是违例。</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 
@@ -208,7 +212,7 @@
 | <!-- TODO --> | | | |
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-**示例（虚构）**：设计编写＝模块 Owner、执行＝QA、评审＝子系统评审；风险“宿主并发合同未定”的触发条件＝G-EX-1 超过最晚 Gate，缓解出口＝先出模块层结论并保留系统层 NOT_RUN，不在计划里替上游拍板。
+<span style="color:#6e7681">**示例（虚构）**：设计编写＝模块 Owner、执行＝QA、评审＝子系统评审；风险“宿主并发合同未定”的触发条件＝G-EX-1 超过最晚 Gate，缓解出口＝先出模块层结论并保留系统层 NOT_RUN，不在计划里替上游拍板。</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 
@@ -232,7 +236,7 @@
 | <!-- TODO；无未决项时写经核对的"无" --> | | |
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-**示例（虚构）**：证据＝引用各设计文档 reports/<run-id>/ 的 Run 记录汇总，不复制 stdout 进计划；Gate 建议＝条件接受（G-EX-1 关闭前宿主并发保留 NOT_RUN），建议不代替批准决定。
+<span style="color:#6e7681">**示例（虚构）**：证据＝引用各设计文档 reports/<run-id>/ 的 Run 记录汇总，不复制 stdout 进计划；Gate 建议＝条件接受（G-EX-1 关闭前宿主并发保留 NOT_RUN），建议不代替批准决定。</span>
 
 | 未决项 / 关联 | Owner / 最晚 Gate | 关闭所需事实或决定 |
 |---|---|---|

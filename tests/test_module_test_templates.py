@@ -20,14 +20,14 @@ class ModuleTestTemplateRegistrationTests(unittest.TestCase):
     def test_module_test_design_registered(self):
         self.assertEqual(self.catalog["templates"].get("tests.module-test-design"),
                          "tests/module-test-design.md")
-        self.assertEqual(self.catalog["template_versions"].get("tests.module-test-design"), "0.4.0")
+        self.assertEqual(self.catalog["template_versions"].get("tests.module-test-design"), "0.5.0")
         self.assertEqual(self.policy["default_paths"]["tests.module-test-design"],
                          "docs/70_verification/specifications")
 
     def test_module_test_plan_registered(self):
         self.assertEqual(self.catalog["templates"].get("tests.module-test-plan"),
                          "tests/module-test-plan.md")
-        self.assertEqual(self.catalog["template_versions"].get("tests.module-test-plan"), "0.4.0")
+        self.assertEqual(self.catalog["template_versions"].get("tests.module-test-plan"), "0.5.0")
         self.assertEqual(self.policy["default_paths"]["tests.module-test-plan"],
                          "docs/70_verification/plans")
 
@@ -101,3 +101,41 @@ class ModuleTestPlanTemplateTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TemplateLegendTests(unittest.TestCase):
+    def test_format_legend_present(self):
+        for name in ("unit-test-design.md", "module-test-design.md", "module-test-plan.md"):
+            text = (ROOT / "templates/tests" / name).read_text()
+            self.assertIn("**格式说明**", text)
+            self.assertIn("蓝色斜体为编写建议", text)
+            self.assertIn("灰色文字为虚构教学示例", text)
+
+
+class HeadingGuidanceAndExampleColorTests(unittest.TestCase):
+    FILES = ("unit-test-design.md", "module-test-design.md", "module-test-plan.md")
+
+    def test_every_heading_has_blue_guidance_and_examples_are_gray(self):
+        import re as _re
+        for name in self.FILES:
+            text = (ROOT / "templates/tests" / name).read_text()
+            kept = _re.sub(r"<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->.*?<!-- STD_TEMPLATE_EXAMPLE_END -->",
+                           "", text, flags=_re.S)
+            lines = kept.splitlines()
+            # document level: first non-empty line after the cover is blue guidance
+            idx = next(i for i, l in enumerate(lines) if l.strip() == "<!-- STD_DOCUMENT_COVER_END -->")
+            follow = next(l for l in lines[idx + 1:] if l.strip())
+            self.assertTrue(follow.startswith('<span style="color:#1f6feb"><em>'), name)
+            # every H2/H3 heading is followed by blue guidance
+            for i, line in enumerate(lines):
+                if line.startswith(("## ", "### ")):
+                    nxt = next(l for l in lines[i + 1:] if l.strip())
+                    self.assertTrue(nxt.startswith('<span style="color:#1f6feb"><em>'),
+                                    f"{name}: {line}")
+            # every example block opens with a gray line
+            for block in _re.findall(
+                    r"<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->\n(.*?)<!-- STD_TEMPLATE_EXAMPLE_END -->",
+                    text, flags=_re.S):
+                first = next(l for l in block.splitlines()
+                             if l.strip() and not l.startswith("###"))
+                self.assertTrue(first.startswith('<span style="color:#6e7681">'), name)

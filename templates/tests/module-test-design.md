@@ -27,11 +27,15 @@
 > 外部不可变证据；不要在文档内容中伪造包含自身的 commit hash。
 <!-- STD_DOCUMENT_COVER_END -->
 
+<span style="color:#1f6feb"><em>**编写建议**：本模板设计整模块组装后的测试。内部单元全部真实参与，模块测试代码默认与单元测试同住 tests/unit/<module>/（MT- 前缀区分）或共置等价路径；Run 报告保存在 reports/<run-id>/。不要把实际运行结果、批准或系统验收结论填进本设计。</em></span>
+
+> **格式说明**：蓝色斜体为编写建议（指导如何填写，生成实例后保留）；灰色文字为虚构教学示例（以 `STD_TEMPLATE_EXAMPLE` 标记包裹，`new-design` 生成实例时自动剥离，不得当作项目事实或运行证据）；`<!-- TODO -->` 为待填槽位。颜色在 GitHub 等严格渲染器中降级为斜体/普通字，语义不变。
+
 > 本设计绑定单一软件模块：模块对象 ID 经 `--design-object-id` 写入 metadata；模块设计 ID/版本与源码修订在 §1 固定，测试代码与 Run 报告路径按 §3、§6、§7 登记。
 
 ### 模板定位：单元、模块与相邻测试层的边界
 
-<!-- 编写建议（定位结论）：本模板的被测对象是"整模块组装后的模块"：内部单元（文件/组件/线程）全部真实参与，沿模块设计的对外接口（§9）、内部流程（§6/§7）、规则（§8）与状态转换（§10）验证可观察行为。它与单元层的分工：单元隔离行为的 Case 权威在 tests.unit-test-design，不在本文件重复；模块级 Case 也不写入单元设计。它与契约/集成层的分工：真实依赖两端的互操作由契约与集成测试承担，本设计的边界替身不证明真实依赖协议；多模块与系统组合由 integration/system 关闭。与模块设计的关系：覆盖分母消费 design.definition §14.1/§14.2 的来源 ID 与 VRC，规则、接口语义以模块设计为唯一权威，Expected 冲突回溯模块设计修订，不在测试侧私改。若项目已用通用 assurance.test-specification 承载模块级 Case，其该职能由本设计取代，只引用登记，不得双写。模块没有多单元组装事实（单文件纯函数库）时，模块级设计可与单元设计合并并在 tailoring 记录，不保留空文档。本模板不含：性能/容量/时序章（按通用规格 §6 裁剪）、执行规程与运行报告。 -->
+<span style="color:#1f6feb"><em>**编写建议**：本模板的被测对象是"整模块组装后的模块"：内部单元全部真实参与，沿模块设计的对外接口（§9）、内部流程（§6/§7）、规则（§8）与状态转换（§10）验证可观察行为。与单元层的分工：单元隔离 Case 权威在 tests.unit-test-design；与契约/集成层的分工：真实依赖两端互操作由契约与集成测试承担，边界替身不证明真实依赖协议；与模块设计的关系：分母消费 §14.1/§14.2 来源 ID 与 VRC，语义以模块设计为唯一权威，Expected 冲突回溯模块设计。已用通用 test-specification 承载模块级 Case 的项目由本设计取代该职能，不得双写；无多单元组装事实时与单元设计合并并 tailoring 记录。本模板不含性能章（按通用规格 §6 裁剪）、执行规程与运行报告。</em></span>
 
 - **权威分工**：整模块组装后的对外接口与内部流程 Case 以本设计为唯一权威；单元隔离归 `tests.unit-test-design`，真实依赖互操作归契约层，系统组合归 integration/system。
 - **测试代码位置**：默认与单元测试同住 `tests/unit/<module>/`（同一模块 Owner 命名空间，Case 前缀 `MT-` 与单元 `UT-` 区分），或项目登记的共置等价路径；如 tailoring 分离为独立目录，须记录到模块的映射，不复制同一测试。
@@ -39,7 +43,7 @@
 
 ### 状态语义：四种状态分开
 
-<!-- 编写建议：§2 的覆盖记录、§4 的 Case、§6 的判定和 §7 的证据必须能区分下列四种状态；混用任何两种都视为模板违例。与 tests.unit-test-design 使用同一状态语义。 -->
+<span style="color:#1f6feb"><em>**编写建议**：§2 的覆盖记录、§4 的 Case、§6 的判定和 §7 的证据必须能区分下列四种状态；混用任何两种都视为模板违例。与 tests.unit-test-design 使用同一状态语义。</em></span>
 
 | 状态种类 | 取值 | 唯一权威记录处 | 禁止 |
 |---|---|---|---|
@@ -48,7 +52,7 @@
 | 执行状态 | `NOT_RUN` / `BLOCKED` / `INVALID` | §6、§7 引用的 Run 报告 | 未运行、被阻断或无效的执行计为通过 |
 | 实际判定 Verdict | `PASS` / `FAIL` | 仅 Run 报告 | 本设计文档预填 Actual 或 Verdict |
 
-<!-- 完成条件：任一 Case 能同时报出四种状态且互不矛盾，如 Designed + Implemented + NOT_RUN（无 Verdict）。 -->
+<span style="color:#1f6feb"><em>**完成条件**：任一 Case 能同时报出四种状态且互不矛盾，如 Designed + Implemented + NOT_RUN（无 Verdict）。</em></span>
 
 ## 1. 被测模块与测试边界
 
@@ -66,7 +70,7 @@
 - 不证明的组合保证及承接测试入口：<!-- TODO -->
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-**示例（虚构）**：被测对象是 EX-MODULE/v1 的 M101 DirectorySelector，构建目标为教学单二进制 harness。内部 I1（唯一性校验）、I2（筛选）、I3（排序）全部真实参与——模块层才能证明“完整校验先于筛选”，只测 I2 的单元测试会漏掉非匹配类别中的重复 ID。边界外无依赖（内存运算），不引入替身。不证明：宿主并发准入与输入快照建立（父设计责任）、真实存储行为（本例无 I/O）；承接入口为宿主组合验证（缺口 G-EX-1）。
+<span style="color:#6e7681">**示例（虚构）**：被测对象是 EX-MODULE/v1 的 M101 DirectorySelector，构建目标为教学单二进制 harness。内部 I1（唯一性校验）、I2（筛选）、I3（排序）全部真实参与——模块层才能证明“完整校验先于筛选”，只测 I2 的单元测试会漏掉非匹配类别中的重复 ID。边界外无依赖（内存运算），不引入替身。不证明：宿主并发准入与输入快照建立（父设计责任）、真实存储行为（本例无 I/O）；承接入口为宿主组合验证（缺口 G-EX-1）。</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 
@@ -86,7 +90,7 @@
 | <!-- TODO --> | <!-- TODO --> | <!-- TODO --> | <!-- TODO --> | <!-- TODO --> |
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-**示例（虚构；一来源一条记录）**：
+<span style="color:#6e7681">**示例（虚构；一来源一条记录）**：</span>
 
 | 来源 ID / 固定版本 | 要验证的可观察保证 | Case ID / 缺口 | Case 设计状态 | 上级组合验证入口 |
 |---|---|---|---|---|
@@ -113,11 +117,11 @@
 - Setup、复位确认、并行隔离和 Cleanup：<!-- TODO -->
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-**示例（虚构）**：
-- Runner、版本、模块构建与运行命令：教学 C++ 宿主直接链接 M101 目标；无 seed、无受控时钟
-- Fixture / seed / 向量来源及版本：冻结构造记录数组（含重复 ID、边界 4096/4097 条）
-- 边界替身、受控时钟/调度与未覆盖行为：本例无替身；若未来接外部存储，fake 只代返回值，真实存储原子性不在模块层证明
-- Setup、复位确认、并行隔离和 Cleanup：每 Case 新建输入数组天然复位；无并行共享
+<span style="color:#6e7681">**示例（虚构）**：</span>
+<span style="color:#6e7681">- Runner、版本、模块构建与运行命令：教学 C++ 宿主直接链接 M101 目标；无 seed、无受控时钟</span>
+<span style="color:#6e7681">- Fixture / seed / 向量来源及版本：冻结构造记录数组（含重复 ID、边界 4096/4097 条）</span>
+<span style="color:#6e7681">- 边界替身、受控时钟/调度与未覆盖行为：本例无替身；若未来接外部存储，fake 只代返回值，真实存储原子性不在模块层证明</span>
+<span style="color:#6e7681">- Setup、复位确认、并行隔离和 Cleanup：每 Case 新建输入数组天然复位；无并行共享</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 
@@ -133,6 +137,8 @@
 <span style="color:#1f6feb"><em>**完成条件**：每个 Case 可按输入、调用、独立 Expected 和失败出口实施，不需要编码者猜测测试意图。</em></span>
 
 ### 4.N `MT-<MODULE>-<NNN>` · <对外接口或内部流程与条件>
+
+<span style="color:#1f6feb"><em>**编写建议**：一个 Case 一个小节，标题为 `MT-<MODULE>-<NNN>` 加对外接口或内部流程与条件；按下列槽位逐项填写，状态型初态必须经公开入口构造，状态按封面后的状态语义分列。</em></span>
 
 - **来源 ID / 被测行为 / 适用基线**
 
@@ -161,29 +167,29 @@
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 ### 4.1 `MT-EXM-002` · 校验先于筛选（虚构示例）
 
-- **来源 ID / 被测行为 / 适用基线**
+<span style="color:#6e7681">- **来源 ID / 被测行为 / 适用基线**</span>
 
-  模块设计 §7 流程 / EX-MODULE v1：完整校验必须先于筛选，非匹配类别中的重复 ID 也要检出。
+<span style="color:#6e7681">  模块设计 §7 流程 / EX-MODULE v1：完整校验必须先于筛选，非匹配类别中的重复 ID 也要检出。</span>
 
-- **被测接口声明与输入构造**
+<span style="color:#6e7681">- **被测接口声明与输入构造**</span>
 
   ```text
-  select_ids(records: span<const Record>, category: Category) -> vector<Id> | InvalidInput
+<span style="color:#6e7681">  select_ids(records: span<const Record>, category: Category) -> vector<Id> | InvalidInput</span>
   ```
 
-  `records`：两条同 ID 记录，类别均不匹配目标 `category`（冻结向量）。
+<span style="color:#6e7681">  `records`：两条同 ID 记录，类别均不匹配目标 `category`（冻结向量）。</span>
 
-- **执行、观察点与独立 Oracle**
+<span style="color:#6e7681">- **执行、观察点与独立 Oracle**</span>
 
-  单次调用；观察返回变体与输入字节。Expected=InvalidInput、整批拒绝、输入逐字节不变——按校验规则人工判定，不调用 select_ids 复算。
+<span style="color:#6e7681">  单次调用；观察返回变体与输入字节。Expected=InvalidInput、整批拒绝、输入逐字节不变——按校验规则人工判定，不调用 select_ids 复算。</span>
 
-- **成功、错误、副作用与清理判据**
+<span style="color:#6e7681">- **成功、错误、副作用与清理判据**</span>
 
-  仅 InvalidInput 分支；无部分结果；无需清理。对照 Case：合法且无重复输入返回确定顺序 IDs（MT-EXM-001）。
+<span style="color:#6e7681">  仅 InvalidInput 分支；无部分结果；无需清理。对照 Case：合法且无重复输入返回确定顺序 IDs（MT-EXM-001）。</span>
 
-- **实现位置、自动化入口与状态**
+<span style="color:#6e7681">- **实现位置、自动化入口与状态**</span>
 
-  教学 harness 的 invalid 输入段；Implemented / NOT_RUN。
+<span style="color:#6e7681">  教学 harness 的 invalid 输入段；Implemented / NOT_RUN。</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 
@@ -211,14 +217,14 @@
 | <!-- TODO；不适用则写事实与 tailoring 依据 --> | | | |
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-**示例（虚构；无状态模块的事实表写法）**：
+<span style="color:#6e7681">**示例（虚构；无状态模块的事实表写法）**：</span>
 
 | 模块事实（引用设计章节） | 第 5 章最低要求 |
 |---|---|
 | EX-MODULE §10：同步只读、无跨调用状态、无 I/O/线程/取消 | Tailored-N/A，事实如左；不设计恢复协议 |
 | EX-CON-1：输入不可变 | 并发只读交错按 §4 覆盖（两线程同输入只读），不构成恢复协议要求 |
 
-**示例（虚构；有状态异步导出模块的 Transition 行）**：
+<span style="color:#6e7681">**示例（虚构；有状态异步导出模块的 Transition 行）**：</span>
 
 | Transition / Invariant ID | 前置事实及可控交错或注入 | Case ID | 独立观测与退出条件 |
 |---|---|---|---|
@@ -244,10 +250,10 @@
 - 覆盖率/变异或反例检查（适用时）：<!-- TODO -->
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-**示例（虚构）**：
-- 完整执行命令（含组装）、单 Case 命令与运行位置：`c++ … module_harness.cc` 全量执行；正式 runner 用过滤参数选单 Case（教学宿主缺失该能力，已暴露为必要项）
-- 期限、退出码、重跑规则与判定：边界注入计数=0 记 INVALID 而非 PASS；组装失败或环境缺失记 BLOCKED；重跑新 run-id 不覆盖原失败
-- 覆盖率/变异或反例检查：不适用（教学例）
+<span style="color:#6e7681">**示例（虚构）**：</span>
+<span style="color:#6e7681">- 完整执行命令（含组装）、单 Case 命令与运行位置：`c++ … module_harness.cc` 全量执行；正式 runner 用过滤参数选单 Case（教学宿主缺失该能力，已暴露为必要项）</span>
+<span style="color:#6e7681">- 期限、退出码、重跑规则与判定：边界注入计数=0 记 INVALID 而非 PASS；组装失败或环境缺失记 BLOCKED；重跑新 run-id 不覆盖原失败</span>
+<span style="color:#6e7681">- 覆盖率/变异或反例检查：不适用（教学例）</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 
@@ -267,7 +273,7 @@
 | <!-- TODO；无缺口时写经核对的"无" --> | | | |
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-**示例（虚构）**：Run 报告位于 `tests/unit/directory_selector/reports/<run-id>/`（教学例共置），保存组装命令、编译器版本、源 hash、stdout 与退出码。
+<span style="color:#6e7681">**示例（虚构）**：Run 报告位于 `tests/unit/directory_selector/reports/<run-id>/`（教学例共置），保存组装命令、编译器版本、源 hash、stdout 与退出码。</span>
 
 | 缺口 ID / 关联来源 | 阻断的 Case 或保证 | Owner / 最晚 Gate | 关闭所需事实或决定 |
 |---|---|---|---|

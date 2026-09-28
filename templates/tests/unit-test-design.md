@@ -27,11 +27,15 @@
 > 外部不可变证据；不要在文档内容中伪造包含自身的 commit hash。
 <!-- STD_DOCUMENT_COVER_END -->
 
+<span style="color:#1f6feb"><em>**编写建议**：本模板只设计一个软件模块的隔离单元测试。测试代码默认位于 tests/unit/<module>/ 或项目已登记的共置路径；`<module>` 是稳定代码目录名，不是 Module ID。Run 报告保存在该类测试自己的 reports/<run-id>/。不要把实际运行结果、批准或系统验收结论填进本设计。</em></span>
+
+> **格式说明**：蓝色斜体为编写建议（指导如何填写，生成实例后保留）；灰色文字为虚构教学示例（以 `STD_TEMPLATE_EXAMPLE` 标记包裹，`new-design` 生成实例时自动剥离，不得当作项目事实或运行证据）；`<!-- TODO -->` 为待填槽位。颜色在 GitHub 等严格渲染器中降级为斜体/普通字，语义不变。
+
 > 本设计绑定单一软件模块：模块对象 ID 经 `--design-object-id` 写入 metadata；模块设计 ID/版本、源码修订与 Test Owner 在 §1 与 §7 固定，测试代码与 Run 报告路径按 §3、§6、§7 登记。
 
 ### 模板定位：与 `assurance.test-specification` 的关系
 
-<!-- 编写建议（定位结论，比较依据见下）：本模板定位为独立模板，不是通用测试规格的 unit profile。理由：(1) 通用规格的 Case Matrix 是单张索引表，本模板要求逐 Case 成节并给完整函数声明、逐参数输入与独立 Oracle，深度以指导写测试代码为准，通用规格装不下；(2) 本模板的覆盖分母绑定模块设计（design.definition §14）的 Function/Constraint/Rule/Interface/Transition/Invariant 与关键错误出口 ID，并继承其正向覆盖"一个来源 ID 一条记录"的规则，这是模块设计侧特有的承接语义；(3) §3 的替身证明边界（mock 不得证明事务/原子性）、§5 的条件适用裁决是单元隔离层特有的判据。共同字段（范围、环境、判定、证据）按 STD 惯例各自维护编写建议，但权威分工如下，不形成两份同权威测试规格： -->
+<span style="color:#1f6feb"><em>**编写建议**：本模板定位为独立模板，不是通用测试规格的 unit profile。理由：(1) 通用规格的 Case Matrix 是单张索引表，本模板要求逐 Case 成节并给完整函数声明、逐参数输入与独立 Oracle，深度以指导写测试代码为准，通用规格装不下；(2) 覆盖分母绑定模块设计（design.definition §14）的来源 ID，继承"一个来源 ID 一条记录"规则；(3) §3 替身证明边界、§5 条件适用裁决是单元隔离层特有判据。权威分工如下，不形成两份同权威测试规格：</em></span>
 
 - **权威分工**：对单个软件模块的单元隔离测试设计，本文件是输入构造、独立 Oracle 与 Case 结构的唯一权威；整模块组装后的对外接口与内部流程 Case 权威在 `tests.module-test-design`，两者 Case 互不重复写入；`assurance.test-specification` 继续负责 contract、integration、system 等层级及跨层级 Case Matrix 汇总，其内容不因本模板而修改。
 - **与模块设计的关系**：覆盖分母消费 `design.definition` §14.1/§14.2 的来源 ID 与 VRC；规则、约束、接口语义仍以模块设计为唯一权威，本设计只固定其单元层验证实例，不复制规则定义。两者 Expected 不一致时回溯模块设计修订，不在测试侧私改。模块设计 §14.2 的 VRC 已足够且不写测试代码时，可不使用本模板。
@@ -41,7 +45,7 @@
 
 ### 状态语义：四种状态分开
 
-<!-- 编写建议：§2 的覆盖记录、§4 的 Case、§6 的判定和 §7 的证据必须能区分下列四种状态；混用任何两种都视为模板违例。 -->
+<span style="color:#1f6feb"><em>**编写建议**：§2 的覆盖记录、§4 的 Case、§6 的判定和 §7 的证据必须能区分下列四种状态；混用任何两种都视为模板违例。</em></span>
 
 | 状态种类 | 取值 | 唯一权威记录处 | 禁止 |
 |---|---|---|---|
@@ -50,9 +54,7 @@
 | 执行状态 | `NOT_RUN` / `BLOCKED` / `INVALID` | §6、§7 引用的 Run 报告 | 未运行、被阻断或无效的执行计为通过 |
 | 实际判定 Verdict | `PASS` / `FAIL` | 仅 Run 报告 | 本设计文档预填 Actual 或 Verdict |
 
-<!-- 完成条件：任一 Case 能同时报出四种状态且互不矛盾，如 Designed + Implemented + NOT_RUN（无 Verdict）。 -->
-
-<!-- 编写建议：本模板只设计一个软件模块的隔离测试。测试代码默认位于 tests/unit/<module>/ 或项目已登记的共置路径；<module> 是稳定代码目录名，不是 Module ID。Run 报告保存在该类测试自己的 reports/<run-id>/。不要把实际运行结果、批准或系统验收结论填进本设计。 -->
+<span style="color:#1f6feb"><em>**完成条件**：任一 Case 能同时报出四种状态且互不矛盾，如 Designed + Implemented + NOT_RUN（无 Verdict）。</em></span>
 
 ## 1. 被测模块与测试边界
 
@@ -70,7 +72,7 @@
 - 不证明的组合保证及承接测试入口：<!-- TODO -->
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-**示例（虚构）**：被测对象为教学基线 EX-FRAME-MODULE 1.0.0 的 M201 FrameDecoder，设计基线 EX-ISD/v1（教学修订 2，与 docs/examples/isd-frame-decoder/ 三文件同步）。被测 API 为 `DecodeResult decode_one(std::span<const std::uint8_t> input) noexcept`，实现在 `frame_decoder.cc`，构建目标为教学单二进制测试宿主。参与测试的全部是真实代码；模块无网络、持久化、时钟或线程依赖，因此不引入任何替身。不证明：宿主访问控制、日志与脱敏（FD-R4 归宿主）、产品协议兼容、调用方长寿命输入与真实峰值；承接入口为宿主组合验证（当前 NOT_RUN → G-EX-2）。
+<span style="color:#6e7681">**示例（虚构）**：被测对象为教学基线 EX-FRAME-MODULE 1.0.0 的 M201 FrameDecoder，设计基线 EX-ISD/v1（教学修订 2，与 docs/examples/isd-frame-decoder/ 三文件同步）。被测 API 为 `DecodeResult decode_one(std::span<const std::uint8_t> input) noexcept`，实现在 `frame_decoder.cc`，构建目标为教学单二进制测试宿主。参与测试的全部是真实代码；模块无网络、持久化、时钟或线程依赖，因此不引入任何替身。不证明：宿主访问控制、日志与脱敏（FD-R4 归宿主）、产品协议兼容、调用方长寿命输入与真实峰值；承接入口为宿主组合验证（当前 NOT_RUN → G-EX-2）。</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 
@@ -90,7 +92,7 @@
 | <!-- TODO --> | <!-- TODO --> | <!-- TODO --> | <!-- TODO --> | <!-- TODO --> |
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-**示例（虚构；一来源一条记录）**：
+<span style="color:#6e7681">**示例（虚构；一来源一条记录）**：</span>
 
 | 来源 ID / 固定版本 | 要验证的可观察保证 | Case ID / 缺口 | Case 设计状态 | 上级组合验证入口 |
 |---|---|---|---|---|
@@ -118,11 +120,11 @@
 - Setup、复位确认、并行隔离和 Cleanup：<!-- TODO -->
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-**示例（虚构）**：
-- Runner、版本、构建与运行命令：C++20 教学测试宿主（无测试框架），构建命令见样例 README；无随机 seed、无受控时钟
-- Fixture / seed / golden 数据来源及版本：冻结 hex 向量（如 `01 01 00 00 00 02 41 42`），无 golden 文件
-- 真实依赖、替身、受控时钟/调度与未覆盖行为：无替身（模块无外部依赖）；若被测模块依赖 SQLite 原子事务，则用独立临时 SQLite 而非数组 fake
-- Setup、复位确认、并行隔离和 Cleanup：每向量独立 span、天然复位；并发 Case 主线程 join 后才销毁输入；无编译器记 BLOCKED/skip 并保留记录
+<span style="color:#6e7681">**示例（虚构）**：</span>
+<span style="color:#6e7681">- Runner、版本、构建与运行命令：C++20 教学测试宿主（无测试框架），构建命令见样例 README；无随机 seed、无受控时钟</span>
+<span style="color:#6e7681">- Fixture / seed / golden 数据来源及版本：冻结 hex 向量（如 `01 01 00 00 00 02 41 42`），无 golden 文件</span>
+<span style="color:#6e7681">- 真实依赖、替身、受控时钟/调度与未覆盖行为：无替身（模块无外部依赖）；若被测模块依赖 SQLite 原子事务，则用独立临时 SQLite 而非数组 fake</span>
+<span style="color:#6e7681">- Setup、复位确认、并行隔离和 Cleanup：每向量独立 span、天然复位；并发 Case 主线程 join 后才销毁输入；无编译器记 BLOCKED/skip 并保留记录</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 
@@ -138,6 +140,8 @@
 <span style="color:#1f6feb"><em>**完成条件**：每个 Case 可按输入、调用、独立 Expected 和失败出口实施，不需要编码者猜测测试意图。</em></span>
 
 ### 4.N `UT-<MODULE>-<NNN>` · <可观察行为与输入条件>
+
+<span style="color:#1f6feb"><em>**编写建议**：一个 Case 一个小节，标题为 `UT-<MODULE>-<NNN>` 加可观察行为与条件；按下列槽位逐项填写，状态按封面后的状态语义分列，不复制第二份权威定义。</em></span>
 
 - **来源 ID / 被测行为 / 适用基线**
 
@@ -166,29 +170,29 @@
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 ### 4.1 `UT-DEC-003` · 非法头优先级（虚构示例）
 
-- **来源 ID / 被测行为 / 适用基线**
+<span style="color:#6e7681">- **来源 ID / 被测行为 / 适用基线**</span>
 
-  FD-R1 / EX-FRAME-MODULE 1.0.0：头校验顺序 version→kind→length，非法即拒、不等待载荷。
+<span style="color:#6e7681">  FD-R1 / EX-FRAME-MODULE 1.0.0：头校验顺序 version→kind→length，非法即拒、不等待载荷。</span>
 
-- **被测接口声明与输入构造**
+<span style="color:#6e7681">- **被测接口声明与输入构造**</span>
 
   ```text
-  DecodeResult decode_one(std::span<const std::uint8_t> input) noexcept
+<span style="color:#6e7681">  DecodeResult decode_one(std::span<const std::uint8_t> input) noexcept</span>
   ```
 
-  `input`：hex `02 02 ff ff ff ff`（version 与 kind 均非法，声明 length=0xffffffff），冻结向量。
+<span style="color:#6e7681">  `input`：hex `02 02 ff ff ff ff`（version 与 kind 均非法，声明 length=0xffffffff），冻结向量。</span>
 
-- **执行、观察点与独立 Oracle**
+<span style="color:#6e7681">- **执行、观察点与独立 Oracle**</span>
 
-  单次调用；观察返回变体、consumed 与输入字节。Expected=Invalid(Version)、consumed=0、无视图——由规则与人手计数推导，不调用 decode_one 复算。
+<span style="color:#6e7681">  单次调用；观察返回变体、consumed 与输入字节。Expected=Invalid(Version)、consumed=0、无视图——由规则与人手计数推导，不调用 decode_one 复算。</span>
 
-- **成功、错误、副作用与清理判据**
+<span style="color:#6e7681">- **成功、错误、副作用与清理判据**</span>
 
-  仅 Invalid 分支；输入逐字节不变；无堆分配、无 I/O；无需清理。把输入改成合法头即正常对照 Case UT-DEC-001。
+<span style="color:#6e7681">  仅 Invalid 分支；输入逐字节不变；无堆分配、无 I/O；无需清理。把输入改成合法头即正常对照 Case UT-DEC-001。</span>
 
-- **实现位置、自动化入口与状态**
+<span style="color:#6e7681">- **实现位置、自动化入口与状态**</span>
 
-  `frame_decoder_test.cc` 的 `invalid` helper；Implemented / NOT_RUN（Actual 归 Run 报告）。
+<span style="color:#6e7681">  `frame_decoder_test.cc` 的 `invalid` helper；Implemented / NOT_RUN（Actual 归 Run 报告）。</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 
@@ -216,14 +220,14 @@
 | <!-- TODO；不适用则写事实与 tailoring 依据 --> | | | |
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-**示例（虚构；无状态模块的事实表与不适用写法）**：
+<span style="color:#6e7681">**示例（虚构；无状态模块的事实表与不适用写法）**：</span>
 
 | 模块事实（引用设计章节） | 第 5 章最低要求 |
 |---|---|
 | EX-ISD §7 生命周期：仅栈变量、无队列/线程池/I/O/取消接口 | Tailored-N/A，事实依据如左；无恢复协议可设计，不虚构 |
 | FD-R2：并发调用不共享可变状态 | 并发只读交错已由 §4 的 UT-DEC-005 覆盖，不构成恢复协议要求 |
 
-**示例（虚构；有状态提交模块的 Transition 行）**：
+<span style="color:#6e7681">**示例（虚构；有状态提交模块的 Transition 行）**：</span>
 
 | Transition / Invariant ID | 前置事实及可控交错或注入 | Case ID | 独立观测与退出条件 |
 |---|---|---|---|
@@ -248,10 +252,10 @@
 - 覆盖率/变异或反例检查（适用时）：<!-- TODO -->
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-**示例（虚构）**：
-- 完整执行命令、单 Case 命令与运行位置：`c++ -std=c++20 … && ./frame_decoder_test`；教学宿主无单 Case 过滤，正式 runner 必须提供选择命令
-- 期限、退出码、重跑规则与判定：退出码 0 且向量输出 PASS 才算成功；并发 Case 串行执行从未交错记 INVALID 而非 PASS；重跑生成新 run-id 不覆盖原失败
-- 覆盖率/变异或反例检查：不适用（教学例无覆盖率工具）
+<span style="color:#6e7681">**示例（虚构）**：</span>
+<span style="color:#6e7681">- 完整执行命令、单 Case 命令与运行位置：`c++ -std=c++20 … && ./frame_decoder_test`；教学宿主无单 Case 过滤，正式 runner 必须提供选择命令</span>
+<span style="color:#6e7681">- 期限、退出码、重跑规则与判定：退出码 0 且向量输出 PASS 才算成功；并发 Case 串行执行从未交错记 INVALID 而非 PASS；重跑生成新 run-id 不覆盖原失败</span>
+<span style="color:#6e7681">- 覆盖率/变异或反例检查：不适用（教学例无覆盖率工具）</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 
@@ -271,7 +275,7 @@
 | <!-- TODO；无缺口时写经核对的“无” --> | | | |
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-**示例（虚构）**：Run 报告位于 `tests/unit/frame_decoder/reports/<run-id>/`（教学例共置），保存完整命令、编译器版本、源文件 hash、stdout 与退出码。
+<span style="color:#6e7681">**示例（虚构）**：Run 报告位于 `tests/unit/frame_decoder/reports/<run-id>/`（教学例共置），保存完整命令、编译器版本、源文件 hash、stdout 与退出码。</span>
 
 | 缺口 ID / 关联来源 | 阻断的 Case 或保证 | Owner / 最晚 Gate | 关闭所需事实或决定 |
 |---|---|---|---|
