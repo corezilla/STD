@@ -178,7 +178,8 @@ class AIAuthoringGuidesTests(unittest.TestCase):
 
 
     def test_companion_templates_have_guidance_for_every_main_chapter(self):
-        for tid in ("interfaces.control", "contracts.specification", "assurance.test-specification"):
+        for tid in ("interfaces.control", "contracts.specification", "assurance.test-specification",
+                    "tests.unit-test-design", "tests.module-test-design", "tests.module-test-plan"):
             content = (ROOT / "templates" / self.catalog["templates"][tid]).read_text()
             chapters = re.split(r"(?m)^## ", content)[1:]
             self.assertTrue(chapters)
