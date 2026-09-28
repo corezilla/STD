@@ -20,14 +20,14 @@ class ModuleTestTemplateRegistrationTests(unittest.TestCase):
     def test_module_test_design_registered(self):
         self.assertEqual(self.catalog["templates"].get("tests.module-test-design"),
                          "tests/module-test-design.md")
-        self.assertEqual(self.catalog["template_versions"].get("tests.module-test-design"), "0.3.0")
+        self.assertEqual(self.catalog["template_versions"].get("tests.module-test-design"), "0.4.0")
         self.assertEqual(self.policy["default_paths"]["tests.module-test-design"],
                          "docs/70_verification/specifications")
 
     def test_module_test_plan_registered(self):
         self.assertEqual(self.catalog["templates"].get("tests.module-test-plan"),
                          "tests/module-test-plan.md")
-        self.assertEqual(self.catalog["template_versions"].get("tests.module-test-plan"), "0.3.0")
+        self.assertEqual(self.catalog["template_versions"].get("tests.module-test-plan"), "0.4.0")
         self.assertEqual(self.policy["default_paths"]["tests.module-test-plan"],
                          "docs/70_verification/plans")
 
@@ -60,14 +60,13 @@ class ModuleTestDesignTemplateTests(unittest.TestCase):
         self.assertIn("`MT-<MODULE>-<NNN>`", self.text)
         self.assertIn("tests/unit/<module>/", self.text)
 
-    def test_teaching_appendix_inside_example_markers_without_dangling_refs(self):
-        begin = self.text.index("<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->")
-        end = self.text.rindex("<!-- STD_TEMPLATE_EXAMPLE_END -->")
-        appendix = self.text.index("## 附录 A.")
-        self.assertGreater(appendix, begin)
-        self.assertLess(appendix, end)
-        kept = self.text[:begin] + self.text[end:]
-        self.assertNotIn("见附录 A", kept.replace("完整试填样稿见 STD 仓库模板的附录 A.1", ""))
+    def test_examples_are_inline_strippable_and_guidance_visible(self):
+        begin = self.text.count("<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->")
+        end = self.text.count("<!-- STD_TEMPLATE_EXAMPLE_END -->")
+        self.assertGreater(begin, 0)
+        self.assertEqual(begin, end)
+        self.assertNotIn("附录 A", self.text)
+        self.assertNotIn("<details>", self.text)
 
 
 class ModuleTestPlanTemplateTests(unittest.TestCase):
@@ -86,14 +85,18 @@ class ModuleTestPlanTemplateTests(unittest.TestCase):
         self.assertIn("tests.module-test-design", self.text)
         self.assertIn("不复制", self.text)
 
-    def test_teaching_appendix_inside_example_markers(self):
-        begin = self.text.index("<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->")
-        end = self.text.rindex("<!-- STD_TEMPLATE_EXAMPLE_END -->")
-        appendix = self.text.index("## 附录 A.")
-        self.assertGreater(appendix, begin)
-        self.assertLess(appendix, end)
-        kept = self.text[:begin] + self.text[end:]
-        self.assertNotIn("见附录 A", kept)
+    def test_examples_are_inline_strippable_and_guidance_visible(self):
+        begin = self.text.count("<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->")
+        end = self.text.count("<!-- STD_TEMPLATE_EXAMPLE_END -->")
+        self.assertGreater(begin, 0)
+        self.assertEqual(begin, end)
+        self.assertNotIn("附录 A", self.text)
+        self.assertNotIn("<details>", self.text)
+        chapters = re.split(r"(?m)^(## \d+\..*)$", self.text)
+        for i in range(1, len(chapters), 2):
+            with self.subTest(chapter=chapters[i]):
+                self.assertIn("STD_TEMPLATE_EXAMPLE_BEGIN", chapters[i + 1])
+                self.assertIn('<span style="color:#1f6feb"><em>**本节目的**', chapters[i + 1])
 
 
 if __name__ == "__main__":

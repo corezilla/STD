@@ -1,6 +1,7 @@
 """Structural invariants specific to the unit test design template."""
 
 import json
+import re
 import unittest
 from pathlib import Path
 
@@ -18,7 +19,7 @@ class UnitTestDesignTemplateTests(unittest.TestCase):
     def test_registered_with_independent_version_and_default_path(self):
         self.assertEqual(self.catalog["templates"].get("tests.unit-test-design"),
                          "tests/unit-test-design.md")
-        self.assertEqual(self.catalog["template_versions"].get("tests.unit-test-design"), "0.4.0")
+        self.assertEqual(self.catalog["template_versions"].get("tests.unit-test-design"), "0.5.0")
         policy = json.loads((ROOT / "templates/path-policy.json").read_text())
         self.assertEqual(policy["default_paths"]["tests.unit-test-design"],
                          "docs/70_verification/specifications")
@@ -40,16 +41,18 @@ class UnitTestDesignTemplateTests(unittest.TestCase):
         block = self.text.split("## 2. 测试依据与正向覆盖", 1)[1].split("## 3.", 1)[0]
         self.assertIn("| 来源 ID / 固定版本 | 要验证的可观察保证 | Case ID / 缺口 | Case 设计状态 | 上级组合验证入口 |", block)
 
-    def test_teaching_appendix_is_fully_inside_example_markers(self):
-        begin = self.text.index("<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->")
-        end = self.text.rindex("<!-- STD_TEMPLATE_EXAMPLE_END -->")
-        appendix = self.text.index("## 附录 A.")
-        self.assertGreater(appendix, begin)
-        self.assertLess(appendix, end)
-        inner = self.text[begin:end]
-        self.assertEqual(inner.count("STD_TEMPLATE_EXAMPLE_BEGIN"), 1)
-        kept = (self.text[:begin] + self.text[end:]).replace("STD 仓库模板的附录 A", "X")
-        self.assertNotIn("见附录 A", kept)
+    def test_examples_are_inline_strippable_and_guidance_visible(self):
+        begin = self.text.count("<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->")
+        end = self.text.count("<!-- STD_TEMPLATE_EXAMPLE_END -->")
+        self.assertGreater(begin, 0)
+        self.assertEqual(begin, end)
+        self.assertNotIn("附录 A", self.text)
+        self.assertNotIn("<details>", self.text)
+        chapters = re.split(r"(?m)^(## \d+\..*)$", self.text)
+        for i in range(1, len(chapters), 2):
+            with self.subTest(chapter=chapters[i]):
+                self.assertIn("STD_TEMPLATE_EXAMPLE_BEGIN", chapters[i + 1])
+                self.assertIn('<span style="color:#1f6feb"><em>**本节目的**', chapters[i + 1])
 
 
 if __name__ == "__main__":
