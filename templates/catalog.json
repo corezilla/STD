@@ -1,5 +1,5 @@
 {
-  "catalog_version": "0.1.0-draft.44",
+  "catalog_version": "0.1.0-draft.45",
   "templates": {
     "management.project-plan": "management/project-plan.md",
     "management.tailoring": "management/tailoring-manifest.md",
@@ -90,7 +90,7 @@
     "assurance.acceptance-plan": "0.2.0",
     "assurance.acceptance-report": "0.2.0",
     "assurance.fpga-implementation-report": "0.2.0",
-    "tests.unit-test-design": "0.1.0",
+    "tests.unit-test-design": "0.1.1",
     "review.packet": "0.2.0",
     "review.schematic-pcb": "0.2.0",
     "decisions.adr": "0.2.0",
