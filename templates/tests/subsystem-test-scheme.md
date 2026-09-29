@@ -82,7 +82,7 @@
 ## 3. 覆盖分母与 Case 清单
 
 <span style="color:#1f6feb"><em>**本节目的**：把 design.subsystem 的适用来源 ID 转成 Case 清单——测试分母的唯一登记。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：一个来源 ID 至少一条记录（可多 Case 分担，分别写责任摘要）；以设计文档（design §12/§14）的验证项 VRC 清单为分母逐项对账：每个 VRC 至少一个 Case——验证项是设计声明的必测点，本清单只引用其 ID 不复制定义、不做附录；Case ID 稳定且唯一（ST-<对象>-<NNN>）；责任摘要只写“要测什么、边界在哪”，不写输入与 Oracle；设计状态按状态语义；未实现与 NOT_RUN 不删；不适用转 §4。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：一个来源 ID 至少一条记录（可多 Case 分担，分别写责任摘要）；以设计文档（design §12/§14）的验证项 VRC 清单为分母逐项对账：每个 VRC 至少一个 Case——验证项是设计声明的必测点，本清单只引用其 ID 不复制定义、不做附录；Case ID 稳定且唯一（IT-<对象>-<NNN>）；责任摘要只写“要测什么、边界在哪”，不写输入与 Oracle；设计状态按状态语义；未实现与 NOT_RUN 不删；不适用转 §4。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：见下表灰字。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：每个适用来源 ID 有 Case 或缺口；每个 Case ID 可追到（或计划有）case-design 文档。</em></span>
 
@@ -94,9 +94,9 @@
 <span style="color:#6e7681">**示例（虚构；一来源至少一条）**：</span>
 <span style="color:#6e7681">| 来源 ID / 固定版本 | 设计验证项 ID | Case ID | 分类 | 优先级 | 责任摘要（要测什么） | 设计状态 | 上级组合验证入口 |</span>
 <span style="color:#6e7681">|---|---|---|---|---|---|---|</span>
-<span style="color:#6e7681">| EX-CON-1 / EX-S01 v1 | VRC-S01-001 | ST-S01-001 | concurrency | P0 | 并发准入下输入不可变、整批返回 | Designed | 系统并发预算（系统层，NOT_RUN） |</span>
-<span style="color:#6e7681">| 跨模块流程：准入→M101→聚合 | VRC-S01-002 | ST-S01-002 | normal | P1 | 排队请求不丢、结果不串 | Designed | — |</span>
-<span style="color:#6e7681">| 机制承接：EX-OBS 快照采样 | VRC-S01-003 | ST-S01-003 | recovery | P2 | 采样不阻塞业务请求 | Designed | 机制端到端归系统层 |</span>
+<span style="color:#6e7681">| EX-CON-1 / EX-S01 v1 | VRC-S01-001 | IT-S01-001 | concurrency | P0 | 并发准入下输入不可变、整批返回 | Designed | 系统并发预算（系统层，NOT_RUN） |</span>
+<span style="color:#6e7681">| 跨模块流程：准入→M101→聚合 | VRC-S01-002 | IT-S01-002 | normal | P1 | 排队请求不丢、结果不串 | Designed | — |</span>
+<span style="color:#6e7681">| 机制承接：EX-OBS 快照采样 | VRC-S01-003 | IT-S01-003 | recovery | P2 | 采样不阻塞业务请求 | Designed | 机制端到端归系统层 |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 4. 不适用与缺口裁决
@@ -125,7 +125,7 @@
 - 与 case-design / 计划的同步规则：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">Case 文档 ID＝Case ID；tests.subsystem-test-plan 引用本方案版本</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-<span style="color:#6e7681">新增 ST-S01-005 先入清单再建 Case 文档；子系统计划引用本方案 v1.0。</span>
+<span style="color:#6e7681">新增 IT-S01-005 先入清单再建 Case 文档；子系统计划引用本方案 v1.0。</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 <!-- 交付自查：每个适用来源 ID 是否都有 Case 或具名缺口；清单里的每个 Case ID 是否都有（或计划有）对应 case-design 文档；方案里是否混入了输入构造或 Oracle 细节？ -->
@@ -146,7 +146,7 @@
 
 <span style="color:#6e7681">| 设计验证项 ID | 要验证什么 | 设计来源 | §3 Case 覆盖 |</span>
 <span style="color:#6e7681">|---|---|---|---|</span>
-<span style="color:#6e7681">| VRC-S01-001 | 并发准入下输入不可变 | 子系统设计 §12 | ST-S01-001 |</span>
-<span style="color:#6e7681">| VRC-S01-002 | 跨模块流程不丢不串 | 同 §12 | ST-S01-002 |</span>
-<span style="color:#6e7681">| VRC-S01-003 | 机制承接采样不阻塞 | 同 §12 | ST-S01-003 |</span>
+<span style="color:#6e7681">| VRC-S01-001 | 并发准入下输入不可变 | 子系统设计 §12 | IT-S01-001 |</span>
+<span style="color:#6e7681">| VRC-S01-002 | 跨模块流程不丢不串 | 同 §12 | IT-S01-002 |</span>
+<span style="color:#6e7681">| VRC-S01-003 | 机制承接采样不阻塞 | 同 §12 | IT-S01-003 |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->

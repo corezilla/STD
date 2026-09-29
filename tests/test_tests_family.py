@@ -38,7 +38,7 @@ class RegistrationTests(unittest.TestCase):
         v = self.catalog["template_versions"]
         self.assertEqual(v["tests.unit-case"], "2.3.1")
         self.assertEqual(v["tests.module-test-plan"], "0.10.0")
-        self.assertEqual(v["tests.asset-design"], "0.2.0")
+        self.assertEqual(v["tests.asset-design"], "0.2.1")
         self.assertEqual(v["tests.unit-test-report"], "0.3.1")
 
 

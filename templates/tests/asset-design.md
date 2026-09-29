@@ -70,7 +70,7 @@
 
 <span style="color:#6e7681">| 消费方 | 类型 | 依赖点 |</span>
 <span style="color:#6e7681">|---|---|---|</span>
-<span style="color:#6e7681">| STS-S01 v1.0 | 方案 | ST-S01-002/004 的交错构造 |</span>
+<span style="color:#6e7681">| STS-S01 v1.0 | 方案 | IT-S01-002/004 的交错构造 |</span>
 <span style="color:#6e7681">| STP-S01 v1.0 | 计划 | §4 Step 0 资产就位 |</span>
 <span style="color:#6e7681">| tests.subsystem-test-report v1.0（间接） | 报告 | BLOCKED 判定引用自检状态 |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
@@ -141,7 +141,7 @@
 <span style="color:#1f6feb"><em>**完成条件**：状态双层可核验；变更影响有消费方逐一评估记录。</em></span>
 
 - 开发状态 / 验证状态（自检 Run 引用）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">Implemented / Verified（clk-run-20260929-01，3/3 PASS）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
-- 最近契约变更与消费方影响：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">v1.1 计数器改为 per-Case 实例；ST-S01-002/004 已复评，计划无影响</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 最近契约变更与消费方影响：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">v1.1 计数器改为 per-Case 实例；IT-S01-002/004 已复评，计划无影响</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 7. 未决项
 

@@ -58,7 +58,7 @@
 
 <span style="color:#1f6feb"><em>**本节目的**：固定子系统层测试活动的范围与构成清单。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：验证对象与不证明什么；构成＝子系统方案×1＋Case 文档×N＋模块计划引用＋系统交接。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 S01：方案 STS-S01 v1.0 ＋ Case 文档 ST-S01-001…004 ＋ 模块计划 MTP-EXM。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 S01：方案 STS-S01 v1.0 ＋ Case 文档 IT-S01-001…004 ＋ 模块计划 MTP-EXM。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：读者（含 Agent）能说清验证对象、构成清单和排除项；每个构成项指向方案、Case 文档或具名缺口。</em></span>
 
 | 构成层 | 文档 / 入口（Document ID 或缺口） | 覆盖责任摘要 | 条目状态 |
@@ -73,7 +73,7 @@
 <span style="color:#6e7681">| 构成层 | 文档 / 入口 | 覆盖责任摘要 | 条目状态 |</span>
 <span style="color:#6e7681">|---|---|---|---|</span>
 <span style="color:#6e7681">| 子系统方案 ×1 | STS-S01 v1.0 | 清单与设计状态唯一登记 | Planned |</span>
-<span style="color:#6e7681">| Case 文档 ×4 | ST-S01-001…004 | 并发准入、跨模块流程、机制承接 | Planned |</span>
+<span style="color:#6e7681">| Case 文档 ×4 | IT-S01-001…004 | 并发准入、跨模块流程、机制承接 | Planned |</span>
 <span style="color:#6e7681">| 模块计划引用 | MTP-EXM | 模块层组织 | Planned |</span>
 <span style="color:#6e7681">| 系统交接 | TSS-APP 清单 | 系统并发预算 | Blocked（G-EX-2） |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
@@ -92,7 +92,7 @@
 
 <span style="color:#1f6feb"><em>**本节目的**：开始执行前逐项 Go/No-Go，全部通过才进入 §4。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：方案就绪度（清单无未登记缺口且版本固定）；Case 实现状态盘点（未 Implemented 的 Case 明确处理）；环境与工具（构建可用、依赖齐、权限具备）；构建接线（干净全量交付构建通过、消费者链接实际交付库、导出/注册项同步）。任一不满足记 Blocked 并登记缺口，不静默降级执行。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 ST-S01：受控时钟可用、注册 fake 就位、Case 齐。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 IT-S01：受控时钟可用、注册 fake 就位、Case 齐。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：每一前检项有可判定事实；No-Go 有出口（Blocked＋缺口）。</em></span>
 
 | 前检项 | 判定事实 | 通过条件 | 不满足时 |
@@ -107,7 +107,7 @@
 <span style="color:#6e7681">| 前检项 | 判定事实 | 通过条件 | 不满足时 |</span>
 <span style="color:#6e7681">|---|---|---|---|</span>
 <span style="color:#6e7681">| 方案就绪度 | STS-S01 v1.0 分母闭合 | 清单无未登记缺口 | Blocked＋缺口 |</span>
-<span style="color:#6e7681">| Case 实现状态 | ST-S01-001…004 均 Implemented | 全部 Implemented 或登记跳过 | NOT_RUN＋登记 |</span>
+<span style="color:#6e7681">| Case 实现状态 | IT-S01-001…004 均 Implemented | 全部 Implemented 或登记跳过 | NOT_RUN＋登记 |</span>
 <span style="color:#6e7681">| 环境与工具 | 受控时钟与注册 fake 就位 | harness 可运行 | 环境性 Blocked |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
@@ -115,7 +115,7 @@
 
 <span style="color:#1f6feb"><em>**本节目的**：给执行者（含 Agent）一条从头到尾的作业序列。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：按方案清单优先级逐 Case：定位 Case 文档→按其 §2–§7 前检与运行→判定分路（PASS/FAIL/BLOCKED/INVALID 各有明确出口与下一步）→记录 Run→继续；失败不阻断后续 Case，除非环境性阻塞；全部完成后按 §7 生成报告；阶段门——最小真实链→规模控制面→完整业务→恢复/全量回归，不等所有模块写完才集成；Step 0 资产就位——按消费索引构建全部依赖测试资产（tests.asset-design）并运行其自检，自检不过即环境性 Blocked，不进入 Case 执行。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 ST-S01：P0 并发准入先行；排队类失败不阻断机制承接组。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 IT-S01：P0 并发准入先行；排队类失败不阻断机制承接组。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：执行者不需要临场发明流程；每个分路有确定下一步。</em></span>
 
 | Step | 动作 | 输入 / 依据 | 产出 |
@@ -154,7 +154,7 @@
 
 <span style="color:#1f6feb"><em>**本节目的**：环境操作可复现。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：搭建、每 Case 复位、并行隔离键、清理的具体命令或入口；环境不可重建即 Blocked；单环境串行时写清 case 前检查、软复位/重启/驱动恢复阶梯与时限，失败后确认回到基线，不能只 kill 后继续。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 ST-S01：harness 每轮重建子系统实例。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 IT-S01：harness 每轮重建子系统实例。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：另一位执行者能独立搭建、复位与清理。</em></span>
 
 - 环境搭建与复位操作：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">子系统 harness 构建一次；每轮重建实例</span><!-- STD_TEMPLATE_EXAMPLE_END -->
@@ -165,7 +165,7 @@
 
 <span style="color:#1f6feb"><em>**本节目的**：Run 证据规则固定。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：Run ID 命名（对象-时间或序号）、每次 Run 保存的命令/版本/stdout/退出码/种子、保存位置与保留期、脱敏要求；重跑生成新 Run 不覆盖。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 ST-S01：run-<日期>-<序号>。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 IT-S01：run-<日期>-<序号>。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：从报告任一 Verdict 能定位唯一 Run 与原始证据。</em></span>
 
 - Run ID 规则与证据位置：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">run-YYYYMMDD-NN；tests/subsystem/s01/reports/<run-id>/</span><!-- STD_TEMPLATE_EXAMPLE_END -->
@@ -175,7 +175,7 @@
 
 <span style="color:#1f6feb"><em>**本节目的**：定义报告产出与 Gate 规则。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：全部 Case 走完后（或按出口准则提前结束）生成 `tests.subsystem-test-report` 实例；Gate 建议规则（覆盖闭合或缺口有主、失败分级）在此固定，报告只按规则给建议不越权批准。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 ST-S01：全部走完后生成报告；Gate＝分母闭合且 G-EX-2 有主。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 IT-S01：全部走完后生成报告；Gate＝分母闭合且 G-EX-2 有主。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：报告的生成时机、模板与 Gate 规则确定。</em></span>
 
 - 报告生成时机与模板：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">全部 Case 走完或出口触发时生成 tests.subsystem-test-report</span><!-- STD_TEMPLATE_EXAMPLE_END -->

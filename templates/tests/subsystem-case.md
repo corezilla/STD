@@ -37,7 +37,7 @@
 
 <span style="color:#1f6feb"><em>**编写建议**：子系统层 Case（整子系统组装，内部模块真实、对其他子系统/外部服务边界替身）；方案清单行持有设计状态，本文档持有实现状态。</em></span>
 
-- **一 Case 一文档**：本文档只展开一个 Case；Document ID＝Case ID（ST-<对象>-<NNN>）；责任摘要、分类与优先级以 `tests.subsystem-test-scheme` 清单行为准，不在本文档重复维护。
+- **一 Case 一文档**：本文档只展开一个 Case；Document ID＝Case ID（IT-<对象>-<NNN>）；责任摘要、分类与优先级以 `tests.subsystem-test-scheme` 清单行为准，不在本文档重复维护。
 - **测试脚本的唯一依据**：编码者按本文档写测试代码，不需要回读方案或设计正文猜测意图。
 - **不预填结果**：本文档持有实现状态；执行状态与 Verdict 只在 Run 报告。
 
@@ -57,10 +57,10 @@
 
 <span style="color:#1f6feb"><em>**本节目的**：把方案清单里这行责任摘要展开成可实施的边界。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：Case ID、来源 ID、设计验证项、分类与优先级引用方案清单行；要测什么、明确不测什么；本 Case 的失败意味着什么。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 ST-S01-001：并发准入下输入不可变。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 IT-S01-001：并发准入下输入不可变。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：读者不回读方案也知道本 Case 的责任与边界。</em></span>
 
-- Case ID / 来源 ID / 设计验证项 / 分类 / 优先级（引用方案清单）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">ST-S01-001 / EX-CON-1 / VRC-S01-001 / concurrency / P0</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- Case ID / 来源 ID / 设计验证项 / 分类 / 优先级（引用方案清单）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">IT-S01-001 / EX-CON-1 / VRC-S01-001 / concurrency / P0</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 要测什么（责任展开）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">两个并发请求经 run_batch 提交，各自完整返回或按准入规则 Busy，输入不变</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 明确不测什么 / 失败含义：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">不测系统并发预算与跨子系统业务流；失败含义＝准入或快照语义破坏</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
@@ -68,7 +68,7 @@
 
 <span style="color:#1f6feb"><em>**本节目的**：固定被测入口与前置状态。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：被测入口完整声明；状态型初态必须经公开入口构造，不直改内部状态；fixture/向量引用其版本，不复制字节；替身/夹具/受控时钟等测试资产链接其 `tests.asset-design` 文档，契约以该文档为唯一 authority。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 ST-S01-001：经公开配置入口构造准入上限。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 IT-S01-001：经公开配置入口构造准入上限。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：另一位执行者能独立建立前置。</em></span>
 
 - 被测入口声明与位置：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">run_batch(calls: span&lt;const Call&gt;) -> BatchResult | Busy</span><!-- STD_TEMPLATE_EXAMPLE_END -->
@@ -85,11 +85,11 @@
 
 <span style="color:#1f6feb"><em>**本节目的**：逐参数固定输入。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：每个参数的类型、取值、构造方法；冻结值或生成规则；非法与边界值的取舍理由；规模（数量、分页、复杂度）与时间域（wall/CPU、观测开销）按目标预算写清。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 ST-S01-001：两并发请求。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 IT-S01-001：两并发请求。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：输入可复现，无隐含依赖。</em></span>
 
 - 逐参数输入构造：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">calls＝两个 select_ids 请求（不同冻结记录集）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
-- 边界/非法取值及理由：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">并发提交＝真实线程＋join；同上限串行对照见 ST-S01-004</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 边界/非法取值及理由：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">并发提交＝真实线程＋join；同上限串行对照见 IT-S01-004</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 规模 / 时间域（数量、分页、复杂度、观测开销）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">并发上限 1 请求；排队等待以受控时钟计量（wall 时间域）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 4. 执行步骤与观察点
@@ -113,7 +113,7 @@
 
 <span style="color:#1f6feb"><em>**本节目的**：固定独立 Oracle 与互斥预期。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：Expected 由独立来源或可手算规则推导，不得调用被测实现复算；输出互斥（成功/各错误分支无第三态）；允许误差或精确比较方法；数值/模型输出分项判据——reference 重复性、真实输入回放、整模型比较分别判定，误差门限来自目标算法要求而非统一常数；判据语义以设计验证项（VRC）为唯一权威，本文细化为可执行断言但不改写，冲突回溯设计修订。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 ST-S01-001：按准入规则人工判定。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 IT-S01-001：按准入规则人工判定。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：预期独立且互斥，可判定。</em></span>
 
 - 独立 Oracle 来源与推导：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">S01 准入规则＋人工判定，不调用被测实现复算</span><!-- STD_TEMPLATE_EXAMPLE_END -->
@@ -123,7 +123,7 @@
 
 <span style="color:#1f6feb"><em>**本节目的**：固定错误路径、副作用与清理。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：每个错误出口的触发与表现；副作用断言（输入不变、无半成品、资源释放）；清理与失败现场保留。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 ST-S01-001：无残留会话。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 IT-S01-001：无残留会话。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：失败可观察、清理可确认。</em></span>
 
 - 错误出口与表现：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">Busy 出口＝可判定错误，不静默丢弃</span><!-- STD_TEMPLATE_EXAMPLE_END -->
@@ -132,12 +132,12 @@
 ## 7. 自动化位置与状态
 
 <span style="color:#1f6feb"><em>**本节目的**：固定自动化位置与实现状态。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：测试文件与测试函数名（ST-<对象>-<NNN>）；单 Case 执行命令；实现状态 Planned/Implemented；执行与 Verdict 归 Run 报告。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 ST-S01-001：harness 并发段。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：测试文件与测试函数名（IT-<对象>-<NNN>）；单 Case 执行命令；实现状态 Planned/Implemented；执行与 Verdict 归 Run 报告。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 IT-S01-001：harness 并发段。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：可从本文档定位测试代码与命令。</em></span>
 
 - 测试文件 / 测试函数：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">子系统 harness 并发段</span><!-- STD_TEMPLATE_EXAMPLE_END -->
-- 单 Case 执行命令：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">正式 runner：--filter ST-S01-001</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 单 Case 执行命令：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">正式 runner：--filter IT-S01-001</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 实现状态：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">Implemented；执行与 Verdict 归 Run 报告</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 <!-- 交付自查：编码者能否只凭本文档写出测试脚本；预期是否独立推导（不调用被测实现复算）；失败出口与清理是否可观察？ -->
