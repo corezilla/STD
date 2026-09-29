@@ -140,7 +140,7 @@
 
 <span style="color:#6e7681">**总体说明**：C++20 系统 harness 链接所有子系统为真实调用；独立存储测试实例（真协议）连接预生产镜像版本；受控时钟 fake（系统级时间推进）；并行隔离按子系统实例+端口+数据命名空间；监控与日志接入；G-EX-3 真实环境（如预生产）有 Owner 与排期；缺关键环境时整批降级为 Blocked 并登记缺口，不静默换工具链。</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
-![system层测试环境拓扑](../../diagrams/tests/system-env-topology.svg)
+![system层测试环境拓扑](../diagrams/tests/system-env-topology.svg)
 
 ## 2. 测试分类体系
 
