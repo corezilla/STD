@@ -33,11 +33,11 @@
 
 > 本计划绑定单一子系统：父设计 Document ID 经 `--parent-document-id` 写入 metadata；子系统设计基线在 §2 固定。
 
-### 模板定位：方案、Case 设计、计划与报告的边界
+### 模板定位：方案、用例、计划与报告的边界
 
 <span style="color:#1f6feb"><em>**编写建议**：本计划对应子系统设计阶段。构成＝子系统方案×1（tests.subsystem-test-scheme）＋Case 文档×N＋模块计划×N 引用＋系统层交接；执行产出为 tests.subsystem-test-report；模块层组织归 tests.module-test-plan。</em></span>
 
-- **权威分工**：Case 清单归 `tests.subsystem-test-scheme`；单 Case 展开归 `tests.subsystem-test-design`（一 Case 一文档）；本计划是**可执行作业指令**——执行者（含 Agent）按它从执行前检做到报告产出；执行结果与 Verdict 权威在 `tests.subsystem-test-report` 与 Run 证据。
+- **权威分工**：Case 清单归 `tests.subsystem-test-scheme`；单 Case 展开归 `tests.subsystem-case`（一 Case 一文档）；本计划是**可执行作业指令**——执行者（含 Agent）按它从执行前检做到报告产出；执行结果与 Verdict 权威在 `tests.subsystem-test-report` 与 Run 证据。
 - **只索引**：构成表引用方案版本与 Case ID 范围，不复制清单或 Case 细节。
 - **测试资产**：工具/夹具/替身/受控时钟的契约与自检在 `tests.asset-design`（一资产一文档，阶段共享）；本计划 §4 Step 0 使其就位。
 - **不是授权书**：按用户当前授权交付；计划到期不改判任何事实状态。

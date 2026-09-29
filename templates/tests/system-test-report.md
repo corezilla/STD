@@ -33,7 +33,7 @@
 
 > 本报告绑定软件系统：父设计经 `--parent-document-id` 写入 metadata。
 
-### 模板定位：报告、方案、Case 设计、计划与 Run 证据的边界
+### 模板定位：报告、方案、用例、计划与 Run 证据的边界
 
 <span style="color:#1f6feb"><em>**编写建议**：系统层报告：汇总一次系统计划执行；分母对照系统方案（tests.system-test-scheme）；验收结论另循验收活动，本报告不代替。</em></span>
 

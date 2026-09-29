@@ -27,27 +27,27 @@
 > 外部不可变证据；不要在文档内容中伪造包含自身的 commit hash。
 <!-- STD_DOCUMENT_COVER_END -->
 
-<span style="color:#1f6feb"><em>**编写建议**：本模板是模块测试方案，与 design.definition（模块设计阶段）一一对应。方案只登记测试分类与 Case 清单（每 Case 一行责任摘要），不写 Case 细节；逐 Case 展开一 Case 一文档（tests.module-test-design）。</em></span>
+<span style="color:#1f6feb"><em>**编写建议**：本模板是模块测试方案，与 design.definition（模块设计阶段）一一对应。方案只登记测试分类与 Case 清单（每 Case 一行责任摘要），不写 Case 细节；逐 Case 展开一 Case 一文档（tests.module-case）。</em></span>
 
 > **格式说明**：蓝色斜体为编写建议（指导如何填写，生成实例后保留）；灰色文字为虚构教学示例（以 `STD_TEMPLATE_EXAMPLE` 标记包裹，`new-design` 生成实例时自动剥离，不得当作项目事实或运行证据）；`<!-- TODO -->` 为待填槽位。颜色在 GitHub 等严格渲染器中降级为斜体/普通字，语义不变。
 
 > 本方案绑定单一软件模块：模块对象 ID 经 `--design-object-id` 写入 metadata；模块设计 ID/版本在 §1 固定。
 
-### 模板定位：方案、Case 设计与计划的边界
+### 模板定位：方案、用例与计划的边界
 
 <span style="color:#1f6feb"><em>**编写建议**：本方案对应模块设计阶段。分母来源是模块设计的对外接口（§9）、内部流程（§6/§7）、规则与状态转换，以及组装后才成立的保证；单元层归 tests.unit-test-scheme，子系统层归 tests.subsystem-test-scheme。</em></span>
 
-- **权威分工**：模块层测试的 Case 清单（ID、分类、优先级、责任摘要、设计状态）以本方案为唯一登记处；单 Case 展开归 `tests.module-test-design`（一 Case 一文档）；活动组织归 `tests.module-test-plan`。
+- **权威分工**：模块层测试的 Case 清单（ID、分类、优先级、责任摘要、设计状态）以本方案为唯一登记处；单 Case 展开归 `tests.module-case`（一 Case 一文档）；活动组织归 `tests.module-test-plan`。
 - **只有摘要**：本方案每条 Case 只写责任摘要（要测什么），不写输入构造、Oracle 或步骤。
 - **下层 PASS 不关闭本层**；本层 PASS 不关闭上层组合目标。
 
-### 状态语义：Case 设计状态
+### 状态语义：用例状态
 
-<span style="color:#1f6feb"><em>**编写建议**：本方案只持有 Case 设计状态（Designed / Gap / Tailored-N/A）；实现状态（Planned/Implemented）在对应 case-design 文档，执行状态与 Verdict 只在 Run 报告。混层即违例。</em></span>
+<span style="color:#1f6feb"><em>**编写建议**：本方案只持有 用例状态（Designed / Gap / Tailored-N/A）；实现状态（Planned/Implemented）在对应 case-design 文档，执行状态与 Verdict 只在 Run 报告。混层即违例。</em></span>
 
 | 状态 | 取值 | 唯一权威记录处 | 禁止 |
 |---|---|---|---|
-| Case 设计状态 | `Designed` / `Gap`（具名缺口）/ `Tailored-N/A` | 本方案 §3 清单 | 未设计写成已设计；N/A 无设计事实依据 |
+| 用例状态 | `Designed` / `Gap`（具名缺口）/ `Tailored-N/A` | 本方案 §3 清单 | 未设计写成已设计；N/A 无设计事实依据 |
 
 <span style="color:#1f6feb"><em>**完成条件**：任一 Case 在本方案中只报设计状态；实现与执行状态可沿 Case ID 追到 case-design 文档与 Run 报告。</em></span>
 
@@ -116,7 +116,7 @@
 
 ## 5. 文档联动与清单变更规则
 
-<span style="color:#1f6feb"><em>**本节目的**：固定方案—Case 设计—计划的联动规则，防三处漂移。</em></span>
+<span style="color:#1f6feb"><em>**本节目的**：固定方案—用例—计划的联动规则，防三处漂移。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：新 Case 先入本清单再建 case-design 文档（文档 ID＝Case ID）；清单变更须同步计划构成表；写明方案冻结/版本规则。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：见灰字。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：清单与 case-design 文档一一对应；计划只引用不复制。</em></span>

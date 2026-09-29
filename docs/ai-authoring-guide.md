@@ -32,7 +32,7 @@
 | [技术分析](ai-guides/technical-analysis.md) | `evaluation.technical-analysis` |
 | [产品与交付定义](ai-guides/product.md) | `product.solution-definition`、`product.sku-specification`、`product.roadmap` |
 | [接口、契约与数据](ai-guides/interfaces-contracts-data.md) | `interfaces.control`、`contracts.specification`、`design.data-dictionary` |
-| [验证与验收](ai-guides/verification.md) | `tests.asset-design`、`tests.module-test-design`、`tests.module-test-plan`、`tests.module-test-report`、`tests.module-test-scheme`、`tests.subsystem-test-design`、`tests.subsystem-test-plan`、`tests.subsystem-test-report`、`tests.subsystem-test-scheme`、`tests.system-test-design`、`tests.system-test-plan`、`tests.system-test-report`、`tests.system-test-scheme`、`tests.unit-test-design`、`tests.unit-test-plan`、`tests.unit-test-report`、`tests.unit-test-scheme` |
+| [验证与验收](ai-guides/verification.md) | `tests.asset-design`、`tests.module-case`、`tests.module-test-plan`、`tests.module-test-report`、`tests.module-test-scheme`、`tests.subsystem-case`、`tests.subsystem-test-plan`、`tests.subsystem-test-report`、`tests.subsystem-test-scheme`、`tests.system-case`、`tests.system-test-plan`、`tests.system-test-report`、`tests.system-test-scheme`、`tests.unit-case`、`tests.unit-test-plan`、`tests.unit-test-report`、`tests.unit-test-scheme` |
 | [评审与决策](ai-guides/review-decisions.md) | `review.packet`、`decisions.adr` |
 | [交付与运维](ai-guides/operations.md) | `operations.release`、`operations.version-description`、`operations.user-manual`、`operations.installation-deployment`、`operations.operations-manual`、`operations.maintenance`、`operations.bring-up` |
 

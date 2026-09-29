@@ -33,7 +33,7 @@
 
 > 本报告绑定单一子系统：父设计经 `--parent-document-id` 写入 metadata。
 
-### 模板定位：报告、方案、Case 设计、计划与 Run 证据的边界
+### 模板定位：报告、方案、用例、计划与 Run 证据的边界
 
 <span style="color:#1f6feb"><em>**编写建议**：子系统层报告：汇总一次子系统计划执行；分母对照子系统方案（tests.subsystem-test-scheme）；系统层结论归 tests.system-test-report。</em></span>
 

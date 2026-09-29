@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DIR = ROOT / "templates/tests"
 STAGES = ("unit", "module", "subsystem", "system")
 SCHEMES = tuple(s + "-test-scheme" for s in STAGES)
-DESIGNS = tuple(s + "-test-design" for s in STAGES)
+DESIGNS = tuple(s + "-case" for s in STAGES)
 PLANS = tuple(s + "-test-plan" for s in STAGES)
 REPORTS = tuple(s + "-test-report" for s in STAGES)
 ASSET = "asset-design"
@@ -36,7 +36,7 @@ class RegistrationTests(unittest.TestCase):
 
     def test_key_versions(self):
         v = self.catalog["template_versions"]
-        self.assertEqual(v["tests.unit-test-design"], "2.3.1")
+        self.assertEqual(v["tests.unit-case"], "2.3.1")
         self.assertEqual(v["tests.module-test-plan"], "0.10.0")
         self.assertEqual(v["tests.asset-design"], "0.2.0")
         self.assertEqual(v["tests.unit-test-report"], "0.3.1")

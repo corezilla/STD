@@ -35,7 +35,7 @@
 | 两侧如何连接并共同演进 | `interfaces.control` |
 | API、Schema、事件和错误语义 | `contracts.specification` |
 | 某阶段测试测什么、有哪些 Case | `tests.*-test-scheme` |
-| 单个 Case 如何执行（测试脚本依据） | `tests.*-test-design` |
+| 单个 Case 如何执行（测试脚本依据） | `tests.*-case` |
 | 某阶段测试如何安排 | `tests.*-test-plan` |
 | 测试实际发生了什么 | Run 报告（reports/<run-id>/，随测试保存） |
 | 如何进行正式验收 | 验收活动（按项目 tailoring 承接，不在 tests 家族） |
@@ -146,7 +146,7 @@ ISD是同一模块的可选实现视图，不插入新的对象层级。默认�
 测试框架与设计阶段一一对应（单元/模块/子系统/系统四层，每层三件）：
 
 - `*-test-scheme`：该阶段的测试方案——测试分类体系与 Case 清单（每 Case 一行：ID/分类/优先级/责任摘要/设计状态）；Case 清单唯一登记处。
-- `*-test-design`：单个 Case 的完整设计，一 Case 一文档——输入、初态、独立 Oracle、预期、清理、测试函数位置；测试脚本按它编写。
+- `*-case`：单个 Case 的完整设计，一 Case 一文档——输入、初态、独立 Oracle、预期、清理、测试函数位置；测试脚本按它编写。
 - `*-test-plan`：该阶段测试的**可执行作业指令**——执行前检（Go/No-Go）、逐 Case 作业序列（Step 0 资产就位起步）、证据与 Run 记录规则、报告产出与 Gate 规则；只索引不复制 Case。
 - `*-test-report`：执行产出的测试报告——逐 Case 结果与 Verdict 的唯一权威、覆盖复算、Gate 建议；引用 Run 证据不复制原始输出。
 - `asset-design`：测试资产设计（一资产一文档）——替身证明边界与注入命中语义的唯一契约 authority、消费方索引、自检与 Verified 状态；工具不替产品补可测试性。

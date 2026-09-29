@@ -2,7 +2,7 @@
 
 版本：0.3.0-draft.2 · 日期：2026-09-19 · 状态：方法草案，待实际写作任务验证
 
-主模板：`tests.asset-design`、`tests.module-test-design`、`tests.module-test-plan`、`tests.module-test-report`、`tests.module-test-scheme`、`tests.subsystem-test-design`、`tests.subsystem-test-plan`、`tests.subsystem-test-report`、`tests.subsystem-test-scheme`、`tests.system-test-design`、`tests.system-test-plan`、`tests.system-test-report`、`tests.system-test-scheme`、`tests.unit-test-design`、`tests.unit-test-plan`、`tests.unit-test-report`、`tests.unit-test-scheme`。
+主模板：`tests.asset-design`、`tests.module-case`、`tests.module-test-plan`、`tests.module-test-report`、`tests.module-test-scheme`、`tests.subsystem-case`、`tests.subsystem-test-plan`、`tests.subsystem-test-report`、`tests.subsystem-test-scheme`、`tests.system-case`、`tests.system-test-plan`、`tests.system-test-report`、`tests.system-test-scheme`、`tests.unit-case`、`tests.unit-test-plan`、`tests.unit-test-report`、`tests.unit-test-scheme`。
 先读[通用 AI 编写指南](../ai-authoring-guide.md)，再读项目已采用的对应模板。本文补充本类型的工作方法，不重复公共来源、权限和状态规则，不自动升级项目模板。
 
 ## 1. 输入与边界
@@ -34,16 +34,16 @@
 | Template ID | 负责什么 | 与相邻文档的区别 |
 |---|---|---|
 | tests.unit-test-scheme | 单元测试方案：分类与 Case 清单（一来源一 Case 登记、责任摘要） | 清单唯一登记；不写 Case 细节 |
-| tests.unit-test-design | 单个单元 Case 的完整设计（一 Case 一文档） | 测试脚本唯一依据；不重复方案清单 |
+| tests.unit-case | 单个单元 Case 的完整设计（一 Case 一文档） | 测试脚本唯一依据；不重复方案清单 |
 | tests.unit-test-plan | 单元测试组织（一模块一份，串联单元 Case 文档） | 计划不复制 Case、不预填结果 |
 | tests.module-test-scheme | 模块测试方案：整模块组装层的分类与 Case 清单 | 清单唯一登记 |
-| tests.module-test-design | 单个模块层 Case 的完整设计（一 Case 一文档） | 内部单元真实、边界替身不证明协议 |
+| tests.module-case | 单个模块层 Case 的完整设计（一 Case 一文档） | 内部单元真实、边界替身不证明协议 |
 | tests.module-test-plan | 模块测试组织 | 只索引不复制 Case |
 | tests.subsystem-test-scheme | 子系统测试方案（对应 design.subsystem） | 承接约束与机制要求进分母 |
-| tests.subsystem-test-design | 单个子系统层 Case 的完整设计 | 内部模块真实 |
+| tests.subsystem-case | 单个子系统层 Case 的完整设计 | 内部模块真实 |
 | tests.subsystem-test-plan | 子系统测试组织 | 构成＝模块计划×N＋子系统设计 |
 | tests.system-test-scheme | 系统测试方案（对应软件系统/机制阶段） | 机制端到端保证进分母 |
-| tests.system-test-design | 单个系统层 Case 的完整设计 | 子系统真实、外部边界 |
+| tests.system-case | 单个系统层 Case 的完整设计 | 子系统真实、外部边界 |
 | tests.system-test-plan | 系统测试组织 | 构成＝子系统计划×N＋系统设计＋验收交接 |
 
 实现前可评审语义、Schema、向量或参考模型；实现后才运行对应实现的契约测试，随后集成/E2E。不能形成“开发前先通过真实两端实现测试”的依赖循环。

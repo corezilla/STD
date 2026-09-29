@@ -33,7 +33,7 @@
 
 > 本报告绑定单一软件模块：模块对象 ID 经 `--design-object-id`、所属计划经 `--parent-document-id` 写入 metadata。
 
-### 模板定位：报告、方案、Case 设计、计划与 Run 证据的边界
+### 模板定位：报告、方案、用例、计划与 Run 证据的边界
 
 <span style="color:#1f6feb"><em>**编写建议**：模块层报告：汇总一次模块计划执行；分母对照模块方案（tests.module-test-scheme）；子系统层结论归 tests.subsystem-test-report。</em></span>
 

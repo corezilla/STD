@@ -3,7 +3,7 @@
 STD 面向软件、硬件、固件、FPGA 和软硬件协同项目，提供项目管理、需求、总体系统设计、总体系统机制设计、
 子系统设计、模块设计、接口契约、验证测试、评审、发布和运维所需的版本化模板。
 
-当前 `0.1.0-draft.59` 优先覆盖：
+当前 `0.1.0-draft.60` 优先覆盖：
 
 - Slinky，以及与其协作的 Piko、LLMTier；
 - HIFM，包括软件、DPU-SIM、FPGA/RTL、板卡和系统验证。
@@ -77,7 +77,7 @@ templates/
 ├── product/          解决方案、SKU 规格与产品路线图
 ├── interfaces/       接口控制
 ├── contracts/        API、Schema、事件与错误契约
-├── tests/            与设计阶段一一对应的测试方案/Case 设计/测试计划（注意与仓库自身 tests/ 不同）
+├── tests/            与设计阶段一一对应的测试方案/用例/测试计划（注意与仓库自身 tests/ 不同）
 ├── review/           评审包
 ├── decisions/        ADR
 └── operations/       用户、安装、运维、维护、Bring-up、发布与退役
@@ -248,9 +248,10 @@ AI 指南按能力贯通章节、先复用并核对现有契约，再交接双�
 ## 批量机制写作准备
 
 接口控制与契约规格模板各为 `0.4.0`；测试框架重构为 `templates/tests/` 家族，与设计阶段一一对应
-（单元/模块/子系统/系统四层，每层三件）：`*-test-scheme` 测试方案（分类与 Case 清单的唯一登记，
-每 Case 一行责任摘要）、`*-test-design` 单 Case 完整设计（一 Case 一文档，Document ID＝Case ID，
-测试脚本按它编写）、`*-test-plan` 测试计划（只索引不复制 Case）。机制保证按执行位置进入子系统/系统
+（单元/模块/子系统/系统四层，每层四件）：`*-test-scheme` 测试方案（分类与 Case 清单的唯一登记，
+每 Case 一行责任摘要）、`*-case` 单个测试用例（一 Case 一文档，Document ID＝Case ID，
+测试脚本按它编写）、`*-test-plan` 测试计划（可执行作业指令，只索引不复制 Case）、
+`*-test-report` 测试报告（Verdict 唯一持有，覆盖复算）。机制保证按执行位置进入子系统/系统
 层分母，不单独立测试模板；assurance 家族（含 vv-plan/test-plan/test-specification/test-procedure/
 test-report/acceptance-*/fpga-implementation-report）整体退役，既有项目按已锁定版本继续使用。
 编写指导以斜体蓝字直接置于各章正文，虚构填写示例内嵌槽位与章节（STD_TEMPLATE_EXAMPLE 标记，

@@ -4,7 +4,7 @@
 
 本文是 tests 家族 case-design 模板的跨阶段方法指南：当被测 Case 的对象是 LLM/智能体组件时，
 如何填写通用 case-design 模板的输入构造、独立 Oracle、预算与安全章节。它不是模板——格式仍由
-`tests.unit/module/subsystem/system-test-design` 强约束，本文只决定"内容怎么写"。
+`tests.unit/module/subsystem/system-case` 强约束，本文只决定"内容怎么写"。
 先读[通用 AI 编写指南](../ai-authoring-guide.md)与项目已采用的 case-design 模板，再按本文方法成文。
 
 ## 1. 什么时候用本方法

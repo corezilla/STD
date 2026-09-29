@@ -26,7 +26,7 @@
 │   ├── 40_module_design/         # 包、模块和组件内部设计
 │   ├── 50_implementation_design/ # 类、文件、算法和关键实现单元设计
 │   ├── 60_interfaces/            # 接口目录、ICD和机器契约索引
-│   ├── 70_verification/          # 测试方案、Case 设计与测试计划；报告随测试保存
+│   ├── 70_verification/          # 测试方案、用例与测试计划；报告随测试保存
 │   ├── 80_operations/            # 安装、部署、运行、维护和发布手册
 │   ├── 90_decisions/             # ADR和已批准技术决策
 │   ├── 91_reviews/               # 正式设计、代码和发布评审记录
@@ -167,7 +167,7 @@ knowledge-base/
 项目规范放在 `docs/00_management/standards/`，其中README.md为强制总索引。
 根README靠前链接总索引，每份规范开头反向链接，详见[项目规范强制索引](project-standards.md)。
 
-- `docs/70_verification/`保存测试方案（schemes）、Case 设计（specifications）与测试计划（plans）；每类测试保存自己的代码与报告，例如 `tests/system/reports/<run-id>/`，不集中到根 `tests/reports/`。
+- `docs/70_verification/`保存测试方案（schemes）、用例（specifications）与测试计划（plans）；每类测试保存自己的代码与报告，例如 `tests/system/reports/<run-id>/`，不集中到根 `tests/reports/`。
 - `interfaces/`保存机器可读公共契约；consumer只引用，不复制Schema。
 - 多服务项目的组件内部单元测试默认随组件共置；采用集中测试布局时，也可放在根
   `tests/unit/<module>/`，但须明确Owner和源码映射。根`tests/`还保存跨Owner契约、集成、系统和验收测试。

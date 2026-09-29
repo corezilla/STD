@@ -33,7 +33,7 @@
 │   ├── 40_module_design/          # 未采用Owner共置时的模块设计
 │   ├── 50_implementation_design/  # 文件、类、RTL单元等实现级设计
 │   ├── 60_interfaces/             # ICD、接口目录、边界说明和契约索引
-│   ├── 70_verification/           # 测试方案、Case 设计、计划、报告与资产；运行证据随测试保存
+│   ├── 70_verification/           # 测试方案、用例、计划、报告与资产；运行证据随测试保存
 │   │   ├── plans/                 # 验证策略、范围、资源和排期
 │   │   ├── specifications/        # Case、输入、Oracle和覆盖要求
 │   │   ├── procedures/            # 测试环境、步骤和操作方法
@@ -265,7 +265,7 @@ hardware/boards/<board>/docs/       # 板卡专属设计、BOM、制造和验证
 - 投资人PPT放 `materials/investors/`，板卡单页放 `materials/products/`。
 - 完整竞品分析放 `docs/15_evaluation/competitive-analysis/`，销售竞品卡放
   `materials/sales/competitive-battlecards/`。
-- `docs/70_verification/` 放测试方案（schemes）、Case 设计（specifications）、测试计划（plans）、测试报告（reports）与测试资产（assets）；可执行测试及其运行证据按测试类型共置，大型证据可存外部数据区。
+- `docs/70_verification/` 放测试方案（schemes）、用例（specifications）、测试计划（plans）、测试报告（reports）与测试资产（assets）；可执行测试及其运行证据按测试类型共置，大型证据可存外部数据区。
 - 简单项目可把契约放 `docs/60_interfaces/contracts/`；需要codegen或多域消费时使用顶层
   `interfaces/`，根文档只保留索引。
 - `docs/migration/std-YYYYMMDD/` 和 `docs/98_migration/` 都可作为迁移区，validator不按目录名禁止。
@@ -312,7 +312,7 @@ Case ID、实际结果、判定和证据位置；外部证据记录稳定制品I
 ```text
 docs/70_verification/
 ├── schemes/system-test-scheme.md              # 分类与 Case 清单（唯一登记：责任摘要/设计状态）
-├── specifications/system-test-design-SYS-APP-001.md  # 单 Case 完整设计（一 Case 一文档）
+├── specifications/system-case-SYS-APP-001.md  # 单 Case 完整设计（一 Case 一文档）
 ├── plans/system-test-plan.md                  # 可执行作业指令：Go/No-Go、Step 0 资产就位、逐 Case 序列
 ├── reports/system-test-report.md              # 本次执行结论：逐 Case 结果与 Verdict、覆盖复算、Gate 建议
 └── assets/system-test-asset-STORE-TEST.md     # 测试资产契约与自检（替身/时钟/生成器，一资产一文档）
@@ -335,7 +335,7 @@ tests/
     └── reports/run-003/                     # M001自己的报告与证据
 ```
 
-方案、Case 设计、计划和资产同样有同名 metadata，图中省略。链路是：系统要求/V → 方案清单中的
+方案、用例、计划和资产同样有同名 metadata，图中省略。链路是：系统要求/V → 方案清单中的
 `SYS-APP-001` → `test_cancel_release.py` 的用例入口 → `run-001` 的实际结果 → 本次报告。
 报告引用既有预期，不为通过测试而修改Oracle；未执行保留NOT_RUN，不能伪造结果。
 不要求每个Case单独建文或每次开发试跑都写正式Markdown报告；保留框架报告即可，正式阶段按需

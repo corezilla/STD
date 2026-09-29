@@ -81,7 +81,7 @@ def main() -> int:
         if args.parent_document_id == args.name:
             parser.error("父文档不能是文档自身")
     if args.level is None:
-        args.level = {"design.system": "system", "design.software-system": "system", "design.subsystem": "subsystem", "design.definition": "module", "design.implementation": "module", "tests.unit-test-design": "module", "tests.unit-test-plan": "module", "tests.unit-test-scheme": "module", "tests.unit-test-report": "module", "tests.module-test-scheme": "module", "tests.module-test-design": "module", "tests.module-test-plan": "module", "tests.subsystem-test-design": "subsystem", "tests.subsystem-test-plan": "subsystem", "tests.subsystem-test-report": "subsystem", "tests.system-test-design": "system", "tests.system-test-plan": "system", "tests.system-test-report": "system"}.get(args.template, "cross-level")
+        args.level = {"design.system": "system", "design.software-system": "system", "design.subsystem": "subsystem", "design.definition": "module", "design.implementation": "module", "tests.unit-case": "module", "tests.unit-test-plan": "module", "tests.unit-test-scheme": "module", "tests.unit-test-report": "module", "tests.module-test-scheme": "module", "tests.module-case": "module", "tests.module-test-plan": "module", "tests.subsystem-case": "subsystem", "tests.subsystem-test-plan": "subsystem", "tests.subsystem-test-report": "subsystem", "tests.system-case": "system", "tests.system-test-plan": "system", "tests.system-test-report": "system"}.get(args.template, "cross-level")
     if args.template in {"design.definition", "design.implementation"} and not args.domain:
         args.domain = ["software"]
     if args.template == "design.implementation" and (args.level != "module" or args.domain != ["software"]):
@@ -240,7 +240,7 @@ def main() -> int:
         "created_at": created_at,
         "last_modified_at": last_modified_at
     }
-    if args.template in {"design.definition", "design.implementation", "tests.unit-test-design", "tests.unit-test-plan", "tests.unit-test-scheme", "tests.unit-test-report", "tests.module-test-design", "tests.module-test-plan", "tests.module-test-scheme", "tests.module-test-report"}:
+    if args.template in {"design.definition", "design.implementation", "tests.unit-case", "tests.unit-test-plan", "tests.unit-test-scheme", "tests.unit-test-report", "tests.module-case", "tests.module-test-plan", "tests.module-test-scheme", "tests.module-test-report"}:
         metadata["design_object_id"] = args.design_object_id
     if args.template == "design.definition":
         metadata["implementation_specification"] = {
