@@ -77,9 +77,9 @@
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 <span style="color:#6e7681">**示例（虚构；子系统层测试方法——含注入/边界/调用序等具体细节）**：</span>
 
-<span style="color:#6e7681">| Case 家族 | 测试设计技术 | 环境类型引用 | 自动化与判定 |</span>
-<span style="color:#6e7681">|---|---|---|---|</span>
-<span style="color:#6e7681">| normal | 跨模块流程（准入→M101→聚合） | 真实内部模块 | CI 跑全集；失败不阻断后续 |
+| Case 家族 | 测试设计技术 | 环境类型引用 | 自动化与判定 |
+|---|---|---|---|
+| normal | 跨模块流程（准入→M101→聚合） | 真实内部模块 | CI 跑全集；失败不阻断后续 |
 | | · 注入：合法 run_batch 多请求序列 | | · 验证三模块各环节事件触发与结果汇总 |
 | boundary | 接口契约驱动（边界 fake 协议） | FAKE-REG | 单 Case --filter；超界→reject |
 | | · 注入：跨子系统协议边界（注册/拒绝/超时/排队） | | · 失败路径显式返回，且对端可见 |
@@ -88,7 +88,7 @@
 | recovery | 状态机恢复分支 | 复用单元/模块 Case 前提 | 单元/模块已验，本层不重复 |
 | | · 注入：取消/迟到完成/跨子系统交接失败 | | · 验证恢复后能继续安全接受请求；旧请求不复活 |
 | concurrency | 线程对偶 + 受控时钟 | 同上 | 失败标 NOT_RUN 等后续跑 |
-| | · 注入：两线程并发 run_batch + 受控时钟推进 | | · 验证不破坏既入请求结果，无内部状态竞争 |</span>
+| | · 注入：两线程并发 run_batch + 受控时钟推进 | | · 验证不破坏既入请求结果，无内部状态竞争 |
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 1.6 替身使用策略与边界
@@ -105,10 +105,10 @@
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 <span style="color:#6e7681">**示例（虚构；子系统层替身矩阵）**：</span>
 
-<span style="color:#6e7681">| 协作者 | 形态 | 替身契约 | 理由 |</span>
-<span style="color:#6e7681">|---|---|---|---|</span>
-<span style="color:#6e7681">| 真实内部模块（准入/M101/聚合） | 跨子系统接口 fake | 受控时钟 fake | 日志 spy |
-| · 契约与自检归 tests.asset-design | | · 不 mock 你不拥有的对象 |</span>
+| 协作者 | 形态 | 替身契约 | 理由 |
+|---|---|---|---|
+| 真实内部模块（准入/M101/聚合） | 跨子系统接口 fake | 受控时钟 fake | 日志 spy |
+| · 契约与自检归 tests.asset-design | | · 不 mock 你不拥有的对象 |
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 
@@ -128,22 +128,54 @@
 
 <span style="color:#6e7681">**拓扑**（ENV 类型 → ENV 实例 → 被测对象）：</span>
 
-```mermaid
-flowchart LR
-  Inner["真实内部模块<br/>准入 / M101 / 聚合<br/>(ENV-1)"] --> SubH["子系统 harness<br/>(ENV-1 链接)"]
-  Fake["跨子系统接口 fake<br/>FAKE-REG<br/>(ENV-2)"] --> SubH
-  CLK["受控时钟 fake<br/>CLK-DIR<br/>(ENV-3)"] --> SubH
-  Log["日志 spy<br/>HARNESS-EXM-LOG<br/>(ENV-4)"] --> SubH
-  SubH --> Case["被测子系统（S01）"]
+```d2
+direction: right
+
+inner: 真实内部模块\n准入 / M101 / 聚合 (ENV-1) {
+  shape: rectangle
+  style.fill: "#E8F5E9"
+}
+
+harness: 子系统 harness\n(ENV-1 链接) {
+  shape: rectangle
+  style.fill: "#F3E5F5"
+}
+
+fake: 跨子系统接口 fake (ENV-2)\nFAKE-REG {
+  shape: rectangle
+  style.fill: "#FFF3E0"
+}
+
+clk: 受控时钟 fake (ENV-3)\nCLK-DIR {
+  shape: rectangle
+  style.fill: "#FFF3E0"
+}
+
+log: 日志 spy (ENV-4)\nHARNESS-EXM-LOG {
+  shape: rectangle
+  style.fill: "#FFF3E0"
+}
+
+case: 被测子系统\nS01 (DIR) {
+  shape: rectangle
+  style.fill: "#E3F2FD"
+  style.bold: true
+}
+
+inner -> harness: 链接
+fake -> harness
+clk -> harness
+log -> harness
+harness -> case
 ```
 
-<span style="color:#6e7681">| 环境类型 | 行为/真伪 | 契约文档 | 在本层用例中的角色 |</span>
-<span style="color:#6e7681">|---|---|---|---|</span>
-<span style="color:#6e7681">| 真实内部模块（准入/M101/聚合） | 真实 | — | 跨模块流程用例 |
+| 环境类型 | 行为/真伪 | 契约文档 | 在本层用例中的角色 |
+|---|---|---|---|
+| 真实内部模块（准入/M101/聚合） | 真实 | — | 跨模块流程用例 |
 | · 契约：源码即真实模块 | | · 用法：子系统 harness 链接全部真实 || 跨子系统接口 fake | 只代返回值/超时 | FAKE-REG | 接口契约驱动用例 |
 | · 契约：替代跨子系统接口，配置可控 | | · 用法：测试前配置注册行为 || 受控时钟 fake | 单调推进 | CLK-DIR | 状态机遍历用例 |
 | · 契约：advance(ms) 单调 | | || 日志 spy | 记录不修改 | HARNESS-EXM-LOG | 调用参数断言用例 |
-| · 契约：仅记录调用参数，不修改被测代码 | | · 用法：测试后断言记录的调用 |</span>
+| · 契约：仅记录调用参数，不修改被测代码 | | · 用法：测试后断言记录的调用 |
 
 <span style="color:#6e7681">**总体说明**：C++20 子系统 harness 链接所有内部模块（准入/M101/聚合全真实）；边界替身引用 tests.asset-design（FAKE-REG、CLK-DIR 等）；CI 入口 runner --filter；并行隔离按子系统实例+端口+临时目录+数据命名空间；缺关键 fake 时整个子系统 Case 集降级为 Blocked 并登记缺口，不静默换工具链。</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
@@ -161,8 +193,8 @@ flowchart LR
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 <span style="color:#6e7681">**示例（虚构；分类适用性）**：</span>
-<span style="color:#6e7681">| normal / boundary / negative / concurrency / recovery | 适用 | — |
-| performance | 裁剪 | 排队上限断言归本层，端到端预算归系统层 |</span>
+| normal / boundary / negative / concurrency / recovery | 适用 | — |
+| performance | 裁剪 | 排队上限断言归本层，端到端预算归系统层 |
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 3. 覆盖分母与 Case 清单
@@ -178,11 +210,11 @@ flowchart LR
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 <span style="color:#6e7681">**示例（虚构；一来源至少一条）**：</span>
-<span style="color:#6e7681">| 来源 ID / 固定版本 | 设计验证项 ID | Case ID | 分类 | 优先级 | 责任摘要（要测什么） | 设计状态 | 上级组合验证入口 |</span>
-<span style="color:#6e7681">|---|---|---|---|---|---|---|</span>
-<span style="color:#6e7681">| EX-CON-1 / EX-DIR v1 | VRC-DIR-001 | IT-DIR-001 | concurrency | P0 | 并发准入下输入不可变、整批返回 | Designed | 系统并发预算（系统层，NOT_RUN） |</span>
-<span style="color:#6e7681">| 跨模块流程：准入→M101→聚合 | VRC-DIR-002 | IT-DIR-002 | normal | P1 | 排队请求不丢、结果不串 | Designed | — |</span>
-<span style="color:#6e7681">| 机制承接：EX-OBS 快照采样 | VRC-DIR-003 | IT-DIR-003 | recovery | P2 | 采样不阻塞业务请求 | Designed | 机制端到端归系统层 |</span>
+| 来源 ID / 固定版本 | 设计验证项 ID | Case ID | 分类 | 优先级 | 责任摘要（要测什么） | 设计状态 | 上级组合验证入口 |
+|---|---|---|---|---|---|---|
+| EX-CON-1 / EX-DIR v1 | VRC-DIR-001 | IT-DIR-001 | concurrency | P0 | 并发准入下输入不可变、整批返回 | Designed | 系统并发预算（系统层，NOT_RUN） |
+| 跨模块流程：准入→M101→聚合 | VRC-DIR-002 | IT-DIR-002 | normal | P1 | 排队请求不丢、结果不串 | Designed | — |
+| 机制承接：EX-OBS 快照采样 | VRC-DIR-003 | IT-DIR-003 | recovery | P2 | 采样不阻塞业务请求 | Designed | 机制端到端归系统层 |
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 4. 不适用与缺口裁决
@@ -197,7 +229,9 @@ flowchart LR
 | <!-- TODO --> | | |
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-<span style="color:#6e7681">| 系统并发预算 / 预算口径在系统设计 | Gap（G-EX-2） | 系统架构组 / 系统方案定义 |</span>
+<span style="color:#6e7681">**示例（虚构；不适用与缺口裁决）**：</span>
+
+| 系统并发预算 / 预算口径在系统设计 | Gap（G-EX-2） | 系统架构组 / 系统方案定义 |
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 5. 文档联动与清单变更规则
@@ -230,9 +264,9 @@ flowchart LR
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 <span style="color:#6e7681">**示例（虚构）**：</span>
 
-<span style="color:#6e7681">| 设计验证项 ID | 要验证什么 | 设计来源 | §3 Case 覆盖 |</span>
-<span style="color:#6e7681">|---|---|---|---|</span>
-<span style="color:#6e7681">| VRC-DIR-001 | 并发准入下输入不可变 | 子系统设计 §12 | IT-DIR-001 |</span>
-<span style="color:#6e7681">| VRC-DIR-002 | 跨模块流程不丢不串 | 同 §12 | IT-DIR-002 |</span>
-<span style="color:#6e7681">| VRC-DIR-003 | 机制承接采样不阻塞 | 同 §12 | IT-DIR-003 |</span>
+| 设计验证项 ID | 要验证什么 | 设计来源 | §3 Case 覆盖 |
+|---|---|---|---|
+| VRC-DIR-001 | 并发准入下输入不可变 | 子系统设计 §12 | IT-DIR-001 |
+| VRC-DIR-002 | 跨模块流程不丢不串 | 同 §12 | IT-DIR-002 |
+| VRC-DIR-003 | 机制承接采样不阻塞 | 同 §12 | IT-DIR-003 |
 <!-- STD_TEMPLATE_EXAMPLE_END -->

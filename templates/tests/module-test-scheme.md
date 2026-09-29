@@ -77,16 +77,16 @@
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 <span style="color:#6e7681">**示例（虚构；模块层测试方法——含注入/边界/调用序等具体细节）**：</span>
 
-<span style="color:#6e7681">| Case 家族 | 测试设计技术 | 环境类型引用 | 自动化与判定 |</span>
-<span style="color:#6e7681">|---|---|---|---|</span>
-<span style="color:#6e7681">| normal | 组装后真实调用 + 等价类划分 | 真实内部单元 + 边界 fake | CI 跑全集；Case 失败不阻断后续 |
+| Case 家族 | 测试设计技术 | 环境类型引用 | 自动化与判定 |
+|---|---|---|---|
+| normal | 组装后真实调用 + 等价类划分 | 真实内部单元 + 边界 fake | CI 跑全集；Case 失败不阻断后续 |
 | | · 注入：合法目录名/类别组合（多类、多记录） | | · 断言返回值与目录 ID 一致 |
 | boundary | 边界值（容量上限、输入长度） | 边界 fake 配置注入 | 单 Case --filter；超界→reject |
 | | · 注入：合法目录+4096 条（=上限）/4097 条（>上限）；单条 payload 上限 | | · 拒绝路径须显式返回 error，不允许静默截断 |
 | negative | 错误猜测 + 选定故障注入（边界依赖） | 注入 fake（计数=命中） | 注入计数=0 标 INVALID；不掩盖 |
 | | · 注入：边界 fake 一次性返回错误/超时/拒绝；故障绑定具体产品步骤（I2→I3 之间） | | · 故障前/后副作用由公开入口观察，不可直改内部 |
 | concurrency | 线程对偶 + 借用/生命（单元层已覆盖） | 受控时钟 fake | 单元层已验证，本层不重复 |
-| | · 注入：两线程调用 select_ids，前置 fake 模拟准入抢占 | | · 验证拒绝路径不返回 Ok，不复用已释放槽位 |</span>
+| | · 注入：两线程调用 select_ids，前置 fake 模拟准入抢占 | | · 验证拒绝路径不返回 Ok，不复用已释放槽位 |
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 1.6 替身使用策略与边界
@@ -103,10 +103,10 @@
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 <span style="color:#6e7681">**示例（虚构；模块层替身矩阵）**：</span>
 
-<span style="color:#6e7681">| 协作者 | 形态 | 替身契约 | 理由 |</span>
-<span style="color:#6e7681">|---|---|---|---|</span>
-<span style="color:#6e7681">| 真实内部单元（I1/I2/I3） | 边界 fake（跨子系统接口） | 受控时钟 fake |
-| · 契约与自检归 tests.asset-design | | · 不 mock 你不拥有的对象 |</span>
+| 协作者 | 形态 | 替身契约 | 理由 |
+|---|---|---|---|
+| 真实内部单元（I1/I2/I3） | 边界 fake（跨子系统接口） | 受控时钟 fake |
+| · 契约与自检归 tests.asset-design | | · 不 mock 你不拥有的对象 |
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 
@@ -126,21 +126,48 @@
 
 <span style="color:#6e7681">**拓扑**（ENV 类型 → ENV 实例 → 被测对象）：</span>
 
-```mermaid
-flowchart LR
-  M["真实内部单元 I1/I2/I3<br/>(ENV-1 真实)"] --> Harness["模块 harness<br/>(ENV-1 链接)"]
-  Fake["边界 fake<br/>FAKE-REG<br/>(ENV-2)"] --> Harness
-  CLK["受控时钟 fake<br/>HARNESS-EXM-CLOCK<br/>(ENV-3)"] --> Harness
-  Harness --> Case["被测模块（M101）"]
+```d2
+direction: right
+
+inner: 真实内部单元 I1/I2/I3 (ENV-1 真实) {
+  shape: rectangle
+  style.fill: "#E8F5E9"
+}
+
+harness: 模块 harness\n(ENV-1 链接) {
+  shape: rectangle
+  style.fill: "#F3E5F5"
+}
+
+fake: 边界 fake (ENV-2)\nFAKE-REG {
+  shape: rectangle
+  style.fill: "#FFF3E0"
+}
+
+clk: 受控时钟 fake (ENV-3)\nHARNESS-EXM-CLOCK {
+  shape: rectangle
+  style.fill: "#FFF3E0"
+}
+
+case: 被测模块\nM101 {
+  shape: rectangle
+  style.fill: "#E3F2FD"
+  style.bold: true
+}
+
+inner -> harness: 链接
+fake -> harness
+clk -> harness
+harness -> case
 ```
 
-<span style="color:#6e7681">| 环境类型 | 行为/真伪 | 契约文档 | 在本层用例中的角色 |</span>
-<span style="color:#6e7681">|---|---|---|---|</span>
-<span style="color:#6e7681">| 真实内部单元（I1/I2/I3） | 真实 | — | 组装后真实调用用例 |
+| 环境类型 | 行为/真伪 | 契约文档 | 在本层用例中的角色 |
+|---|---|---|---|
+| 真实内部单元（I1/I2/I3） | 真实 | — | 组装后真实调用用例 |
 | · 契约：源码即真实单元 | | · 用法：模块 harness 链接全部内部单元为真实 || 边界 fake（跨子系统接口） | 只代返回值/超时 | FAKE-REG | 跨边界用例 |
 | · 契约：FAKE-REG 替代跨子系统边界，配置可控 | | · 用法：测试前配置失败/超时；不持 Care 调用外的副作用 || 受控时钟 fake | 单调推进 | HARNESS-EXM-CLOCK | 时间/并发用例 |
 | · 契约：advance(ms) 单调 | | || 冻结向量集 | 真实但固定 | EX-MODULE 冻结集 | 输入/边界用例 |
-| · 契约：固定输入集 | | · 用法：边界测试从冻结集读取 |</span>
+| · 契约：固定输入集 | | · 用法：边界测试从冻结集读取 |
 
 <span style="color:#6e7681">**总体说明**：C++20 模块 harness 直接链接全部内部单元（I1/I2/I3 全真实）；边界 fake 引用 tests.asset-design（FAKE-REG 等）；CI 入口 runner --filter；并行隔离按模块实例+端口+临时目录；缺编译器记 Blocked，不静默换工具链。</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
@@ -158,8 +185,8 @@ flowchart LR
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 <span style="color:#6e7681">**示例（虚构；分类适用性）**：</span>
-<span style="color:#6e7681">| normal / boundary / negative / concurrency | 适用 | — |
-| recovery | Tailored-N/A | 同步只读、无跨调用状态（模块设计 §10） |</span>
+| normal / boundary / negative / concurrency | 适用 | — |
+| recovery | Tailored-N/A | 同步只读、无跨调用状态（模块设计 §10） |
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 3. 覆盖分母与 Case 清单
@@ -175,11 +202,11 @@ flowchart LR
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 <span style="color:#6e7681">**示例（虚构；一来源至少一条）**：</span>
-<span style="color:#6e7681">| 来源 ID / 固定版本 | 设计验证项 ID | Case ID | 分类 | 优先级 | 责任摘要（要测什么） | 设计状态 | 上级组合验证入口 |</span>
-<span style="color:#6e7681">|---|---|---|---|---|---|---|</span>
-<span style="color:#6e7681">| EX-CON-1 / EX-MODULE v1 | VRC-M101-001 | MT-EXM-001 | normal | P1 | 合法输入返回确定顺序 IDs 且输入不变 | Designed | 宿主并发准入（NOT_RUN） |</span>
-<span style="color:#6e7681">| 校验先于筛选（§7） | VRC-M101-002 | MT-EXM-002 | negative | P0 | 非匹配类别中的重复 ID 仍整批拒绝 | Designed | — |</span>
-<span style="color:#6e7681">| EX-CON-2 / 同基线 | VRC-M101-003 | MT-EXM-003 | boundary | P1 | 4096 恰好通过、4097 拒绝 | Designed | — |</span>
+| 来源 ID / 固定版本 | 设计验证项 ID | Case ID | 分类 | 优先级 | 责任摘要（要测什么） | 设计状态 | 上级组合验证入口 |
+|---|---|---|---|---|---|---|
+| EX-CON-1 / EX-MODULE v1 | VRC-M101-001 | MT-EXM-001 | normal | P1 | 合法输入返回确定顺序 IDs 且输入不变 | Designed | 宿主并发准入（NOT_RUN） |
+| 校验先于筛选（§7） | VRC-M101-002 | MT-EXM-002 | negative | P0 | 非匹配类别中的重复 ID 仍整批拒绝 | Designed | — |
+| EX-CON-2 / 同基线 | VRC-M101-003 | MT-EXM-003 | boundary | P1 | 4096 恰好通过、4097 拒绝 | Designed | — |
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 4. 不适用与缺口裁决
@@ -194,7 +221,9 @@ flowchart LR
 | <!-- TODO --> | | |
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-<span style="color:#6e7681">| 宿主并发准入 / 父设计入口未定义 | Gap（G-EX-1） | 父设计 / 子系统测试评审 |</span>
+<span style="color:#6e7681">**示例（虚构；不适用与缺口裁决）**：</span>
+
+| 宿主并发准入 / 父设计入口未定义 | Gap（G-EX-1） | 父设计 / 子系统测试评审 |
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 5. 文档联动与清单变更规则
@@ -227,9 +256,9 @@ flowchart LR
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 <span style="color:#6e7681">**示例（虚构）**：</span>
 
-<span style="color:#6e7681">| 设计验证项 ID | 要验证什么 | 设计来源 | §3 Case 覆盖 |</span>
-<span style="color:#6e7681">|---|---|---|---|</span>
-<span style="color:#6e7681">| VRC-M101-001 | 输入不可变、整批返回 | 模块设计 §14.2 | MT-EXM-001 |</span>
-<span style="color:#6e7681">| VRC-M101-002 | 校验先于筛选 | 同 §14.2 | MT-EXM-002 |</span>
-<span style="color:#6e7681">| VRC-M101-003 | 容量上限 4096 | 同 §14.2 | MT-EXM-003 |</span>
+| 设计验证项 ID | 要验证什么 | 设计来源 | §3 Case 覆盖 |
+|---|---|---|---|
+| VRC-M101-001 | 输入不可变、整批返回 | 模块设计 §14.2 | MT-EXM-001 |
+| VRC-M101-002 | 校验先于筛选 | 同 §14.2 | MT-EXM-002 |
+| VRC-M101-003 | 容量上限 4096 | 同 §14.2 | MT-EXM-003 |
 <!-- STD_TEMPLATE_EXAMPLE_END -->

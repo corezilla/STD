@@ -77,9 +77,9 @@
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 <span style="color:#6e7681">**示例（虚构；单元层测试方法——含注入/边界/调用序等具体细节）**：</span>
 
-<span style="color:#6e7681">| Case 家族 | 测试设计技术 | 环境类型引用 | 自动化与判定 |</span>
-<span style="color:#6e7681">|---|---|---|---|</span>
-<span style="color:#6e7681">| normal | 等价类划分（合法帧/合法用例集） | 独立子程序编译产物 + 冻结向量集 | CI 跑全集；1 次执行即判 |
+| Case 家族 | 测试设计技术 | 环境类型引用 | 自动化与判定 |
+|---|---|---|---|
+| normal | 等价类划分（合法帧/合法用例集） | 独立子程序编译产物 + 冻结向量集 | CI 跑全集；1 次执行即判 |
 | | · 注入：完整头 + payload；空白、payload 仅单字节、UTF 边界 | | · 用固定 seed 避免伪随机；断言 exit-code 与 OK bytes 严格相等 |
 | boundary | 边界值（长度上限、payload 大小） | 冻结向量集 + 受控时钟 fake | 单 Case --filter；超界→reject |
 | | · 注入：合法头 + payload∈{4096 字节；4097 字节}；零字节 payload | | · 边界断言须在「接受」与「超限 reject」之间二选一，无第三态 |
@@ -88,7 +88,7 @@
 | concurrency | 线程对偶 + 受控时钟 fake | 受控时钟 fake | 多次采样统计；一次失败标 INVALID 复现 |
 | | · 注入：两个并发线程各读一次冻结向量集；主线程 join 后再销毁输入 | | · 失败须记录样本与线程交错状态以复现；不允许靠「重跑通过」掩盖 |
 | recovery | 资源归还（占槽后的释放） | 受控时钟 fake | 异常路径后必须有显式释放动作 |
-| | · 注入：占槽后异常提前返回 | | · 验证槽位归还、可重入、并发安全 |</span>
+| | · 注入：占槽后异常提前返回 | | · 验证槽位归还、可重入、并发安全 |
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 1.6 替身使用策略与边界
@@ -105,10 +105,10 @@
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 <span style="color:#6e7681">**示例（虚构；单元层替身矩阵）**：</span>
 
-<span style="color:#6e7681">| 协作者 | 形态 | 替身契约 | 理由 |</span>
-<span style="color:#6e7681">|---|---|---|---|</span>
-<span style="color:#6e7681">| 独立子程序编译产物（真实） | 受控时钟 fake | 边界 fake（注册/日志） |
-| · 契约与自检归 tests.asset-design | | · 不 mock 你不拥有的对象 |</span>
+| 协作者 | 形态 | 替身契约 | 理由 |
+|---|---|---|---|
+| 独立子程序编译产物（真实） | 受控时钟 fake | 边界 fake（注册/日志） |
+| · 契约与自检归 tests.asset-design | | · 不 mock 你不拥有的对象 |
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 
@@ -128,21 +128,42 @@
 
 <span style="color:#6e7681">**拓扑**（ENV 类型 → ENV 实例 → 被测对象）：</span>
 
-```mermaid
-flowchart LR
-  Code["独立子程序编译产物<br/>(ENV-1 真实)"] --> Case
-  CLK["受控时钟 fake<br/>HARNESS-FD-CLOCK<br/>(ENV-2)"] --> Case
-  Fake["边界 fake<br/>FAKE-REG / HARNESS-FD-LOG<br/>(ENV-3)"] --> Case
-  Case["被测单元（FrameDecoder）"]
+```d2
+direction: right
+
+code: 独立子程序编译产物 (ENV-1 真实) {
+  shape: rectangle
+  style.fill: "#E8F5E9"
+}
+
+clk: 受控时钟 fake (ENV-2)\nHARNESS-FD-CLOCK {
+  shape: rectangle
+  style.fill: "#FFF3E0"
+}
+
+fake: 边界 fake (ENV-3)\nFAKE-REG / HARNESS-FD-LOG {
+  shape: rectangle
+  style.fill: "#FFF3E0"
+}
+
+case: 被测单元\nFrameDecoder {
+  shape: rectangle
+  style.fill: "#E3F2FD"
+  style.bold: true
+}
+
+code -> case
+clk -> case
+fake -> case
 ```
 
-<span style="color:#6e7681">| 环境类型 | 行为/真伪 | 契约文档 | 在本层用例中的角色 |</span>
-<span style="color:#6e7681">|---|---|---|---|</span>
-<span style="color:#6e7681">| 独立子程序编译产物 | 真实 C++20 编译 | — | 单元验证对象自身 |
+| 环境类型 | 行为/真伪 | 契约文档 | 在本层用例中的角色 |
+|---|---|---|---|
+| 独立子程序编译产物 | 真实 C++20 编译 | — | 单元验证对象自身 |
 | · 契约：源码即真实编译产物，不替代、不 mock | | · 用法：每个 Case 直接调用入口函数，无中间件 || 冻结向量集与种子 | 真实但固定 | docs/examples/isd-frame-decoder/ | 正常/边界用例输入 |
 | · 契约：固定种子→固定 hex bytes；版本随代码升级 | | · 用法：禁止随机生成，必须从固定集读取 || 受控时钟 fake | 单调推进、advance(ms) | HARNESS-FD-CLOCK | 时间/并发用例 |
 | · 契约：advance(ms) 单调、不模拟硬件漂移 | | · 用法：测试前 set_time，测试后 reset || 边界 fake（注册/日志） | 只代返回值与调用参数 | FAKE-REG / HARNESS-FD-LOG | 边界交互用例 |
-| · 契约：FAKE-REG 返回配置值/超时；HARNESS-FD-LOG 记录不修改 | | · 用法：测试前重置计数，测试后验证断言调用 |</span>
+| · 契约：FAKE-REG 返回配置值/超时；HARNESS-FD-LOG 记录不修改 | | · 用法：测试前重置计数，测试后验证断言调用 |
 
 <span style="color:#6e7681">**总体说明**：C++20 编译器（clang 17），构建目标为教学单二进制；fixture 来源为 docs/examples/isd-frame-decoder/ 冻结 hex 向量集与固定种子；替身资产归 tests.asset-design（HARNESS-FD-CLOCK / -REG / -LOG）；CI 入口为 runner --filter 选单 Case 或全集；并行隔离按模块实例+端口+临时目录；缺编译器记 Blocked/skip，不静默换工具链。</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
@@ -160,9 +181,9 @@ flowchart LR
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 <span style="color:#6e7681">**示例（虚构；分类适用性）**：</span>
-<span style="color:#6e7681">| normal / boundary / negative / concurrency | 适用 | — |
+| normal / boundary / negative / concurrency | 适用 | — |
 | recovery | Tailored-N/A | 模块无跨调用状态（ISD §7 事实） |
-| security / performance / endurance | 不在本层 | 归模块/系统层与通用规格 §6 |</span>
+| security / performance / endurance | 不在本层 | 归模块/系统层与通用规格 §6 |
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 3. 覆盖分母与 Case 清单
@@ -178,12 +199,12 @@ flowchart LR
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 <span style="color:#6e7681">**示例（虚构；一来源至少一条）**：</span>
-<span style="color:#6e7681">| 来源 ID / 固定版本 | 设计验证项 ID | Case ID | 分类 | 优先级 | 责任摘要（要测什么） | 设计状态 | 上级组合验证入口 |</span>
-<span style="color:#6e7681">|---|---|---|---|---|---|---|</span>
-<span style="color:#6e7681">| FD-R1 / EX-FRAME-MODULE 1.0.0 | VRC-EX-ISD-DECODE-01 | UT-FD-001 | normal | P1 | 合法帧解析出借用视图与 consumed，只消费首帧 | Designed | — |</span>
-<span style="color:#6e7681">| FD-R1 | VRC-EX-ISD-DECODE-01 | UT-FD-003 | negative | P0 | 头非法时按 version→kind→length 优先级拒绝，不等待载荷 | Designed | — |</span>
-<span style="color:#6e7681">| FD-R2 / 同基线 | VRC-EX-ISD-LIFE-01 | UT-FD-005 | concurrency | P1 | 并发只读结果一致且输入不变 | Designed | 宿主长寿命组合（NOT_RUN） |</span>
-<span style="color:#6e7681">| 上级 wire 契约 | — | （Gap） | contract | — | wire 互操作非本层责任 | Gap（G-EX-1） | 契约层入口未定义 |</span>
+| 来源 ID / 固定版本 | 设计验证项 ID | Case ID | 分类 | 优先级 | 责任摘要（要测什么） | 设计状态 | 上级组合验证入口 |
+|---|---|---|---|---|---|---|
+| FD-R1 / EX-FRAME-MODULE 1.0.0 | VRC-EX-ISD-DECODE-01 | UT-FD-001 | normal | P1 | 合法帧解析出借用视图与 consumed，只消费首帧 | Designed | — |
+| FD-R1 | VRC-EX-ISD-DECODE-01 | UT-FD-003 | negative | P0 | 头非法时按 version→kind→length 优先级拒绝，不等待载荷 | Designed | — |
+| FD-R2 / 同基线 | VRC-EX-ISD-LIFE-01 | UT-FD-005 | concurrency | P1 | 并发只读结果一致且输入不变 | Designed | 宿主长寿命组合（NOT_RUN） |
+| 上级 wire 契约 | — | （Gap） | contract | — | wire 互操作非本层责任 | Gap（G-EX-1） | 契约层入口未定义 |
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 4. 不适用与缺口裁决
@@ -198,7 +219,9 @@ flowchart LR
 | <!-- TODO --> | | |
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-<span style="color:#6e7681">| 上级 wire 契约 / 契约层入口未定义 | Gap（G-EX-1） | 系统架构组 / 指定契约测试文档 |</span>
+<span style="color:#6e7681">**示例（虚构；不适用与缺口裁决）**：</span>
+
+| 上级 wire 契约 / 契约层入口未定义 | Gap（G-EX-1） | 系统架构组 / 指定契约测试文档 |
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 5. 文档联动与清单变更规则
@@ -231,9 +254,9 @@ flowchart LR
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 <span style="color:#6e7681">**示例（虚构）**：</span>
 
-<span style="color:#6e7681">| 设计验证项 ID | 要验证什么 | 设计来源 | §3 Case 覆盖 |</span>
-<span style="color:#6e7681">|---|---|---|---|</span>
-<span style="color:#6e7681">| VRC-EX-ISD-DECODE-01 | 头校验顺序与错误优先级 | ISD §验证 | UT-FD-001/003 |</span>
-<span style="color:#6e7681">| VRC-EX-ISD-LIFE-01 | 借用寿命与并发只读 | ISD §验证 | UT-FD-005 |</span>
-<span style="color:#6e7681">| （Gap）上级 wire 契约 | wire 互操作 | 契约层入口未定义 | 缺口 G-EX-1 |</span>
+| 设计验证项 ID | 要验证什么 | 设计来源 | §3 Case 覆盖 |
+|---|---|---|---|
+| VRC-EX-ISD-DECODE-01 | 头校验顺序与错误优先级 | ISD §验证 | UT-FD-001/003 |
+| VRC-EX-ISD-LIFE-01 | 借用寿命与并发只读 | ISD §验证 | UT-FD-005 |
+| （Gap）上级 wire 契约 | wire 互操作 | 契约层入口未定义 | 缺口 G-EX-1 |
 <!-- STD_TEMPLATE_EXAMPLE_END -->

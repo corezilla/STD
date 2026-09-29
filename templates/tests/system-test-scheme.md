@@ -77,9 +77,9 @@
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 <span style="color:#6e7681">**示例（虚构；系统层测试方法——含注入/边界/调用序等具体细节）**：</span>
 
-<span style="color:#6e7681">| Case 家族 | 测试设计技术 | 环境类型引用 | 自动化与判定 |</span>
-<span style="color:#6e7681">|---|---|---|---|</span>
-<span style="color:#6e7681">| normal（E2E 关键路径） | 端到端跑通启动/业务/配置/停止 | 真实子系统 + 预生产镜像 | CI 跑全集；失败不阻断后续但需复现 |
+| Case 家族 | 测试设计技术 | 环境类型引用 | 自动化与判定 |
+|---|---|---|---|
+| normal（E2E 关键路径） | 端到端跑通启动/业务/配置/停止 | 真实子系统 + 预生产镜像 | CI 跑全集；失败不阻断后续但需复现 |
 | | · 注入：标准启动→业务调用→配置变更→正常停止 | | · 验证每阶段事件顺序与状态切换 |
 | boundary（全链路集成） | 子系统/机制端到端（含 EX-OBS PARTIAL） | 真实子系统 + 独立存储 + 受控时钟 | 单 Case --filter；机制端到端独立记录 |
 | | · 注入：跨子系统全链路正常路径 + 机制端到端 PARTIAL 场景 | | · 验证子系统集成语义、机制在系统级端到端表现 |
@@ -90,7 +90,7 @@
 | recovery（灾备） | kill/注入失败/资源回收 | 真实子系统 + 监控日志 | 复现状态与修复分开记录；无因果标未复现 |
 | | · 注入：kill 进程/注入失败/磁盘满/资源回收失败 | | · 验证复现状态 vs 修复状态分开记录；无因果证据标未复现 |
 | security（安全冒烟） | 鉴权/注入/脱敏（prompt 注入 + 敏感数据） | 真实子系统 | 缺关键 fake 时降级为 Blocked |
-| | · 注入：prompt 注入样本 + 敏感数据样本 | | · 必须拒绝/脱敏，不允许泄露系统提示 |</span>
+| | · 注入：prompt 注入样本 + 敏感数据样本 | | · 必须拒绝/脱敏，不允许泄露系统提示 |
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 1.6 替身使用策略与边界
@@ -107,10 +107,10 @@
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 <span style="color:#6e7681">**示例（虚构；系统层替身矩阵）**：</span>
 
-<span style="color:#6e7681">| 协作者 | 形态 | 替身契约 | 理由 |</span>
-<span style="color:#6e7681">|---|---|---|---|</span>
-<span style="color:#6e7681">| 真实子系统（全部） | 独立存储测试实例（真协议） | 跨系统接口 fake | 受控时钟 fake |
-| · 契约与自检归 tests.asset-design | | · 不 mock 你不拥有的对象 |</span>
+| 协作者 | 形态 | 替身契约 | 理由 |
+|---|---|---|---|
+| 真实子系统（全部） | 独立存储测试实例（真协议） | 跨系统接口 fake | 受控时钟 fake |
+| · 契约与自检归 tests.asset-design | | · 不 mock 你不拥有的对象 |
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 
@@ -130,24 +130,61 @@
 
 <span style="color:#6e7681">**拓扑**（ENV 类型 → ENV 实例 → 被测对象）：</span>
 
-```mermaid
-flowchart LR
-  Sub["真实子系统（全部）<br/>(ENV-1)"] --> SysH["系统 harness<br/>(ENV-1 链接)"]
-  Store["独立存储测试实例<br/>STORE-TEST（真协议）<br/>(ENV-2)"] --> SysH
-  Fake["跨系统接口 fake<br/>FAKE-REG<br/>(ENV-3)"] --> SysH
-  CLK["受控时钟 fake<br/>CLK-APP<br/>(ENV-4)"] --> SysH
-  Prod["预生产镜像<br/>G-EX-3 排期中<br/>(ENV-5)"] --> SysH
-  SysH --> Case["被测系统（EX-APP）"]
+```d2
+direction: right
+
+sub: 真实子系统（全部）(ENV-1) {
+  shape: rectangle
+  style.fill: "#E8F5E9"
+}
+
+harness: 系统 harness\n(ENV-1 链接) {
+  shape: rectangle
+  style.fill: "#F3E5F5"
+}
+
+store: 独立存储测试实例 (ENV-2)\nSTORE-TEST（真协议） {
+  shape: rectangle
+  style.fill: "#FFF3E0"
+}
+
+fake: 跨系统接口 fake (ENV-3)\nFAKE-REG {
+  shape: rectangle
+  style.fill: "#FFF3E0"
+}
+
+clk: 受控时钟 fake (ENV-4)\nCLK-APP {
+  shape: rectangle
+  style.fill: "#FFF3E0"
+}
+
+prod: 预生产镜像 (ENV-5)\nG-EX-3 排期中 {
+  shape: rectangle
+  style.fill: "#FFEBEE"
+}
+
+case: 被测系统\nEX-APP {
+  shape: rectangle
+  style.fill: "#E3F2FD"
+  style.bold: true
+}
+
+sub -> harness: 链接
+store -> harness
+fake -> harness
+clk -> harness
+prod -> harness
+harness -> case
 ```
 
-<span style="color:#6e7681">| 环境类型 | 行为/真伪 | 契约文档 | 在本层用例中的角色 |</span>
-<span style="color:#6e7681">|---|---|---|---|</span>
-<span style="color:#6e7681">| 真实子系统（全部） | 真实 | — | E2E 关键路径/全链路集成用例 |
+| 环境类型 | 行为/真伪 | 契约文档 | 在本层用例中的角色 |
+|---|---|---|---|
+| 真实子系统（全部） | 真实 | — | E2E 关键路径/全链路集成用例 |
 | · 契约：源码即真实子系统 | | · 用法：系统 harness 链接全部真实 || 独立存储测试实例 | 真协议（独立于生产存储） | STORE-TEST | 数据库/存储相关用例 |
 | · 契约：真协议，独立于生产存储 | | · 用法：升级场景测试；不 mock 协议 || 外部接口 fake（注册/接入） | 只代返回值/超时 | FAKE-REG | 跨系统边界用例 |
 | · 契约：替代跨系统接口 | | · 用法：测试前配置拒绝/超时 || 受控时钟 fake | 系统级时间推进 | CLK-APP | 时间/调度用例 |
 | · 契约：系统级时间单调推进 | | || 预生产镜像 | 真实但受控 | 镜像快照版本 | E2E 与全链路集成 |
-| · 契约：受控的预生产环境，记录快照版本 | | · 用法：E2E 端到端在此镜像运行 |</span>
+| · 契约：受控的预生产环境，记录快照版本 | | · 用法：E2E 端到端在此镜像运行 |
 
 <span style="color:#6e7681">**总体说明**：C++20 系统 harness 链接所有子系统为真实调用；独立存储测试实例（真协议）连接预生产镜像版本；受控时钟 fake（系统级时间推进）；并行隔离按子系统实例+端口+数据命名空间；监控与日志接入；G-EX-3 真实环境（如预生产）有 Owner 与排期；缺关键环境时整批降级为 Blocked 并登记缺口，不静默换工具链。</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
@@ -165,9 +202,9 @@ flowchart LR
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 <span style="color:#6e7681">**示例（虚构；分类适用性）**：</span>
-<span style="color:#6e7681">| normal / boundary / negative / concurrency / recovery | 适用 | — |
+| normal / boundary / negative / concurrency / recovery | 适用 | — |
 | performance | 适用 | 启动时长与停止清空期限断言 |
-| endurance | 裁剪 | 容量与长稳另立专项（tailoring） |</span>
+| endurance | 裁剪 | 容量与长稳另立专项（tailoring） |
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 3. 覆盖分母与 Case 清单
@@ -183,11 +220,11 @@ flowchart LR
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 <span style="color:#6e7681">**示例（虚构；一来源至少一条）**：</span>
-<span style="color:#6e7681">| 来源 ID / 固定版本 | 设计验证项 ID | Case ID | 分类 | 优先级 | 责任摘要（要测什么） | 设计状态 | 上级组合验证入口 |</span>
-<span style="color:#6e7681">|---|---|---|---|---|---|---|</span>
-<span style="color:#6e7681">| 启动流程（系统设计 §7.3） | VRC-APP-001 | SYS-APP-001 | normal | P0 | 全组件按序就绪，失败组件不阻塞重启 | Designed | — |</span>
-<span style="color:#6e7681">| 停止清空（§7.6） | VRC-APP-002 | SYS-APP-002 | recovery | P0 | 在途请求退出且无残留，重启前确认 | Designed | — |</span>
-<span style="color:#6e7681">| 机制端到端：EX-OBS §15 | VRC-APP-003 | SYS-APP-003 | normal | P1 | 版本核对机制端到端 PARTIAL 语义成立 | Designed | 验收场景预演（不替代验收） |</span>
+| 来源 ID / 固定版本 | 设计验证项 ID | Case ID | 分类 | 优先级 | 责任摘要（要测什么） | 设计状态 | 上级组合验证入口 |
+|---|---|---|---|---|---|---|
+| 启动流程（系统设计 §7.3） | VRC-APP-001 | SYS-APP-001 | normal | P0 | 全组件按序就绪，失败组件不阻塞重启 | Designed | — |
+| 停止清空（§7.6） | VRC-APP-002 | SYS-APP-002 | recovery | P0 | 在途请求退出且无残留，重启前确认 | Designed | — |
+| 机制端到端：EX-OBS §15 | VRC-APP-003 | SYS-APP-003 | normal | P1 | 版本核对机制端到端 PARTIAL 语义成立 | Designed | 验收场景预演（不替代验收） |
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 4. 不适用与缺口裁决
@@ -202,7 +239,9 @@ flowchart LR
 | <!-- TODO --> | | |
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-<span style="color:#6e7681">| 真实生产环境验证 / 环境不可得 | Gap（G-EX-3） | 运维 / 预生产环境排期 |</span>
+<span style="color:#6e7681">**示例（虚构；不适用与缺口裁决）**：</span>
+
+| 真实生产环境验证 / 环境不可得 | Gap（G-EX-3） | 运维 / 预生产环境排期 |
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 5. 文档联动与清单变更规则
@@ -235,9 +274,9 @@ flowchart LR
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 <span style="color:#6e7681">**示例（虚构）**：</span>
 
-<span style="color:#6e7681">| 设计验证项 ID | 要验证什么 | 设计来源 | §3 Case 覆盖 |</span>
-<span style="color:#6e7681">|---|---|---|---|</span>
-<span style="color:#6e7681">| VRC-APP-001 | 启动流程按序就绪 | 系统设计 §12 | SYS-APP-001 |</span>
-<span style="color:#6e7681">| VRC-APP-002 | 停止清空无残留 | 同 §12 | SYS-APP-002 |</span>
-<span style="color:#6e7681">| VRC-APP-003 | 机制端到端 PARTIAL 语义 | 同 §12 | SYS-APP-003 |</span>
+| 设计验证项 ID | 要验证什么 | 设计来源 | §3 Case 覆盖 |
+|---|---|---|---|
+| VRC-APP-001 | 启动流程按序就绪 | 系统设计 §12 | SYS-APP-001 |
+| VRC-APP-002 | 停止清空无残留 | 同 §12 | SYS-APP-002 |
+| VRC-APP-003 | 机制端到端 PARTIAL 语义 | 同 §12 | SYS-APP-003 |
 <!-- STD_TEMPLATE_EXAMPLE_END -->
