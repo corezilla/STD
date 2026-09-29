@@ -2,7 +2,7 @@
 
 版本：0.2.0-draft.1 · 日期：2026-09-12 · 状态：方法草案，待实际写作任务验证
 
-主模板：`design.fpga`、`assurance.fpga-implementation-report`。
+主模板：`design.fpga`。
 先读[通用 AI 编写指南](../ai-authoring-guide.md)，再读项目已采用的对应模板。本文补充本类型的工作方法，不重复公共来源、权限和状态规则，不自动升级项目模板。
 
 ## 1. 输入与边界

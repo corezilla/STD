@@ -45,21 +45,6 @@
     "hardware.bom": "hardware/docs/15_evaluation",
     "interfaces.control": "docs/60_interfaces",
     "contracts.specification": "docs/60_interfaces/contracts",
-    "assurance.vv-plan": "docs/70_verification/plans",
-    "assurance.test-plan": "docs/70_verification/plans",
-    "assurance.test-specification": "docs/70_verification/specifications",
-    "assurance.test-procedure": "docs/70_verification/procedures",
-    "assurance.test-report": {
-      "static": "tests/static/reports",
-      "contract": "tests/contract/reports",
-      "subsystem": "tests/subsystem/reports",
-      "integration": "tests/integration/reports",
-      "system": "tests/system/reports",
-      "acceptance": "tests/acceptance/reports"
-    },
-    "assurance.acceptance-plan": "docs/70_verification/acceptance",
-    "assurance.acceptance-report": "tests/acceptance/reports",
-    "assurance.fpga-implementation-report": "firmware/docs/70_verification",
     "tests.unit-test-design": "docs/70_verification/specifications",
     "review.packet": "docs/91_reviews",
     "review.schematic-pcb": "hardware/docs/91_reviews",
@@ -72,7 +57,16 @@
     "operations.maintenance": "docs/80_operations/manuals",
     "operations.bring-up": "docs/80_operations/bring-up",
     "tests.module-test-design": "docs/70_verification/specifications",
-    "tests.module-test-plan": "docs/70_verification/plans"
+    "tests.module-test-plan": "docs/70_verification/plans",
+    "tests.unit-test-plan": "docs/70_verification/plans",
+    "tests.subsystem-test-design": "docs/70_verification/specifications",
+    "tests.subsystem-test-plan": "docs/70_verification/plans",
+    "tests.system-test-design": "docs/70_verification/specifications",
+    "tests.system-test-plan": "docs/70_verification/plans",
+    "tests.unit-test-scheme": "docs/70_verification/schemes",
+    "tests.module-test-scheme": "docs/70_verification/schemes",
+    "tests.subsystem-test-scheme": "docs/70_verification/schemes",
+    "tests.system-test-scheme": "docs/70_verification/schemes"
   },
   "domain_owned_path_patterns": {
     "software_component": {

@@ -3,7 +3,7 @@
 STD 面向软件、硬件、固件、FPGA 和软硬件协同项目，提供项目管理、需求、总体系统设计、总体系统机制设计、
 子系统设计、模块设计、接口契约、验证测试、评审、发布和运维所需的版本化模板。
 
-当前 `0.1.0-draft.51` 优先覆盖：
+当前 `0.1.0-draft.52` 优先覆盖：
 
 - Slinky，以及与其协作的 Piko、LLMTier；
 - HIFM，包括软件、DPU-SIM、FPGA/RTL、板卡和系统验证。
@@ -77,8 +77,7 @@ templates/
 ├── product/          解决方案、SKU 规格与产品路线图
 ├── interfaces/       接口控制
 ├── contracts/        API、Schema、事件与错误契约
-├── assurance/        V&V、测试计划/步骤/报告、验收和 FPGA 实现报告
-├── tests/            模块的单元测试设计、模块测试设计与模块测试计划（注意与仓库自身 tests/ 不同）
+├── tests/            与设计阶段一一对应的测试方案/Case 设计/测试计划（注意与仓库自身 tests/ 不同）
 ├── review/           评审包
 ├── decisions/        ADR
 └── operations/       用户、安装、运维、维护、Bring-up、发布与退役
@@ -133,7 +132,7 @@ manifest。完整接入规则见 [`docs/adoption.md`](docs/adoption.md)。
 AI 编写入口采用“通用方法 + 模板类型专项”：先读
 [`docs/ai-authoring-guide.md`](docs/ai-authoring-guide.md)（`0.2.0-draft.9`），
 再按其中的映射选择主专项和项目已采用模板，不需要通读全部指南。
-15 类专项覆盖当前 51 个模板，同类模板共享方法，计划、报告和决定仍保留不同完成边界；
+15 类专项覆盖当前 52 个模板，同类模板共享方法，计划、报告和决定仍保留不同完成边界；
 精确导航见 [`docs/ai-authoring-guides.json`](docs/ai-authoring-guides.json)。
 软件模块需要独立实现规格时使用可选的 [`ISD模板`](templates/design/implementation-design.md)，
 配套 [`ISD规范`](docs/isd-standard.md) 和 [`AI编写指南`](docs/ai-guides/implementation-design.md)。
@@ -248,15 +247,14 @@ AI 指南按能力贯通章节、先复用并核对现有契约，再交接双�
 
 ## 批量机制写作准备
 
-接口控制与契约规格模板各为 `0.4.0`，测试规格为 `0.2.1`；新增[单模块单元测试设计模板](templates/tests/unit-test-design.md)
-`tests.unit-test-design`（`0.7.0`）：以模块设计的 Function/Constraint/Rule/Interface/Transition/Invariant
-及错误出口 ID 为分母逐 Case 设计输入、fixture、独立 Oracle 与测试代码位置，区分设计/实现/执行/判定四种
-状态，第 5 章按模块事实裁决状态、并发与故障测试的适用性；单元层用例权威归本设计，
-`assurance.test-specification` 继续负责其他层级。编写指导以斜体蓝字直接置于各章正文，虚构填写示例内嵌各章槽位之后（STD_TEMPLATE_EXAMPLE 标记，实例化时剥离）。同批新增
-[模块测试设计](templates/tests/module-test-design.md) `tests.module-test-design`（`0.6.0`，整模块组装后
-测对外接口与内部流程，内部单元真实、边界外依赖替身）与[模块测试计划](templates/tests/module-test-plan.md)
-`tests.module-test-plan`（`0.6.0`，模块范围测试活动的组织与证据汇总，只做索引不复制 Case）。三者逐章提供段落式建议、
-完成条件及贯穿示例，不仅保留空标题。[机制 AI 指南 §10](docs/ai-guides/system-mechanism.md#10-批量编写与跨文档复审)
+接口控制与契约规格模板各为 `0.4.0`；测试框架重构为 `templates/tests/` 家族，与设计阶段一一对应
+（单元/模块/子系统/系统四层，每层三件）：`*-test-scheme` 测试方案（分类与 Case 清单的唯一登记，
+每 Case 一行责任摘要）、`*-test-design` 单 Case 完整设计（一 Case 一文档，Document ID＝Case ID，
+测试脚本按它编写）、`*-test-plan` 测试计划（只索引不复制 Case）。机制保证按执行位置进入子系统/系统
+层分母，不单独立测试模板；assurance 家族（含 vv-plan/test-plan/test-specification/test-procedure/
+test-report/acceptance-*/fpga-implementation-report）整体退役，既有项目按已锁定版本继续使用。
+编写指导以斜体蓝字直接置于各章正文，虚构填写示例内嵌槽位与章节（STD_TEMPLATE_EXAMPLE 标记，
+实例化时剥离），文件开头附格式说明。[机制 AI 指南 §10](docs/ai-guides/system-mechanism.md#10-批量编写与跨文档复审)
 说明固定一批输入、共享契约唯一修改、父子承接和受影响文档的组合复查，不引入新的写作平台。
 [Host—驱动—FPGA 教学案例](docs/examples/host-fpga-transfer-example.md)给出完整逻辑调用、原生布局、
 停止/排空和 V→Case/环境的路径；未实现具体 OS/总线绑定，不宣称真实硬件验证。

@@ -34,13 +34,12 @@
 | BOM、正式料号、替代料和供应风险如何管理 | `hardware.bom` |
 | 两侧如何连接并共同演进 | `interfaces.control` |
 | API、Schema、事件和错误语义 | `contracts.specification` |
-| 如何证明需求满足 | `assurance.vv-plan` |
-| 某个测试层级如何组织 | `assurance.test-plan` |
-| 某组测试如何执行和判定 | `assurance.test-specification` |
-| 单次可复现测试如何逐步执行 | `assurance.test-procedure` |
-| 测试实际发生了什么 | `assurance.test-report` |
-| 如何进行正式验收 | `assurance.acceptance-plan` / `assurance.acceptance-report` |
-| FPGA 综合、实现和时序是否收敛 | `assurance.fpga-implementation-report` |
+| 某阶段测试测什么、有哪些 Case | `tests.*-test-scheme` |
+| 单个 Case 如何执行（测试脚本依据） | `tests.*-test-design` |
+| 某阶段测试如何安排 | `tests.*-test-plan` |
+| 测试实际发生了什么 | Run 报告（reports/<run-id>/，随测试保存） |
+| 如何进行正式验收 | 验收活动（按项目 tailoring 承接，不在 tests 家族） |
+| FPGA 综合、实现和时序是否收敛 | `design.fpga` §验证章（实现报告随项目 tailoring 承接） |
 | 某个基线能否进入下一阶段 | `review.packet` |
 | 原理图和 PCB 是否可发布 | `review.schematic-pcb` |
 | 为什么选择某项方案 | `decisions.adr` |
@@ -144,17 +143,13 @@ ISD是同一模块的可选实现视图，不插入新的对象层级。默认�
 
 ## 4. 测试文档的边界
 
-- `vv-plan`：整个产品如何证明需求满足。
-- `test-plan`：某一测试层级的范围、资源、策略、入口和出口。
-- `test-specification`：测试 case、输入、oracle 和覆盖设计。
-- `unit-test-design`：单个软件模块隔离单元测试的逐 Case 设计（输入构造、fixture、独立 Oracle、测试代码位置）；单元 PASS 不关闭组合目标。
-- `module-test-design`：整模块组装后的测试设计（对外接口与内部流程，内部单元真实、边界外依赖替身）；模块 PASS 不关闭契约/集成/系统。
-- `module-test-plan`：单个模块的测试活动组织（范围、策略、资源、出入口、证据汇总），串联单元/模块设计与上级组合入口。
-- `test-procedure`：可由执行者逐步操作的程序。
-- `test-report`：一次或一组实际执行结果。
-- `acceptance-*`：客户/产品 authority 的正式验收决定。
+测试框架与设计阶段一一对应（单元/模块/子系统/系统四层，每层三件）：
 
-这些文档可以按已批准的 tailoring 合并，但 metadata 和章节映射必须保留。
+- `*-test-scheme`：该阶段的测试方案——测试分类体系与 Case 清单（每 Case 一行：ID/分类/优先级/责任摘要/设计状态）；Case 清单唯一登记处。
+- `*-test-design`：单个 Case 的完整设计，一 Case 一文档——输入、初态、独立 Oracle、预期、清理、测试函数位置；测试脚本按它编写。
+- `*-test-plan`：该阶段测试活动的组织——范围构成、基线重跑、资源责任、出入口、证据汇总；只索引不复制 Case。
+
+机制（design.system-mechanism）不单独立测试文档，其保证按执行位置进入子系统/系统层方案的覆盖分母。验收活动与运行报告不在本家族；按项目 tailoring 承接。
 
 ## 5. 总体系统设计与总体系统机制设计的边界
 

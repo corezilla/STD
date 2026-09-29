@@ -16,7 +16,7 @@
 
 初次完整编写：先读本指南，再根据实际交付物读取**一个主专项指南**、项目已采用的模板及其全部编写建议；最后读该任务需要的项目来源。不是先读全部指南，也不是按项目名称选模板。续写或局部修改先读现有记录、对应方法和当前差异，只检查受影响内容及直接依赖，不重跑完整写作流程。
 
-下表覆盖当前目录中的 51 个模板。相近模板共享专项，但保留各自的输入、产物和完成条件。一个任务产出多种文档时，分别按对应专项处理；跨领域只读被依赖的部分，不重复创建同一内容的规范来源。
+下表覆盖当前目录中的 52 个模板。相近模板共享专项，但保留各自的输入、产物和完成条件。一个任务产出多种文档时，分别按对应专项处理；跨领域只读被依赖的部分，不重复创建同一内容的规范来源。
 
 | 主专项指南 | 适用 Template ID |
 |---|---|
@@ -26,13 +26,13 @@
 | [软件子系统与模块](ai-guides/unit-design.md) | `design.subsystem`、`design.definition` |
 | [软件实现规格设计（ISD）](ai-guides/implementation-design.md) | `design.implementation` |
 | [硬件、制造与板级评审](ai-guides/hardware.md) | `design.hardware`、`hardware.manufacturing`、`hardware.bom`、`review.schematic-pcb` |
-| [FPGA 程序与实现报告](ai-guides/fpga.md) | `design.fpga`、`assurance.fpga-implementation-report` |
+| [FPGA 程序与实现报告](ai-guides/fpga.md) | `design.fpga` |
 | [工程管理](ai-guides/management.md) | `management.project-plan`、`management.tailoring`、`management.development-plan`、`management.semp`、`management.configuration-plan`、`management.risk-plan`、`management.quality-plan`、`management.safety-plan`、`management.security-plan` |
 | [需求与追溯](ai-guides/requirements.md) | `requirements.stakeholder-needs`、`requirements.conops`、`requirements.specification`、`requirements.traceability` |
 | [技术分析](ai-guides/technical-analysis.md) | `evaluation.technical-analysis` |
 | [产品与交付定义](ai-guides/product.md) | `product.solution-definition`、`product.sku-specification`、`product.roadmap` |
 | [接口、契约与数据](ai-guides/interfaces-contracts-data.md) | `interfaces.control`、`contracts.specification`、`design.data-dictionary` |
-| [验证与验收](ai-guides/verification.md) | `assurance.vv-plan`、`assurance.test-plan`、`assurance.test-specification`、`assurance.test-procedure`、`assurance.test-report`、`assurance.acceptance-plan`、`assurance.acceptance-report`、`tests.unit-test-design`、`tests.module-test-design`、`tests.module-test-plan` |
+| [验证与验收](ai-guides/verification.md) | `tests.module-test-design`、`tests.module-test-plan`、`tests.module-test-scheme`、`tests.subsystem-test-design`、`tests.subsystem-test-plan`、`tests.subsystem-test-scheme`、`tests.system-test-design`、`tests.system-test-plan`、`tests.system-test-scheme`、`tests.unit-test-design`、`tests.unit-test-plan`、`tests.unit-test-scheme` |
 | [评审与决策](ai-guides/review-decisions.md) | `review.packet`、`decisions.adr` |
 | [交付与运维](ai-guides/operations.md) | `operations.release`、`operations.version-description`、`operations.user-manual`、`operations.installation-deployment`、`operations.operations-manual`、`operations.maintenance`、`operations.bring-up` |
 

@@ -27,17 +27,17 @@
 > 外部不可变证据；不要在文档内容中伪造包含自身的 commit hash。
 <!-- STD_DOCUMENT_COVER_END -->
 
-<span style="color:#1f6feb"><em>**编写建议**：本模板组织模块层的测试活动，与 design.definition（模块设计阶段）一一对应。计划只做索引与状态：引用方案（tests.module-test-scheme）与 Case 文档（tests.module-test-design，一 Case 一文档），不复制 Case、不预填执行结果。</em></span>
+<span style="color:#1f6feb"><em>**编写建议**：本模板组织单元层的测试活动，与 design.implementation（单元设计阶段）一一对应。计划只做索引与状态：引用方案（tests.unit-test-scheme）与 Case 文档（tests.unit-test-design，一 Case 一文档），不复制 Case、不预填执行结果。</em></span>
 
 > **格式说明**：蓝色斜体为编写建议（指导如何填写，生成实例后保留）；灰色文字为虚构教学示例（以 `STD_TEMPLATE_EXAMPLE` 标记包裹，`new-design` 生成实例时自动剥离，不得当作项目事实或运行证据）；`<!-- TODO -->` 为待填槽位。颜色在 GitHub 等严格渲染器中降级为斜体/普通字，语义不变。
 
-> 本计划绑定单一软件模块：模块对象 ID 经 `--design-object-id` 写入 metadata；模块设计基线在 §2 固定。
+> 本计划绑定单一软件模块：模块对象 ID 经 `--design-object-id` 写入 metadata；ISD 基线在 §2 固定。
 
 ### 模板定位：方案、Case 设计与计划的边界
 
-<span style="color:#1f6feb"><em>**编写建议**：本计划对应模块设计阶段。构成＝模块方案×1（tests.module-test-scheme）＋Case 文档×N（tests.module-test-design）＋单元计划引用与子系统交接；单元层组织归 tests.unit-test-plan。</em></span>
+<span style="color:#1f6feb"><em>**编写建议**：本计划对应实现阶段。构成＝单元方案×1（tests.unit-test-scheme）＋Case 文档×N（tests.unit-test-design，一 Case 一文档）＋模块层交接；模块组装层组织归 tests.module-test-plan。</em></span>
 
-- **权威分工**：模块层测试活动组织以本计划为唯一权威；Case 清单归 `tests.module-test-scheme`；单 Case 展开归 `tests.module-test-design`（一 Case 一文档）；实际结果权威在 Run 报告。
+- **权威分工**：单元层测试活动组织以本计划为唯一权威；Case 清单归 `tests.unit-test-scheme`；单 Case 展开归 `tests.unit-test-design`（一 Case 一文档）；实际结果权威在 Run 报告。
 - **只索引**：构成表引用方案版本与 Case ID 范围，不复制清单或 Case 细节。
 - **不预填结果**：任何条目不得出现 PASS 或执行结论；计划不是授权书。
 
@@ -55,14 +55,14 @@
 
 ## 1. 目标、范围与测试构成
 
-<span style="color:#1f6feb"><em>**本节目的**：固定模块层测试活动的范围与构成清单。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：验证对象与不证明什么；构成＝模块方案×1＋Case 文档×N＋单元计划/子系统交接；排除项及 tailoring 依据。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 M101：方案 MTS-EXM v1.0 ＋ Case 文档 MT-EXM-001…004。</em></span>
+<span style="color:#1f6feb"><em>**本节目的**：固定单元层测试活动的范围与构成清单。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：验证对象与不证明什么；构成＝方案×1＋Case 文档×N＋模块/契约交接出口；排除项及 tailoring 依据。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 FrameDecoder：方案 UTS-FD v1.2 ＋ Case 文档 UT-FD-001…005。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：读者能说清验证对象、构成清单和排除项；每个构成项指向方案、Case 文档或具名缺口。</em></span>
 
 | 构成层 | 文档 / 入口（Document ID 或缺口） | 覆盖责任摘要 | 条目状态 |
 |---|---|---|---|
-| <!-- 模块方案 ×1 --> | | | |
+| <!-- 单元方案 ×1 --> | | | |
 | <!-- Case 文档 ×N（按方案清单） --> | | | |
 | <!-- 相邻层交接出口 --> | | | |
 
@@ -70,27 +70,27 @@
 <span style="color:#6e7681">**示例（虚构）**：</span>
 <span style="color:#6e7681">| 构成层 | 文档 / 入口 | 覆盖责任摘要 | 条目状态 |</span>
 <span style="color:#6e7681">|---|---|---|---|</span>
-<span style="color:#6e7681">| 模块方案 ×1 | MTS-EXM v1.0 | 清单与设计状态唯一登记 | Planned |</span>
-<span style="color:#6e7681">| Case 文档 ×4 | MT-EXM-001…004 | 对外行为、校验先于筛选、容量上限 | Planned |</span>
-<span style="color:#6e7681">| 单元计划引用 | UTP-EXM | 单元层组织 | Planned |</span>
-<span style="color:#6e7681">| 子系统交接 | STS-S01 清单 | 宿主并发准入 | Blocked（G-EX-1） |</span>
+<span style="color:#6e7681">| 单元方案 ×1 | UTS-FD v1.2 | 清单与设计状态唯一登记 | Planned |</span>
+<span style="color:#6e7681">| Case 文档 ×5 | UT-FD-001…005 | 互斥分支、借用寿命、并发只读 | Planned |</span>
+<span style="color:#6e7681">| 模块层交接 | 模块测试计划 | 组装后流程保证 | Planned |</span>
+<span style="color:#6e7681">| 契约层交接 | 入口未定义 | wire 互操作 | Blocked（G-EX-1） |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 2. 被测基线与变更重跑范围
 
-<span style="color:#1f6feb"><em>**本节目的**：固定模块层基线与变更→重跑映射。</em></span>
+<span style="color:#1f6feb"><em>**本节目的**：固定单元层基线与变更→重跑映射。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：设计文档与源码、依赖、构建环境版本；哪些变化触发哪些 Case 重跑；计划只固定基线与规则。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：EX-MODULE/v1；教学 C++ 目标</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：EX-ISD/v1 修订 2；教学 C++ 目标；无外部依赖</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：基线可核验；任一类变更能映射到明确重跑范围。</em></span>
 
-- 设计 / 源码 / 依赖基线：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">EX-MODULE/v1；教学 C++ 目标</span><!-- STD_TEMPLATE_EXAMPLE_END -->
-- 变更 → 重跑范围规则：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">select_ids 签名变化→方案重裁＋全部 Case 重跑；I3 实现变化→受影响 Case 复跑</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 设计 / 源码 / 依赖基线：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">EX-ISD/v1 修订 2；教学 C++ 目标；无外部依赖</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 变更 → 重跑范围规则：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">decode_one 签名变化→方案重裁＋全部 Case 重跑；私有 helper 重构→受影响 Case 复跑</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 3. 策略与覆盖模型
 
-<span style="color:#1f6feb"><em>**本节目的**：说明模块层覆盖如何从方案分母论证，并与相邻层分工。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：按方案 §3 分母归类：对外接口行为、组装后流程、容量上限各在哪组 Case 关闭；不下放单元层已关闭项。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：校验先于筛选在 MT-EXM-002 关闭（不下放单元层）。</em></span>
+<span style="color:#1f6feb"><em>**本节目的**：说明单元层覆盖如何从方案分母论证，并与相邻层分工。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：按方案 §3 分母归类：函数行为、错误分支、并发/借用、数据规则各自在哪组 Case 关闭；保留 NOT_RUN 分母。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：错误优先级在 UT-FD-003 关闭；wire 互操作留给契约层。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：每类保证能定位关闭层与承接文档；不以覆盖率百分比代替论证。</em></span>
 
 | 保证类别（来源 ID 族） | 关闭层 | 承接文档/入口 | 分母缺口 |
@@ -101,26 +101,26 @@
 <span style="color:#6e7681">**示例（虚构）**：</span>
 <span style="color:#6e7681">| 保证类别 | 关闭层 | 承接文档/入口 | 分母缺口 |</span>
 <span style="color:#6e7681">|---|---|---|---|</span>
-<span style="color:#6e7681">| 对外接口行为（EX-CON-1） | 本层 | MT-EXM-001/002 | — |</span>
-<span style="color:#6e7681">| 容量上限（EX-CON-2） | 本层 | MT-EXM-003/004 | — |</span>
-<span style="color:#6e7681">| 宿主并发准入 | 子系统层 | STS-S01 清单 | G-EX-1，Blocked |</span>
+<span style="color:#6e7681">| 头校验顺序与错误优先级（FD-R1） | 本层 | UT-FD-001/003 | — |</span>
+<span style="color:#6e7681">| 借用寿命与并发只读（FD-R2/R3） | 本层 | UT-FD-004/005 | — |</span>
+<span style="color:#6e7681">| wire 互操作 | 契约层 | 入口未定义 | G-EX-1，Blocked |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 4. 环境、资源与隔离
 
 <span style="color:#1f6feb"><em>**本节目的**：环境资源清单可核验、有 Owner。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：runner、构建目标、向量/夹具资产、所有权；并行隔离单位；缺失登记 Blocked。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：教学 harness＋冻结构造记录；无共享设备。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：C++20 教学宿主＋冻结 hex 向量；缺编译器整体 Blocked。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：清单可核验；共享与隔离明确；缺失项 Blocked。</em></span>
 
-- 环境与资产清单及 Owner：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">教学 C++ harness＋冻结构造记录数组，Owner＝模块 Owner</span><!-- STD_TEMPLATE_EXAMPLE_END -->
-- 共享资源、隔离与调度：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">无共享设备；缺编译器时整体 Blocked</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 环境与资产清单及 Owner：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">C++20 教学宿主＋冻结 hex 向量集，Owner＝模块 Owner</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 共享资源、隔离与调度：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">无共享设备；缺编译器时相关条目整体 Blocked</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 5. 方案与 Case 家族映射
 
 <span style="color:#1f6feb"><em>**本节目的**：Case 家族只映射到方案清单段落，不复制。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：家族→方案清单段落与 Case ID 范围。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：negative→MT-EXM-002；recovery→方案 §4 N/A。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：家族→方案清单段落与 Case ID 范围；方案未覆盖家族以缺口登记。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：negative→UT-FD-003；recovery→方案 §4 N/A（无状态事实）。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：每个家族能追到方案清单段落或缺口；没有第二份 Case 清单。</em></span>
 
 | Case 家族 | 方案清单段落 / Case ID 范围 | 条目状态 |
@@ -128,18 +128,18 @@
 | <!-- normal / boundary / negative / concurrency / recovery / … --> | | |
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-<span style="color:#6e7681">negative→MT-EXM-002；boundary→MT-EXM-003/004；recovery→方案 §4 裁决 N/A（同步只读事实）。</span>
+<span style="color:#6e7681">negative→方案清单 UT-FD-003；concurrency→UT-FD-005；recovery→方案 §4 裁决 N/A（无状态事实）。</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 6. 入口、出口与判定准则
 
 <span style="color:#1f6feb"><em>**本节目的**：开始/结束门槛可判定，判定语义与 Case 文档一致。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：入口（方案就绪、环境、基线）；出口（覆盖闭合或缺口有 Owner/Gate）；执行状态语义引用 Run 报告；到期不改判。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：入口＝方案清单无未登记缺口且组装可用。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：入口＝方案清单无未登记缺口且构建可用。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：门槛可判定；到期不改变事实状态。</em></span>
 
-- 入口准则：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">方案清单无未登记缺口且组装可用</span><!-- STD_TEMPLATE_EXAMPLE_END -->
-- 出口准则与 Gate 建议：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">覆盖闭合或缺口均有 Owner/Gate</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 入口准则：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">方案清单无未登记缺口且构建可用</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 出口准则与 Gate 建议：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">覆盖闭合或缺口均有 Owner/Gate；契约场景到期仍 NOT_RUN</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 缺陷登记、偏差与重跑规则（重跑不覆盖失败证据）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">缺陷登记到缺陷库并关联 Case ID；重跑生成新 Run，不覆盖失败证据</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 7. 责任、排期与风险
@@ -154,25 +154,25 @@
 | <!-- TODO --> | | | |
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-<span style="color:#6e7681">方案维护＝模块 Owner / 本迭代；风险“宿主并发合同未定”缓解＝模块结论先行。</span>
+<span style="color:#6e7681">方案维护＝模块 Owner / 本迭代；风险“契约入口未定”触发＝G-EX-1 超 Gate，缓解＝单元结论先行。</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 8. 证据汇总、Gate 建议与未决项
 
 <span style="color:#1f6feb"><em>**本节目的**：证据可从各 Run 报告复算，Gate 建议不越权。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：证据从 Run 报告引用汇总；Gate 建议给接受/条件接受/拒绝及依据；未决项有 Owner/Gate/关闭条件；任何条目不写成 PASS。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：证据＝各 Case Run 引用。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：证据＝各 Case 文档 Run 引用。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：Gate 建议可复算；未决项有主有期限；无执行结论。</em></span>
 
 - 证据汇总方式与位置：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">引用各 Case 的 reports/<run-id>/ Run 记录</span><!-- STD_TEMPLATE_EXAMPLE_END -->
-- 模块层 Gate 建议（接受/条件接受/拒绝）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">接受（分母闭合且缺口有主）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 单元层 Gate 建议（接受/条件接受/拒绝）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">条件接受（G-EX-1 关闭前契约场景保留 NOT_RUN）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 | 未决项 / 关联 | Owner / 最晚 Gate | 关闭所需事实或决定 |
 |---|---|---|
 | <!-- TODO；无未决项时写经核对的“无” --> | | |
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-<span style="color:#6e7681">G-EX-1 / 宿主并发准入 | 父设计 / 子系统测试评审 | 关闭前子系统层保留 NOT_RUN。</span>
+<span style="color:#6e7681">G-EX-1 / 契约组合入口 | 系统架构组 / 下次契约评审 | 指定契约测试文档；关闭前保留 NOT_RUN。</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 <!-- 交付自查：能否从任一保证类别追到方案清单、Case 文档与 Run 路径；计划里是否出现任何执行结论；到期条目是否被偷偷改判？ -->

@@ -136,7 +136,7 @@ STD tag，不改 draft.26 来源清单、项目采用锁或 Git 历史。只升�
 |---|---|---|
 | interfaces.control | 0.2.0 → 0.3.0 | 11 章均补段落式指导、例子及完成条件 |
 | contracts.specification | 0.2.0 → 0.3.0 | 11 章均补指导，贯穿签名/状态/异常/验证 |
-| assurance.test-specification | 0.1.0 → 0.2.0 | 10 章均补指导，分开设计 V、Case、环境和 Run |
+| assurance.test-specification | 0.1.0 → 0.2.0 | 历史记录：该模板已在 draft.52 退役，单元~系统层由 tests.* 家族承接 |
 | design.definition | 1.2.0 → 1.3.0 | 易失/在途状态不能以无持久化裁剪 |
 | design.system-mechanism | 2.1.0 → 2.2.0 | 保持 16 章，加入软硬件案例入口及跨机制组合检查 |
 

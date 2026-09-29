@@ -59,8 +59,7 @@
    "title": "FPGA 程序与实现报告",
    "guide": "docs/ai-guides/fpga.md",
    "template_ids": [
-    "design.fpga",
-    "assurance.fpga-implementation-report"
+    "design.fpga"
    ]
   },
   {
@@ -123,16 +122,18 @@
    "title": "验证与验收",
    "guide": "docs/ai-guides/verification.md",
    "template_ids": [
-    "assurance.vv-plan",
-    "assurance.test-plan",
-    "assurance.test-specification",
-    "assurance.test-procedure",
-    "assurance.test-report",
-    "assurance.acceptance-plan",
-    "assurance.acceptance-report",
-    "tests.unit-test-design",
     "tests.module-test-design",
-    "tests.module-test-plan"
+    "tests.module-test-plan",
+    "tests.module-test-scheme",
+    "tests.subsystem-test-design",
+    "tests.subsystem-test-plan",
+    "tests.subsystem-test-scheme",
+    "tests.system-test-design",
+    "tests.system-test-plan",
+    "tests.system-test-scheme",
+    "tests.unit-test-design",
+    "tests.unit-test-plan",
+    "tests.unit-test-scheme"
    ]
   },
   {

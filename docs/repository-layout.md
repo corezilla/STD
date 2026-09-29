@@ -297,7 +297,7 @@ STD报告模板编写，并保存metadata，不因放在tests下而免除文档�
 这里的唯一报告，不在 `docs/70_verification/reports/` 再维护副本。
 跨类型结论可以在现有评审包汇总并引用各报告，不重抄原始结果。
 这里的报告指测试执行/验收报告；FPGA综合、布局布线、时序收敛等实现报告仍是独立的工程交付物，
-沿用 `assurance.fpga-implementation-report` 的领域落位，不把它冒充系统或板上测试报告。
+FPGA 实现报告按项目 tailoring 承接，不把它冒充系统或板上测试报告。
 
 默认不提交可再生的大型输出、敏感日志或整包运行制品。推荐将机器输出放在
 `reports/<run-id>/artifacts/` 并针对该子目录配置ignore或CI保留策略；不要一概忽略整个

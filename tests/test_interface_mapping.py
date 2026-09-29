@@ -437,7 +437,7 @@ class InterfaceMappingTests(unittest.TestCase):
 
     def test_generated_companion_templates_bind_current_version_and_keep_guidance(self):
         catalog = validator.read_json(ROOT / "templates/catalog.json")
-        for tid in ("interfaces.control", "contracts.specification", "assurance.test-specification", "design.definition"):
+        for tid in ("interfaces.control", "contracts.specification", "design.definition"):
             dest = self.root / tid
             result = subprocess.run([sys.executable, str(ROOT / "scripts/new-design"), "--template", tid,
                                      "--project", "example", "--name", "sample", "--output", str(dest),

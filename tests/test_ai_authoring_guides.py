@@ -178,7 +178,7 @@ class AIAuthoringGuidesTests(unittest.TestCase):
 
 
     def test_companion_templates_have_guidance_for_every_main_chapter(self):
-        for tid in ("interfaces.control", "contracts.specification", "assurance.test-specification"):
+        for tid in ("interfaces.control", "contracts.specification"):
             content = (ROOT / "templates" / self.catalog["templates"][tid]).read_text()
             chapters = re.split(r"(?m)^## ", content)[1:]
             self.assertTrue(chapters)
@@ -187,10 +187,6 @@ class AIAuthoringGuidesTests(unittest.TestCase):
                     for term in ("<details>", "**本节目的**", "**必须写清楚**", "**抽象示例**", "**完成条件**", "</details>"):
                         self.assertIn(term, chapter)
                     self.assertNotIn("<!-- 编写建议：", chapter)
-        spec = (ROOT / "templates/assurance/test-specification.md").read_text()
-        self.assertIn("设计 V", spec)
-        self.assertIn("Case 实现 / 执行状态", spec)
-        self.assertIn("Run/证据引用或缺口", spec)
 
     def test_volatile_state_is_not_exempt_and_batch_method_is_concrete(self):
         unit = (ROOT / "templates/design/design-definition.md").read_text()

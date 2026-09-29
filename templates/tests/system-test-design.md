@@ -27,15 +27,15 @@
 > 外部不可变证据；不要在文档内容中伪造包含自身的 commit hash。
 <!-- STD_DOCUMENT_COVER_END -->
 
-<span style="color:#1f6feb"><em>**编写建议**：本文档是单个@@STAGE@@测试 Case 的完整设计，一 Case 一文档，与 design.definition 阶段的测试方案（tests.module-test-scheme）清单一一对应；测试脚本按本文档编写。</em></span>
+<span style="color:#1f6feb"><em>**编写建议**：本文档是单个@@STAGE@@测试 Case 的完整设计，一 Case 一文档，与 design.software-system 阶段的测试方案（tests.system-test-scheme）清单一一对应；测试脚本按本文档编写。</em></span>
 
 > **格式说明**：蓝色斜体为编写建议（指导如何填写，生成实例后保留）；灰色文字为虚构教学示例（以 `STD_TEMPLATE_EXAMPLE` 标记包裹，`new-design` 生成实例时自动剥离，不得当作项目事实或运行证据）；`<!-- TODO -->` 为待填槽位。颜色在 GitHub 等严格渲染器中降级为斜体/普通字，语义不变。
 
-> 本 Case 文档绑定：模块对象 ID 经 `--design-object-id`、所属方案经 `--parent-document-id` 写入 metadata；Document ID＝Case ID。
+> 本 Case 文档绑定：系统设计经 `--parent-document-id`、所属方案经方案清单行引用写入 metadata；Document ID＝Case ID。
 
 ### 模板定位：方案、Case 设计与计划的边界
 
-<span style="color:#1f6feb"><em>**编写建议**：模块层 Case（整模块组装，内部单元真实、边界替身不证明协议）；方案清单行持有设计状态，本文档持有实现状态。</em></span>
+<span style="color:#1f6feb"><em>**编写建议**：系统层 Case（整软件系统组装，子系统真实、外部依赖边界替身或真实环境）；方案清单行持有设计状态，本文档持有实现状态；不替代验收。</em></span>
 
 - **一 Case 一文档**：本文档只展开一个 Case；Document ID＝Case ID（@@PREFIX@@-<对象>-<NNN>）；责任摘要、分类与优先级以 `tests.@@stage@@-test-scheme` 清单行为准，不在本文档重复维护。
 - **测试脚本的唯一依据**：编码者按本文档写测试代码，不需要回读方案或设计正文猜测意图。
@@ -57,38 +57,38 @@
 
 <span style="color:#1f6feb"><em>**本节目的**：把方案清单里这行责任摘要展开成可实施的边界。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：Case ID、来源 ID、分类与优先级引用方案清单行；要测什么、明确不测什么；本 Case 的失败意味着什么。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 MT-EXM-002：校验先于筛选——只测 I2 的单元 Case 会漏掉本保证。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 SYS-APP-002：停止清空。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：读者不回读方案也知道本 Case 的责任与边界。</em></span>
 
-- Case ID / 来源 ID / 分类 / 优先级（引用方案清单）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">MT-EXM-002 / 模块设计 §7 流程 / negative / P0</span><!-- STD_TEMPLATE_EXAMPLE_END -->
-- 要测什么（责任展开）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">完整校验先于筛选：非匹配类别中的重复 ID 仍整批拒绝</span><!-- STD_TEMPLATE_EXAMPLE_END -->
-- 明确不测什么 / 失败含义：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">不测真实存储与宿主准入；失败含义＝模块组装后校验/筛选顺序错误</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- Case ID / 来源 ID / 分类 / 优先级（引用方案清单）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">SYS-APP-002 / 系统设计 §7.6 / recovery / P0</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 要测什么（责任展开）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">停止后在途请求退出且无残留，重启前确认</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 明确不测什么 / 失败含义：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">不测真实生产环境与客户验收；失败含义＝停止语义破坏</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 2. 被测入口与前置
 
 <span style="color:#1f6feb"><em>**本节目的**：固定被测入口与前置状态。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：被测入口完整声明；状态型初态必须经公开入口构造，不直改内部状态；fixture/向量引用其版本，不复制字节。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 MT-EXM-002：组装后单次调用。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 SYS-APP-002：经公开入口构造在途请求。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：另一位执行者能独立建立前置。</em></span>
 
-- 被测入口声明与位置：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">select_ids(records: span&lt;const Record&gt;, category: Category) -> vector&lt;Id&gt; | InvalidInput</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 被测入口声明与位置：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">系统 harness：stop() 与公开状态查询接口</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ```text
 <真实公开入口签名>
 ```
 
-- 初态构造（经公开入口）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">无跨调用状态，无需初态构造</span><!-- STD_TEMPLATE_EXAMPLE_END -->
-- Fixture / 向量及版本：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">冻结构造记录数组（两条同 ID、类别不匹配；方案冻结集 v1.0）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 初态构造（经公开入口）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">经公开提交入口构造在途请求（受控时钟保持未完成）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- Fixture / 向量及版本：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">冻结请求脚本与受控时钟配置（方案冻结集 v1.0）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 3. 输入构造
 
 <span style="color:#1f6feb"><em>**本节目的**：逐参数固定输入。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：每个参数的类型、取值、构造方法；冻结值或生成规则；非法与边界值的取舍理由。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 MT-EXM-002：两参数。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 SYS-APP-002：一个在途请求。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：输入可复现，无隐含依赖。</em></span>
 
-- 逐参数输入构造：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">records＝两条同 ID 记录（类别均不匹配）；category＝目标类别</span><!-- STD_TEMPLATE_EXAMPLE_END -->
-- 边界/非法取值及理由：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">同 ID 且不匹配：只有校验先于筛选才会检出；合法对照见 MT-EXM-001</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 逐参数输入构造：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">在途请求＝受控时钟保持执行中；随后调用 stop()</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 边界/非法取值及理由：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">在途 vs 停止顺序交错的另一序见 SYS-APP-005</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 4. 执行步骤与观察点
 
@@ -102,38 +102,40 @@
 | <!-- TODO --> | | |
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-<span style="color:#6e7681">| 1 | 以冻结数组单次调用 select_ids | 返回变体与输入字节 |</span>
+<span style="color:#6e7681">| 1 | 提交请求并在受控时钟上保持执行中 | 公开状态＝执行中 |
+| 2 | 调用 stop() | 请求出口与系统状态 |
+| 3 | 查询公开状态与存储 | 无残留、可重启确认 |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 5. 独立 Oracle 与预期结果
 
 <span style="color:#1f6feb"><em>**本节目的**：固定独立 Oracle 与互斥预期。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：Expected 由独立来源或可手算规则推导，不得调用被测实现复算；输出互斥（成功/各错误分支无第三态）；允许误差或精确比较方法。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 MT-EXM-002：按校验规则人工判定。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 SYS-APP-002：按停止规则人工判定。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：预期独立且互斥，可判定。</em></span>
 
-- 独立 Oracle 来源与推导：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">模块设计校验规则＋人工判定，不调用 select_ids 复算</span><!-- STD_TEMPLATE_EXAMPLE_END -->
-- 互斥预期（成功 / 各错误分支）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">仅 InvalidInput：整批拒绝；部分结果或 Ok 均为失败</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 独立 Oracle 来源与推导：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">系统设计停止规则＋人工判定</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 互斥预期（成功 / 各错误分支）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">请求有确定出口（完成或明确取消）；无残留；系统进入可重启状态；无第三态</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 6. 错误路径、副作用与清理
 
 <span style="color:#1f6feb"><em>**本节目的**：固定错误路径、副作用与清理。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：每个错误出口的触发与表现；副作用断言（输入不变、无半成品、资源释放）；清理与失败现场保留。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 MT-EXM-002：无部分结果。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 SYS-APP-002：迟到完成不复活。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：失败可观察、清理可确认。</em></span>
 
-- 错误出口与表现：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">无部分结果出口</span><!-- STD_TEMPLATE_EXAMPLE_END -->
-- 副作用断言与清理：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">输入逐字节不变；无半成品；无需清理</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 错误出口与表现：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">停止后迟到完成事件＝拒绝且可观察</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 副作用断言与清理：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">存储无半成品；句柄释放；日志保留失败现场</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 7. 自动化位置与状态
 
 <span style="color:#1f6feb"><em>**本节目的**：固定自动化位置与实现状态。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：测试文件与测试函数名（MT-<对象>-<NNN>）；单 Case 执行命令；实现状态 Planned/Implemented；执行与 Verdict 归 Run 报告。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 MT-EXM-002：harness invalid 段。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：测试文件与测试函数名（SYS-<对象>-<NNN>）；单 Case 执行命令；实现状态 Planned/Implemented；执行与 Verdict 归 Run 报告。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 SYS-APP-002：harness 停止段。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：可从本文档定位测试代码与命令。</em></span>
 
-- 测试文件 / 测试函数：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">教学 harness invalid 输入段</span><!-- STD_TEMPLATE_EXAMPLE_END -->
-- 单 Case 执行命令：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">正式 runner：--filter MT-EXM-002</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 测试文件 / 测试函数：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">系统 harness 停止段</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 单 Case 执行命令：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">正式 runner：--filter SYS-APP-002</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 实现状态：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">Implemented；执行与 Verdict 归 Run 报告</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 <!-- 交付自查：编码者能否只凭本文档写出测试脚本；预期是否独立推导（不调用被测实现复算）；失败出口与清理是否可观察？ -->
