@@ -1,26 +1,26 @@
 direction: right
 
-inner: 真实内部单元 I1/I2/I3 (ENV-1 真实) {
+inner: 真实内部单元 I1/I2/I3 (ENV-1) {
   shape: rectangle
   style.fill: "#E8F5E9"
 }
 
-harness: 模块 harness\n(ENV-1 链接) {
+harness: 模块 harness (ENV-1) {
   shape: rectangle
   style.fill: "#F3E5F5"
 }
 
-fake: 边界 fake (ENV-2)\nFAKE-REG {
+fake: 边界 fake (ENV-2) {
   shape: rectangle
   style.fill: "#FFF3E0"
 }
 
-clk: 受控时钟 fake (ENV-3)\nHARNESS-EXM-CLOCK {
+clk: 受控时钟 fake (ENV-3) {
   shape: rectangle
   style.fill: "#FFF3E0"
 }
 
-case: 被测模块\nM101 {
+case: 被测模块 M101 {
   shape: rectangle
   style.fill: "#E3F2FD"
   style.bold: true
