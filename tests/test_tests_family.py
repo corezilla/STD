@@ -36,11 +36,11 @@ class RegistrationTests(unittest.TestCase):
 
     def test_key_versions(self):
         v = self.catalog["template_versions"]
-        self.assertEqual(v["tests.unit-test-design"], "2.1.0")
-        self.assertEqual(v["tests.module-test-plan"], "0.9.0")
-        self.assertEqual(v["tests.asset-design"], "0.1.0")
+        self.assertEqual(v["tests.unit-test-design"], "2.2.0")
+        self.assertEqual(v["tests.module-test-plan"], "0.10.0")
+        self.assertEqual(v["tests.asset-design"], "0.2.0")
         for s in STAGES:
-            self.assertEqual(v[f"tests.{s}-test-report"], "0.1.0")
+            self.assertEqual(v[f"tests.{s}-test-report"], "0.2.0")
 
 
 class FormatInvariants(unittest.TestCase):
@@ -105,6 +105,21 @@ class RoleInvariants(unittest.TestCase):
                 self.assertIn("Go / No-Go", text)
                 self.assertIn("test-report", text)
                 self.assertNotIn("`PASS` / `FAIL`", text)
+
+    def test_hifm_feedback_folded_in(self):
+        for name in DESIGNS:
+            self.assertIn("规模（数量、分页、复杂度）", (DIR / (name + ".md")).read_text())
+            self.assertIn("分项判据", (DIR / (name + ".md")).read_text())
+        for name in PLANS:
+            text = (DIR / (name + ".md")).read_text()
+            self.assertIn("构建接线", text)
+            self.assertIn("阶段门", text)
+            self.assertIn("复位阶梯", text)
+        for name in REPORTS:
+            text = (DIR / (name + ".md")).read_text()
+            self.assertIn("待重验", text)
+            self.assertIn("未复现/未关闭", text)
+        self.assertIn("预定义故障场景", (DIR / "asset-design.md").read_text())
 
     def test_reports_own_verdicts(self):
         for name in REPORTS:

@@ -78,7 +78,7 @@
 ## 2. 行为契约（唯一 authority）
 
 <span style="color:#1f6feb"><em>**本节目的**：定义资产对外暴露的确切行为——这是替身证明边界的唯一出处。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：替身类资产：模拟什么、不模拟什么（真实协议/事务/时序不由它证明）、允许配置的行为集；注入类：注入点、命中语义（如注入计数）、撤销；时钟/调度类：精度、推进接口、与真实时间的边界；生成器类：输出分布、冻结与可复现规则；调用序断言范围。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：替身类资产：模拟什么、不模拟什么（真实协议/事务/时序不由它证明）、允许配置的行为集；注入类：注入点、命中语义（如注入计数）、撤销；时钟/调度类：精度、推进接口、与真实时间的边界；生成器类：输出分布、冻结与可复现规则；调用序断言范围；故障绑定具体产品步骤及副作用前后，预定义场景有独立 oracle，核对执行次数/操作 ID/持久内容与后续恢复。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：虚构 FAKE-REG 注册接口 fake 只代返回值与一次超时注入（计数=1 为命中），不证明真实注册协议。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：Case 作者不需要读资产源码就能正确使用并声明其不证明的性质。</em></span>
 
@@ -86,6 +86,7 @@
 - 不模拟 / 不证明的性质：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">不证明真实注册协议、鉴权与重试语义；这些归契约/集成层</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 注入/命中语义（适用时）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">注入计数器从 0 起，每次命中 +1；Case 以计数=1 证明注入已命中</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 精度 / 推进接口（时钟类适用）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">CLK-S01：advance(ms) 单调推进；不模拟硬件时钟漂移</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 预定义故障场景与副作用前后绑定：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">场景 S1：目标分配后、复制提交前注入失败；核对执行次数、操作 ID 与持久内容；恢复另立场景</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 3. 可测试性依赖与缺口回路
 

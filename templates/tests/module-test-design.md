@@ -84,12 +84,13 @@
 ## 3. 输入构造
 
 <span style="color:#1f6feb"><em>**本节目的**：逐参数固定输入。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：每个参数的类型、取值、构造方法；冻结值或生成规则；非法与边界值的取舍理由。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：每个参数的类型、取值、构造方法；冻结值或生成规则；非法与边界值的取舍理由；规模（数量、分页、复杂度）与时间域（wall/CPU、观测开销）按目标预算写清。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：虚构 MT-EXM-002：两参数。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：输入可复现，无隐含依赖。</em></span>
 
 - 逐参数输入构造：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">records＝两条同 ID 记录（类别均不匹配）；category＝目标类别</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 边界/非法取值及理由：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">同 ID 且不匹配：只有校验先于筛选才会检出；合法对照见 MT-EXM-001</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 规模 / 时间域（数量、分页、复杂度、观测开销）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">单批 ≤4096 条；校验 O(n log n)、筛选 O(n)（对照 EX-CON-2）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 4. 执行步骤与观察点
 
@@ -109,7 +110,7 @@
 ## 5. 独立 Oracle 与预期结果
 
 <span style="color:#1f6feb"><em>**本节目的**：固定独立 Oracle 与互斥预期。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：Expected 由独立来源或可手算规则推导，不得调用被测实现复算；输出互斥（成功/各错误分支无第三态）；允许误差或精确比较方法。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：Expected 由独立来源或可手算规则推导，不得调用被测实现复算；输出互斥（成功/各错误分支无第三态）；允许误差或精确比较方法；数值/模型输出分项判据——reference 重复性、真实输入回放、整模型比较分别判定，误差门限来自目标算法要求而非统一常数。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：虚构 MT-EXM-002：按校验规则人工判定。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：预期独立且互斥，可判定。</em></span>
 

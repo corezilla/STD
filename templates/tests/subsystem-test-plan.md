@@ -91,7 +91,7 @@
 ## 3. 执行前检（Go / No-Go）
 
 <span style="color:#1f6feb"><em>**本节目的**：开始执行前逐项 Go/No-Go，全部通过才进入 §4。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：方案就绪度（清单无未登记缺口且版本固定）；Case 实现状态盘点（未 Implemented 的 Case 明确处理）；环境与工具（构建可用、依赖齐、权限具备）。任一不满足记 Blocked 并登记缺口，不静默降级执行。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：方案就绪度（清单无未登记缺口且版本固定）；Case 实现状态盘点（未 Implemented 的 Case 明确处理）；环境与工具（构建可用、依赖齐、权限具备）；构建接线（干净全量交付构建通过、消费者链接实际交付库、导出/注册项同步）。任一不满足记 Blocked 并登记缺口，不静默降级执行。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：虚构 ST-S01：受控时钟可用、注册 fake 就位、Case 齐。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：每一前检项有可判定事实；No-Go 有出口（Blocked＋缺口）。</em></span>
 
@@ -100,6 +100,7 @@
 | <!-- 方案就绪度 --> | | | |
 | <!-- Case 实现状态盘点 --> | | | |
 | <!-- 环境与工具（引用 tests.asset-design 的 Verified 状态） --> | | | |
+| <!-- 构建接线（全量交付构建 / 消费者链接实际库） --> | | | |
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 <span style="color:#6e7681">**示例（虚构）**：</span>
@@ -113,7 +114,7 @@
 ## 4. 执行流程（逐 Case 作业序列）
 
 <span style="color:#1f6feb"><em>**本节目的**：给执行者（含 Agent）一条从头到尾的作业序列。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：按方案清单优先级逐 Case：定位 Case 文档→按其 §2–§7 前检与运行→判定分路（PASS/FAIL/BLOCKED/INVALID 各有明确出口与下一步）→记录 Run→继续；失败不阻断后续 Case，除非环境性阻塞；全部完成后按 §7 生成报告；Step 0 资产就位——按消费索引构建全部依赖测试资产（tests.asset-design）并运行其自检，自检不过即环境性 Blocked，不进入 Case 执行。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：按方案清单优先级逐 Case：定位 Case 文档→按其 §2–§7 前检与运行→判定分路（PASS/FAIL/BLOCKED/INVALID 各有明确出口与下一步）→记录 Run→继续；失败不阻断后续 Case，除非环境性阻塞；全部完成后按 §7 生成报告；阶段门——最小真实链→规模控制面→完整业务→恢复/全量回归，不等所有模块写完才集成；Step 0 资产就位——按消费索引构建全部依赖测试资产（tests.asset-design）并运行其自检，自检不过即环境性 Blocked，不进入 Case 执行。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：虚构 ST-S01：P0 并发准入先行；排队类失败不阻断机制承接组。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：执行者不需要临场发明流程；每个分路有确定下一步。</em></span>
 
@@ -125,6 +126,14 @@
 | <!-- 3 --> | 按 Case 文档执行前检与运行 | Case 文档 §2–§7 | Run 记录 |
 | <!-- 4 --> | 判定并分路（PASS/FAIL/BLOCKED/INVALID） | 断言与环境事实 | Verdict 归报告 |
 | <!-- 5 --> | 全部完成后生成测试报告 | 本计划 §7 | tests.subsystem-test-report |
+
+| 阶段门 | 目的 | 进入条件 |
+|---|---|---|
+| <!-- 1 最小真实链 --> | | |
+| <!-- 2 规模控制面 --> | | |
+| <!-- 3 完整业务 --> | | |
+| <!-- 4 恢复 / 全量回归 --> | | |
+
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 <span style="color:#6e7681">**示例（虚构）**：</span>
@@ -144,12 +153,13 @@
 ## 5. 环境操作（搭建 / 复位 / 隔离 / 清理）
 
 <span style="color:#1f6feb"><em>**本节目的**：环境操作可复现。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：搭建、每 Case 复位、并行隔离键、清理的具体命令或入口；环境不可重建即 Blocked。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：搭建、每 Case 复位、并行隔离键、清理的具体命令或入口；环境不可重建即 Blocked；单环境串行时写清 case 前检查、软复位/重启/驱动恢复阶梯与时限，失败后确认回到基线，不能只 kill 后继续。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：虚构 ST-S01：harness 每轮重建子系统实例。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：另一位执行者能独立搭建、复位与清理。</em></span>
 
 - 环境搭建与复位操作：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">子系统 harness 构建一次；每轮重建实例</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 隔离键与清理：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">模块实例/端口/临时目录按隔离键分开</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 复位阶梯与时限（软复位→重启→驱动恢复）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">停止本任务→检查残留→重建子系统实例；单步超时 2000ms 上限</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 6. 证据与 Run 记录规则
 

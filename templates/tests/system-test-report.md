@@ -67,12 +67,13 @@
 ## 2. 被测基线与实际环境
 
 <span style="color:#1f6feb"><em>**本节目的**：固定实际被测基线与环境，单列偏差。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：实际代码/构建/环境版本与计划基线对照；差异逐条列出；不同基线的结果不合并统计。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：实际代码/构建/环境版本与计划基线对照；差异逐条列出；不同基线的结果不合并统计；结果绑定源码/库/配置/环境/checker 版本，相关修改后证据标“待重验”并保留历史，不从旧快照派生当前结论。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：虚构 SYS-APP：预生产环境版本差异。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：基线可核验；偏差不隐藏。</em></span>
 
 - 实际基线（与计划对照）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">EX-APP/v1；预生产镜像 2026.09（计划为 2026.08）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 环境偏差及影响：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">镜像差异已记录；存储测试实例版本一致</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 证据版本绑定与待重验：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">源码、镜像、环境快照、checker 版本绑定；相关修改后标“待重验”</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 3. 逐 Case 执行记录
 
@@ -96,7 +97,7 @@
 ## 4. 偏差、无效执行与重跑
 
 <span style="color:#1f6feb"><em>**本节目的**：如实记录偏差与无效执行。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：偏离 Case 文档的原因与批准；无效执行（未命中、环境错配）与重跑的新 Run；旧失败保留。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：偏离 Case 文档的原因与批准；无效执行（未命中、环境错配）与重跑的新 Run；旧失败保留；偶发失败保留原始 RED，复现状态与修复状态分开记录，无因果证据只能标“未复现/未关闭”。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：虚构 SYS-APP：无无效执行。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：偏差可追溯；重跑不覆盖历史。</em></span>
 
