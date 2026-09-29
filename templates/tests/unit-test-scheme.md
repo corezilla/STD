@@ -95,9 +95,9 @@
 <span style="color:#6e7681">**示例（虚构；一来源至少一条）**：</span>
 <span style="color:#6e7681">| 来源 ID / 固定版本 | 设计验证项 ID | Case ID | 分类 | 优先级 | 责任摘要（要测什么） | 设计状态 | 上级组合验证入口 |</span>
 <span style="color:#6e7681">|---|---|---|---|---|---|---|</span>
-<span style="color:#6e7681">| FD-R1 / EX-FRAME-MODULE 1.0.0 | V-EX-ISD-DECODE-01 | UT-FD-001 | normal | P1 | 合法帧解析出借用视图与 consumed，只消费首帧 | Designed | — |</span>
-<span style="color:#6e7681">| FD-R1 | V-EX-ISD-DECODE-01 | UT-FD-003 | negative | P0 | 头非法时按 version→kind→length 优先级拒绝，不等待载荷 | Designed | — |</span>
-<span style="color:#6e7681">| FD-R2 / 同基线 | V-EX-ISD-LIFE-01 | UT-FD-005 | concurrency | P1 | 并发只读结果一致且输入不变 | Designed | 宿主长寿命组合（NOT_RUN） |</span>
+<span style="color:#6e7681">| FD-R1 / EX-FRAME-MODULE 1.0.0 | VRC-EX-ISD-DECODE-01 | UT-FD-001 | normal | P1 | 合法帧解析出借用视图与 consumed，只消费首帧 | Designed | — |</span>
+<span style="color:#6e7681">| FD-R1 | VRC-EX-ISD-DECODE-01 | UT-FD-003 | negative | P0 | 头非法时按 version→kind→length 优先级拒绝，不等待载荷 | Designed | — |</span>
+<span style="color:#6e7681">| FD-R2 / 同基线 | VRC-EX-ISD-LIFE-01 | UT-FD-005 | concurrency | P1 | 并发只读结果一致且输入不变 | Designed | 宿主长寿命组合（NOT_RUN） |</span>
 <span style="color:#6e7681">| 上级 wire 契约 | — | （Gap） | contract | — | wire 互操作非本层责任 | Gap（G-EX-1） | 契约层入口未定义 |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 

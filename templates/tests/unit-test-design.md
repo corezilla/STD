@@ -60,7 +60,7 @@
 <span style="color:#1f6feb"><em>**抽象示例**：虚构 UT-FD-003：头非法时按优先级拒绝——不证明组装后流程。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：读者不回读方案也知道本 Case 的责任与边界。</em></span>
 
-- Case ID / 来源 ID / 设计验证项 / 分类 / 优先级（引用方案清单）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">UT-FD-003 / FD-R1 / V-EX-ISD-DECODE-01 / negative / P0（引用方案清单行）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- Case ID / 来源 ID / 设计验证项 / 分类 / 优先级（引用方案清单）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">UT-FD-003 / FD-R1 / VRC-EX-ISD-DECODE-01 / negative / P0（引用方案清单行）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 要测什么（责任展开）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">头非法时按 version→kind→length 优先级拒绝且不等待载荷</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 明确不测什么 / 失败含义：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">不测组装后流程与 wire 互操作；失败含义＝校验顺序实现错误</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 

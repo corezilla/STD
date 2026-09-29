@@ -685,7 +685,7 @@ enum InspectionState { ACCEPTED, RUNNING, SUCCEEDED, FAILED }
 
 - **验证**：
 
-  设计向量 `V-EX-STATE-01` 检查终态前提和未知值拒绝；本例 `NOT_RUN`，不表示验证通过。
+  设计向量 `VRC-EX-STATE-01` 检查终态前提和未知值拒绝；本例 `NOT_RUN`，不表示验证通过。
 
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
@@ -752,7 +752,7 @@ InspectionRequest {
 
 - **验证**：
 
-  `V-EX-REQUEST-01` 覆盖合法构造、缺字段和同 ID 冲突；本例 `NOT_RUN`。
+  `VRC-EX-REQUEST-01` 覆盖合法构造、缺字段和同 ID 冲突；本例 `NOT_RUN`。
 
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
@@ -793,7 +793,7 @@ InspectionSubmission {
 
 - **验证**：
 
-  `V-EX-SUBMISSION-01` 检查首次受理、同请求重放、响应丢失后查询和无重复任务；本例 `NOT_RUN`。
+  `VRC-EX-SUBMISSION-01` 检查首次受理、同请求重放、响应丢失后查询和无重复任务；本例 `NOT_RUN`。
 
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
@@ -863,7 +863,7 @@ score_threshold: 0.75
 
 - **验证**：
 
-  `V-EX-POLICY-FILE-01` 覆盖完整加载、缺字段/未知键/越界拒绝、修改文件但未重启时版本不变；本例 `NOT_RUN`。
+  `VRC-EX-POLICY-FILE-01` 覆盖完整加载、缺字段/未知键/越界拒绝、修改文件但未重启时版本不变；本例 `NOT_RUN`。
 
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
@@ -945,7 +945,7 @@ score_threshold: 0.75
 
 - **验证**：
 
-  `V-EX-FRAME-01` 覆盖逐字段编码/解码、长度与端序、版本/保留位拒绝、重复与冲突报文；本例 `NOT_RUN`。
+  `VRC-EX-FRAME-01` 覆盖逐字段编码/解码、长度与端序、版本/保留位拒绝、重复与冲突报文；本例 `NOT_RUN`。
 
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
@@ -1028,7 +1028,7 @@ score_threshold: 0.75
 
 - **验证**：
 
-  `V-EX-REGISTER-01` 覆盖复位值、位域、只读拒写、原子读取和互斥状态；本例 `NOT_RUN`，不代表 RTL 仿真或上板结果。
+  `VRC-EX-REGISTER-01` 覆盖复位值、位域、只读拒写、原子读取和互斥状态；本例 `NOT_RUN`，不代表 RTL 仿真或上板结果。
 
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
@@ -1063,7 +1063,7 @@ score_threshold: 0.75
 
 - **验证**：
 
-  `V-EX-ROUTE-01` 覆盖地址步长、大小端编码、复位空项、无效值和写入后生效边界；本例 `NOT_RUN`，不代表 FPGA 仿真或上板结果。
+  `VRC-EX-ROUTE-01` 覆盖地址步长、大小端编码、复位空项、无效值和写入后生效边界；本例 `NOT_RUN`，不代表 FPGA 仿真或上板结果。
 
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
@@ -1135,7 +1135,7 @@ InspectionRuntimeState {
 
 - **验证**：
 
-  `V-EX-RUNTIME-01` 覆盖终态不变量和旧代次更新拒绝；本例 `NOT_RUN`。
+  `VRC-EX-RUNTIME-01` 覆盖终态不变量和旧代次更新拒绝；本例 `NOT_RUN`。
 
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
@@ -1209,7 +1209,7 @@ CREATE TABLE inspection_jobs (
 
 - **验证**：
 
-  `V-EX-JOBS-01` 覆盖约束拒绝、提交失败与崩溃恢复；本例 `NOT_RUN`。
+  `VRC-EX-JOBS-01` 覆盖约束拒绝、提交失败与崩溃恢复；本例 `NOT_RUN`。
 
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
@@ -1308,7 +1308,7 @@ enum InspectionErrorCode { INVALID_REQUEST, REQUEST_CONFLICT, PERMISSION_DENIED,
 
 - **合法/拒绝实例与验证**：
 
-  队列满且无新任务时返回 `QUEUE_FULL` 合法；任务已创建却返回此码必须拒绝。`V-EX-QUEUE-01` 核对触发事实、错误码和无副作用，本例 `NOT_RUN`。
+  队列满且无新任务时返回 `QUEUE_FULL` 合法；任务已创建却返回此码必须拒绝。`VRC-EX-QUEUE-01` 核对触发事实、错误码和无副作用，本例 `NOT_RUN`。
 
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
@@ -1349,7 +1349,7 @@ InspectionError {
 
 - **验证**：
 
-  `V-EX-ERROR-01` 检查字段条件、关联身份和敏感信息边界；本例 `NOT_RUN`。
+  `VRC-EX-ERROR-01` 检查字段条件、关联身份和敏感信息边界；本例 `NOT_RUN`。
 
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
@@ -1528,7 +1528,7 @@ submit_inspection(
 这是异步任务的同步受理调用；成功响应不表示检测完成。受理记录对重放可见后才能返回 `ACCEPTED`。调用超时或连接中断且无有效响应时，结果是**未知**，不是 `INVALID_REQUEST` 或 `QUEUE_FULL`；只有权威 `request_id` 判重仍可用时，才允许原请求原样重放并读取原结果，不可换 ID 发起新执行。取消本次网络等待不取消已受理任务。并发同 ID 调用只能产生一个任务；请求身份保留期和兼容版本须由实际系统合同固定，本教学例子不臆造数值。
 
 - **实现分配与验证**：
-`InspectionAdmission` 负责权限/输入校验、原子判重、容量判断和任务创建；状态持有者负责后续完成状态。`V-EX-SUBMIT-01` 用合法首次请求、同 ID 同内容重放、同 ID 异内容、无权限、无效图像、队列满和响应丢失向量检查返回类型、错误码与任务数量；教学例子未执行测试，不代表真实系统通过。
+`InspectionAdmission` 负责权限/输入校验、原子判重、容量判断和任务创建；状态持有者负责后续完成状态。`VRC-EX-SUBMIT-01` 用合法首次请求、同 ID 同内容重放、同 ID 异内容、无权限、无效图像、队列满和响应丢失向量检查返回类型、错误码与任务数量；教学例子未执行测试，不代表真实系统通过。
 
 本例仅示范接口记录应达到的粒度；不能把 `Proposed` 类型、示意成员名或未运行的验证项复制为项目已批准契约。
 <!-- STD_TEMPLATE_EXAMPLE_END -->
@@ -1689,7 +1689,7 @@ inspectctl task status --task <Task ID> [--output text|json] [--timeout <秒>]
 
 - **运行影响、审计与验证**：
 
-  无业务写入；按 §10 记录查询审计，不记录敏感任务内容。`V-CLI-STATUS-01` 检查成功、任务不存在、无权限、连接失败和超时，确认失败时没有正常状态输出。
+  无业务写入；按 §10 记录查询审计，不记录敏感任务内容。`VRC-CLI-STATUS-01` 检查成功、任务不存在、无权限、连接失败和超时，确认失败时没有正常状态输出。
 
 ```text
 $ inspectctl task status --task t-7

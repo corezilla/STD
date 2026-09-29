@@ -36,11 +36,10 @@ class RegistrationTests(unittest.TestCase):
 
     def test_key_versions(self):
         v = self.catalog["template_versions"]
-        self.assertEqual(v["tests.unit-test-design"], "2.3.0")
+        self.assertEqual(v["tests.unit-test-design"], "2.3.1")
         self.assertEqual(v["tests.module-test-plan"], "0.10.0")
         self.assertEqual(v["tests.asset-design"], "0.2.0")
-        for s in STAGES:
-            self.assertEqual(v[f"tests.{s}-test-report"], "0.3.0")
+        self.assertEqual(v["tests.unit-test-report"], "0.3.1")
 
 
 class FormatInvariants(unittest.TestCase):

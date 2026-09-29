@@ -108,7 +108,7 @@ enum InspectionState { ACCEPTED, RUNNING, SUCCEEDED, FAILED }
 
 - **验证**：
 
-  设计向量 `V-EX-STATE-01` 检查终态前提和未知值拒绝；本例 `NOT_RUN`，不表示验证通过。
+  设计向量 `VRC-EX-STATE-01` 检查终态前提和未知值拒绝；本例 `NOT_RUN`，不表示验证通过。
 
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
@@ -164,7 +164,7 @@ InspectionRequest {
 
 - **验证**：
 
-  `V-EX-REQUEST-01` 覆盖合法构造、缺字段和同 ID 冲突；本例 `NOT_RUN`。
+  `VRC-EX-REQUEST-01` 覆盖合法构造、缺字段和同 ID 冲突；本例 `NOT_RUN`。
 
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
@@ -205,7 +205,7 @@ InspectionSubmission {
 
 - **验证**：
 
-  `V-EX-SUBMISSION-01` 检查首次受理、同请求重放、响应丢失后查询和无重复任务；本例 `NOT_RUN`。
+  `VRC-EX-SUBMISSION-01` 检查首次受理、同请求重放、响应丢失后查询和无重复任务；本例 `NOT_RUN`。
 
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
@@ -264,7 +264,7 @@ score_threshold: 0.75
 
 - **验证**：
 
-  `V-EX-POLICY-FILE-01` 覆盖完整加载、缺字段/未知键/越界拒绝、修改文件但未重启时版本不变；本例 `NOT_RUN`。
+  `VRC-EX-POLICY-FILE-01` 覆盖完整加载、缺字段/未知键/越界拒绝、修改文件但未重启时版本不变；本例 `NOT_RUN`。
 
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
@@ -335,7 +335,7 @@ score_threshold: 0.75
 
 - **验证**：
 
-  `V-EX-FRAME-01` 覆盖逐字段编码/解码、长度与端序、版本/保留位拒绝、重复与冲突报文；本例 `NOT_RUN`。
+  `VRC-EX-FRAME-01` 覆盖逐字段编码/解码、长度与端序、版本/保留位拒绝、重复与冲突报文；本例 `NOT_RUN`。
 
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
@@ -407,7 +407,7 @@ score_threshold: 0.75
 
 - **验证**：
 
-  `V-EX-REGISTER-01` 覆盖复位值、位域、只读拒写、原子读取和互斥状态；本例 `NOT_RUN`，不代表 RTL 仿真或上板结果。
+  `VRC-EX-REGISTER-01` 覆盖复位值、位域、只读拒写、原子读取和互斥状态；本例 `NOT_RUN`，不代表 RTL 仿真或上板结果。
 
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
@@ -442,7 +442,7 @@ score_threshold: 0.75
 
 - **验证**：
 
-  `V-EX-ROUTE-01` 覆盖地址步长、大小端编码、复位空项、无效值和写入后生效边界；本例 `NOT_RUN`，不代表 FPGA 仿真或上板结果。
+  `VRC-EX-ROUTE-01` 覆盖地址步长、大小端编码、复位空项、无效值和写入后生效边界；本例 `NOT_RUN`，不代表 FPGA 仿真或上板结果。
 
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
@@ -503,7 +503,7 @@ InspectionRuntimeState {
 
 - **验证**：
 
-  `V-EX-RUNTIME-01` 覆盖终态不变量和旧代次更新拒绝；本例 `NOT_RUN`。
+  `VRC-EX-RUNTIME-01` 覆盖终态不变量和旧代次更新拒绝；本例 `NOT_RUN`。
 
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
@@ -566,7 +566,7 @@ CREATE TABLE inspection_jobs (
 
 - **验证**：
 
-  `V-EX-JOBS-01` 覆盖约束拒绝、提交失败与崩溃恢复；本例 `NOT_RUN`。
+  `VRC-EX-JOBS-01` 覆盖约束拒绝、提交失败与崩溃恢复；本例 `NOT_RUN`。
 
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
@@ -622,7 +622,7 @@ enum InspectionErrorCode { INVALID_REQUEST, REQUEST_CONFLICT, PERMISSION_DENIED,
 
 - **合法/拒绝实例与验证**：
 
-  队列满且无新任务时返回 `QUEUE_FULL` 合法；任务已创建却返回此码必须拒绝。`V-EX-QUEUE-01` 核对触发事实、错误码和无副作用，本例 `NOT_RUN`。
+  队列满且无新任务时返回 `QUEUE_FULL` 合法；任务已创建却返回此码必须拒绝。`VRC-EX-QUEUE-01` 核对触发事实、错误码和无副作用，本例 `NOT_RUN`。
 
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
@@ -663,7 +663,7 @@ InspectionError {
 
 - **验证**：
 
-  `V-EX-ERROR-01` 检查字段条件、关联身份和敏感信息边界；本例 `NOT_RUN`。
+  `VRC-EX-ERROR-01` 检查字段条件、关联身份和敏感信息边界；本例 `NOT_RUN`。
 
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 

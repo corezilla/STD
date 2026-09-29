@@ -267,7 +267,7 @@ enum class InvalidReason { Version, Kind, Length };
 
 - **验证**
 
-  `V-EX-ISD-REJECT-01` 逐值检查触发事实及未改写输入；示例 `NOT_RUN`。
+  `VRC-EX-ISD-REJECT-01` 逐值检查触发事实及未改写输入；示例 `NOT_RUN`。
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ### 4.2 业务与操作数据结构（适用时）
@@ -339,7 +339,7 @@ FrameView {
 
 - **合法与拒绝实例、验证**
 
-  `OK` 且输入仍有效时读取视图合法；`NEED_MORE` / `INVALID` 返回该视图必须拒绝。`V-EX-ISD-VIEW-01` 检查寿命边界，示例 `NOT_RUN`。
+  `OK` 且输入仍有效时读取视图合法；`NEED_MORE` / `INVALID` 返回该视图必须拒绝。`VRC-EX-ISD-VIEW-01` 检查寿命边界，示例 `NOT_RUN`。
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
@@ -370,7 +370,7 @@ DecodeResult =
 
 - **约束与验证**
 
-  三种结果不得同时出现。`V-EX-ISD-RESULT-01` 分别覆盖完整帧、短输入与非法帧，核对视图有无、`consumed` 和输入未被改写；示例 `NOT_RUN`。
+  三种结果不得同时出现。`VRC-EX-ISD-RESULT-01` 分别覆盖完整帧、短输入与非法帧，核对视图有无、`consumed` 和输入未被改写；示例 `NOT_RUN`。
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ### 4.3 配置与规则数据结构（适用时）
@@ -728,7 +728,7 @@ DecodeResult decode_one(std::span<const std::uint8_t> input) noexcept;
 
 - **实现与验证**
 
-  实现应落在项目确定的解码源文件及构建目标；`V-EX-ISD-DECODE-01` 用完整帧、短头、短载荷、非法头和输入寿命向量，从公开入口断言三个互斥结果及输入不变。示例 `NOT_RUN`，不表示真实模块已实现。
+  实现应落在项目确定的解码源文件及构建目标；`VRC-EX-ISD-DECODE-01` 用完整帧、短头、短载荷、非法头和输入寿命向量，从公开入口断言三个互斥结果及输入不变。示例 `NOT_RUN`，不表示真实模块已实现。
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ### 5.2 消息与数据流接口（适用时）

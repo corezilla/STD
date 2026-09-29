@@ -128,8 +128,8 @@
 <span style="color:#6e7681">**示例（虚构）**：</span>
 <span style="color:#6e7681">| 方案来源 ID | 设计验证项 ID | Case ID | 报告状态 | 剩余缺口 |</span>
 <span style="color:#6e7681">|---|---|---|---|</span>
-<span style="color:#6e7681">| FD-R1 | V-EX-ISD-DECODE-01 | UT-FD-001/003 | 003 FAIL | DEF-17 修复后复跑 |</span>
-<span style="color:#6e7681">| FD-R2/R3 | V-EX-ISD-LIFE-01 | UT-FD-004/005 | PASS | — |</span>
+<span style="color:#6e7681">| FD-R1 | VRC-EX-ISD-DECODE-01 | UT-FD-001/003 | 003 FAIL | DEF-17 修复后复跑 |</span>
+<span style="color:#6e7681">| FD-R2/R3 | VRC-EX-ISD-LIFE-01 | UT-FD-004/005 | PASS | — |</span>
 <span style="color:#6e7681">| 上级 wire 契约 | — | （Gap） | NOT_RUN | G-EX-1 保留 |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
