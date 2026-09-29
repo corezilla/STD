@@ -31,7 +31,9 @@
 
 > **格式说明**：蓝色斜体为编写建议（指导如何填写，生成实例后保留）；灰色文字为虚构教学示例（以 `STD_TEMPLATE_EXAMPLE` 标记包裹，`new-design` 生成实例时自动剥离，不得当作项目事实或运行证据）；`<!-- TODO -->` 为待填槽位。颜色在 GitHub 等严格渲染器中降级为斜体/普通字，语义不变。
 
-> 本计划绑定单一软件模块：模块对象 ID 经 `--design-object-id` 写入 metadata；模块设计基线在 §2 固定。
+> 本计划绑定单一软件模块
+
+> 本文档对设计验证项（VRC/V-xxx）的引用规则：只引用 ID 与状态，不复制定义/判据；ENV 实例编号归 tests.asset-design，本计划编排 ENV 编号与 Case 分配时若变更设计须回溯修订并记录。：模块对象 ID 经 `--design-object-id` 写入 metadata；模块设计基线在 §2 固定。
 
 ### 模板定位：方案、用例、计划与报告的边界
 
@@ -118,7 +120,7 @@
 <span style="color:#1f6feb"><em>**抽象示例**：见下方灰字——为同一 Case 分配多个 ENV 实例以并行/隔离，或多 Case 复用同一 ENV 实例。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：每个 §3.1 的 Case 在本表有 ENV 实例；类型一致；准备未完成标 Blocked 并登记缺口，不静默换实例。</em></span>
 
-| ENV 实例编号 | 环境类型 | 具体配置/位置 | Owner | 分配给哪些 Case | 准备时限 | 状态 |
+| ENV 实例编号 | 环境类型 | 契约文档引用（tests.asset-design） | 具体配置/位置 | Owner | 分配给哪些 Case | 准备时限 | 状态 | 契约校验（Verified/降级原因） |
 |---|---|---|---|---|---|---|
 | <!-- TODO：如 ENV-1、ENV-2 --> | <!-- 类型（引用方案 §1.6） --> | <!-- TODO --> | <!-- TODO --> | <!-- Case ID 范围 --> | <!-- TODO --> | <!-- Blocked/Ready --> |
 
@@ -132,6 +134,8 @@
 | ENV-3 | 受控时钟 fake | HARNESS-EXM-CLOCK v1 | 模块 Owner | MT-EXM-002 | 每次发布前 | Ready |
 </span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
+
+> §3 的「环境与工具」前检项与 §4 Step 0 ENV 自检是同一项不重复：§3 是 Go/No-Go 判定，§4 Step 0 是按消费方索引的 ENV 实例分配执行；ENV 实例归 tests.asset-design 自检。
 
 ## 4. 环境实例分配（plan 编排）
 
@@ -158,6 +162,8 @@
 ## 5. 执行流程（逐 Case 作业序列）
 
 <span style="color:#1f6feb"><em>**本节目的**：给执行者（含 Agent）一条从头到尾的作业序列。</em></span>
+
+> 失败处理与收口（在本流程图内统一）：FAIL → 保留首个失败现场 + 保留 Run 证据 + 禁止重跑覆盖原始失败 → 登记缺陷并关联 Case ID；BLOCKED → 标记环境性阻塞 + 整个 §4 流程停止 + 登记缺口 + 不静默换工具链；INVALID → 标记该 Case 注入未命中 + 复现状态与修复状态分开记录 → 不允许仅靠"重跑通过"掩盖；NOT_RUN → 标记未执行 + 登记原因（不在 §3 清单中静默消失）。
 <span style="color:#1f6feb"><em>**必须写清楚**：按方案清单优先级逐 Case：定位 Case 文档→按其 §2–§7 前检与运行→判定分路（PASS/FAIL/BLOCKED/INVALID 各有明确出口与下一步）→记录 Run→继续；失败不阻断后续 Case，除非环境性阻塞；全部完成后按 §7 生成报告；阶段门——最小真实链→规模控制面→完整业务→恢复/全量回归，不等所有模块写完才集成；Step 0 资产就位——按消费索引构建全部依赖测试资产（tests.asset-design）并运行其自检，自检不过即环境性 Blocked，不进入 Case 执行。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：虚构 MT-EXM：P0 的 002 先行；失败不阻断容量上限组。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：执行者不需要临场发明流程；每个分路有确定下一步。</em></span>
@@ -218,7 +224,7 @@
 ## 8. 报告产出与 Gate 规则
 
 <span style="color:#1f6feb"><em>**本节目的**：定义报告产出与 Gate 规则。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：全部 Case 走完后（或按出口准则提前结束）生成 `tests.module-test-report` 实例；Gate 建议规则（覆盖闭合或缺口有主、失败分级）在此固定，报告只按规则给建议不越权批准。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：全部 Case 走完后（或按出口准则提前结束）生成 `tests.module-test-report` 实例；Gate 建议规则（覆盖闭合或缺口有主、失败分级）在此固定，报告只按规则给建议不越权批准。> 失败降级路径：plan 整体 BLOCKED（环境性）→ 该轮不生成 report 实例，只记缺口与原因；plan 部分 Case 失败 → 仍生成 report（含 FAIL/INVALID 完整记录），后续报告生成失败（new-design 等）→ 不掩盖 FAIL，复现状态与修复状态分开记录。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：虚构 MT-EXM：全部走完后生成报告；Gate＝分母闭合且 G-EX-1 有主。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：报告的生成时机、模板与 Gate 规则确定。</em></span>
 

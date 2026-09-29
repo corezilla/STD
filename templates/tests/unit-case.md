@@ -30,6 +30,7 @@
 <span style="color:#1f6feb"><em>**编写建议**：本文档是单个单元测试 Case 的完整设计，一 Case 一文档，与 design.implementation 阶段的测试方案（tests.unit-test-scheme）清单一一对应；测试脚本按本文档编写；LLM/智能体组件的输入构造、独立判据、统计口径与预算安全方法见 [LLM 测试方法](../../docs/ai-guides/llm-testing.md)。</em></span>
 
 > **格式说明**：蓝色斜体为编写建议（指导如何填写，生成实例后保留）；灰色文字为虚构教学示例（以 `STD_TEMPLATE_EXAMPLE` 标记包裹，`new-design` 生成实例时自动剥离，不得当作项目事实或运行证据）；`<!-- TODO -->` 为待填槽位。颜色在 GitHub 等严格渲染器中降级为斜体/普通字，语义不变。
+> 本文档对设计验证项（VRC/V-xxx）的引用规则：只引用 ID 与状态，不复制定义/判据；Case 文档若需细化执行断言需在变更时回溯设计修订并记录。
 
 > 本 Case 文档绑定：模块对象 ID 经 `--design-object-id`、所属方案经 `--parent-document-id` 写入 metadata；Document ID＝Case ID。
 
@@ -95,7 +96,7 @@
 ## 4. 执行步骤与观察点
 
 <span style="color:#1f6feb"><em>**本节目的**：固定动作序列与观察点。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：按序写动作与观察对象（公开返回、公开查询、权威记录、边界替身调用序）；替身调用序可断言但不证明真实协议。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：按序写动作与观察对象（公开返回、公开查询、权威记录、边界替身调用序）；替身调用序可断言但不证明真实协议。；执行超时与中断（单 Case 单线程超时 + 替身调用次数上限 + 观察点轮询间隔，FAKE 注入未命中或超时视为该 Case 失败；Case 内中断不应改变被测全局状态、需用 RAII 风格恢复/或回滚到基线）。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：见下表灰字。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：执行者不猜下一步。</em></span>
 
@@ -111,6 +112,8 @@
 
 <span style="color:#1f6feb"><em>**本节目的**：固定独立 Oracle 与互斥预期。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：Expected 由独立来源或可手算规则推导，不得调用被测实现复算；输出互斥（成功/各错误分支无第三态）；允许误差或精确比较方法；数值/模型输出分项判据——reference 重复性、真实输入回放、整模型比较分别判定，误差门限来自目标算法要求而非统一常数；判据语义以设计验证项（VRC）为唯一权威，本文细化为可执行断言但不改写，冲突回溯设计修订。</em></span>
+
+> 同一 Case 不混多个负向条件或异常分支；每个条件/分支独立 Case（独立判定、独立复跑、独立 Run 记录）。需验证多条件同时非法的优先级时用专属 Case。
 <span style="color:#1f6feb"><em>**抽象示例**：虚构 UT-FD-003：手算推导。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：预期独立且互斥，可判定。</em></span>
 
