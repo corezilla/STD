@@ -82,7 +82,7 @@
 
 <span style="color:#1f6feb"><em>**本节目的**：固定系统层基线与变更→重跑映射。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：设计文档与源码、依赖、构建环境版本；哪些变化触发哪些 Case 重跑；重跑生成新 Run 与新报告，不覆盖旧失败。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：EX-APP/v1；系统 harness 与外部存储测试实例</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 EX-APP：基线 EX-APP/v1；流程语义变化→方案重裁＋全部 Case 重跑，子系统内部变化→本层回归。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：基线可核验；任一类变更能映射到明确重跑范围。</em></span>
 
 - 设计 / 源码 / 依赖基线：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">EX-APP/v1；系统 harness 与外部存储测试实例</span><!-- STD_TEMPLATE_EXAMPLE_END -->

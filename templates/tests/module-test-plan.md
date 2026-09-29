@@ -82,7 +82,7 @@
 
 <span style="color:#1f6feb"><em>**本节目的**：固定模块层基线与变更→重跑映射。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：设计文档与源码、依赖、构建环境版本；哪些变化触发哪些 Case 重跑；重跑生成新 Run 与新报告，不覆盖旧失败。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：EX-MODULE/v1；教学 C++ 目标</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 M101：基线 EX-MODULE/v1；select_ids 签名变化→全部 Case 重跑，I3 实现变化→仅受影响 Case 复跑。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：基线可核验；任一类变更能映射到明确重跑范围。</em></span>
 
 - 设计 / 源码 / 依赖基线：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">EX-MODULE/v1；教学 C++ 目标</span><!-- STD_TEMPLATE_EXAMPLE_END -->
