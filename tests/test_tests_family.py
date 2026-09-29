@@ -52,7 +52,9 @@ class FormatInvariants(unittest.TestCase):
                                  text.count("<!-- STD_TEMPLATE_EXAMPLE_END -->"))
                 kept = re.sub(r"<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->.*?<!-- STD_TEMPLATE_EXAMPLE_END -->",
                               "", text, flags=re.S)
-                self.assertNotIn("附录 A", kept)
+                self.assertNotIn("见附录 A", kept)
+                if name not in SCHEMES:
+                    self.assertNotIn("附录 A", kept)
                 self.assertNotIn("<details>", kept)
                 lines = kept.splitlines()
                 idx = next(i for i, l in enumerate(lines)

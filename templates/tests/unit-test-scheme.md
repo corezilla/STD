@@ -131,3 +131,24 @@
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 <!-- 交付自查：每个适用来源 ID 是否都有 Case 或具名缺口；清单里的每个 Case ID 是否都有（或计划有）对应 case-design 文档；方案里是否混入了输入构造或 Oracle 细节？ -->
+
+## 附录 A. 本层设计验证项 VRC 汇集（对照用）
+
+<span style="color:#1f6feb"><em>**本节目的**：把设计文档声明的本层验证项 VRC 汇集于此，供逐项对照 §3 清单的覆盖。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：VRC 清单以设计文档（design §12/§14）为唯一权威，本附录只登记 ID 与要验证什么，不复制判据/Oracle 定义；设计变更时本附录同步；每个 VRC 必须在 §3 清单有至少一个 Case，否则登记缺口。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：见下方灰字。</em></span>
+<span style="color:#1f6feb"><em>**完成条件**：本附录 VRC 集合与设计文档一致；每个 VRC 在 §3 清单有 Case 或缺口。</em></span>
+
+| 设计验证项 ID | 要验证什么（名称/责任） | 设计来源 | §3 Case 覆盖 |
+|---|---|---|---|
+| <!-- TODO --> | | | |
+
+<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
+<span style="color:#6e7681">**示例（虚构）**：</span>
+
+<span style="color:#6e7681">| 设计验证项 ID | 要验证什么 | 设计来源 | §3 Case 覆盖 |</span>
+<span style="color:#6e7681">|---|---|---|---|</span>
+<span style="color:#6e7681">| VRC-EX-ISD-DECODE-01 | 头校验顺序与错误优先级 | ISD §验证 | UT-FD-001/003 |</span>
+<span style="color:#6e7681">| VRC-EX-ISD-LIFE-01 | 借用寿命与并发只读 | ISD §验证 | UT-FD-005 |</span>
+<span style="color:#6e7681">| （Gap）上级 wire 契约 | wire 互操作 | 契约层入口未定义 | 缺口 G-EX-1 |</span>
+<!-- STD_TEMPLATE_EXAMPLE_END -->
