@@ -1,5 +1,5 @@
 {
-  "catalog_version": "0.1.0-draft.58",
+  "catalog_version": "0.1.0-draft.59",
   "templates": {
     "contracts.specification": "contracts/contract-specification.md",
     "decisions.adr": "decisions/adr.md",
@@ -108,10 +108,10 @@
     "tests.subsystem-test-plan": "0.3.0",
     "tests.system-test-design": "2.3.0",
     "tests.system-test-plan": "0.3.0",
-    "tests.unit-test-scheme": "0.2.1",
-    "tests.module-test-scheme": "0.2.0",
-    "tests.subsystem-test-scheme": "0.2.0",
-    "tests.system-test-scheme": "0.2.0",
+    "tests.unit-test-scheme": "0.3.0",
+    "tests.module-test-scheme": "0.3.0",
+    "tests.subsystem-test-scheme": "0.3.0",
+    "tests.system-test-scheme": "0.3.0",
     "tests.asset-design": "0.2.0",
     "tests.unit-test-report": "0.3.1",
     "tests.module-test-report": "0.3.0",
