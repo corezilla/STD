@@ -3,7 +3,7 @@
 STD 面向软件、硬件、固件、FPGA 和软硬件协同项目，提供项目管理、需求、总体系统设计、总体系统机制设计、
 子系统设计、模块设计、接口契约、验证测试、评审、发布和运维所需的版本化模板。
 
-当前 `0.1.0-draft.54` 优先覆盖：
+当前 `0.1.0-draft.55` 优先覆盖：
 
 - Slinky，以及与其协作的 Piko、LLMTier；
 - HIFM，包括软件、DPU-SIM、FPGA/RTL、板卡和系统验证。
@@ -132,7 +132,7 @@ manifest。完整接入规则见 [`docs/adoption.md`](docs/adoption.md)。
 AI 编写入口采用“通用方法 + 模板类型专项”：先读
 [`docs/ai-authoring-guide.md`](docs/ai-authoring-guide.md)（`0.2.0-draft.9`），
 再按其中的映射选择主专项和项目已采用模板，不需要通读全部指南。
-15 类专项覆盖当前 58 个模板，同类模板共享方法，计划、报告和决定仍保留不同完成边界；
+15 类专项覆盖当前 57 个模板，同类模板共享方法，计划、报告和决定仍保留不同完成边界；
 精确导航见 [`docs/ai-authoring-guides.json`](docs/ai-authoring-guides.json)。
 软件模块需要独立实现规格时使用可选的 [`ISD模板`](templates/design/implementation-design.md)，
 配套 [`ISD规范`](docs/isd-standard.md) 和 [`AI编写指南`](docs/ai-guides/implementation-design.md)。

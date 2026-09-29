@@ -2,7 +2,7 @@
 
 版本：0.3.0-draft.2 · 日期：2026-09-19 · 状态：方法草案，待实际写作任务验证
 
-主模板：`tests.asset-design`、`tests.llm-test-design`、`tests.module-test-design`、`tests.module-test-plan`、`tests.module-test-report`、`tests.module-test-scheme`、`tests.subsystem-test-design`、`tests.subsystem-test-plan`、`tests.subsystem-test-report`、`tests.subsystem-test-scheme`、`tests.system-test-design`、`tests.system-test-plan`、`tests.system-test-report`、`tests.system-test-scheme`、`tests.unit-test-design`、`tests.unit-test-plan`、`tests.unit-test-report`、`tests.unit-test-scheme`。
+主模板：`tests.asset-design`、`tests.module-test-design`、`tests.module-test-plan`、`tests.module-test-report`、`tests.module-test-scheme`、`tests.subsystem-test-design`、`tests.subsystem-test-plan`、`tests.subsystem-test-report`、`tests.subsystem-test-scheme`、`tests.system-test-design`、`tests.system-test-plan`、`tests.system-test-report`、`tests.system-test-scheme`、`tests.unit-test-design`、`tests.unit-test-plan`、`tests.unit-test-report`、`tests.unit-test-scheme`。
 先读[通用 AI 编写指南](../ai-authoring-guide.md)，再读项目已采用的对应模板。本文补充本类型的工作方法，不重复公共来源、权限和状态规则，不自动升级项目模板。
 
 ## 1. 输入与边界
@@ -49,6 +49,9 @@
 实现前可评审语义、Schema、向量或参考模型；实现后才运行对应实现的契约测试，随后集成/E2E。不能形成“开发前先通过真实两端实现测试”的依赖循环。
 
 ## 4. 图例与写法示例
+
+LLM/智能体组件的 Case 判据（四类独立 Oracle、统计口径、预算配额与注入安全）见[LLM 测试方法](llm-testing.md)，不在各阶段 case-design 模板里重复。
+
 
 测试规格工作稿 0.2.1 的十章均有段落式指导与完成条件；Case Matrix 分开设计 V、Case、
 backend/环境和 Run。可参考[软硬件案例 §7](../examples/host-fpga-transfer-example.md#verification)

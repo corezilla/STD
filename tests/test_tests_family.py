@@ -14,8 +14,7 @@ DESIGNS = tuple(s + "-test-design" for s in STAGES)
 PLANS = tuple(s + "-test-plan" for s in STAGES)
 REPORTS = tuple(s + "-test-report" for s in STAGES)
 ASSET = "asset-design"
-LLM = "llm-test-design"
-ALL = SCHEMES + DESIGNS + PLANS + REPORTS + (ASSET, LLM)
+ALL = SCHEMES + DESIGNS + PLANS + REPORTS + (ASSET,)
 
 
 class RegistrationTests(unittest.TestCase):
@@ -93,6 +92,7 @@ class RoleInvariants(unittest.TestCase):
                 self.assertIn("tests.asset-design", text)
                 self.assertIn("唯一 authority", text)
                 self.assertIn("仅 Run 报告", text)
+                self.assertIn("llm-testing.md", text)
 
     def test_plans_are_executable_with_asset_step_zero(self):
         for name in PLANS:
@@ -115,17 +115,6 @@ class RoleInvariants(unittest.TestCase):
                 self.assertIn("覆盖复算", text)
                 self.assertIn("不越权", text)
                 self.assertIn("Run 证据", text)
-
-    def test_llm_design_covers_oracle_uncertainty_budget_safety(self):
-        text = (DIR / (LLM + ".md")).read_text()
-        self.assertIn("固定 prompt", text)
-        self.assertIn("统计判据", text)
-        self.assertIn("独立评判", text)
-        self.assertIn("token", text)
-        self.assertIn("注入", text)
-        self.assertIn("tests.asset-design", text)
-        self.assertIn("禁止只写", text)
-        self.assertIn("独立 Oracle", text)
 
     def test_asset_design_holds_contract_authority(self):
         text = (DIR / (ASSET + ".md")).read_text()

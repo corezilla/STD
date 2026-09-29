@@ -1,5 +1,5 @@
 {
-  "catalog_version": "0.1.0-draft.54",
+  "catalog_version": "0.1.0-draft.55",
   "templates": {
     "contracts.specification": "contracts/contract-specification.md",
     "decisions.adr": "decisions/adr.md",
@@ -42,7 +42,6 @@
     "review.packet": "review/review-packet.md",
     "review.schematic-pcb": "review/schematic-pcb-review-checklist.md",
     "tests.asset-design": "tests/asset-design.md",
-    "tests.llm-test-design": "tests/llm-test-design.md",
     "tests.module-test-design": "tests/module-test-design.md",
     "tests.module-test-plan": "tests/module-test-plan.md",
     "tests.module-test-report": "tests/module-test-report.md",
@@ -117,7 +116,6 @@
     "tests.unit-test-report": "0.1.0",
     "tests.module-test-report": "0.1.0",
     "tests.subsystem-test-report": "0.1.0",
-    "tests.system-test-report": "0.1.0",
-    "tests.llm-test-design": "0.1.0"
+    "tests.system-test-report": "0.1.0"
   }
 }

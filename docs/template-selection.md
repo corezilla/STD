@@ -150,7 +150,6 @@ ISD是同一模块的可选实现视图，不插入新的对象层级。默认�
 - `*-test-plan`：该阶段测试的**可执行作业指令**——执行前检（Go/No-Go）、逐 Case 作业序列（Step 0 资产就位起步）、证据与 Run 记录规则、报告产出与 Gate 规则；只索引不复制 Case。
 - `*-test-report`：执行产出的测试报告——逐 Case 结果与 Verdict 的唯一权威、覆盖复算、Gate 建议；引用 Run 证据不复制原始输出。
 - `asset-design`：测试资产设计（一资产一文档）——替身证明边界与注入命中语义的唯一契约 authority、消费方索引、自检与 Verified 状态；工具不替产品补可测试性。
-- `llm-test-design`：LLM/智能体组件测试 Case 设计（一 Case 一文档）——固定 prompt 与模型配置、四类独立 Oracle（确定性/结构/约束/独立评判）、统计判据处理不确定性、token/配额预算与注入安全；禁止只写“答案正确”。
 
 机制（design.system-mechanism）不单独立测试文档，其保证按执行位置进入子系统/系统层方案的覆盖分母。验收活动与运行报告不在本家族；按项目 tailoring 承接。
 

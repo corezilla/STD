@@ -71,8 +71,7 @@
     "tests.unit-test-report": "docs/70_verification/reports",
     "tests.module-test-report": "docs/70_verification/reports",
     "tests.subsystem-test-report": "docs/70_verification/reports",
-    "tests.system-test-report": "docs/70_verification/reports",
-    "tests.llm-test-design": "docs/70_verification/specifications"
+    "tests.system-test-report": "docs/70_verification/reports"
   },
   "domain_owned_path_patterns": {
     "software_component": {
