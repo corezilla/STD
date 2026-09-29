@@ -115,21 +115,21 @@
 ## 5. 覆盖复算（对照方案分母）
 
 <span style="color:#1f6feb"><em>**本节目的**：对照方案分母复算覆盖。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：方案 §3 每个来源 ID 逐条对照：Case 状态如何变化、Gap 是否关闭、NOT_RUN 保留在哪；覆盖复算以本报告事实为准，不以计划口径代替。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：方案 §3 每个来源 ID 与其设计验证项（VRC）逐条对照：Case 状态如何变化、Gap 是否关闭、NOT_RUN 保留在哪；覆盖复算以本报告事实为准，不以计划口径代替。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：虚构 ST-S01：EX-CON-1 关闭、预算保留。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：分母每条有着落；未关闭项显式保留。</em></span>
 
-| 方案来源 ID | Case ID | 报告状态 | 剩余缺口 |
+| 方案来源 ID | 设计验证项 ID | Case ID | 报告状态 | 剩余缺口 |
 |---|---|---|---|
 | <!-- 对照方案 §3 清单逐条复算 --> | | | |
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 <span style="color:#6e7681">**示例（虚构）**：</span>
-<span style="color:#6e7681">| 方案来源 ID | Case ID | 报告状态 | 剩余缺口 |</span>
+<span style="color:#6e7681">| 方案来源 ID | 设计验证项 ID | Case ID | 报告状态 | 剩余缺口 |</span>
 <span style="color:#6e7681">|---|---|---|---|</span>
-<span style="color:#6e7681">| EX-CON-1 | ST-S01-001 | PASS | — |</span>
-<span style="color:#6e7681">| 跨模块流程 | ST-S01-002 | PASS | — |</span>
-<span style="color:#6e7681">| 系统并发预算 | （Gap） | NOT_RUN | G-EX-2 保留 |</span>
+<span style="color:#6e7681">| EX-CON-1 | VRC-S01-001 | ST-S01-001 | PASS | — |</span>
+<span style="color:#6e7681">| 跨模块流程 | VRC-S01-002 | ST-S01-002 | PASS | — |</span>
+<span style="color:#6e7681">| 系统并发预算 | — | （Gap） | NOT_RUN | G-EX-2 保留 |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 6. 缺陷与残余风险

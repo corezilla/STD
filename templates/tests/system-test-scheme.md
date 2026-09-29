@@ -83,21 +83,21 @@
 ## 3. 覆盖分母与 Case 清单
 
 <span style="color:#1f6feb"><em>**本节目的**：把 design.software-system 的适用来源 ID 转成 Case 清单——测试分母的唯一登记。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：一个来源 ID 至少一条记录（可多 Case 分担，分别写责任摘要）；Case ID 稳定且唯一（SYS-<对象>-<NNN>）；责任摘要只写“要测什么、边界在哪”，不写输入与 Oracle；设计状态按状态语义；未实现与 NOT_RUN 不删；不适用转 §4。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：一个来源 ID 至少一条记录（可多 Case 分担，分别写责任摘要）；每个设计验证项（design §12/§14 的 VRC/V-xxx）至少一个 Case——验证项是设计声明的必测点，本清单逐项覆盖；Case ID 稳定且唯一（SYS-<对象>-<NNN>）；责任摘要只写“要测什么、边界在哪”，不写输入与 Oracle；设计状态按状态语义；未实现与 NOT_RUN 不删；不适用转 §4。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：见下表灰字。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：每个适用来源 ID 有 Case 或缺口；每个 Case ID 可追到（或计划有）case-design 文档。</em></span>
 
-| 来源 ID / 固定版本 | Case ID | 分类 | 优先级 | 责任摘要（要测什么） | 设计状态 | 上级组合验证入口 |
+| 来源 ID / 固定版本 | 设计验证项 ID | Case ID | 分类 | 优先级 | 责任摘要（要测什么） | 设计状态 | 上级组合验证入口 |
 |---|---|---|---|---|---|---|
 | <!-- TODO --> | <!-- TODO --> | | | <!-- TODO --> | <!-- TODO --> | |
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 <span style="color:#6e7681">**示例（虚构；一来源至少一条）**：</span>
-<span style="color:#6e7681">| 来源 ID / 固定版本 | Case ID | 分类 | 优先级 | 责任摘要（要测什么） | 设计状态 | 上级组合验证入口 |</span>
+<span style="color:#6e7681">| 来源 ID / 固定版本 | 设计验证项 ID | Case ID | 分类 | 优先级 | 责任摘要（要测什么） | 设计状态 | 上级组合验证入口 |</span>
 <span style="color:#6e7681">|---|---|---|---|---|---|---|</span>
-<span style="color:#6e7681">| 启动流程（系统设计 §7.3） | SYS-APP-001 | normal | P0 | 全组件按序就绪，失败组件不阻塞重启 | Designed | — |</span>
-<span style="color:#6e7681">| 停止清空（§7.6） | SYS-APP-002 | recovery | P0 | 在途请求退出且无残留，重启前确认 | Designed | — |</span>
-<span style="color:#6e7681">| 机制端到端：EX-OBS §15 | SYS-APP-003 | normal | P1 | 版本核对机制端到端 PARTIAL 语义成立 | Designed | 验收场景预演（不替代验收） |</span>
+<span style="color:#6e7681">| 启动流程（系统设计 §7.3） | VRC-APP-001 | SYS-APP-001 | normal | P0 | 全组件按序就绪，失败组件不阻塞重启 | Designed | — |</span>
+<span style="color:#6e7681">| 停止清空（§7.6） | VRC-APP-002 | SYS-APP-002 | recovery | P0 | 在途请求退出且无残留，重启前确认 | Designed | — |</span>
+<span style="color:#6e7681">| 机制端到端：EX-OBS §15 | VRC-APP-003 | SYS-APP-003 | normal | P1 | 版本核对机制端到端 PARTIAL 语义成立 | Designed | 验收场景预演（不替代验收） |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 4. 不适用与缺口裁决

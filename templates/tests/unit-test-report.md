@@ -116,21 +116,21 @@
 ## 5. 覆盖复算（对照方案分母）
 
 <span style="color:#1f6feb"><em>**本节目的**：对照方案分母复算覆盖。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：方案 §3 每个来源 ID 逐条对照：Case 状态如何变化、Gap 是否关闭、NOT_RUN 保留在哪；覆盖复算以本报告事实为准，不以计划口径代替。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：方案 §3 每个来源 ID 与其设计验证项（VRC）逐条对照：Case 状态如何变化、Gap 是否关闭、NOT_RUN 保留在哪；覆盖复算以本报告事实为准，不以计划口径代替。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：虚构 UT-FD：FD-R1 因 003 FAIL 未关闭。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：分母每条有着落；未关闭项显式保留。</em></span>
 
-| 方案来源 ID | Case ID | 报告状态 | 剩余缺口 |
+| 方案来源 ID | 设计验证项 ID | Case ID | 报告状态 | 剩余缺口 |
 |---|---|---|---|
 | <!-- 对照方案 §3 清单逐条复算 --> | | | |
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 <span style="color:#6e7681">**示例（虚构）**：</span>
-<span style="color:#6e7681">| 方案来源 ID | Case ID | 报告状态 | 剩余缺口 |</span>
+<span style="color:#6e7681">| 方案来源 ID | 设计验证项 ID | Case ID | 报告状态 | 剩余缺口 |</span>
 <span style="color:#6e7681">|---|---|---|---|</span>
-<span style="color:#6e7681">| FD-R1 | UT-FD-001/003 | 003 FAIL | DEF-17 修复后复跑 |</span>
-<span style="color:#6e7681">| FD-R2/R3 | UT-FD-004/005 | PASS | — |</span>
-<span style="color:#6e7681">| 上级 wire 契约 | （Gap） | NOT_RUN | G-EX-1 保留 |</span>
+<span style="color:#6e7681">| FD-R1 | V-EX-ISD-DECODE-01 | UT-FD-001/003 | 003 FAIL | DEF-17 修复后复跑 |</span>
+<span style="color:#6e7681">| FD-R2/R3 | V-EX-ISD-LIFE-01 | UT-FD-004/005 | PASS | — |</span>
+<span style="color:#6e7681">| 上级 wire 契约 | — | （Gap） | NOT_RUN | G-EX-1 保留 |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 6. 缺陷与残余风险

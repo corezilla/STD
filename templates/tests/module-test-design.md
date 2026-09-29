@@ -56,11 +56,11 @@
 ## 1. Case 概述与责任
 
 <span style="color:#1f6feb"><em>**本节目的**：把方案清单里这行责任摘要展开成可实施的边界。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：Case ID、来源 ID、分类与优先级引用方案清单行；要测什么、明确不测什么；本 Case 的失败意味着什么。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：Case ID、来源 ID、设计验证项、分类与优先级引用方案清单行；要测什么、明确不测什么；本 Case 的失败意味着什么。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：虚构 MT-EXM-002：校验先于筛选——只测 I2 的单元 Case 会漏掉本保证。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：读者不回读方案也知道本 Case 的责任与边界。</em></span>
 
-- Case ID / 来源 ID / 分类 / 优先级（引用方案清单）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">MT-EXM-002 / 模块设计 §7 流程 / negative / P0</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- Case ID / 来源 ID / 设计验证项 / 分类 / 优先级（引用方案清单）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">MT-EXM-002 / 模块设计 §7 流程 / VRC-M101-002 / negative / P0</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 要测什么（责任展开）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">完整校验先于筛选：非匹配类别中的重复 ID 仍整批拒绝</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 明确不测什么 / 失败含义：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">不测真实存储与宿主准入；失败含义＝模块组装后校验/筛选顺序错误</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
@@ -110,7 +110,7 @@
 ## 5. 独立 Oracle 与预期结果
 
 <span style="color:#1f6feb"><em>**本节目的**：固定独立 Oracle 与互斥预期。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：Expected 由独立来源或可手算规则推导，不得调用被测实现复算；输出互斥（成功/各错误分支无第三态）；允许误差或精确比较方法；数值/模型输出分项判据——reference 重复性、真实输入回放、整模型比较分别判定，误差门限来自目标算法要求而非统一常数。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：Expected 由独立来源或可手算规则推导，不得调用被测实现复算；输出互斥（成功/各错误分支无第三态）；允许误差或精确比较方法；数值/模型输出分项判据——reference 重复性、真实输入回放、整模型比较分别判定，误差门限来自目标算法要求而非统一常数；判据语义以设计验证项（VRC）为唯一权威，本文细化为可执行断言但不改写，冲突回溯设计修订。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：虚构 MT-EXM-002：按校验规则人工判定。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：预期独立且互斥，可判定。</em></span>
 

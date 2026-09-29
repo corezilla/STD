@@ -36,11 +36,11 @@ class RegistrationTests(unittest.TestCase):
 
     def test_key_versions(self):
         v = self.catalog["template_versions"]
-        self.assertEqual(v["tests.unit-test-design"], "2.2.0")
+        self.assertEqual(v["tests.unit-test-design"], "2.3.0")
         self.assertEqual(v["tests.module-test-plan"], "0.10.0")
         self.assertEqual(v["tests.asset-design"], "0.2.0")
         for s in STAGES:
-            self.assertEqual(v[f"tests.{s}-test-report"], "0.2.0")
+            self.assertEqual(v[f"tests.{s}-test-report"], "0.3.0")
 
 
 class FormatInvariants(unittest.TestCase):
@@ -79,7 +79,7 @@ class RoleInvariants(unittest.TestCase):
         for name in SCHEMES:
             text = (DIR / (name + ".md")).read_text()
             with self.subTest(template=name):
-                self.assertIn("| 来源 ID / 固定版本 | Case ID | 分类 | 优先级 | 责任摘要（要测什么） | 设计状态 | 上级组合验证入口 |", text)
+                self.assertIn("| 来源 ID / 固定版本 | 设计验证项 ID | Case ID | 分类 | 优先级 | 责任摘要（要测什么） | 设计状态 | 上级组合验证入口 |", text)
                 self.assertIn("唯一登记处", text)
                 self.assertNotIn("`PASS`", text)
 
@@ -120,6 +120,14 @@ class RoleInvariants(unittest.TestCase):
             self.assertIn("待重验", text)
             self.assertIn("未复现/未关闭", text)
         self.assertIn("预定义故障场景", (DIR / "asset-design.md").read_text())
+        for name in SCHEMES:
+            self.assertIn("设计验证项 ID", (DIR / (name + ".md")).read_text())
+            self.assertIn("至少一个 Case", (DIR / (name + ".md")).read_text())
+        for name in DESIGNS:
+            self.assertIn("设计验证项", (DIR / (name + ".md")).read_text())
+            self.assertIn("VRC）为唯一权威", (DIR / (name + ".md")).read_text())
+        for name in REPORTS:
+            self.assertIn("设计验证项 ID", (DIR / (name + ".md")).read_text())
 
     def test_reports_own_verdicts(self):
         for name in REPORTS:

@@ -83,22 +83,22 @@
 ## 3. 覆盖分母与 Case 清单
 
 <span style="color:#1f6feb"><em>**本节目的**：把 design.implementation 的适用来源 ID 转成 Case 清单——测试分母的唯一登记。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：一个来源 ID 至少一条记录（可多 Case 分担，分别写责任摘要）；Case ID 稳定且唯一（UT-<对象>-<NNN>）；责任摘要只写“要测什么、边界在哪”，不写输入与 Oracle；设计状态按状态语义；未实现与 NOT_RUN 不删；不适用转 §4。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：一个来源 ID 至少一条记录（可多 Case 分担，分别写责任摘要）；每个设计验证项（design §12/§14 的 VRC/V-xxx）至少一个 Case——验证项是设计声明的必测点，本清单逐项覆盖；Case ID 稳定且唯一（UT-<对象>-<NNN>）；责任摘要只写“要测什么、边界在哪”，不写输入与 Oracle；设计状态按状态语义；未实现与 NOT_RUN 不删；不适用转 §4。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：见下表灰字。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：每个适用来源 ID 有 Case 或缺口；每个 Case ID 可追到（或计划有）case-design 文档。</em></span>
 
-| 来源 ID / 固定版本 | Case ID | 分类 | 优先级 | 责任摘要（要测什么） | 设计状态 | 上级组合验证入口 |
+| 来源 ID / 固定版本 | 设计验证项 ID | Case ID | 分类 | 优先级 | 责任摘要（要测什么） | 设计状态 | 上级组合验证入口 |
 |---|---|---|---|---|---|---|
 | <!-- TODO --> | <!-- TODO --> | | | <!-- TODO --> | <!-- TODO --> | |
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 <span style="color:#6e7681">**示例（虚构；一来源至少一条）**：</span>
-<span style="color:#6e7681">| 来源 ID / 固定版本 | Case ID | 分类 | 优先级 | 责任摘要（要测什么） | 设计状态 | 上级组合验证入口 |</span>
+<span style="color:#6e7681">| 来源 ID / 固定版本 | 设计验证项 ID | Case ID | 分类 | 优先级 | 责任摘要（要测什么） | 设计状态 | 上级组合验证入口 |</span>
 <span style="color:#6e7681">|---|---|---|---|---|---|---|</span>
-<span style="color:#6e7681">| FD-R1 / EX-FRAME-MODULE 1.0.0 | UT-FD-001 | normal | P1 | 合法帧解析出借用视图与 consumed，只消费首帧 | Designed | — |</span>
-<span style="color:#6e7681">| FD-R1 | UT-FD-003 | negative | P0 | 头非法时按 version→kind→length 优先级拒绝，不等待载荷 | Designed | — |</span>
-<span style="color:#6e7681">| FD-R2 / 同基线 | UT-FD-005 | concurrency | P1 | 并发只读结果一致且输入不变 | Designed | 宿主长寿命组合（NOT_RUN） |</span>
-<span style="color:#6e7681">| 上级 wire 契约 | （Gap） | contract | — | wire 互操作非本层责任 | Gap（G-EX-1） | 契约层入口未定义 |</span>
+<span style="color:#6e7681">| FD-R1 / EX-FRAME-MODULE 1.0.0 | V-EX-ISD-DECODE-01 | UT-FD-001 | normal | P1 | 合法帧解析出借用视图与 consumed，只消费首帧 | Designed | — |</span>
+<span style="color:#6e7681">| FD-R1 | V-EX-ISD-DECODE-01 | UT-FD-003 | negative | P0 | 头非法时按 version→kind→length 优先级拒绝，不等待载荷 | Designed | — |</span>
+<span style="color:#6e7681">| FD-R2 / 同基线 | V-EX-ISD-LIFE-01 | UT-FD-005 | concurrency | P1 | 并发只读结果一致且输入不变 | Designed | 宿主长寿命组合（NOT_RUN） |</span>
+<span style="color:#6e7681">| 上级 wire 契约 | — | （Gap） | contract | — | wire 互操作非本层责任 | Gap（G-EX-1） | 契约层入口未定义 |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 4. 不适用与缺口裁决
