@@ -66,14 +66,11 @@
 
 <span style="color:#1f6feb"><em>**完成条件**：读者能指出实际被测代码、替代边界、模块设计基线，以及本单元测试不能证明的组合保证。</em></span>
 
-- 被测 Module ID、正式名称、父对象与设计基线：<!-- TODO -->
-- 被测 API / 行为与源码、构建目标：<!-- TODO -->
-- 单元边界、真实依赖与替代依赖：<!-- TODO -->
-- 不证明的组合保证及承接测试入口：<!-- TODO -->
+- 被测 Module ID、正式名称、父对象与设计基线：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">EX-FRAME-MODULE 的 M201 FrameDecoder，父对象 S01，设计基线 EX-ISD/v1 修订 2</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 被测 API / 行为与源码、构建目标：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">decode_one(std::span&lt;const std::uint8_t&gt;) noexcept，实现在 frame_decoder.cc，教学单二进制目标</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 单元边界、真实依赖与替代依赖：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">全部真实代码；无网络/持久化/时钟/线程依赖，不引入替身</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 不证明的组合保证及承接测试入口：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">宿主权限与脱敏（FD-R4）、产品协议兼容、长寿命输入；承接＝宿主组合验证（NOT_RUN → G-EX-2）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
-<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-<span style="color:#6e7681">**示例（虚构）**：被测对象为教学基线 EX-FRAME-MODULE 1.0.0 的 M201 FrameDecoder，设计基线 EX-ISD/v1（教学修订 2，与 docs/examples/isd-frame-decoder/ 三文件同步）。被测 API 为 `DecodeResult decode_one(std::span<const std::uint8_t> input) noexcept`，实现在 `frame_decoder.cc`，构建目标为教学单二进制测试宿主。参与测试的全部是真实代码；模块无网络、持久化、时钟或线程依赖，因此不引入任何替身。不证明：宿主访问控制、日志与脱敏（FD-R4 归宿主）、产品协议兼容、调用方长寿命输入与真实峰值；承接入口为宿主组合验证（当前 NOT_RUN → G-EX-2）。</span>
-<!-- STD_TEMPLATE_EXAMPLE_END -->
 
 
 
@@ -114,18 +111,11 @@
 
 <span style="color:#1f6feb"><em>**完成条件**：另一位执行者能独立建立、复位和隔离环境，并知道每个替身未覆盖的真实行为。</em></span>
 
-- Runner、版本、构建与运行命令：<!-- TODO -->
-- Fixture / seed / golden 数据来源及版本：<!-- TODO -->
-- 真实依赖、替身、受控时钟/调度与未覆盖行为：<!-- TODO -->
-- Setup、复位确认、并行隔离和 Cleanup：<!-- TODO -->
+- Runner、版本、构建与运行命令：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">C++20 教学测试宿主（无框架）；无 seed、无受控时钟</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- Fixture / seed / golden 数据来源及版本：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">冻结 hex 向量（如 01 01 00 00 00 02 41 42）；无 golden 文件</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 真实依赖、替身、受控时钟/调度与未覆盖行为：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">无替身；若依赖 SQLite 原子事务，用独立临时 SQLite 而非数组 fake</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- Setup、复位确认、并行隔离和 Cleanup：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">每向量独立 span、天然复位；并发 Case join 后才销毁输入；无编译器记 BLOCKED</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
-<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-<span style="color:#6e7681">**示例（虚构）**：</span>
-<span style="color:#6e7681">- Runner、版本、构建与运行命令：C++20 教学测试宿主（无测试框架），构建命令见样例 README；无随机 seed、无受控时钟</span>
-<span style="color:#6e7681">- Fixture / seed / golden 数据来源及版本：冻结 hex 向量（如 `01 01 00 00 00 02 41 42`），无 golden 文件</span>
-<span style="color:#6e7681">- 真实依赖、替身、受控时钟/调度与未覆盖行为：无替身（模块无外部依赖）；若被测模块依赖 SQLite 原子事务，则用独立临时 SQLite 而非数组 fake</span>
-<span style="color:#6e7681">- Setup、复位确认、并行隔离和 Cleanup：每向量独立 span、天然复位；并发 Case 主线程 join 后才销毁输入；无编译器记 BLOCKED/skip 并保留记录</span>
-<!-- STD_TEMPLATE_EXAMPLE_END -->
 
 
 
@@ -247,16 +237,10 @@
 
 <span style="color:#1f6feb"><em>**完成条件**：自动化入口能复现每个 Case，并按事实区分失败、阻塞、无效与未运行。</em></span>
 
-- 完整执行命令、单 Case 命令与运行位置：<!-- TODO -->
-- 期限、退出码、重跑规则与判定：<!-- TODO -->
-- 覆盖率/变异或反例检查（适用时）：<!-- TODO -->
+- 完整执行命令、单 Case 命令与运行位置：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">c++ -std=c++20 … && ./frame_decoder_test；正式 runner 须提供单 Case 过滤</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 期限、退出码、重跑规则与判定：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">退出码 0 且向量 PASS 才算成功；并发未交错记 INVALID；重跑新 run-id 不覆盖失败</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 覆盖率/变异或反例检查（适用时）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">不适用（教学例无覆盖率工具）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
-<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-<span style="color:#6e7681">**示例（虚构）**：</span>
-<span style="color:#6e7681">- 完整执行命令、单 Case 命令与运行位置：`c++ -std=c++20 … && ./frame_decoder_test`；教学宿主无单 Case 过滤，正式 runner 必须提供选择命令</span>
-<span style="color:#6e7681">- 期限、退出码、重跑规则与判定：退出码 0 且向量输出 PASS 才算成功；并发 Case 串行执行从未交错记 INVALID 而非 PASS；重跑生成新 run-id 不覆盖原失败</span>
-<span style="color:#6e7681">- 覆盖率/变异或反例检查：不适用（教学例无覆盖率工具）</span>
-<!-- STD_TEMPLATE_EXAMPLE_END -->
 
 
 

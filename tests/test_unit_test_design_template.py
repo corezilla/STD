@@ -19,7 +19,7 @@ class UnitTestDesignTemplateTests(unittest.TestCase):
     def test_registered_with_independent_version_and_default_path(self):
         self.assertEqual(self.catalog["templates"].get("tests.unit-test-design"),
                          "tests/unit-test-design.md")
-        self.assertEqual(self.catalog["template_versions"].get("tests.unit-test-design"), "0.6.0")
+        self.assertEqual(self.catalog["template_versions"].get("tests.unit-test-design"), "0.7.0")
         policy = json.loads((ROOT / "templates/path-policy.json").read_text())
         self.assertEqual(policy["default_paths"]["tests.unit-test-design"],
                          "docs/70_verification/specifications")

@@ -91,14 +91,9 @@
 
 <span style="color:#1f6feb"><em>**完成条件**：基线可核验；任一类变更能映射到明确的重跑范围。</em></span>
 
-- 模块设计 / ISD / 源码 / 依赖基线：<!-- TODO -->
-- 变更 → 重跑范围规则：<!-- TODO -->
+- 模块设计 / ISD / 源码 / 依赖基线：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">EX-MODULE/v1 教学修订；教学 C++ 目标；无外部依赖</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 变更 → 重跑范围规则：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">select_ids 签名变化→单元＋模块全重跑并通知契约层；I3 实现变化→仅 I3 单元＋模块层</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
-<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-<span style="color:#6e7681">**示例（虚构）**：</span>
-<span style="color:#6e7681">- 模块设计 / ISD / 源码 / 依赖基线：EX-MODULE/v1 教学修订；教学 C++ 目标；无外部依赖</span>
-<span style="color:#6e7681">- 变更 → 重跑范围规则：select_ids 签名变化 → 单元＋模块全重跑并通知契约层；I3 排序实现变化 → 仅 I3 单元＋模块层，其余单元不连带</span>
-<!-- STD_TEMPLATE_EXAMPLE_END -->
 
 
 
@@ -141,12 +136,9 @@
 
 <span style="color:#1f6feb"><em>**完成条件**：环境与资源清单可核验、有 Owner；共享与隔离方式明确，缺失项登记为 Blocked。</em></span>
 
-- 环境与资产清单及 Owner：<!-- TODO -->
-- 共享资源、隔离与调度：<!-- TODO -->
+- 环境与资产清单及 Owner：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">教学构建工具链＋冻结构造记录数组，Owner＝模块 Owner</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 共享资源、隔离与调度：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">无共享设备；缺编译器时相关条目整体 Blocked，不换工具链静默执行</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
-<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-<span style="color:#6e7681">**示例（虚构）**：环境＝教学构建工具链＋冻结构造记录数组，Owner＝模块 Owner；无共享设备；缺编译器时相关构成条目整体 Blocked，不换别的工具链静默执行。</span>
-<!-- STD_TEMPLATE_EXAMPLE_END -->
 
 
 
@@ -187,13 +179,10 @@
 
 <span style="color:#1f6feb"><em>**完成条件**：开始与结束门槛可判定；判定语义与设计文档一致；到期不改变事实状态。</em></span>
 
-- 入口准则：<!-- TODO -->
-- 出口准则与 Gate 建议：<!-- TODO -->
-- 缺陷登记、偏差与重跑规则（重跑不覆盖失败证据）：<!-- TODO -->
+- 入口准则：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">两份设计的 §2 覆盖无未登记缺口且构建可用</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 出口准则与 Gate 建议：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">覆盖闭合或缺口均有 Owner/Gate；宿主并发到期仍 NOT_RUN，到期改判违例</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 缺陷登记、偏差与重跑规则（重跑不覆盖失败证据）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">缺陷登记到缺陷库并关联 Case；重跑生成新 Run，不覆盖失败证据</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
-<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-<span style="color:#6e7681">**示例（虚构）**：入口＝两份设计的 §2 覆盖无未登记缺口且构建可用；出口＝覆盖闭合或缺口均有 Owner/Gate；宿主并发场景到期仍 NOT_RUN——到期改判是违例。</span>
-<!-- STD_TEMPLATE_EXAMPLE_END -->
 
 
 

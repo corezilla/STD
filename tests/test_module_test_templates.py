@@ -20,14 +20,14 @@ class ModuleTestTemplateRegistrationTests(unittest.TestCase):
     def test_module_test_design_registered(self):
         self.assertEqual(self.catalog["templates"].get("tests.module-test-design"),
                          "tests/module-test-design.md")
-        self.assertEqual(self.catalog["template_versions"].get("tests.module-test-design"), "0.5.0")
+        self.assertEqual(self.catalog["template_versions"].get("tests.module-test-design"), "0.6.0")
         self.assertEqual(self.policy["default_paths"]["tests.module-test-design"],
                          "docs/70_verification/specifications")
 
     def test_module_test_plan_registered(self):
         self.assertEqual(self.catalog["templates"].get("tests.module-test-plan"),
                          "tests/module-test-plan.md")
-        self.assertEqual(self.catalog["template_versions"].get("tests.module-test-plan"), "0.5.0")
+        self.assertEqual(self.catalog["template_versions"].get("tests.module-test-plan"), "0.6.0")
         self.assertEqual(self.policy["default_paths"]["tests.module-test-plan"],
                          "docs/70_verification/plans")
 

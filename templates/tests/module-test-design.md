@@ -64,14 +64,11 @@
 
 <span style="color:#1f6feb"><em>**完成条件**：读者能指出模块构建目标、真实内部组成、边界替代位置，以及本设计不能证明的依赖互操作与系统组合保证。</em></span>
 
-- 被测 Module ID、正式名称、父对象与设计基线：<!-- TODO -->
-- 模块构建目标与 harness 装配方式：<!-- TODO -->
-- 真实内部单元与边界外依赖/替身：<!-- TODO -->
-- 不证明的组合保证及承接测试入口：<!-- TODO -->
+- 被测 Module ID、正式名称、父对象与设计基线：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">EX-MODULE/v1 的 M101 DirectorySelector，父对象 S01，设计基线 EX-MODULE/v1</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 模块构建目标与 harness 装配方式：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">教学单二进制 harness，直接链接 M101 目标</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 真实内部单元与边界外依赖/替身：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">I1 校验、I2 筛选、I3 排序全部真实；边界外无依赖，不引入替身</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 不证明的组合保证及承接测试入口：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">宿主并发准入与输入快照（父设计）、真实存储（本例无 I/O）；承接＝宿主组合验证（G-EX-1）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
-<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-<span style="color:#6e7681">**示例（虚构）**：被测对象是 EX-MODULE/v1 的 M101 DirectorySelector，构建目标为教学单二进制 harness。内部 I1（唯一性校验）、I2（筛选）、I3（排序）全部真实参与——模块层才能证明“完整校验先于筛选”，只测 I2 的单元测试会漏掉非匹配类别中的重复 ID。边界外无依赖（内存运算），不引入替身。不证明：宿主并发准入与输入快照建立（父设计责任）、真实存储行为（本例无 I/O）；承接入口为宿主组合验证（缺口 G-EX-1）。</span>
-<!-- STD_TEMPLATE_EXAMPLE_END -->
 
 
 
@@ -111,18 +108,11 @@
 
 <span style="color:#1f6feb"><em>**完成条件**：另一位执行者能独立构建 harness、复位和隔离模块实例，并知道每个边界替身未覆盖的真实行为。</em></span>
 
-- Runner、版本、模块构建与运行命令：<!-- TODO -->
-- Fixture / seed / 向量来源及版本：<!-- TODO -->
-- 边界替身、受控时钟/调度与未覆盖行为：<!-- TODO -->
-- Setup、复位确认、并行隔离和 Cleanup：<!-- TODO -->
+- Runner、版本、模块构建与运行命令：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">教学 C++ 宿主；无 seed、无受控时钟</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- Fixture / seed / 向量来源及版本：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">冻结构造记录数组（含重复 ID、边界 4096/4097 条）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 边界替身、受控时钟/调度与未覆盖行为：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">本例无替身；若接外部存储，fake 只代返回值，不证明真实存储协议</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- Setup、复位确认、并行隔离和 Cleanup：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">每 Case 新建输入数组天然复位；无并行共享</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
-<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-<span style="color:#6e7681">**示例（虚构）**：</span>
-<span style="color:#6e7681">- Runner、版本、模块构建与运行命令：教学 C++ 宿主直接链接 M101 目标；无 seed、无受控时钟</span>
-<span style="color:#6e7681">- Fixture / seed / 向量来源及版本：冻结构造记录数组（含重复 ID、边界 4096/4097 条）</span>
-<span style="color:#6e7681">- 边界替身、受控时钟/调度与未覆盖行为：本例无替身；若未来接外部存储，fake 只代返回值，真实存储原子性不在模块层证明</span>
-<span style="color:#6e7681">- Setup、复位确认、并行隔离和 Cleanup：每 Case 新建输入数组天然复位；无并行共享</span>
-<!-- STD_TEMPLATE_EXAMPLE_END -->
 
 
 
@@ -245,16 +235,10 @@
 
 <span style="color:#1f6feb"><em>**完成条件**：自动化入口能复现每个 Case（含模块组装步骤），并按事实区分失败、阻塞、无效与未运行。</em></span>
 
-- 完整执行命令（含组装）、单 Case 命令与运行位置：<!-- TODO -->
-- 期限、退出码、重跑规则与判定：<!-- TODO -->
-- 覆盖率/变异或反例检查（适用时）：<!-- TODO -->
+- 完整执行命令（含组装）、单 Case 命令与运行位置：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">c++ … module_harness.cc 全量执行；正式 runner 用过滤参数选单 Case</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 期限、退出码、重跑规则与判定：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">边界注入计数=0 记 INVALID；组装失败记 BLOCKED；重跑新 run-id 不覆盖失败</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 覆盖率/变异或反例检查（适用时）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">不适用（教学例）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
-<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-<span style="color:#6e7681">**示例（虚构）**：</span>
-<span style="color:#6e7681">- 完整执行命令（含组装）、单 Case 命令与运行位置：`c++ … module_harness.cc` 全量执行；正式 runner 用过滤参数选单 Case（教学宿主缺失该能力，已暴露为必要项）</span>
-<span style="color:#6e7681">- 期限、退出码、重跑规则与判定：边界注入计数=0 记 INVALID 而非 PASS；组装失败或环境缺失记 BLOCKED；重跑新 run-id 不覆盖原失败</span>
-<span style="color:#6e7681">- 覆盖率/变异或反例检查：不适用（教学例）</span>
-<!-- STD_TEMPLATE_EXAMPLE_END -->
 
 
 

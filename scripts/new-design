@@ -200,7 +200,7 @@ def main() -> int:
     if content.count(example_begin) != content.count(example_end):
         parser.error("模板教学样板标记不完整")
     content = re.sub(
-        re.escape(example_begin) + r".*?" + re.escape(example_end) + r"\n?",
+        re.escape(example_begin) + r".*?" + re.escape(example_end),
         "", content, flags=re.DOTALL,
     )
     if example_begin in content or example_end in content:
