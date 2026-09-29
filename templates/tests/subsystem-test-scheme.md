@@ -111,21 +111,11 @@
 | · 契约与自检归 tests.asset-design | | · 不 mock 你不拥有的对象 |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
+
 ## 1.7 测试环境类型（方案定义）
 
 <span style="color:#1f6feb"><em>**本节目相**：固定本层"在哪类环境上跑"——列出环境**类型**（抽象类别）及其行为/真伪与契约文档（tests.asset-design 或产品规范）；同一类型可多套实例（多 docker 用于并行），具体**实例编号与分配**由 `tests.subsystem-test-plan` §4 编排，Case 在 §2 通过「环境类型 + ENV 实例编号」引用，不在本文档重复描述环境本身。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：见下方灰字——子系统层测试环境类型（含契约与用法具体细节）+ 拓扑。
-
-**拓扑**：子系统层测试环境拓扑（ENV 类型 → ENV 实例 → 被测对象）：
-
-```mermaid
-flowchart LR
-  Inner["真实内部模块<br/>准入 / M101 / 聚合<br/>(ENV-1)"] --> SubH["子系统 harness<br/>(ENV-1 链接)"]
-  Fake["跨子系统接口 fake<br/>FAKE-REG<br/>(ENV-2)"] --> SubH
-  CLK["受控时钟 fake<br/>CLK-DIR<br/>(ENV-3)"] --> SubH
-  Log["日志 spy<br/>HARNESS-EXM-LOG<br/>(ENV-4)"] --> SubH
-  SubH --> Case["被测子系统（S01）"]
-```</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：见下方灰字——子系统层测试环境类型（含契约与用法具体细节）+ 环境拓扑（ENV 类型 → ENV 实例 → 被测对象）。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：每个 §3 Case 行能指出所用环境类型；类型与 asset-design 契约对应；无未声明的环境依赖。</em></span>
 
 | 环境类型 | 行为/真伪 | 契约文档 | 在本层用例中的角色 |
@@ -134,6 +124,18 @@ flowchart LR
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 <span style="color:#6e7681">**示例（虚构；子系统层测试环境类型——含契约与用法具体细节）**：</span>
+
+
+<span style="color:#6e7681">**拓扑**（ENV 类型 → ENV 实例 → 被测对象）：</span>
+
+```mermaid
+flowchart LR
+  Inner["真实内部模块<br/>准入 / M101 / 聚合<br/>(ENV-1)"] --> SubH["子系统 harness<br/>(ENV-1 链接)"]
+  Fake["跨子系统接口 fake<br/>FAKE-REG<br/>(ENV-2)"] --> SubH
+  CLK["受控时钟 fake<br/>CLK-DIR<br/>(ENV-3)"] --> SubH
+  Log["日志 spy<br/>HARNESS-EXM-LOG<br/>(ENV-4)"] --> SubH
+  SubH --> Case["被测子系统（S01）"]
+```
 
 <span style="color:#6e7681">| 环境类型 | 行为/真伪 | 契约文档 | 在本层用例中的角色 |</span>
 <span style="color:#6e7681">|---|---|---|---|</span>

@@ -113,12 +113,22 @@
 | · 契约与自检归 tests.asset-design | | · 不 mock 你不拥有的对象 |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
+
 ## 1.7 测试环境类型（方案定义）
 
 <span style="color:#1f6feb"><em>**本节目相**：固定本层"在哪类环境上跑"——列出环境**类型**（抽象类别）及其行为/真伪与契约文档（tests.asset-design 或产品规范）；同一类型可多套实例（多 docker 用于并行），具体**实例编号与分配**由 `tests.system-test-plan` §4 编排，Case 在 §2 通过「环境类型 + ENV 实例编号」引用，不在本文档重复描述环境本身。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：见下方灰字——系统层测试环境类型（含契约与用法具体细节）+ 拓扑。
+<span style="color:#1f6feb"><em>**抽象示例**：见下方灰字——系统层测试环境类型（含契约与用法具体细节）+ 环境拓扑（ENV 类型 → ENV 实例 → 被测对象）。</em></span>
+<span style="color:#1f6feb"><em>**完成条件**：每个 §3 Case 行能指出所用环境类型；类型与 asset-design 契约对应；无未声明的环境依赖。</em></span>
 
-**拓扑**：系统层测试环境拓扑（ENV 类型 → ENV 实例 → 被测对象）：
+| 环境类型 | 行为/真伪 | 契约文档 | 在本层用例中的角色 |
+|---|---|---|---|
+| <!-- TODO --> | <!-- TODO --> | <!-- TODO --> | <!-- TODO --> |
+
+<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
+<span style="color:#6e7681">**示例（虚构；系统层测试环境类型——含契约与用法具体细节）**：</span>
+
+
+<span style="color:#6e7681">**拓扑**（ENV 类型 → ENV 实例 → 被测对象）：</span>
 
 ```mermaid
 flowchart LR
@@ -128,15 +138,7 @@ flowchart LR
   CLK["受控时钟 fake<br/>CLK-APP<br/>(ENV-4)"] --> SysH
   Prod["预生产镜像<br/>G-EX-3 排期中<br/>(ENV-5)"] --> SysH
   SysH --> Case["被测系统（EX-APP）"]
-```</em></span>
-<span style="color:#1f6feb"><em>**完成条件**：每个 §3 Case 行能指出所用环境类型；类型与 asset-design 契约对应；无未声明的环境依赖。</em></span>
-
-| 环境类型 | 行为/真伪 | 契约文档 | 在本层用例中的角色 |
-|---|---|---|---|
-| <!-- TODO --> | <!-- TODO --> | <!-- TODO --> | <!-- TODO --> |
-
-<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-<span style="color:#6e7681">**示例（虚构；系统层测试环境类型——含契约与用法具体细节）**：</span>
+```
 
 <span style="color:#6e7681">| 环境类型 | 行为/真伪 | 契约文档 | 在本层用例中的角色 |</span>
 <span style="color:#6e7681">|---|---|---|---|</span>
