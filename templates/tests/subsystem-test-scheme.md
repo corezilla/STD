@@ -127,9 +127,7 @@
 
 
 <span style="color:#6e7681">**拓扑**（ENV 类型 → ENV 实例 → 被测对象）：</span>
-
 ![subsystem层测试环境拓扑](../../diagrams/tests/subsystem-env-topology.svg)
-
 | 环境类型 | 行为/真伪 | 契约文档 | 在本层用例中的角色 |
 |---|---|---|---|
 | 真实内部模块（准入/M101/聚合） | 真实 | — | 跨模块流程用例 |
