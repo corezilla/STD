@@ -66,9 +66,7 @@
 
 <span style="color:#1f6feb"><em>**本节目的**：固定本阶段的测试分类体系与适用裁剪。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：采用 STD 统一家族词表（normal/boundary/negative/concurrency/recovery/security/performance/endurance），逐类声明本阶段适用性与裁剪依据；不适用不等于没写 Case，须在 §4 给事实。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：| normal / boundary / negative / concurrency / recovery | 适用 | — |
-| performance | 适用 | 启动时长与停止清空期限断言 |
-| endurance | 裁剪 | 容量与长稳另立专项（tailoring） |</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：见下方灰字分类示例。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：分类体系可裁剪可追溯，每个适用分类在 §3 清单中至少有 Case 或缺口。</em></span>
 
 | 分类（STD 家族词表） | 本阶段适用性 | 裁剪依据 |
