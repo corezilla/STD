@@ -111,6 +111,28 @@
 <span style="color:#6e7681">| 环境与工具 | 组装目标构建成功 | harness 可链接运行 | 环境性 Blocked |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
+### 3.5 环境实例分配（plan 编排）
+
+<span style="color:#1f6feb"><em>**本节目相**：把方案 §1.6 的环境类型落实为具体的**实例编号**，并分配给具体 Case——同一类型可多套（如多 docker 用于并行），编号与分配是 plan 的责任，Case 只引用编号。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：列出本计划分配的全部 ENV 实例（编号 + 类型 + 具体配置/位置 + Owner + 分配给哪些 Case + 准备时限 + 状态）；ENV 实例类型与方案 §1.6 类型一致；准备失败标 Blocked 并登记缺口，不静默换其他实例。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：见下方灰字——为同一 Case 分配多个 ENV 实例以并行/隔离，或多 Case 复用同一 ENV 实例。</em></span>
+<span style="color:#1f6feb"><em>**完成条件**：每个 §3.1 的 Case 在本表有 ENV 实例；类型一致；准备未完成标 Blocked 并登记缺口，不静默换实例。</em></span>
+
+| ENV 实例编号 | 环境类型 | 具体配置/位置 | Owner | 分配给哪些 Case | 准备时限 | 状态 |
+|---|---|---|---|---|---|---|
+| <!-- TODO：如 ENV-1、ENV-2 --> | <!-- 类型（引用方案 §1.6） --> | <!-- TODO --> | <!-- TODO --> | <!-- Case ID 范围 --> | <!-- TODO --> | <!-- Blocked/Ready --> |
+
+<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
+<span style="color:#6e7681">**示例（虚构；模块层 ENV 实例）**：</span>
+
+<span style="color:#6e7681">| ENV 实例编号 | 环境类型 | 具体配置/位置 | Owner | 分配给哪些 Case | 准备时限 | 状态 |</span>
+<span style="color:#6e7681">|---|---|---|---|---|---|---|</span>
+<span style="color:#6e7681">| ENV-1 | 模块 harness（真实内部单元） | clang17 编译模块镜像 | 模块 Owner | MT-EXM-001/002/003 | 每次发布前 | Ready |
+| ENV-2 | 边界 fake（FAKE-REG） | FAKE-REG v1 | 模块 Owner | MT-EXM-002/003 | 每次发布前 | Ready |
+| ENV-3 | 受控时钟 fake | HARNESS-EXM-CLOCK v1 | 模块 Owner | MT-EXM-002 | 每次发布前 | Ready |
+</span>
+<!-- STD_TEMPLATE_EXAMPLE_END -->
+
 ## 4. 执行流程（逐 Case 作业序列）
 
 <span style="color:#1f6feb"><em>**本节目的**：给执行者（含 Agent）一条从头到尾的作业序列。</em></span>

@@ -77,8 +77,8 @@
 <真实公开入口签名>
 ```
 
-- 初态构造（经公开入口）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">经公开配置入口加载 DIR 准入上限＝1</span><!-- STD_TEMPLATE_EXAMPLE_END -->
-- Fixture / 向量及版本：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">冻结构造记录与并发请求脚本（方案冻结集 v1.0）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 初态构造（经公开入口）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">ENV-1 子系统 harness / ENV-2 跨子系统接口 fake（FAKE-REG） / ENV-3 受控时钟 fake（CLK-DIR） / ENV-4 日志 spy（HARNESS-EXM-LOG）（契约见 tests.asset-design）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 环境类型 + ENV 实例编号（引用 tests.subsystem-test-plan §3.5 分配）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">冻结构造记录与并发请求脚本（方案冻结集 v1.0）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 依赖的测试资产（tests.asset-design 文档）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">CLK-DIR 受控时钟 / FAKE-REG 注册 fake（契约与自检见 asset 文档）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 3. 输入构造

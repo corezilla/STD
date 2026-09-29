@@ -78,7 +78,7 @@
 ```
 
 - 初态构造（经公开入口）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">经公开提交入口构造在途请求（受控时钟保持未完成）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
-- Fixture / 向量及版本：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">冻结请求脚本与受控时钟配置（方案冻结集 v1.0）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 环境类型 + ENV 实例编号（引用 tests.system-test-plan §3.5 分配）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">ENV-1 系统 harness / ENV-2 独立存储测试实例（STORE-TEST，真协议） / ENV-3 跨系统接口 fake（FAKE-REG） / ENV-4 受控时钟 fake（CLK-APP） / ENV-5 真实生产环境（契约见 tests.asset-design）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 依赖的测试资产（tests.asset-design 文档）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">HARNESS-APP 系统 harness / STORE-TEST 存储测试实例（契约与自检见 asset 文档）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 3. 输入构造

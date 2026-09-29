@@ -78,7 +78,7 @@
 ```
 
 - 初态构造（经公开入口）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">无状态，无需初态构造</span><!-- STD_TEMPLATE_EXAMPLE_END -->
-- Fixture / 向量及版本：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">冻结 hex 向量 02 02 ff ff ff ff（方案冻结集 v1.2）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 环境类型 + ENV 实例编号（引用 tests.unit-test-plan §3.5 分配）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">ENV-1 独立子程序编译产物（clang17 编译产物） / ENV-2 受控时钟 fake（HARNESS-FD-CLOCK） / ENV-3 冻结向量集（docs/examples/isd-frame-decoder/）（契约见 tests.asset-design）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 依赖的测试资产（tests.asset-design 文档）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">HARNESS-FD 教学宿主 / VEC-FD 冻结向量集（契约与自检见 asset 文档）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 3. 输入构造
