@@ -27,7 +27,7 @@
 > 外部不可变证据；不要在文档内容中伪造包含自身的 commit hash。
 <!-- STD_DOCUMENT_COVER_END -->
 
-<span style="color:#1f6feb"><em>**编写建议**：本文档是单个子系统测试 Case 的完整设计，一 Case 一文档，与 design.subsystem 阶段的测试方案（tests.subsystem-test-scheme）清单一一对应；测试脚本按本文档编写，一 Case 一文档；LLM/智能体组件的输入构造、独立判据、统计口径与预算安全方法见 [LLM 测试方法](../../docs/ai-guides/llm-testing.md)。</em></span>
+<span style="color:#1f6feb"><em>**编写建议**：本文档是单个子系统测试 Case 的完整设计，一 Case 一文档，与 design.subsystem 阶段的测试方案（tests.subsystem-test-scheme）清单一一对应；测试脚本按本文档编写；LLM/智能体组件的输入构造、独立判据、统计口径与预算安全方法见 [LLM 测试方法](../../docs/ai-guides/llm-testing.md)。</em></span>
 
 > **格式说明**：蓝色斜体为编写建议（指导如何填写，生成实例后保留）；灰色文字为虚构教学示例（以 `STD_TEMPLATE_EXAMPLE` 标记包裹，`new-design` 生成实例时自动剥离，不得当作项目事实或运行证据）；`<!-- TODO -->` 为待填槽位。颜色在 GitHub 等严格渲染器中降级为斜体/普通字，语义不变。
 

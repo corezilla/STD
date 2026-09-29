@@ -28,7 +28,7 @@ class RegistrationTests(unittest.TestCase):
             self.assertEqual(self.catalog["templates"][tid], "tests/" + name + ".md", tid)
             self.assertIn(tid, self.catalog["template_versions"], tid)
             kind = ("schemes" if name in SCHEMES else
-                    "specifications" if (name in DESIGNS or name == "llm-test-design") else
+                    "specifications" if name in DESIGNS else
                     "plans" if name in PLANS else
                     "reports" if name in REPORTS else "assets")
             self.assertEqual(self.policy["default_paths"][tid],
