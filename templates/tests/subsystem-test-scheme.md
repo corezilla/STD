@@ -128,46 +128,7 @@
 
 <span style="color:#6e7681">**拓扑**（ENV 类型 → ENV 实例 → 被测对象）：</span>
 
-```d2
-direction: right
-
-inner: 真实内部模块\n准入 / M101 / 聚合 (ENV-1) {
-  shape: rectangle
-  style.fill: "#E8F5E9"
-}
-
-harness: 子系统 harness\n(ENV-1 链接) {
-  shape: rectangle
-  style.fill: "#F3E5F5"
-}
-
-fake: 跨子系统接口 fake (ENV-2)\nFAKE-REG {
-  shape: rectangle
-  style.fill: "#FFF3E0"
-}
-
-clk: 受控时钟 fake (ENV-3)\nCLK-DIR {
-  shape: rectangle
-  style.fill: "#FFF3E0"
-}
-
-log: 日志 spy (ENV-4)\nHARNESS-EXM-LOG {
-  shape: rectangle
-  style.fill: "#FFF3E0"
-}
-
-case: 被测子系统\nS01 (DIR) {
-  shape: rectangle
-  style.fill: "#E3F2FD"
-  style.bold: true
-}
-
-inner -> harness: 链接
-fake -> harness
-clk -> harness
-log -> harness
-harness -> case
-```
+![subsystem层测试环境拓扑](../../diagrams/tests/subsystem-env-topology.svg)
 
 | 环境类型 | 行为/真伪 | 契约文档 | 在本层用例中的角色 |
 |---|---|---|---|

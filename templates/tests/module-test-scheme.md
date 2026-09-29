@@ -126,40 +126,7 @@
 
 <span style="color:#6e7681">**拓扑**（ENV 类型 → ENV 实例 → 被测对象）：</span>
 
-```d2
-direction: right
-
-inner: 真实内部单元 I1/I2/I3 (ENV-1 真实) {
-  shape: rectangle
-  style.fill: "#E8F5E9"
-}
-
-harness: 模块 harness\n(ENV-1 链接) {
-  shape: rectangle
-  style.fill: "#F3E5F5"
-}
-
-fake: 边界 fake (ENV-2)\nFAKE-REG {
-  shape: rectangle
-  style.fill: "#FFF3E0"
-}
-
-clk: 受控时钟 fake (ENV-3)\nHARNESS-EXM-CLOCK {
-  shape: rectangle
-  style.fill: "#FFF3E0"
-}
-
-case: 被测模块\nM101 {
-  shape: rectangle
-  style.fill: "#E3F2FD"
-  style.bold: true
-}
-
-inner -> harness: 链接
-fake -> harness
-clk -> harness
-harness -> case
-```
+![module层测试环境拓扑](../../diagrams/tests/module-env-topology.svg)
 
 | 环境类型 | 行为/真伪 | 契约文档 | 在本层用例中的角色 |
 |---|---|---|---|

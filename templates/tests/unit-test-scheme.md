@@ -128,34 +128,7 @@
 
 <span style="color:#6e7681">**拓扑**（ENV 类型 → ENV 实例 → 被测对象）：</span>
 
-```d2
-direction: right
-
-code: 独立子程序编译产物 (ENV-1 真实) {
-  shape: rectangle
-  style.fill: "#E8F5E9"
-}
-
-clk: 受控时钟 fake (ENV-2)\nHARNESS-FD-CLOCK {
-  shape: rectangle
-  style.fill: "#FFF3E0"
-}
-
-fake: 边界 fake (ENV-3)\nFAKE-REG / HARNESS-FD-LOG {
-  shape: rectangle
-  style.fill: "#FFF3E0"
-}
-
-case: 被测单元\nFrameDecoder {
-  shape: rectangle
-  style.fill: "#E3F2FD"
-  style.bold: true
-}
-
-code -> case
-clk -> case
-fake -> case
-```
+![unit层测试环境拓扑](../../diagrams/tests/unit-env-topology.svg)
 
 | 环境类型 | 行为/真伪 | 契约文档 | 在本层用例中的角色 |
 |---|---|---|---|

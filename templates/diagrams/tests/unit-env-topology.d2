@@ -1,0 +1,26 @@
+direction: right
+
+code: 独立子程序编译产物 (ENV-1 真实) {
+  shape: rectangle
+  style.fill: "#E8F5E9"
+}
+
+clk: 受控时钟 fake (ENV-2)\nHARNESS-FD-CLOCK {
+  shape: rectangle
+  style.fill: "#FFF3E0"
+}
+
+fake: 边界 fake (ENV-3)\nFAKE-REG / HARNESS-FD-LOG {
+  shape: rectangle
+  style.fill: "#FFF3E0"
+}
+
+case: 被测单元\nFrameDecoder {
+  shape: rectangle
+  style.fill: "#E3F2FD"
+  style.bold: true
+}
+
+code -> case
+clk -> case
+fake -> case

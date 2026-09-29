@@ -130,52 +130,7 @@
 
 <span style="color:#6e7681">**拓扑**（ENV 类型 → ENV 实例 → 被测对象）：</span>
 
-```d2
-direction: right
-
-sub: 真实子系统（全部）(ENV-1) {
-  shape: rectangle
-  style.fill: "#E8F5E9"
-}
-
-harness: 系统 harness\n(ENV-1 链接) {
-  shape: rectangle
-  style.fill: "#F3E5F5"
-}
-
-store: 独立存储测试实例 (ENV-2)\nSTORE-TEST（真协议） {
-  shape: rectangle
-  style.fill: "#FFF3E0"
-}
-
-fake: 跨系统接口 fake (ENV-3)\nFAKE-REG {
-  shape: rectangle
-  style.fill: "#FFF3E0"
-}
-
-clk: 受控时钟 fake (ENV-4)\nCLK-APP {
-  shape: rectangle
-  style.fill: "#FFF3E0"
-}
-
-prod: 预生产镜像 (ENV-5)\nG-EX-3 排期中 {
-  shape: rectangle
-  style.fill: "#FFEBEE"
-}
-
-case: 被测系统\nEX-APP {
-  shape: rectangle
-  style.fill: "#E3F2FD"
-  style.bold: true
-}
-
-sub -> harness: 链接
-store -> harness
-fake -> harness
-clk -> harness
-prod -> harness
-harness -> case
-```
+![system层测试环境拓扑](../../diagrams/tests/system-env-topology.svg)
 
 | 环境类型 | 行为/真伪 | 契约文档 | 在本层用例中的角色 |
 |---|---|---|---|
