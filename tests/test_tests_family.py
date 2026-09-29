@@ -14,7 +14,8 @@ DESIGNS = tuple(s + "-test-design" for s in STAGES)
 PLANS = tuple(s + "-test-plan" for s in STAGES)
 REPORTS = tuple(s + "-test-report" for s in STAGES)
 ASSET = "asset-design"
-ALL = SCHEMES + DESIGNS + PLANS + REPORTS + (ASSET,)
+LLM = "llm-test-design"
+ALL = SCHEMES + DESIGNS + PLANS + REPORTS + (ASSET, LLM)
 
 
 class RegistrationTests(unittest.TestCase):
@@ -28,7 +29,7 @@ class RegistrationTests(unittest.TestCase):
             self.assertEqual(self.catalog["templates"][tid], "tests/" + name + ".md", tid)
             self.assertIn(tid, self.catalog["template_versions"], tid)
             kind = ("schemes" if name in SCHEMES else
-                    "specifications" if name in DESIGNS else
+                    "specifications" if (name in DESIGNS or name == "llm-test-design") else
                     "plans" if name in PLANS else
                     "reports" if name in REPORTS else "assets")
             self.assertEqual(self.policy["default_paths"][tid],
@@ -114,6 +115,17 @@ class RoleInvariants(unittest.TestCase):
                 self.assertIn("覆盖复算", text)
                 self.assertIn("不越权", text)
                 self.assertIn("Run 证据", text)
+
+    def test_llm_design_covers_oracle_uncertainty_budget_safety(self):
+        text = (DIR / (LLM + ".md")).read_text()
+        self.assertIn("固定 prompt", text)
+        self.assertIn("统计判据", text)
+        self.assertIn("独立评判", text)
+        self.assertIn("token", text)
+        self.assertIn("注入", text)
+        self.assertIn("tests.asset-design", text)
+        self.assertIn("禁止只写", text)
+        self.assertIn("独立 Oracle", text)
 
     def test_asset_design_holds_contract_authority(self):
         text = (DIR / (ASSET + ".md")).read_text()

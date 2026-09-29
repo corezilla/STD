@@ -123,6 +123,7 @@
    "guide": "docs/ai-guides/verification.md",
    "template_ids": [
     "tests.asset-design",
+    "tests.llm-test-design",
     "tests.module-test-design",
     "tests.module-test-plan",
     "tests.module-test-report",
