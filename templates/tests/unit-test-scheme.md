@@ -62,11 +62,40 @@
 - 本阶段测试边界（真实组成 / 边界替身）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">全部真实代码；无替身（无外部依赖）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 不证明的组合保证及承接入口：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">组装后流程、wire 互操作、宿主权限；承接＝模块方案与契约层</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
-## 1.5 替身使用策略与边界
 
-<span style="color:#1f6feb"><em>**本节目的**：固定单元层替身的使用，让 §3 清单的替身选择可解释可复核。</em></span>
+## 1.5 测试方法与测试设计技术
+
+<span style="color:#1f6feb"><em>**本节目相**：固定单元层"怎么测"的方法论——单元层测试设计技术比较单一（mock 为主），上游测试常**多方法共存**，需逐一描述与边界。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：测试设计技术（按 Case 家族用哪些——等价类划分/边界值/状态转换/决策表/错误猜测/属性测试/变异测试等，写明对哪些 family 用哪种及不用哪种）；入场标准（设计文档到位、方案清单冻结、Case 实现就绪、替身 Verified、环境齐）；离场标准（分母每条来源有 Case 或缺口、Verdict 齐全、缺口有主、设计变更触发重跑）；自动化策略（哪些进 CI、单 Case 选择入口、断点/重跑规则、flaky 不掩盖根因）。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：见下方灰字——单元层方法（含注入/边界/调用序等具体细节）。</em></span>
+<span style="color:#1f6feb"><em>**完成条件**：每个 §3 Case 行能指出所用方法与环境类型；入场/离场可判定；环境类型与 asset-design 契约对应；无未声明的环境依赖。</em></span>
+
+| Case 家族 | 测试设计技术 | 环境类型引用 | 自动化与判定规则 |
+|---|---|---|---|
+| <!-- TODO：如 normal/boundary/negative/concurrency/recovery --> | <!-- TODO --> | <!-- 类型名（详见 §1.7） --> | <!-- TODO --> |
+
+<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
+<span style="color:#6e7681">**示例（虚构；单元层测试方法——含注入/边界/调用序等具体细节）**：</span>
+
+<span style="color:#6e7681">| Case 家族 | 测试设计技术 | 环境类型引用 | 自动化与判定 |</span>
+<span style="color:#6e7681">|---|---|---|---|</span>
+<span style="color:#6e7681">| normal | 等价类划分（合法帧/合法用例集） | 独立子程序编译产物 + 冻结向量集 | CI 跑全集；1 次执行即判 |
+| | · 注入：完整头 + payload；空白、payload 仅单字节、UTF 边界 | | · 用固定 seed 避免伪随机；断言 exit-code 与 OK bytes 严格相等 |
+| boundary | 边界值（长度上限、payload 大小） | 冻结向量集 + 受控时钟 fake | 单 Case --filter；超界→reject |
+| | · 注入：合法头 + payload∈{4096 字节；4097 字节}；零字节 payload | | · 边界断言须在「接受」与「超限 reject」之间二选一，无第三态 |
+| negative | 错误猜测（注入非法 header/字段组合） | 受控时钟 fake + 边界 fake | 一次性判 PASS/FAIL；不掩盖 FAIL |
+| | · 注入：version=2、kind=2、length=0xffffffff、超大 length；多项非法同时出现验证优先级 | | · 优先级 version→kind→length 必须可独立复现 |
+| concurrency | 线程对偶 + 受控时钟 fake | 受控时钟 fake | 多次采样统计；一次失败标 INVALID 复现 |
+| | · 注入：两个并发线程各读一次冻结向量集；主线程 join 后再销毁输入 | | · 失败须记录样本与线程交错状态以复现；不允许靠「重跑通过」掩盖 |
+| recovery | 资源归还（占槽后的释放） | 受控时钟 fake | 异常路径后必须有显式释放动作 |
+| | · 注入：占槽后异常提前返回 | | · 验证槽位归还、可重入、并发安全 |</span>
+<!-- STD_TEMPLATE_EXAMPLE_END -->
+
+## 1.6 替身使用策略与边界
+
+<span style="color:#1f6feb"><em>**本节目相**：固定单元层替身的使用，让 §3 清单的替身选择可解释可复核。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：替身决策准则（按所有权/可控性/真实性分类——内部真实/边界 fake/真协议测试实例/容器等）；替身形态（mock/fake/stub/spy 的取舍与代价）；替身保真度——契约与自检归 `tests.asset-design`（一资产一文档），方案与 Case 只引用其 ID 不复制行为；交互断言 vs 返回值断言（优先返回值，必要时断言关键调用序，但不耦合内部实现）；反模式（不 mock 你不拥有的接口、不 mock 值对象/纯数据、不为凑覆盖率而 mock、不过度断言内部细节）；与 §1 边界、§3 Case 清单、`tests.unit-case` §2 替身选择一致。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：见下方灰字——单元层替身矩阵：独立子程序编译产物（真实） | 受控时钟 fake | 边界 fake（注册/日志）；不 mock 你不拥有的对象、不 mock 值类型。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：见下方灰字——单元层替身矩阵。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：每个 §3 Case 行能指出替身类型与契约文档 ID；替身矩阵与 asset-design 一一对应；反模式逐项被排除并有理由。</em></span>
 
 | 协作者类型 | 替身形态 | 替身契约文档（tests.asset-design） | 决策理由 |
@@ -78,50 +107,42 @@
 
 <span style="color:#6e7681">| 协作者 | 形态 | 替身契约 | 理由 |</span>
 <span style="color:#6e7681">|---|---|---|---|</span>
-| 独立子程序编译产物 | 真实 | — | 被测对象自身，不 mock |
-| 受控时钟 fake | fake | HARNESS-FD-CLOCK | 真实时钟不可控，用 fake 推进确定性调度 |
-| 边界 fake（注册/日志） | fake | FAKE-REG / HARNESS-FD-LOG | 只代返回值与调用参数 |
+<span style="color:#6e7681">| 独立子程序编译产物（真实） | 受控时钟 fake | 边界 fake（注册/日志） |
+| · 契约与自检归 tests.asset-design | | · 不 mock 你不拥有的对象 |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
-## 1.6 测试方法与测试环境
+## 1.7 测试环境类型（方案定义）
 
-<span style="color:#1f6feb"><em>**本节目相**：固定单元层"怎么测"的方法论与所需测试环境——单元层比较单一（mock 为主），上游测试常**多方法共存**，需逐一描述。本节分两部分：测试方法（怎么测）+ 环境类型（在哪类环境上跑）。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：**测试方法**（按 Case 家族用哪些——等价类划分/边界值/状态转换/决策表/错误猜测/属性测试/变异测试等，写明对哪些 family 用哪种及不用哪种）；入场标准（设计文档到位、方案清单冻结、Case 实现就绪、替身 Verified、环境齐）；离场标准（分母每条来源有 Case 或缺口、Verdict 齐全、缺口有主、设计变更触发重跑）；自动化策略（哪些进 CI、单 Case 选择入口、断点/重跑规则、flaky 不掩盖根因）。**测试环境类型**——列出本层用到的环境类型（抽象类别）及其行为/真伪与契约文档（tests.asset-design 或产品规范）；同一类型可有多个实例（多 docker 用于并行），具体**实例编号与分配**由 `tests.unit-test-plan` §3.5 编排，Case 在 §2 通过「环境类型 + ENV 实例编号」引用，不在本文档重复描述环境本身。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：见下方灰字——单元层测试方法与测试环境类型。</em></span>
-<span style="color:#1f6feb"><em>**完成条件**：每个 §3 Case 行能指出所用方法与环境类型；入场/离场可判定；环境类型与 asset-design 契约对应；无未声明的环境依赖。</em></span>
+<span style="color:#1f6feb"><em>**本节目相**：固定本层"在哪类环境上跑"——列出环境**类型**（抽象类别）及其行为/真伪与契约文档（tests.asset-design 或产品规范）；同一类型可多套实例（多 docker 用于并行），具体**实例编号与分配**由 `tests.unit-test-plan` §4 编排，Case 在 §2 通过「环境类型 + ENV 实例编号」引用，不在本文档重复描述环境本身。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：见下方灰字——单元层测试环境类型（含契约与用法具体细节）+ 拓扑。
 
-### 测试方法（按 Case 家族）
+**拓扑**：单元层测试环境拓扑（ENV 类型 → ENV 实例 → 被测对象）：
 
-<span style="color:#1f6feb"><em>**说明**：本表列出本层使用的**测试设计技术**与对应环境类型引用（详见下一节）；选择依据见各 family 的写作建议。</em></span>
+```mermaid
+flowchart LR
+  Code["独立子程序编译产物<br/>(ENV-1 真实)"] --> Case
+  CLK["受控时钟 fake<br/>HARNESS-FD-CLOCK<br/>(ENV-2)"] --> Case
+  Fake["边界 fake<br/>FAKE-REG / HARNESS-FD-LOG<br/>(ENV-3)"] --> Case
+  Case["被测单元（FrameDecoder）"]
+```</em></span>
+<span style="color:#1f6feb"><em>**完成条件**：每个 §3 Case 行能指出所用环境类型；类型与 asset-design 契约对应；无未声明的环境依赖。</em></span>
 
-| Case 家族 | 测试设计技术 | 环境类型引用 | 自动化与判定规则 |
+| 环境类型 | 行为/真伪 | 契约文档 | 在本层用例中的角色 |
 |---|---|---|---|
-| <!-- TODO：如 normal/boundary/negative/concurrency/recovery --> | <!-- TODO --> | <!-- 类型名（下方「测试环境类型」表） --> | <!-- TODO --> |
+| <!-- TODO --> | <!-- TODO --> | <!-- TODO --> | <!-- TODO --> |
 
-### 测试环境类型（方案定义）
-
-<span style="color:#1f6feb"><em>**说明**：本表列出本层测试用到的**环境类型**（抽象类别）及其行为/真伪与契约文档；同一类型可有多套实例（实例编号与分配见 `tests.unit-test-plan` §3.5）。</em></span>
-
-| 环境类型 | 行为/真伪 | 契约文档（tests.asset-design 或产品规范） | 在本层用例中的角色 |
-|---|---|---|---|
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-<span style="color:#6e7681">**示例（虚构；单元层测试方法与测试环境类型）**：</span>
-
-<span style="color:#6e7681">| Case 家族 | 测试设计技术 | 环境类型引用 | 自动化与判定 |</span>
-<span style="color:#6e7681">|---|---|---|---|</span>
-<span style="color:#6e7681">| normal | 等价类划分（合法帧/合法用例集） | 独立子程序编译产物 + 冻结向量集 | CI 跑全集；1 次执行即判 |
-| boundary | 边界值（长度上限、payload 大小） | 冻结向量集 + 受控时钟 fake | 单 Case --filter；超界→reject |
-| negative | 错误猜测（注入非法 header/字段组合） | 受控时钟 fake + 边界 fake | 一次性判 PASS/FAIL；不掩盖 FAIL |
-| concurrency | 线程对偶 + 受控时钟 fake | 受控时钟 fake | 多次采样统计；一次失败标 INVALID 复现 |
-</span>
+<span style="color:#6e7681">**示例（虚构；单元层测试环境类型——含契约与用法具体细节）**：</span>
 
 <span style="color:#6e7681">| 环境类型 | 行为/真伪 | 契约文档 | 在本层用例中的角色 |</span>
 <span style="color:#6e7681">|---|---|---|---|</span>
 <span style="color:#6e7681">| 独立子程序编译产物 | 真实 C++20 编译 | — | 单元验证对象自身 |
-| 冻结向量集与种子 | 真实但固定 | docs/examples/isd-frame-decoder/ | 正常/边界用例输入 |
-| 受控时钟 fake | 单调推进、advance(ms) | HARNESS-FD-CLOCK | 时间/并发用例 |
-| 边界 fake（注册/日志） | 只代返回值与调用参数 | FAKE-REG / HARNESS-FD-LOG | 边界交互用例 |
-</span>
+| · 契约：源码即真实编译产物，不替代、不 mock | | · 用法：每个 Case 直接调用入口函数，无中间件 || 冻结向量集与种子 | 真实但固定 | docs/examples/isd-frame-decoder/ | 正常/边界用例输入 |
+| · 契约：固定种子→固定 hex bytes；版本随代码升级 | | · 用法：禁止随机生成，必须从固定集读取 || 受控时钟 fake | 单调推进、advance(ms) | HARNESS-FD-CLOCK | 时间/并发用例 |
+| · 契约：advance(ms) 单调、不模拟硬件漂移 | | · 用法：测试前 set_time，测试后 reset || 边界 fake（注册/日志） | 只代返回值与调用参数 | FAKE-REG / HARNESS-FD-LOG | 边界交互用例 |
+| · 契约：FAKE-REG 返回配置值/超时；HARNESS-FD-LOG 记录不修改 | | · 用法：测试前重置计数，测试后验证断言调用 |</span>
+
+<span style="color:#6e7681">**总体说明**：C++20 编译器（clang 17），构建目标为教学单二进制；fixture 来源为 docs/examples/isd-frame-decoder/ 冻结 hex 向量集与固定种子；替身资产归 tests.asset-design（HARNESS-FD-CLOCK / -REG / -LOG）；CI 入口为 runner --filter 选单 Case 或全集；并行隔离按模块实例+端口+临时目录；缺编译器记 Blocked/skip，不静默换工具链。</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 2. 测试分类体系

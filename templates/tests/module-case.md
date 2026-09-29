@@ -78,7 +78,7 @@
 ```
 
 - 初态构造（经公开入口）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">无跨调用状态，无需初态构造</span><!-- STD_TEMPLATE_EXAMPLE_END -->
-- 环境类型 + ENV 实例编号（引用 tests.module-test-plan §3.5 分配）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">ENV-1 模块 harness（clang17 编译模块镜像） / ENV-2 边界 fake（FAKE-REG） / ENV-3 受控时钟 fake（HARNESS-EXM-CLOCK）（契约见 tests.asset-design）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 环境类型 + ENV 实例编号（引用 tests.module-test-plan §4 分配）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">ENV-1 模块 harness（clang17 编译模块镜像） / ENV-2 边界 fake（FAKE-REG） / ENV-3 受控时钟 fake（HARNESS-EXM-CLOCK）（契约见 tests.asset-design）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 依赖的测试资产（tests.asset-design 文档）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">HARNESS-EXM 教学 harness / GEN-EXM 记录数组生成器（契约与自检见 asset 文档）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 3. 输入构造
