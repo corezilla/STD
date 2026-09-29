@@ -125,7 +125,6 @@
 
 
 <span style="color:#6e7681">**拓扑**（ENV 类型 → ENV 实例 → 被测对象）：</span>
-![module层测试环境拓扑](../../diagrams/tests/module-env-topology.svg)
 | 环境类型 | 行为/真伪 | 契约文档 | 在本层用例中的角色 |
 |---|---|---|---|
 | 真实内部单元（I1/I2/I3） | 真实 | — | 组装后真实调用用例 |
@@ -136,6 +135,7 @@
 
 <span style="color:#6e7681">**总体说明**：C++20 模块 harness 直接链接全部内部单元（I1/I2/I3 全真实）；边界 fake 引用 tests.asset-design（FAKE-REG 等）；CI 入口 runner --filter；并行隔离按模块实例+端口+临时目录；缺编译器记 Blocked，不静默换工具链。</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
+![module层测试环境拓扑](../../diagrams/tests/module-env-topology.svg)
 
 ## 2. 测试分类体系
 

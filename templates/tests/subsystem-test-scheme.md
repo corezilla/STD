@@ -127,7 +127,6 @@
 
 
 <span style="color:#6e7681">**拓扑**（ENV 类型 → ENV 实例 → 被测对象）：</span>
-![subsystem层测试环境拓扑](../../diagrams/tests/subsystem-env-topology.svg)
 | 环境类型 | 行为/真伪 | 契约文档 | 在本层用例中的角色 |
 |---|---|---|---|
 | 真实内部模块（准入/M101/聚合） | 真实 | — | 跨模块流程用例 |
@@ -138,6 +137,7 @@
 
 <span style="color:#6e7681">**总体说明**：C++20 子系统 harness 链接所有内部模块（准入/M101/聚合全真实）；边界替身引用 tests.asset-design（FAKE-REG、CLK-DIR 等）；CI 入口 runner --filter；并行隔离按子系统实例+端口+临时目录+数据命名空间；缺关键 fake 时整个子系统 Case 集降级为 Blocked 并登记缺口，不静默换工具链。</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
+![subsystem层测试环境拓扑](../../diagrams/tests/subsystem-env-topology.svg)
 
 ## 2. 测试分类体系
 

@@ -127,7 +127,6 @@
 
 
 <span style="color:#6e7681">**拓扑**（ENV 类型 → ENV 实例 → 被测对象）：</span>
-![unit层测试环境拓扑](../../diagrams/tests/unit-env-topology.svg)
 | 环境类型 | 行为/真伪 | 契约文档 | 在本层用例中的角色 |
 |---|---|---|---|
 | 独立子程序编译产物 | 真实 C++20 编译 | — | 单元验证对象自身 |
@@ -138,6 +137,7 @@
 
 <span style="color:#6e7681">**总体说明**：C++20 编译器（clang 17），构建目标为教学单二进制；fixture 来源为 docs/examples/isd-frame-decoder/ 冻结 hex 向量集与固定种子；替身资产归 tests.asset-design（HARNESS-FD-CLOCK / -REG / -LOG）；CI 入口为 runner --filter 选单 Case 或全集；并行隔离按模块实例+端口+临时目录；缺编译器记 Blocked/skip，不静默换工具链。</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
+![unit层测试环境拓扑](../../diagrams/tests/unit-env-topology.svg)
 
 ## 2. 测试分类体系
 
