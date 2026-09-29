@@ -33,7 +33,7 @@
 │   ├── 40_module_design/          # 未采用Owner共置时的模块设计
 │   ├── 50_implementation_design/  # 文件、类、RTL单元等实现级设计
 │   ├── 60_interfaces/             # ICD、接口目录、边界说明和契约索引
-│   ├── 70_verification/           # V&V计划、规格和规程；测试报告随测试保存
+│   ├── 70_verification/           # 测试方案、Case 设计、计划、报告与资产；运行证据随测试保存
 │   │   ├── plans/                 # 验证策略、范围、资源和排期
 │   │   ├── specifications/        # Case、输入、Oracle和覆盖要求
 │   │   ├── procedures/            # 测试环境、步骤和操作方法
@@ -265,7 +265,7 @@ hardware/boards/<board>/docs/       # 板卡专属设计、BOM、制造和验证
 - 投资人PPT放 `materials/investors/`，板卡单页放 `materials/products/`。
 - 完整竞品分析放 `docs/15_evaluation/competitive-analysis/`，销售竞品卡放
   `materials/sales/competitive-battlecards/`。
-- `docs/70_verification/` 放计划、规格和规程；可执行测试及其报告按测试类型共置，大型证据可存外部数据区。
+- `docs/70_verification/` 放测试方案（schemes）、Case 设计（specifications）、测试计划（plans）、测试报告（reports）与测试资产（assets）；可执行测试及其运行证据按测试类型共置，大型证据可存外部数据区。
 - 简单项目可把契约放 `docs/60_interfaces/contracts/`；需要codegen或多域消费时使用顶层
   `interfaces/`，根文档只保留索引。
 - `docs/migration/std-YYYYMMDD/` 和 `docs/98_migration/` 都可作为迁移区，validator不按目录名禁止。
@@ -311,17 +311,18 @@ Case ID、实际结果、判定和证据位置；外部证据记录稳定制品I
 
 ```text
 docs/70_verification/
-├── plans/system-test-plan.md                 # 范围、资源、阶段、进入/退出条件
-├── specifications/system-test-specification.md # Case ID、前提、输入和独立判据
-└── procedures/system-test-procedure.md       # 部署、复位、执行、收集和清理方法
+├── schemes/system-test-scheme.md              # 分类与 Case 清单（唯一登记：责任摘要/设计状态）
+├── specifications/system-test-design-SYS-APP-001.md  # 单 Case 完整设计（一 Case 一文档）
+├── plans/system-test-plan.md                  # 可执行作业指令：Go/No-Go、Step 0 资产就位、逐 Case 序列
+├── reports/system-test-report.md              # 本次执行结论：逐 Case 结果与 Verdict、覆盖复算、Gate 建议
+└── assets/system-test-asset-STORE-TEST.md     # 测试资产契约与自检（替身/时钟/生成器，一资产一文档）
 tests/
 ├── system/
-│   ├── cases/test_cancel_release.py          # 执行SYS-CANCEL-001并检查资源释放
+│   ├── cases/test_cancel_release.py          # 执行 SYS-APP-001 并检查资源释放
 │   ├── fixtures/task-input.json              # 小型固定输入，不保存实际运行结果
 │   ├── environments/compose.yaml             # 本套测试环境的可执行定义
 │   └── reports/run-001/
-│       ├── system-test-report.md             # 本次结论、失败与未运行项、证据索引
-│       ├── system-test-report.metadata.json  # 正式报告的文档身份、版本和来源
+│       ├── run-summary.md                    # 本次 Run 记录：命令、结果、证据索引
 │       └── artifacts/                        # 默认不入Git；CI保留或转外部证据库
 │           ├── results.json                 # 各Case的expected、actual和verdict
 │           ├── junit.xml                    # 测试框架输出（适用时）
@@ -334,8 +335,8 @@ tests/
     └── reports/run-003/                     # M001自己的报告与证据
 ```
 
-计划、规格和规程同样有同名metadata，图中省略。链路是：系统要求/V → 规格中的
-`SYS-CANCEL-001` → `test_cancel_release.py` 的用例入口 → `run-001` 的实际结果 → 本次报告。
+方案、Case 设计、计划和资产同样有同名 metadata，图中省略。链路是：系统要求/V → 方案清单中的
+`SYS-APP-001` → `test_cancel_release.py` 的用例入口 → `run-001` 的实际结果 → 本次报告。
 报告引用既有预期，不为通过测试而修改Oracle；未执行保留NOT_RUN，不能伪造结果。
 不要求每个Case单独建文或每次开发试跑都写正式Markdown报告；保留框架报告即可，正式阶段按需
 形成评审结论。集成测试和模块测试沿用同样关联方法，但测试对象及验证边界不同，局部通过不代表系统通过。
