@@ -61,7 +61,9 @@
 
 - 资产 ID / 名称 / 形态：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">CLK-S01 受控时钟（测试资产，虚构）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 用途与解决的问题：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">驱动 S01 排队交错的确定性调度，替代真实并发时序</span><!-- STD_TEMPLATE_EXAMPLE_END -->
-- 消费方索引（方案/Case/计划 文档与版本）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">STS-S01 v1.0（ST-S01-002/004）、STP-S01 v1.0 Step 0</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+| 消费方 | 类型 | 依赖点 |
+|---|---|---|
+| <!-- TODO --> | | |
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 <span style="color:#6e7681">**示例（虚构；消费方索引表）**：</span>
@@ -113,6 +115,13 @@
 <span style="color:#1f6feb"><em>**抽象示例**：虚构 CLK-S01 自检：advance(5) 后读数=5 且单调；注入计数命中一次 +1；自检 Run 保存在 assets 自己的 reports/。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：每个 §2 契约条款有对应自检项；Verified 可追到自检 Run。</em></span>
 
+| 自检项 | 验证的契约条款 | 判定 |
+|---|---|---|
+| <!-- TODO --> | | |
+
+- 自检执行入口：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">runner --filter CLK-CHK（教学：assets 自检目标全量跑）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 自检 Run 证据位置：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">tests/subsystem/s01/assets/clk/reports/<run-id>/</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 <span style="color:#6e7681">**示例（虚构；自检用例表）**：</span>
 
@@ -122,9 +131,6 @@
 <span style="color:#6e7681">| CLK-CHK-2 两次 advance 交错不回退 | §2 单调性 | 断言 |</span>
 <span style="color:#6e7681">| CLK-CHK-3 计数器命中一次 +1、不命中为 0 | §2 命中语义 | 断言 |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
-
-- 自检执行入口：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">runner --filter CLK-CHK（教学：assets 自检目标全量跑）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
-- 自检 Run 证据位置：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">tests/subsystem/s01/assets/clk/reports/<run-id>/</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 6. 状态与版本
 
