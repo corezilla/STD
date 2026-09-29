@@ -244,12 +244,12 @@
 
 ```mermaid
 flowchart LR
-    C["S01 内的已有调用方"] -->|"借用原始 request"| M["DirectorySelector (M101)"]
+    C["DIR 内的已有调用方"] -->|"借用原始 request"| M["DirectorySelector (M101)"]
     M -->|"独立 IDs 或类型化错误"| C
 ```
 
 图 M-C1 · EX-MODULE/v1 · Target / Planned / NOT_RUN。实线表示同步函数入参和返回，不是网络或新部署边界。
-S01 的已有调用方拥有 request 及 records；M101 借用只读输入并产生独立 IDs 或类型化错误。调用方保持输入及字段不可变直至返回。
+DIR 的已有调用方拥有 request 及 records；M101 借用只读输入并产生独立 IDs 或类型化错误。调用方保持输入及字段不可变直至返回。
 内部文件结构见 §5，过程见 §7；本图只展示模块外部交接，不代替完整产品应用环境。
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
@@ -1500,7 +1500,7 @@ R-ORDER 是外部可观察规则，归并仅是本地实现选择；换等价算
 
 ```mermaid
 sequenceDiagram
-    participant C as S01 调用方
+    participant C as DIR 调用方
     participant E as core.select_ids
     participant V as I1 validate_all
     participant F as I2 filter_ids
@@ -1749,7 +1749,7 @@ submit_inspection(
 
 ```mermaid
 sequenceDiagram
-    participant C as S01 调用方
+    participant C as DIR 调用方
     participant A as 承载调用 A 的宿主线程
     participant B as 承载调用 B 的宿主线程
     C->>A: select_ids(合法输入 A)
@@ -2042,7 +2042,7 @@ flowchart TB
     C --> E["E-UNIT 或宿主组合环境<br/>固定向量 / 独立输入 / 实际结束确认"]
     E --> U["Run 与证据<br/>当前全部 NOT_RUN"]
     U --> L["M101 局部结论<br/>不能推导父级 PASS"]
-    L -. 提供局部证据 .-> P["S01 组合验证<br/>快照 / 准入 / 并发预算"]
+    L -. 提供局部证据 .-> P["DIR 组合验证<br/>快照 / 准入 / 并发预算"]
 ```
 
 图 M-V1 · EX-MODULE/v1 · Target / Planned / NOT_RUN。实线表示验证承接关系，不是执行流程；虚线表示局部证据输入父级评审。
@@ -2240,9 +2240,9 @@ VRC-M101-001/C1 用固定 [a1,b2] 判顺序；VRC-M101-004/C7-C8 检查并发不
 
 **用途与承接（对应 §1–4）**
 
-DirectorySelector（M101）属于虚构 S01 目录应用子系统。用户在已有界面选择类别后，S01 调用 M101 对内存记录筛选并按优先级展示 ID。
+DirectorySelector（M101）属于虚构 DIR 目录应用子系统。用户在已有界面选择类别后，DIR 调用 M101 对内存记录筛选并按优先级展示 ID。
 M101 不加载文件、不授权用户、不访问网络，不产生业务写入，也没有独立 UI、线程或取消 API。
-父输入为虚构文档 EX-S01/v1，拟议约束 EX-CON-1 是输入不可变与整批返回，EX-CON-2 是每次最多 4096 条；
+父输入为虚构文档 EX-DIR/v1，拟议约束 EX-CON-1 是输入不可变与整批返回，EX-CON-2 是每次最多 4096 条；
 拟议输入不因此获批。父设计负责输入快照的建立及整个应用并发准入，不将单调用上限当成进程容量。
 
 上下文见 §4 图 M-C1：已有调用方以同步函数传入借用记录，接收独立结果或错误。
@@ -2339,7 +2339,7 @@ M101 不输出日志、不持有凭据；调用应用按错误码计数和脱敏
 
 **设计验证、缺口与一致性（对应 §14–15）**
 
-所有条目被测对象为 M101、父对象 S01。环境 E-UNIT 是所选语言的独立测试进程，无外部服务；每例新建输入和捕获结果，
+所有条目被测对象为 M101、父对象 DIR。环境 E-UNIT 是所选语言的独立测试进程，无外部服务；每例新建输入和捕获结果，
 结束后退出作用域。并行例不用共享可变 fixture；对不可变同一输入的共享读取另设例，调用结束前不复位输入。
 自动执行需保留语言/运行库版本、向量及运行命令，失败保留具体输入与交错。下表 Case 均待实现，Run 均 NOT_RUN。
 
@@ -2353,8 +2353,8 @@ M101 不输出日志、不持有凭据；调用应用按错误码计数和脱敏
 | VRC-M101-006 / IF-SELECT | C10：缺字段、额外字段、布尔 priority、越界 priority、非 ASCII ID、非法 kind | request 级 index=null；记录级首个错误索引，无隐式转换 | E-UNIT / NOT_RUN |
 
 O1：实现语言及可恢复分配失败策略未定，Owner 为模块负责人，需以候选语言异常模型和父资源政策裁决并回写 §9–10；
-O2：内存/延迟及并发组合预算未定，Owner 为 S01 负责人，需给约束并以实际布局/工作负载量测回写 §12。
+O2：内存/延迟及并发组合预算未定，Owner 为 DIR 负责人，需给约束并以实际布局/工作负载量测回写 §12。
 这两项不能用 NOT_IMPLEMENTED 代替设计缺口，也不能判本教学方案已具备生产实现批准条件。
 R-VALID 改动时回查 IF-SELECT、M-P1、伪代码、VRC-M101-002/-003/-006；R-ORDER 改动时回查 I3 与 VRC-M101-001。
-局部 Case 即使通过，也不能代替 S01 的输入快照、准入与并发组合验证。
+局部 Case 即使通过，也不能代替 DIR 的输入快照、准入与并发组合验证。
 <!-- STD_TEMPLATE_EXAMPLE_END -->

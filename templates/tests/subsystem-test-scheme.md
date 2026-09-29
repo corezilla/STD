@@ -55,10 +55,10 @@
 
 <span style="color:#1f6feb"><em>**本节目的**：固定整子系统组装层的对象与边界。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：被测子系统与设计基线；真实内部模块；对其他子系统/外部服务的边界替身；不证明的系统组合保证。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 S01 方案覆盖并发准入与跨模块流程。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 DIR 方案覆盖并发准入与跨模块流程。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：读者能说清子系统层测什么。</em></span>
 
-- 被测对象、设计基线与父对象：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">EX-S01/v1 目录应用子系统（含 M101），父对象 EX-APP</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 被测对象、设计基线与父对象：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">EX-DIR/v1 目录应用子系统（含 M101），父对象 EX-APP</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 本阶段测试边界（真实组成 / 边界替身）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">准入/M101/聚合全部真实；对 EX-APP 注册接口用 fake</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 不证明的组合保证及承接入口：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">跨子系统业务流与系统预算；承接＝系统方案</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
@@ -94,9 +94,9 @@
 <span style="color:#6e7681">**示例（虚构；一来源至少一条）**：</span>
 <span style="color:#6e7681">| 来源 ID / 固定版本 | 设计验证项 ID | Case ID | 分类 | 优先级 | 责任摘要（要测什么） | 设计状态 | 上级组合验证入口 |</span>
 <span style="color:#6e7681">|---|---|---|---|---|---|---|</span>
-<span style="color:#6e7681">| EX-CON-1 / EX-S01 v1 | VRC-S01-001 | IT-S01-001 | concurrency | P0 | 并发准入下输入不可变、整批返回 | Designed | 系统并发预算（系统层，NOT_RUN） |</span>
-<span style="color:#6e7681">| 跨模块流程：准入→M101→聚合 | VRC-S01-002 | IT-S01-002 | normal | P1 | 排队请求不丢、结果不串 | Designed | — |</span>
-<span style="color:#6e7681">| 机制承接：EX-OBS 快照采样 | VRC-S01-003 | IT-S01-003 | recovery | P2 | 采样不阻塞业务请求 | Designed | 机制端到端归系统层 |</span>
+<span style="color:#6e7681">| EX-CON-1 / EX-DIR v1 | VRC-DIR-001 | IT-DIR-001 | concurrency | P0 | 并发准入下输入不可变、整批返回 | Designed | 系统并发预算（系统层，NOT_RUN） |</span>
+<span style="color:#6e7681">| 跨模块流程：准入→M101→聚合 | VRC-DIR-002 | IT-DIR-002 | normal | P1 | 排队请求不丢、结果不串 | Designed | — |</span>
+<span style="color:#6e7681">| 机制承接：EX-OBS 快照采样 | VRC-DIR-003 | IT-DIR-003 | recovery | P2 | 采样不阻塞业务请求 | Designed | 机制端到端归系统层 |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 4. 不适用与缺口裁决
@@ -125,7 +125,7 @@
 - 与 case-design / 计划的同步规则：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">Case 文档 ID＝Case ID；tests.subsystem-test-plan 引用本方案版本</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-<span style="color:#6e7681">新增 IT-S01-005 先入清单再建 Case 文档；子系统计划引用本方案 v1.0。</span>
+<span style="color:#6e7681">新增 IT-DIR-005 先入清单再建 Case 文档；子系统计划引用本方案 v1.0。</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 <!-- 交付自查：每个适用来源 ID 是否都有 Case 或具名缺口；清单里的每个 Case ID 是否都有（或计划有）对应 case-design 文档；方案里是否混入了输入构造或 Oracle 细节？ -->
@@ -146,7 +146,7 @@
 
 <span style="color:#6e7681">| 设计验证项 ID | 要验证什么 | 设计来源 | §3 Case 覆盖 |</span>
 <span style="color:#6e7681">|---|---|---|---|</span>
-<span style="color:#6e7681">| VRC-S01-001 | 并发准入下输入不可变 | 子系统设计 §12 | IT-S01-001 |</span>
-<span style="color:#6e7681">| VRC-S01-002 | 跨模块流程不丢不串 | 同 §12 | IT-S01-002 |</span>
-<span style="color:#6e7681">| VRC-S01-003 | 机制承接采样不阻塞 | 同 §12 | IT-S01-003 |</span>
+<span style="color:#6e7681">| VRC-DIR-001 | 并发准入下输入不可变 | 子系统设计 §12 | IT-DIR-001 |</span>
+<span style="color:#6e7681">| VRC-DIR-002 | 跨模块流程不丢不串 | 同 §12 | IT-DIR-002 |</span>
+<span style="color:#6e7681">| VRC-DIR-003 | 机制承接采样不阻塞 | 同 §12 | IT-DIR-003 |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->

@@ -56,11 +56,11 @@
 
 <span style="color:#1f6feb"><em>**本节目的**：固定资产解决什么问题、谁在用。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：资产的用途与形态（harness/替身/时钟/生成器/编排）；消费方索引——哪些方案、Case 文档、计划依赖它（Document ID + 版本）；无消费方的资产应退役而非闲置。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 CLK-S01 受控时钟被 STS-S01 方案的 3 个 Case 与 STP-S01 计划 Step 0 依赖。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 CLK-DIR 受控时钟被 STS-DIR 方案的 3 个 Case 与 STP-DIR 计划 Step 0 依赖。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：用途清晰；消费方索引完整可反向追溯。</em></span>
 
-- 资产 ID / 名称 / 形态：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">CLK-S01 受控时钟（测试资产，虚构）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
-- 用途与解决的问题：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">驱动 S01 排队交错的确定性调度，替代真实并发时序</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 资产 ID / 名称 / 形态：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">CLK-DIR 受控时钟（测试资产，虚构）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 用途与解决的问题：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">驱动 DIR 排队交错的确定性调度，替代真实并发时序</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 | 消费方 | 类型 | 依赖点 |
 |---|---|---|
 | <!-- TODO --> | | |
@@ -70,8 +70,8 @@
 
 <span style="color:#6e7681">| 消费方 | 类型 | 依赖点 |</span>
 <span style="color:#6e7681">|---|---|---|</span>
-<span style="color:#6e7681">| STS-S01 v1.0 | 方案 | IT-S01-002/004 的交错构造 |</span>
-<span style="color:#6e7681">| STP-S01 v1.0 | 计划 | §4 Step 0 资产就位 |</span>
+<span style="color:#6e7681">| STS-DIR v1.0 | 方案 | IT-DIR-002/004 的交错构造 |</span>
+<span style="color:#6e7681">| STP-DIR v1.0 | 计划 | §4 Step 0 资产就位 |</span>
 <span style="color:#6e7681">| tests.subsystem-test-report v1.0（间接） | 报告 | BLOCKED 判定引用自检状态 |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
@@ -85,7 +85,7 @@
 - 模拟的行为集：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">FAKE-REG：成功/失败/超时三种返回；一次可配置延迟</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 不模拟 / 不证明的性质：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">不证明真实注册协议、鉴权与重试语义；这些归契约/集成层</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 注入/命中语义（适用时）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">注入计数器从 0 起，每次命中 +1；Case 以计数=1 证明注入已命中</span><!-- STD_TEMPLATE_EXAMPLE_END -->
-- 精度 / 推进接口（时钟类适用）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">CLK-S01：advance(ms) 单调推进；不模拟硬件时钟漂移</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 精度 / 推进接口（时钟类适用）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">CLK-DIR：advance(ms) 单调推进；不模拟硬件时钟漂移</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 预定义故障场景与副作用前后绑定：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">场景 S1：目标分配后、复制提交前注入失败；核对执行次数、操作 ID 与持久内容；恢复另立场景</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 3. 可测试性依赖与缺口回路
@@ -95,25 +95,25 @@
 <span style="color:#1f6feb"><em>**抽象示例**：虚构 EX-MODULE 若无公开配置入口，CLK 类资产无法构造初态——登记 Gap 到 MTS-EXM §4 并移交模块设计，而非反射改私有字段。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：每个依赖钩子有设计出处；缺失项有 Gap 编号与移交记录；无绕行手段残留。</em></span>
 
-- 依赖的产品钩子（设计出处）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">S01 公开配置入口（EX-S01 §6）；停止清空确认接口（EX-APP §7.6）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
-- 缺失钩子的 Gap 与移交：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">（无缺失；若有：Gap→STS-S01 §4→EX-S01 设计未决项）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 依赖的产品钩子（设计出处）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">DIR 公开配置入口（EX-DIR §6）；停止清空确认接口（EX-APP §7.6）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 缺失钩子的 Gap 与移交：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">（无缺失；若有：Gap→STS-DIR §4→EX-DIR 设计未决项）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 4. 实现设计与版本耦合
 
 <span style="color:#1f6feb"><em>**本节目的**：资产自己的实现方案与演进规则。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：实现位置（tests/ 下目录）、结构与关键接口；与被测版本/接口的耦合（绑哪个版本、产品变更时的适配规则）；并行使用时的隔离（实例/端口/命名空间）。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 CLK-S01 位于 tests/subsystem/s01/assets/clk/，接口变更随 STS-S01 版本重裁。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 CLK-DIR 位于 tests/subsystem/s01/assets/clk/，接口变更随 STS-DIR 版本重裁。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：另一位开发者能接手维护；版本耦合规则明确。</em></span>
 
 - 实现位置与结构：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">tests/subsystem/s01/assets/clk/（单头文件＋注入计数器）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
-- 版本耦合与适配规则：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">绑定 EX-S01/v1 公开接口；S01 接口变更时先改契约再适配，消费方逐一复跑自检</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 版本耦合与适配规则：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">绑定 EX-DIR/v1 公开接口；DIR 接口变更时先改契约再适配，消费方逐一复跑自检</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 并行隔离：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">每 Case 独立时钟实例；计数器不跨 Case 复用</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 5. 自身验证（自检）
 
 <span style="color:#1f6feb"><em>**本节目的**：资产怎么证明自己可用——Verified 的唯一来源。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：自检用例清单（区别于产品 Case：验证资产行为符合 §2 契约，如注入确实命中、时钟确实推进）；对拍方式（适用时，与真实依赖的对照样本）；自检 Run 的执行入口与证据位置；自检失败=消费方计划 Step 0 阻塞。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 CLK-S01 自检：advance(5) 后读数=5 且单调；注入计数命中一次 +1；自检 Run 保存在 assets 自己的 reports/。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 CLK-DIR 自检：advance(5) 后读数=5 且单调；注入计数命中一次 +1；自检 Run 保存在 assets 自己的 reports/。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：每个 §2 契约条款有对应自检项；Verified 可追到自检 Run。</em></span>
 
 | 自检项 | 验证的契约条款 | 判定 |
@@ -137,11 +137,11 @@
 
 <span style="color:#1f6feb"><em>**本节目的**：当前两层状态与变更影响。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：开发状态（Planned/Implemented）与验证状态（Unverified/Verified＋自检 Run 引用）；最近一次契约变更对消费方的影响评估。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 CLK-S01：Implemented＋Verified（自检 Run clk-run-20260929-01，3/3 PASS）。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 CLK-DIR：Implemented＋Verified（自检 Run clk-run-20260929-01，3/3 PASS）。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：状态双层可核验；变更影响有消费方逐一评估记录。</em></span>
 
 - 开发状态 / 验证状态（自检 Run 引用）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">Implemented / Verified（clk-run-20260929-01，3/3 PASS）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
-- 最近契约变更与消费方影响：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">v1.1 计数器改为 per-Case 实例；IT-S01-002/004 已复评，计划无影响</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 最近契约变更与消费方影响：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">v1.1 计数器改为 per-Case 实例；IT-DIR-002/004 已复评，计划无影响</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 7. 未决项
 

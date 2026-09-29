@@ -58,7 +58,7 @@
 <span style="color:#1f6feb"><em>**抽象示例**：虚构 EX-APP 方案覆盖启动/配置/停止流程与机制端到端。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：读者能说清系统层测什么、验收承接什么。</em></span>
 
-- 被测对象、设计基线与父对象：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">EX-APP/v1 软件系统（含 S01 等），设计基线 EX-APP/v1</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 被测对象、设计基线与父对象：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">EX-APP/v1 软件系统（含 DIR 等），设计基线 EX-APP/v1</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 本阶段测试边界（真实组成 / 边界替身）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">子系统全部真实；对外存储用独立测试实例（真实协议）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 不证明的组合保证及承接入口：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">真实生产环境、客户验收；承接＝验收活动（tailoring 承接）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 

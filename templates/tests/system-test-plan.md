@@ -58,7 +58,7 @@
 
 <span style="color:#1f6feb"><em>**本节目的**：固定系统层测试活动的范围与构成清单。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：验证对象与不证明什么；构成＝系统方案×1＋Case 文档×N＋子系统计划引用＋验收交接。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 EX-APP：方案 TSS-APP v1.0 ＋ Case 文档 SYS-APP-001…005 ＋ 子系统计划 STP-S01。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 EX-APP：方案 TSS-APP v1.0 ＋ Case 文档 SYS-APP-001…005 ＋ 子系统计划 STP-DIR。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：读者（含 Agent）能说清验证对象、构成清单和排除项；每个构成项指向方案、Case 文档或具名缺口。</em></span>
 
 | 构成层 | 文档 / 入口（Document ID 或缺口） | 覆盖责任摘要 | 条目状态 |
@@ -74,7 +74,7 @@
 <span style="color:#6e7681">|---|---|---|---|</span>
 <span style="color:#6e7681">| 系统方案 ×1 | TSS-APP v1.0 | 清单与设计状态唯一登记 | Planned |</span>
 <span style="color:#6e7681">| Case 文档 ×5 | SYS-APP-001…005 | 启动/停止/配置流程、机制端到端 | Planned |</span>
-<span style="color:#6e7681">| 子系统计划引用 | STP-S01 | 子系统层组织 | Planned |</span>
+<span style="color:#6e7681">| 子系统计划引用 | STP-DIR | 子系统层组织 | Planned |</span>
 <span style="color:#6e7681">| 验收交接 | 验收活动（tailoring） | 客户验收场景 | Deferred（有依据） |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 

@@ -58,7 +58,7 @@
 <span style="color:#1f6feb"><em>**抽象示例**：虚构 EX-MODULE 方案覆盖 select_ids 对外行为与校验先于筛选。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：读者能说清模块层测什么、不下放单元层什么。</em></span>
 
-- 被测对象、设计基线与父对象：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">EX-MODULE/v1 的 M101 DirectorySelector，父对象 S01</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 被测对象、设计基线与父对象：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">EX-MODULE/v1 的 M101 DirectorySelector，父对象 DIR</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 本阶段测试边界（真实组成 / 边界替身）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">I1/I2/I3 全部真实；边界外无依赖</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 不证明的组合保证及承接入口：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">宿主并发准入、真实存储互操作；承接＝子系统/系统方案</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 

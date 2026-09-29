@@ -75,7 +75,7 @@
 <span style="color:#6e7681">| 模块方案 ×1 | MTS-EXM v1.0 | 清单与设计状态唯一登记 | Planned |</span>
 <span style="color:#6e7681">| Case 文档 ×4 | MT-EXM-001…004 | 对外行为、校验先于筛选、容量上限 | Planned |</span>
 <span style="color:#6e7681">| 单元计划引用 | UTP-EXM | 单元层组织 | Planned |</span>
-<span style="color:#6e7681">| 子系统交接 | STS-S01 清单 | 宿主并发准入 | Blocked（G-EX-1） |</span>
+<span style="color:#6e7681">| 子系统交接 | STS-DIR 清单 | 宿主并发准入 | Blocked（G-EX-1） |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 2. 被测基线与变更重跑范围
