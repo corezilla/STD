@@ -1,4 +1,4 @@
-"""Invariants for the stage-aligned tests family (scheme / case-design / plan)."""
+"""Invariants for the stage-aligned tests family (scheme/case-design/plan/report/asset)."""
 
 import json
 import re
@@ -8,10 +8,13 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DIR = ROOT / "templates/tests"
-SCHEMES = ('unit-test-scheme', 'module-test-scheme', 'subsystem-test-scheme', 'system-test-scheme')
-DESIGNS = ('unit-test-design', 'module-test-design', 'subsystem-test-design', 'system-test-design')
-PLANS = ('unit-test-plan', 'module-test-plan', 'subsystem-test-plan', 'system-test-plan')
-ALL = SCHEMES + DESIGNS + PLANS
+STAGES = ("unit", "module", "subsystem", "system")
+SCHEMES = tuple(s + "-test-scheme" for s in STAGES)
+DESIGNS = tuple(s + "-test-design" for s in STAGES)
+PLANS = tuple(s + "-test-plan" for s in STAGES)
+REPORTS = tuple(s + "-test-report" for s in STAGES)
+ASSET = "asset-design"
+ALL = SCHEMES + DESIGNS + PLANS + REPORTS + (ASSET,)
 
 
 class RegistrationTests(unittest.TestCase):
@@ -19,22 +22,25 @@ class RegistrationTests(unittest.TestCase):
         self.catalog = json.loads((ROOT / "templates/catalog.json").read_text())
         self.policy = json.loads((ROOT / "templates/path-policy.json").read_text())
 
-    def test_all_twelve_registered_with_paths_and_versions(self):
+    def test_all_seventeen_registered_with_paths(self):
         for name in ALL:
             tid = "tests." + name
             self.assertEqual(self.catalog["templates"][tid], "tests/" + name + ".md", tid)
             self.assertIn(tid, self.catalog["template_versions"], tid)
-            expected = ("docs/70_verification/schemes" if name in SCHEMES else
-                        "docs/70_verification/specifications" if name in DESIGNS else
-                        "docs/70_verification/plans")
-            self.assertEqual(self.policy["default_paths"][tid], expected, tid)
+            kind = ("schemes" if name in SCHEMES else
+                    "specifications" if name in DESIGNS else
+                    "plans" if name in PLANS else
+                    "reports" if name in REPORTS else "assets")
+            self.assertEqual(self.policy["default_paths"][tid],
+                             "docs/70_verification/" + kind, tid)
 
-    def test_major_restructure_versions(self):
+    def test_key_versions(self):
         v = self.catalog["template_versions"]
-        self.assertEqual(v["tests.unit-test-design"], "2.0.0")
-        self.assertEqual(v["tests.module-test-design"], "2.0.0")
-        for name in SCHEMES:
-            self.assertEqual(v["tests." + name], "0.1.0")
+        self.assertEqual(v["tests.unit-test-design"], "2.1.0")
+        self.assertEqual(v["tests.module-test-plan"], "0.9.0")
+        self.assertEqual(v["tests.asset-design"], "0.1.0")
+        for s in STAGES:
+            self.assertEqual(v[f"tests.{s}-test-report"], "0.1.0")
 
 
 class FormatInvariants(unittest.TestCase):
@@ -59,8 +65,10 @@ class FormatInvariants(unittest.TestCase):
                         nxt = next(l for l in lines[i + 1:] if l.strip())
                         self.assertTrue(nxt.startswith('<span style="color:#1f6feb"><em>'),
                                         f"{name}: {line}")
-                for block in re.findall(r"<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->\n(.*?)<!-- STD_TEMPLATE_EXAMPLE_END -->",
-                                        text, flags=re.S):
+                blocks = re.findall(r"<!-- STD_TEMPLATE_EXAMPLE_BEGIN -->\n(.*?)<!-- STD_TEMPLATE_EXAMPLE_END -->",
+                                    text, flags=re.S)
+                self.assertTrue(blocks, name)
+                for block in blocks:
                     first = next(l for l in block.splitlines()
                                  if l.strip() and not l.startswith("###"))
                     self.assertTrue(first.startswith('<span style="color:#6e7681">'), name)
@@ -73,27 +81,47 @@ class RoleInvariants(unittest.TestCase):
             with self.subTest(template=name):
                 self.assertIn("| 来源 ID / 固定版本 | Case ID | 分类 | 优先级 | 责任摘要（要测什么） | 设计状态 | 上级组合验证入口 |", text)
                 self.assertIn("唯一登记处", text)
-                self.assertIn("`Designed` / `Gap`（具名缺口）/ `Tailored-N/A`", text)
+                self.assertNotIn("`PASS`", text)
 
-    def test_designs_are_one_case_per_document(self):
+    def test_designs_are_one_case_per_document_with_asset_links(self):
         for name in DESIGNS:
             text = (DIR / (name + ".md")).read_text()
             with self.subTest(template=name):
                 self.assertIn("一 Case 一文档", text)
                 self.assertIn("Document ID＝Case ID", text)
-                self.assertIn("`Planned` / `Implemented`", text)
+                self.assertIn("tests.asset-design", text)
+                self.assertIn("唯一 authority", text)
                 self.assertIn("仅 Run 报告", text)
-                self.assertNotIn("`Designed` / `Gap`", text)
 
-    def test_plans_index_without_duplicating(self):
+    def test_plans_are_executable_with_asset_step_zero(self):
         for name in PLANS:
             text = (DIR / (name + ".md")).read_text()
             with self.subTest(template=name):
-                self.assertIn("`Planned`", text)
-                self.assertIn("`Deferred`", text)
-                self.assertIn("`Blocked`", text)
-                self.assertIn("test-scheme", text)
-                self.assertIn("test-design", text)
+                self.assertIn("可执行作业指令", text)
+                self.assertIn("资产就位", text)
+                self.assertIn("Step 0", text)
+                self.assertIn("tests.asset-design", text)
+                self.assertIn("Go / No-Go", text)
+                self.assertIn("test-report", text)
+                self.assertNotIn("`PASS` / `FAIL`", text)
+
+    def test_reports_own_verdicts(self):
+        for name in REPORTS:
+            text = (DIR / (name + ".md")).read_text()
+            with self.subTest(template=name):
+                self.assertIn("Verdict 唯一持有", text)
+                self.assertIn("`PASS` / `FAIL`", text)
+                self.assertIn("覆盖复算", text)
+                self.assertIn("不越权", text)
+                self.assertIn("Run 证据", text)
+
+    def test_asset_design_holds_contract_authority(self):
+        text = (DIR / (ASSET + ".md")).read_text()
+        self.assertIn("唯一 authority", text)
+        self.assertIn("消费方索引", text)
+        self.assertIn("不替产品补可测试性", text)
+        self.assertIn("`Unverified` / `Verified`", text)
+        self.assertIn("自检", text)
 
 
 if __name__ == "__main__":

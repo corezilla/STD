@@ -67,7 +67,7 @@
 ## 2. 被测入口与前置
 
 <span style="color:#1f6feb"><em>**本节目的**：固定被测入口与前置状态。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：被测入口完整声明；状态型初态必须经公开入口构造，不直改内部状态；fixture/向量引用其版本，不复制字节。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：被测入口完整声明；状态型初态必须经公开入口构造，不直改内部状态；fixture/向量引用其版本，不复制字节；替身/夹具/受控时钟等测试资产链接其 `tests.asset-design` 文档，契约以该文档为唯一 authority。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：虚构 MT-EXM-002：组装后单次调用。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：另一位执行者能独立建立前置。</em></span>
 
@@ -79,6 +79,7 @@
 
 - 初态构造（经公开入口）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">无跨调用状态，无需初态构造</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - Fixture / 向量及版本：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">冻结构造记录数组（两条同 ID、类别不匹配；方案冻结集 v1.0）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 依赖的测试资产（tests.asset-design 文档）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">HARNESS-EXM 教学 harness / GEN-EXM 记录数组生成器（契约与自检见 asset 文档）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 3. 输入构造
 

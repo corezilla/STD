@@ -2,7 +2,7 @@
 
 版本：0.3.0-draft.2 · 日期：2026-09-19 · 状态：方法草案，待实际写作任务验证
 
-主模板：`tests.module-test-design`、`tests.module-test-plan`、`tests.module-test-scheme`、`tests.subsystem-test-design`、`tests.subsystem-test-plan`、`tests.subsystem-test-scheme`、`tests.system-test-design`、`tests.system-test-plan`、`tests.system-test-scheme`、`tests.unit-test-design`、`tests.unit-test-plan`、`tests.unit-test-scheme`。
+主模板：`tests.asset-design`、`tests.module-test-design`、`tests.module-test-plan`、`tests.module-test-report`、`tests.module-test-scheme`、`tests.subsystem-test-design`、`tests.subsystem-test-plan`、`tests.subsystem-test-report`、`tests.subsystem-test-scheme`、`tests.system-test-design`、`tests.system-test-plan`、`tests.system-test-report`、`tests.system-test-scheme`、`tests.unit-test-design`、`tests.unit-test-plan`、`tests.unit-test-report`、`tests.unit-test-scheme`。
 先读[通用 AI 编写指南](../ai-authoring-guide.md)，再读项目已采用的对应模板。本文补充本类型的工作方法，不重复公共来源、权限和状态规则，不自动升级项目模板。
 
 ## 1. 输入与边界

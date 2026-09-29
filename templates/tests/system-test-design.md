@@ -67,7 +67,7 @@
 ## 2. 被测入口与前置
 
 <span style="color:#1f6feb"><em>**本节目的**：固定被测入口与前置状态。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：被测入口完整声明；状态型初态必须经公开入口构造，不直改内部状态；fixture/向量引用其版本，不复制字节。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：被测入口完整声明；状态型初态必须经公开入口构造，不直改内部状态；fixture/向量引用其版本，不复制字节；替身/夹具/受控时钟等测试资产链接其 `tests.asset-design` 文档，契约以该文档为唯一 authority。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：虚构 SYS-APP-002：经公开入口构造在途请求。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：另一位执行者能独立建立前置。</em></span>
 
@@ -79,6 +79,7 @@
 
 - 初态构造（经公开入口）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">经公开提交入口构造在途请求（受控时钟保持未完成）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - Fixture / 向量及版本：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">冻结请求脚本与受控时钟配置（方案冻结集 v1.0）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 依赖的测试资产（tests.asset-design 文档）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">HARNESS-APP 系统 harness / STORE-TEST 存储测试实例（契约与自检见 asset 文档）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 3. 输入构造
 
