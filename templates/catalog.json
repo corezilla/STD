@@ -1,5 +1,4 @@
 {
-  "catalog_version": "0.1.0-draft.66",
   "templates": {
     "contracts.specification": "contracts/contract-specification.md",
     "decisions.adr": "decisions/adr.md",
@@ -102,24 +101,21 @@
     "operations.maintenance": "0.2.0",
     "operations.bring-up": "0.2.0",
     "tests.module-case": "2.3.2",
-    "tests.module-test-plan": "0.8.0",
-    "tests.unit-test-plan": "0.8.0",
+    "tests.module-test-plan": "0.9.1",
+    "tests.unit-test-plan": "0.9.1",
     "tests.subsystem-case": "2.3.2",
-    "tests.subsystem-test-plan": "0.8.0",
+    "tests.subsystem-test-plan": "0.9.1",
     "tests.system-case": "2.3.2",
-    "tests.system-test-plan": "0.8.0",
-    "tests.unit-test-scheme": "0.6.0",
-    "tests.module-test-scheme": "0.6.0",
-    "tests.subsystem-test-scheme": "0.6.0",
-    "tests.system-test-scheme": "0.6.0",
+    "tests.system-test-plan": "0.9.1",
+    "tests.unit-test-scheme": "0.6.1",
+    "tests.module-test-scheme": "0.6.1",
+    "tests.subsystem-test-scheme": "0.6.1",
+    "tests.system-test-scheme": "0.6.1",
     "tests.asset-design": "0.2.2",
-    "tests.unit-test-report": "0.3.0",
-    "tests.module-test-report": "0.3.0",
-    "tests.subsystem-test-report": "0.3.0",
-    "tests.system-test-report": "0.3.0",
-    "tests.unit-test-case": "2.5.0",
-    "tests.module-test-case": "2.5.0",
-    "tests.subsystem-test-case": "2.5.0",
-    "tests.system-test-case": "2.5.0"
-  }
+    "tests.unit-test-report": "0.3.1",
+    "tests.module-test-report": "0.3.1",
+    "tests.subsystem-test-report": "0.3.1",
+    "tests.system-test-report": "0.3.1"
+  },
+  "catalog_version": "0.1.0-draft.69"
 }
