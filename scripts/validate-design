@@ -20,6 +20,7 @@ except ImportError:
 
 
 ROOT = Path(__file__).resolve().parents[1]
+LOCKED_REVISION: str | None = None
 FINGERPRINT_ROOT: Path | None = None
 EXCLUDED_PARTS = {
     ".git", ".cache", ".local", ".venv", "__pycache__", "node_modules",
@@ -48,6 +49,17 @@ COMPACT_COVER_FIELDS = {
     "Document ID", "Document Version", "Status", "Project", "Document Owner",
     "Last Modified Date", "Template ID", "Template Version",
 }
+
+
+def load_locked_blob(revision: str, rel_path: str) -> bytes | None:
+    """Read a file from the lock-pinned STD revision (not the live checkout)."""
+    try:
+        return subprocess.run(
+            ["git", "-C", str(ROOT), "show", f"{revision}:{rel_path}"],
+            check=True, capture_output=True,
+        ).stdout
+    except subprocess.CalledProcessError:
+        return None
 
 
 def load_json(path: Path):
@@ -271,7 +283,11 @@ def validate_metadata(path: Path, schema: dict, catalog: dict, project_root: Pat
         template_path = f"templates/{relative_template}"
         expected_hash = source_artifacts.get(template_path)
         if expected_hash is None and data.get("template_version") == expected_template_version:
-            expected_hash = hashlib.sha256((ROOT / template_path).read_bytes()).hexdigest()
+            locked_blob = load_locked_blob(LOCKED_REVISION, template_path) if LOCKED_REVISION else None
+            if locked_blob is not None:
+                expected_hash = hashlib.sha256(locked_blob).hexdigest()
+            else:
+                expected_hash = hashlib.sha256((ROOT / template_path).read_bytes()).hexdigest()
         if expected_hash and data.get("template_sha256") != expected_hash:
             errors.append(issue("template.hash", path, "template_sha256 与锁定模板不一致"))
 
@@ -869,8 +885,24 @@ def main() -> int:
         control_errors, source_artifacts, lock = validate_project_control(project_root, args.require_immutable_std)
         errors.extend(control_errors)
 
-    catalog = load_json(ROOT / "templates/catalog.json")
-    metadata_schema = load_json(ROOT / "schemas/document-metadata.schema.json")
+    global LOCKED_REVISION
+    locked_rev = lock.get("source_revision") if isinstance(lock, dict) else None
+    LOCKED_REVISION = locked_rev if isinstance(locked_rev, str) else None
+    if isinstance(locked_rev, str) and re.fullmatch(r"[a-f0-9]{40}", locked_rev):
+        locked_catalog = load_locked_blob(locked_rev, "templates/catalog.json")
+        locked_schema = load_locked_blob(locked_rev, "schemas/document-metadata.schema.json")
+        if locked_catalog is not None:
+            catalog = json.loads(locked_catalog)
+        else:
+            catalog = load_json(ROOT / "templates/catalog.json")
+        if locked_schema is not None:
+            import json as _json
+            metadata_schema = _json.loads(locked_schema)
+        else:
+            metadata_schema = load_json(ROOT / "schemas/document-metadata.schema.json")
+    else:
+        catalog = load_json(ROOT / "templates/catalog.json")
+        metadata_schema = load_json(ROOT / "schemas/document-metadata.schema.json")
     metadata_paths = sorted({path for root in roots for path in discover(root, ".metadata.json")})
     markdown_paths: set[Path] = set()
     identities: dict[str, Path] = {}
