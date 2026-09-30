@@ -93,7 +93,7 @@
 ## 3. 执行前检（Go / No-Go）
 
 <span style="color:#1f6feb"><em>**本节目的**：开始执行前逐项 Go/No-Go，全部通过才进入 §4。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：必须写清楚：方案就绪度（清单无未登记缺口且版本固定）；Case 实现状态盘点（未 Implemented 的 Case 明确处理）；环境与工具（构建可用、依赖齐、权限具备）；构建接线（干净全量交付构建通过、消费者链接实际交付库、导出/注册项同步）；代码 review 包通过（review.packet 覆盖本层 + 模块 review 通过）；测试资产/数据版本对齐（与设计 §13 可冻结资产清单对账）。任一不满足记 Blocked 并登记缺口，不静默降级执行。任一不满足记 Blocked 并登记缺口，不静默降级执行。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：方案就绪度（清单无未登记缺口且版本固定）；Case 实现状态盘点（未 Implemented 的 Case 明确处理）；环境与工具（构建可用、依赖齐、权限具备）；构建接线（干净全量交付构建通过、消费者链接实际交付库、导出/注册项同步）；代码 review 通过（tests.code-review-checklist 全部必查项通过；BLOCKED 项不得进入测试）；测试资产/数据版本对齐（与设计 §13 可冻结资产清单对账）。任一不满足记 Blocked 并登记缺口，不静默降级执行。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：虚构 UT-FD：编译器可用、5 个 Case 全 Implemented 才 Go。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：每一前检项有可判定事实；No-Go 有出口（Blocked＋缺口）。</em></span>
 

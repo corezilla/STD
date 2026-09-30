@@ -38,24 +38,26 @@
 完成检查：评审意见可定位、可复现；每项未关闭问题有 Owner、关闭条件和再次审查入口。
 </details>
 
-## 2. Naming、Public Contract 与接口一致性
+## 2. Naming、Public Contract 与上游契约一致性
 
 <details>
 <summary>本节编写建议</summary>
 
-对照设计文档（design.definition §9 / contracts.specification）核对被审源码的公开 API：命名、参数顺序与类型、可空性、返回类型、错误码、可空/非空、并发约束。
+对照设计文档（design.definition §9 / contracts.specification）核对被审源码的公开 API：命名、参数顺序与类型、可空性、返回类型、错误码、可空/非空、并发约束。源码不能脱离设计/契约自行发挥；每条被审证据绑定到上游设计 §/契约条目。
 
-问题包括：定位到 X.Y（文件:行 或 接口 ID）+ 复现路径 + 修复责任 + 关闭条件，禁止只写通过。
+问题包括：定位到 X.Y（文件:行 或 接口 ID）+ 复现路径 + 修复责任 + 关闭条件，禁止只写通过；越界项标 BLOCKED。
 
-完成检查：公开契约每个签名/错误码与上游文档一一对账；私有不暴露。
+完成检查：公开契约每个签名/错误码与上游文档一一对账；私有不暴露；每个公开 API、错误码、并发约束都对应上游条款。
 </details>
 
 - [ ] 公开函数/方法名、参数与返回与设计 §9 / contracts 完全一致
-- [ ] 错误码 ID、消息、可空性严格遵守设计 §11 错误表/公共错误码
+- [ ] 错误码 ID、消息、可空性严格遵守设计 §11 错误表/公共错误码（不允许擅自新建错误码）
 - [ ] 接口参数顺序、类型、可空与不可空约束一致（不允许 nullable→non-nullable 的隐式放宽）
 - [ ] 私有实现细节（内部状态、缓存结构、内部 helper）不暴露在公开契约里
 - [ ] 公开方法的可重入/线程安全不证伪：要么文档声明非并发，要么实现真的无共享可变状态
 - [ ] 过期/替代签名已删除或显式 deprecate，不存在可被静默调用的旧名
+- [ ] 资源所有权/调用顺序与设计 §8 调用链一致
+- [ ] 单元测试 Case 列表与方案 §3 VRC 对账（每个 VRC 至少一条对应 Case）
 
 ## 3. Error handling、错误路径与边界
 
@@ -114,61 +116,26 @@
 - [ ] 跨接口调用不暴露内部权限范围
 - [ ] 失败路径不留下可被重试绕过的半资源
 
-## 6. Testability 与可观察性
+## 6. Testability、可观察性与下游测试钩子
 
 <details>
 <summary>本节编写建议</summary>
 
-被审代码必须可被测试覆盖：公开契约可注入替身/可重入；关键路径有对应 unit case（参见设计 §14 VRC）；运行期 + 故障期都可观测。
+被审代码必须可被测试覆盖，并为下游测试留出钩子：公开契约可注入替身/可重入；关键路径有对应 unit case（参见设计 §14 VRC）；运行期 + 故障期都可观测、可断言、可重放。
 
-问题包括：定位 + 可测性缺口 + 观测缺口 + 修复责任。
+问题包括：定位 + 可测性缺口 + 观测缺口 + 缺钩子 + 修复责任。
 
-完成检查：每个公开契约可被测试覆盖；关键路径在设计 §14 VRC 与方案 §3 清单中。
+完成检查：每个公开契约可被测试覆盖；关键路径在设计 §14 VRC 与方案 §3 清单中；关键路径能在测试中重放且可断言。
 </details>
 
 - [ ] 公开契约可注入替身（clock/registry/IO），无需改业务代码
 - [ ] 关键路径在设计 §14 VRC 与方案 §3 清单有对应 Case
-- [ ] 运行期与失败期都可观测（不吞错、不静默 fallback）
+- [ ] 运行期与失败期都可观测、失败/边界路径可断言（不吞错、不静默 fallback）
 - [ ] 单元层可重入（无全局可变状态或状态可重入）
 - [ ] 测试 Case 与本 review 同一基线 commit（不是后续 fix 后再补 Case）
-
-## 7. Code review 与上游契约的一致性
-
-<details>
-<summary>本节编写建议</summary>
-
-源码不能脱离设计/契约自行发挥。每条被审证据绑定到上游设计 §/契约条目。
-
-问题包括：定位到 设计 § + 源码点 + 越界证据 + 修复责任 + 关闭条件。
-
-完成检查：每个公开 API、错误码、并发约束都对应上游条款；越界标 BLOCKED。
-</details>
-
-- [ ] 公开 API 与 design.definition §9 一致
-- [ ] 接口契约与 contracts.specification 一致（字段、可空性、错误码）
-- [ ] 错误码与公共错误码 §11 一致（不允许擅自新建错误码）
-- [ ] 并发约束与设计 §10 死锁/活锁/超时要求一致
-- [ ] 资源所有权/调用顺序与 §8 调用链一致
-- [ ] 单元测试 Case 列表与方案 §3 VRC 对账（每个 VRC 至少一条对应 Case）
-
-## 8. Code review 与下游测试钩子的对应
-
-<details>
-<summary>本节编写建议</summary>
-
-源码必须为下游测试留出钩子：可注入替身、可重入、可观测可断言。
-
-问题包括：定位 + 缺钩子 + 修复责任。
-
-完成检查：每个关键路径能在测试中重放且可断言。
-</details>
-
-- [ ] 每个公开契约至少有对应 unit test 用例
-- [ ] 关键状态可注入替身（clock/registry/IO）便于重放
-- [ ] 失败/边界路径可断言（不吞错、不静默）
 - [ ] 并发竞态可由代码 + 测试 case 主动重放
 
-## 9. Issue Log
+## 7. Issue Log
 
 <details>
 <summary>本节编写建议</summary>
@@ -179,17 +146,27 @@
 完成检查：评审意见可定位、可复现；每项未关闭问题有 Owner、关闭条件和再次审查入口。
 </details>
 
-| ID | Severity | Finding | Contract Source | Owner | Disposition |
-|---|---|---|---|---|---|
-| <!-- TODO --> | | | | | |
+| ID | Severity | Finding | Contract Source | Owner | 关闭条件 | Disposition |
+|---|---|---|---|---|---|---|
+| <!-- TODO --> | | | | | | |
 
-## 10. Review Decision 与 Test Gate
+## 8. Review Decision 与 Test Gate
 
 <details>
 <summary>本节编写建议</summary>
 
-根据开放问题给通过、条件通过或返工结论，指出禁止开始测试的 blocker（code review 没通过 → plan §3「代码 review 包通过」不通过 → 整个测试 BLOCKED）。
+根据开放问题给通过、条件通过或返工结论，指出禁止开始测试的 blocker（code review 没通过 → plan §3「代码 review 通过」不通过 → 整个测试 BLOCKED）。
 围绕固定版本的被审对象记录检查方法、观察事实、判定和关闭责任，避免只写「已检查」或「通过」。
 
 完成检查：每个公开契约可被测试覆盖；code review 通过 → plan §3 可进入；code review 不通过 → 整个 §4 流程 BLOCKED。
 </details>
+
+| 项 | 结论 |
+|---|---|
+| Review Verdict | `PASS` / `CONDITIONAL PASS` / `REWORK` |
+| 未关闭 BLOCKED 项数 | |
+| 是否允许进入测试（plan §3「代码 review 通过」） | `通过` / `不通过` |
+| Reviewer | |
+| Approver | |
+| Approval Date | |
+</content>
