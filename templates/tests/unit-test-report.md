@@ -62,7 +62,6 @@
 
 - 报告范围（计划/方案版本）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">单元计划 UTP-FD v1.0 / 方案 UTS-FD v1.2</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 结果分布与总结论：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">4 PASS、1 FAIL、0 BLOCKED、0 INVALID、0 NOT_RUN</span><!-- STD_TEMPLATE_EXAMPLE_END -->
-- Gate 达成情况：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">条件接受：修复 UT-FD-003 缺陷后复跑</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 2. 被测基线与实际环境
 

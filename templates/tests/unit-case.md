@@ -63,7 +63,7 @@
 
 - Case ID / 来源 ID / 设计验证项 / 分类 / 优先级（引用方案清单）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">UT-FD-003 / FD-R1 / VRC-EX-ISD-DECODE-01 / negative / P0（引用方案清单行）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 要测什么（责任展开）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">头非法时按 version→kind→length 优先级拒绝且不等待载荷</span><!-- STD_TEMPLATE_EXAMPLE_END -->
-- 明确不测什么 / 失败含义：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">不测组装后流程与 wire 互操作；失败含义＝校验顺序实现错误</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 明确不测什么 / 失败含义：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">不测组装后流程（属于模块层）；失败含义＝校验顺序实现错误</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 2. 被测入口与前置
 
@@ -85,7 +85,7 @@
 ## 3. 输入构造
 
 <span style="color:#1f6feb"><em>**本节目的**：逐参数固定输入。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：每个参数的类型、取值、构造方法；冻结值或生成规则；非法与边界值的取舍理由；规模（数量、分页、复杂度）与时间域（wall/CPU、观测开销）按目标预算写清。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：每个参数的类型、取值、构造方法; stream/time-domain mock 设置（流式/事件驱动/SSE 用例）：用例 §2 的 fake 须提供 advance(time_ms) / emit(event) / drain() 接口；测试代码 §4 用 advance 推进时间、用 emit 触发事件；用例 §5 用 drain() 后判断言 (避免 sleep 真实时钟)。；冻结值或生成规则；非法与边界值的取舍理由；规模（数量、分页、复杂度）与时间域（wall/CPU、观测开销）按目标预算写清。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：虚构 UT-FD-003：单参数冻结向量。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：输入可复现，无隐含依赖。</em></span>
 
@@ -96,7 +96,7 @@
 ## 4. 执行步骤与观察点
 
 <span style="color:#1f6feb"><em>**本节目的**：固定动作序列与观察点。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：按序写动作与观察对象（公开返回、公开查询、权威记录、边界替身调用序）；替身调用序可断言但不证明真实协议。；执行超时与中断（单 Case 单线程超时 + 替身调用次数上限 + 观察点轮询间隔，FAKE 注入未命中或超时视为该 Case 失败；Case 内中断不应改变被测全局状态、需用 RAII 风格恢复/或回滚到基线）。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：按序写动作与观察对象（公开返回、公开查询、权威记录、边界替身调用序）；替身调用序可断言但不证明真实协议。；执行超时与中断（单 Case 单线程超时（默认 30s，可调）+ 替身调用次数上限（默认 1000 次，超限视为 Invalid 而非 Pass）+ 观察点轮询间隔（默认 10ms，单点等待不超过 5s）；FAKE 注入未命中或超时视为该 Case 失败；Case 内中断不应改变被测全局状态、需用 RAII 风格恢复/或回滚到基线）。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：见下表灰字。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：执行者不猜下一步。</em></span>
 

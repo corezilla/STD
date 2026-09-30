@@ -56,7 +56,9 @@
     "tests.unit-case": "tests/unit-case.md",
     "tests.unit-test-plan": "tests/unit-test-plan.md",
     "tests.unit-test-report": "tests/unit-test-report.md",
-    "tests.unit-test-scheme": "tests/unit-test-scheme.md"
+    "tests.unit-test-scheme": "tests/unit-test-scheme.md",
+    "review.tests-code-review-checklist": "review/tests.code-review-checklist.md",
+    "review.schematic-pcb-review-checklist": "review/schematic-pcb-review-checklist.md"
   },
   "template_versions": {
     "management.project-plan": "0.2.0",
@@ -116,7 +118,8 @@
     "tests.module-test-report": "0.3.1",
     "tests.subsystem-test-report": "0.3.1",
     "tests.system-test-report": "0.3.1",
-    "catalog_version": "0.1.0-draft.70"
+    "review.tests-code-review-checklist": "0.1.0",
+    "review.schematic-pcb-review-checklist": "0.1.0"
   },
-  "catalog_version": "0.1.0-draft.70"
+  "catalog_version": "0.1.0-draft.72"
 }

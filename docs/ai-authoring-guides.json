@@ -147,6 +147,9 @@
    "guide": "docs/ai-guides/review-decisions.md",
    "template_ids": [
     "review.packet",
+    "review.schematic-pcb",
+    "review.schematic-pcb-review-checklist",
+    "review.tests-code-review-checklist",
     "decisions.adr"
    ]
   },

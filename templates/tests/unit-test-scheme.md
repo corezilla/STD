@@ -148,6 +148,8 @@
 | · 契约：源码即真实编译产物，不替代、不 mock | | · 用法：每个 Case 直接调用入口函数，无中间件 || 冻结向量集与种子 | 真实但固定 | docs/examples/isd-frame-decoder/ | 正常/边界用例输入 |
 | · 契约：固定种子→固定 hex bytes；版本随代码升级 | | · 用法：禁止随机生成，必须从固定集读取 || 受控时钟 fake | 单调推进、advance(ms) | HARNESS-FD-CLOCK | 时间/并发用例 |
 | · 契约：advance(ms) 单调、不模拟硬件漂移 | | · 用法：测试前 set_time，测试后 reset || 边界 fake（注册/日志） | 只代返回值与调用参数 | FAKE-REG / HARNESS-FD-LOG | 边界交互用例 |
+| 网络边界 mock（HTTP server fake / 客户端 fake） | 只代请求/响应/超时 | — | 网络/边界交互用例（如 LLMTier HTTP API SSE 模拟） |
+| 流式 fake（事件源 / 增量数据流） | 只代事件序列与时序 | — | SSE/流式/事件驱动用例 |
 | · 契约：FAKE-REG 返回配置值/超时；HARNESS-FD-LOG 记录不修改 | | · 用法：测试前重置计数，测试后验证断言调用 |
 
 <span style="color:#6e7681">**总体说明**：C++20 编译器（clang 17），构建目标为教学单二进制；fixture 来源为 docs/examples/isd-frame-decoder/ 冻结 hex 向量集与固定种子；替身资产归 tests.asset-design（HARNESS-FD-CLOCK / -REG / -LOG）；CI 入口为 runner --filter 选单 Case 或全集；并行隔离按模块实例+端口+临时目录；缺编译器记 Blocked/skip，不静默换工具链。</span>

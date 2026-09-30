@@ -33,7 +33,7 @@
 | [产品与交付定义](ai-guides/product.md) | `product.solution-definition`、`product.sku-specification`、`product.roadmap` |
 | [接口、契约与数据](ai-guides/interfaces-contracts-data.md) | `interfaces.control`、`contracts.specification`、`design.data-dictionary` |
 | [验证与验收](ai-guides/verification.md) | `tests.asset-design`、`tests.module-case`、`tests.module-test-plan`、`tests.module-test-report`、`tests.module-test-scheme`、`tests.subsystem-case`、`tests.subsystem-test-plan`、`tests.subsystem-test-report`、`tests.subsystem-test-scheme`、`tests.system-case`、`tests.system-test-plan`、`tests.system-test-report`、`tests.system-test-scheme`、`tests.unit-case`、`tests.unit-test-plan`、`tests.unit-test-report`、`tests.unit-test-scheme` |
-| [评审与决策](ai-guides/review-decisions.md) | `review.packet`、`decisions.adr` |
+| [评审与决策](ai-guides/review-decisions.md) | `review.packet`、`decisions.adr`、`review.schematic-pcb-review-checklist`、`review.tests-code-review-checklist` |
 | [交付与运维](ai-guides/operations.md) | `operations.release`、`operations.version-description`、`operations.user-manual`、`operations.installation-deployment`、`operations.operations-manual`、`operations.maintenance`、`operations.bring-up` |
 
 精确映射由 [AI 指南映射表](ai-authoring-guides.json)记录，与[模板目录](../templates/catalog.json)做完整性检查；这里只是导航，不新增生成器或运行时机制。如何选择文档层级见[模板选择规则](template-selection.md)，共同质量规则见[设计文档编写规范](design-writing-guide.md)。
