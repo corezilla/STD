@@ -166,6 +166,7 @@
 │   │   └── repository/            # 路径、命名、许可证和仓库策略检查
 │   ├── unit/                      # 可在单一模块边界完成的自动化测试
 │   │   ├── cases/                 # 单元可执行用例，文件名＝Case ID＋语言后缀（如 UT-FD-003.py）
+│   │   │   └── support/           # 本模块 Case 专属辅助函数（构造/断言/局部 mock）；跨模块工具走 tests/common/
 │   │   └── <module-id>/           # 被测模块报告；固件等使用其实际设计对象ID
 │   │       └── reports/           # 该模块测试报告，按Run ID分开
 │   ├── contract/                  # ABI、IDL、Schema、寄存器和协议契约测试
@@ -348,9 +349,12 @@ tests/
 │   └── reports/run-002/
 │       └── subsystem-test-report.md            # 子系统/集成阶段正式报告
 └── unit/
-    ├── cases/UT-FD-003.py                      # 执行 UT-FD-003 单元测试（文件名＝Case ID＋后缀）
+    ├── cases/
+    │   ├── UT-FD-003.py                          # 执行 UT-FD-003 单元测试（文件名＝Case ID＋后缀）
+    │   └── support/
+    │       └── helpers.py                        # 本模块 Case 专属辅助函数
     └── M001/reports/run-003/
-        └── unit-test-report.md                 # M001 单元阶段正式报告
+        └── unit-test-report.md                   # M001 单元阶段正式报告
 ```
 
 方案、用例、计划和资产同样有同名 metadata，图中省略。链路是：系统要求/V → 方案清单中的
