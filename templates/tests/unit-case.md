@@ -72,7 +72,7 @@
 <span style="color:#1f6feb"><em>**抽象示例**：虚构 UT-FD-003：单次调用 decode_one，冻结向量。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：另一位执行者能独立建立前置。</em></span>
 
-- 被测入口声明与位置：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">decode_one(std::span&lt;const std::uint8_t&gt;) noexcept，frame_decoder_test.cc</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 被测入口声明与位置：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">decode_one(std::span&lt;const std::uint8_t&gt;) noexcept，frame_decoder.h</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ```text
 <真实公开入口签名>

@@ -321,7 +321,7 @@ docs/70_verification/
 ├── unit/                                        # 单元测试阶段（Case 前缀 UT）
 │   ├── unit-test-scheme.md                      # 方案：分类 + Case 清单（唯一登记，1 份/阶段）
 │   ├── cases/
-│   │   └── UT-M001-001.md                       # 单 Case 完整设计（一 Case 一文档）
+│   │   └── UT-FD-003.md                        # 单 Case 完整设计（一 Case 一文档）
 │   └── unit-test-plan.md                        # 计划：Go/No-Go + ENV 实例分配 + 逐 Case 序列（1 份/阶段）
 ├── module/                                      # 模块测试阶段（Case 前缀 MT）—— 结构同 unit/
 ├── subsystem/                                   # 子系统/集成测试阶段（Case 前缀 IT）—— 结构同 unit/
@@ -335,7 +335,7 @@ docs/70_verification/
     └── STORE-TEST.md                            # 一资产一文档
 tests/
 ├── system/
-│   ├── cases/test_cancel_release.py            # 执行 ST-APP-001 并检查资源释放
+│   ├── cases/ST-APP-001.py                     # 执行 ST-APP-001 并检查资源释放
 │   ├── fixtures/task-input.json                # 小型固定输入，不保存实际运行结果
 │   ├── environments/compose.yaml               # 本套测试环境的可执行定义
 │   └── reports/run-001/
@@ -345,7 +345,7 @@ tests/
 │           ├── junit.xml                      # 测试框架输出（适用时）
 │           └── logs/                          # 脱敏日志和诊断输出
 ├── integration/
-│   ├── cases/test_api_worker.py                # 执行 IT-* 边界联调（子系统/集成阶段）
+│   ├── cases/IT-DIR-001.py                     # 执行 IT-DIR-001 边界联调（子系统/集成阶段）
 │   └── reports/run-002/
 │       └── subsystem-test-report.md            # 子系统/集成阶段正式报告
 └── unit/
@@ -358,15 +358,15 @@ tests/
 ```
 
 方案、用例、计划和资产同样有同名 metadata，图中省略。链路是：系统要求/V → 方案清单中的
-`ST-APP-001` → `test_cancel_release.py` 的用例入口 → `run-001` 的正式报告与机器证据。
+`ST-APP-001` → `ST-APP-001.py` 的用例入口 → `run-001` 的正式报告与机器证据。
 报告引用既有预期，不为通过测试而修改Oracle；未执行保留NOT_RUN，不能伪造结果。
 不要求每个Case单独建文或每次开发试跑都写正式Markdown报告；保留框架报告即可，正式阶段按需
 形成评审结论。集成测试和模块测试沿用同样关联方法，但测试对象及验证边界不同，局部通过不代表系统通过。
 
-`module` 阶段（MT）与 `unit` 阶段（UT）都针对模块，`tests/` 侧同用 `tests/unit/<module>/`，靠
-Case ID 前缀区分测试阶段；`subsystem` 阶段（IT）对应 `tests/integration/`，`system` 阶段（ST）
-对应 `tests/system/`。客户/项目验收测试的正式计划与判定由 `system` 阶段（ST）承接，或在 tailoring
-中单独设 acceptance 目录。
+`unit` 阶段（UT）脚本平铺在 `tests/unit/cases/`，文件名＝Case ID＋语言后缀；`module` 阶段（MT）
+同样针对模块，`tests/` 侧落位待定（暂沿用 `tests/unit/<module>/`）。`subsystem` 阶段（IT）对应
+`tests/integration/`，`system` 阶段（ST）对应 `tests/system/`。客户/项目验收测试的正式计划与判定
+由 `system` 阶段（ST）承接，或在 tailoring 中单独设 acceptance 目录。
 
 ### 4.2 文档与工程数据
 
