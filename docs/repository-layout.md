@@ -165,8 +165,8 @@
 │   │   ├── rtl/                   # HDL lint、CDC/RDC规则和约束静态检查
 │   │   └── repository/            # 路径、命名、许可证和仓库策略检查
 │   ├── unit/                      # 可在单一模块边界完成的自动化测试
-│   │   └── <module-id>/           # 被测模块ID；固件等使用其实际设计对象ID
-│   │       ├── cases/             # 模块可执行用例，可按语言框架调整
+│   │   ├── cases/                 # 单元可执行用例，文件名＝Case ID＋语言后缀（如 UT-FD-003.py）
+│   │   └── <module-id>/           # 被测模块报告；固件等使用其实际设计对象ID
 │   │       └── reports/           # 该模块测试报告，按Run ID分开
 │   ├── contract/                  # ABI、IDL、Schema、寄存器和协议契约测试
 │   │   ├── reports/               # 本类契约测试报告，按Run ID分开
@@ -347,9 +347,9 @@ tests/
 │   ├── cases/test_api_worker.py                # 执行 IT-* 边界联调（子系统/集成阶段）
 │   └── reports/run-002/
 │       └── subsystem-test-report.md            # 子系统/集成阶段正式报告
-└── unit/M001/
-    ├── cases/test_task_state.py                # 执行 UT-M001-* 单元测试
-    └── reports/run-003/
+└── unit/
+    ├── cases/UT-FD-003.py                      # 执行 UT-FD-003 单元测试（文件名＝Case ID＋后缀）
+    └── M001/reports/run-003/
         └── unit-test-report.md                 # M001 单元阶段正式报告
 ```
 

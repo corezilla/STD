@@ -133,11 +133,11 @@
 ## 7. 自动化位置与状态
 
 <span style="color:#1f6feb"><em>**本节目的**：固定自动化位置与实现状态。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：测试文件与测试函数名（UT-<对象>-<NNN>）；单 Case 执行命令；实现状态 Planned/Implemented；执行与 Verdict 归 Run 报告。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 UT-FD-003：invalid helper。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：测试文件（`tests/unit/cases/UT-<对象>-<NNN>.py`，文件名＝Case ID＋语言后缀，与本文档名一致）与测试函数名（描述性）；单 Case 执行命令；实现状态 Planned/Implemented；执行与 Verdict 归 Run 报告。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 UT-FD-003：invalid_header_rejected。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：可从本文档定位测试代码与命令。</em></span>
 
-- 测试文件 / 测试函数：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">frame_decoder_test.cc 的 invalid helper</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 测试文件 / 测试函数：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">tests/unit/cases/UT-FD-003.py 的 invalid_header_rejected</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 单 Case 执行命令：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">正式 runner：--filter UT-FD-003（教学宿主无过滤，全量跑）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 实现状态：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">Implemented；执行与 Verdict 归 Run 报告</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
