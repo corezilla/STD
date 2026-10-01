@@ -134,7 +134,7 @@
 
 <span style="color:#1f6feb"><em>**本节目的**：固定自动化位置与实现状态。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：测试文件（`tests/module/cases/MT-<对象>-<NNN>.py`，文件名＝Case ID＋语言后缀，与本文档名一致）与测试函数名（描述性）；被本模块 Case 复用的辅助函数放 `tests/module/cases/support/`（跨模块工具走 `tests/common/`）；单 Case 执行命令；实现状态 Planned/Implemented；执行与 Verdict 归 Run 报告。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 MT-EXM-002：harness invalid 段。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 MT-EXM-002：validation_precedes_filtering。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：可从本文档定位测试代码与命令。</em></span>
 
 - 测试文件 / 测试函数：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">tests/module/cases/MT-EXM-002.py 的 validation_precedes_filtering</span><!-- STD_TEMPLATE_EXAMPLE_END -->
