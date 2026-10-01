@@ -57,7 +57,7 @@
 
 <span style="color:#1f6feb"><em>**本节目的**：给出一眼可判的总结论。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：本报告覆盖的计划与方案版本、执行范围、结果分布（PASS/FAIL/BLOCKED/INVALID/NOT_RUN 计数）、Gate 达成情况；结论与 §3–§5 明细一致。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 SYS-APP：4 PASS、1 BLOCKED（环境）。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 ST-APP：4 PASS、1 BLOCKED（环境）。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：读者不读明细也知道本轮结论与边界。</em></span>
 
 - 报告范围（计划/方案版本）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">系统计划 TSP-APP v1.0 / 方案 TSS-APP v1.0</span><!-- STD_TEMPLATE_EXAMPLE_END -->
@@ -68,7 +68,7 @@
 
 <span style="color:#1f6feb"><em>**本节目的**：固定实际被测基线与环境，单列偏差。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：实际代码/构建/环境版本与计划基线对照；差异逐条列出；不同基线的结果不合并统计；结果绑定源码/库/配置/环境/checker 版本，相关修改后证据标“待重验”并保留历史，不从旧快照派生当前结论。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 SYS-APP：预生产环境版本差异。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 ST-APP：预生产环境版本差异。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：基线可核验；偏差不隐藏。</em></span>
 
 - 实际基线（与计划对照）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">EX-APP/v1；预生产镜像 2026.09（计划为 2026.08）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
@@ -90,15 +90,15 @@
 <span style="color:#6e7681">**示例（虚构）**：</span>
 <span style="color:#6e7681">| Case ID | 执行状态 | Verdict | Run ID / 证据 | 缺陷 / 备注 |</span>
 <span style="color:#6e7681">|---|---|---|---|---|</span>
-<span style="color:#6e7681">| SYS-APP-002 | 有效 Run | PASS | run-20260929-02 | 停止清空无残留 |</span>
-<span style="color:#6e7681">| SYS-APP-005 | BLOCKED | — | — | 需真实生产环境（G-EX-3） |</span>
+<span style="color:#6e7681">| ST-APP-002 | 有效 Run | PASS | run-20260929-02 | 停止清空无残留 |</span>
+<span style="color:#6e7681">| ST-APP-005 | BLOCKED | — | — | 需真实生产环境（G-EX-3） |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 4. 偏差、无效执行与重跑
 
 <span style="color:#1f6feb"><em>**本节目的**：如实记录偏差与无效执行。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：偏离 Case 文档的原因与批准；无效执行（未命中、环境错配）与重跑的新 Run；旧失败保留；偶发失败保留原始 RED，复现状态与修复状态分开记录，无因果证据只能标“未复现/未关闭”。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 SYS-APP：无无效执行。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 ST-APP：无无效执行。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：偏差可追溯；重跑不覆盖历史。</em></span>
 
 | 偏差 / 无效项 | 原因 | 影响 Case | 处置与重跑 Run |
@@ -116,7 +116,7 @@
 
 <span style="color:#1f6feb"><em>**本节目的**：对照方案分母复算覆盖。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：方案 §3 每个来源 ID 与其设计验证项（VRC）逐条对照：Case 状态如何变化、Gap 是否关闭、NOT_RUN 保留在哪；除 Verdict 外记录三列——结果已知性（结果是否可独立判定/是否有未知分支）、副作用（Case 执行后是否改变被测状态/调用了哪些外部资源/变更了哪些持久化数据）、清理状态（资源是否已释放/状态是否回滚基线/未清理项是否登记）。覆盖复算以本报告事实为准，不以计划口径代替。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 SYS-APP：流程与机制关闭、真实环境保留。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 ST-APP：流程与机制关闭、真实环境保留。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：分母每条有着落；未关闭项显式保留。</em></span>
 
 | 方案来源 ID | 设计验证项 ID | Case ID | 报告状态 | 剩余缺口 |
@@ -127,26 +127,26 @@
 <span style="color:#6e7681">**示例（虚构）**：</span>
 <span style="color:#6e7681">| 方案来源 ID | 设计验证项 ID | Case ID | 报告状态 | 剩余缺口 |</span>
 <span style="color:#6e7681">|---|---|---|---|</span>
-<span style="color:#6e7681">| 启动/停止流程 | VRC-APP-001 | SYS-APP-001/002 | PASS | — |</span>
-<span style="color:#6e7681">| 机制端到端 EX-OBS | VRC-APP-003 | SYS-APP-003 | PASS | — |</span>
-<span style="color:#6e7681">| 真实生产环境 | — | SYS-APP-005 | BLOCKED | G-EX-3 保留 |</span>
+<span style="color:#6e7681">| 启动/停止流程 | VRC-APP-001 | ST-APP-001/002 | PASS | — |</span>
+<span style="color:#6e7681">| 机制端到端 EX-OBS | VRC-APP-003 | ST-APP-003 | PASS | — |</span>
+<span style="color:#6e7681">| 真实生产环境 | — | ST-APP-005 | BLOCKED | G-EX-3 保留 |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 6. 缺陷与残余风险
 
 <span style="color:#1f6feb"><em>**本节目的**：失败追到缺陷，残余风险显式。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：每个 FAIL 关联缺陷 ID、严重度、状态与回归 Case；残余风险写触发条件与影响，不写“重试即可”。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 SYS-APP：无产品缺陷。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 ST-APP：无产品缺陷。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：失败有主；风险可判定。</em></span>
 
 - 缺陷清单（关联 Case 与 Run）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">（无）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
-- 残余风险：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">真实生产环境未验证前，上线决定不得引用 SYS-APP-005</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 残余风险：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">真实生产环境未验证前，上线决定不得引用 ST-APP-005</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 7. Gate 结论与建议
 
 <span style="color:#1f6feb"><em>**本节目的**：按计划的 Gate 规则给结论与建议。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：接受/条件接受/拒绝及依据；开放问题与责任方；报告不代替批准决定。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 SYS-APP：条件接受。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 ST-APP：条件接受。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：建议可复算（能追到明细与缺口）；不越权。</em></span>
 
 - Gate 结论（接受/条件接受/拒绝）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">条件接受：G-EX-3 排期后补环境验证</span><!-- STD_TEMPLATE_EXAMPLE_END -->

@@ -179,7 +179,7 @@
 ## 3. 覆盖分母与 Case 清单
 
 <span style="color:#1f6feb"><em>**本节目的**：把 design.software-system 的适用来源 ID 转成 Case 清单——测试分母的唯一登记。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：一个来源 ID 至少一条记录（可多 Case 分担，分别写责任摘要）；以设计文档（design §12/§14）的验证项 VRC 清单为分母逐项对账：每个 VRC 至少一个 Case——验证项是设计声明的必测点，本清单只引用其 ID 不复制定义、不做附录；Case ID 稳定且唯一（SYS-<对象>-<NNN>）；责任摘要只写“要测什么、边界在哪”，不写输入与 Oracle；设计状态按状态语义；未实现与 NOT_RUN 不删；不适用转 §4。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：一个来源 ID 至少一条记录（可多 Case 分担，分别写责任摘要）；以设计文档（design §12/§14）的验证项 VRC 清单为分母逐项对账：每个 VRC 至少一个 Case——验证项是设计声明的必测点，本清单只引用其 ID 不复制定义、不做附录；Case ID 稳定且唯一（ST-<对象>-<NNN>）；责任摘要只写“要测什么、边界在哪”，不写输入与 Oracle；设计状态按状态语义；未实现与 NOT_RUN 不删；不适用转 §4。</em></span>
 
 > 来源 ID 与设计验证项（VRC）的边界：本表登记 ID+责任摘要；判据/Oracle/Owner/契约权威归 design 与 tests.asset-design，不在此行复写；变更设计时同步 VRC 同步本清单。
 <span style="color:#1f6feb"><em>**抽象示例**：见下表灰字。</em></span>
@@ -193,9 +193,9 @@
 <span style="color:#6e7681">**示例（虚构；一来源至少一条）**：</span>
 | 来源 ID / 固定版本 | 设计验证项 ID | Case ID | 分类 | 优先级 | 责任摘要（要测什么） | 设计状态 | 上级组合验证入口 |
 |---|---|---|---|---|---|---|
-| 启动流程（系统设计 §7.3） | VRC-APP-001 | SYS-APP-001 | normal | P0 | 全组件按序就绪，失败组件不阻塞重启 | Designed | — |
-| 停止清空（§7.6） | VRC-APP-002 | SYS-APP-002 | recovery | P0 | 在途请求退出且无残留，重启前确认 | Designed | — |
-| 机制端到端：EX-OBS §15 | VRC-APP-003 | SYS-APP-003 | normal | P1 | 版本核对机制端到端 PARTIAL 语义成立 | Designed | 验收场景预演（不替代验收） |
+| 启动流程（系统设计 §7.3） | VRC-APP-001 | ST-APP-001 | normal | P0 | 全组件按序就绪，失败组件不阻塞重启 | Designed | — |
+| 停止清空（§7.6） | VRC-APP-002 | ST-APP-002 | recovery | P0 | 在途请求退出且无残留，重启前确认 | Designed | — |
+| 机制端到端：EX-OBS §15 | VRC-APP-003 | ST-APP-003 | normal | P1 | 版本核对机制端到端 PARTIAL 语义成立 | Designed | 验收场景预演（不替代验收） |
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 4. 不适用与缺口裁决
@@ -226,7 +226,7 @@
 - 与 case-design / 计划的同步规则：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">Case 文档 ID＝Case ID；tests.system-test-plan 引用本方案版本</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
-<span style="color:#6e7681">新增 SYS-APP-004 先入清单再建 Case 文档；系统计划引用本方案 v1.0。</span>
+<span style="color:#6e7681">新增 ST-APP-004 先入清单再建 Case 文档；系统计划引用本方案 v1.0。</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 <!-- 交付自查：每个适用来源 ID 是否都有 Case 或具名缺口；清单里的每个 Case ID 是否都有（或计划有）对应 case-design 文档；方案里是否混入了输入构造或 Oracle 细节？ -->
@@ -247,7 +247,7 @@
 
 | 设计验证项 ID | 要验证什么 | 设计来源 | §3 Case 覆盖 |
 |---|---|---|---|
-| VRC-APP-001 | 启动流程按序就绪 | 系统设计 §12 | SYS-APP-001 |
-| VRC-APP-002 | 停止清空无残留 | 同 §12 | SYS-APP-002 |
-| VRC-APP-003 | 机制端到端 PARTIAL 语义 | 同 §12 | SYS-APP-003 |
+| VRC-APP-001 | 启动流程按序就绪 | 系统设计 §12 | ST-APP-001 |
+| VRC-APP-002 | 停止清空无残留 | 同 §12 | ST-APP-002 |
+| VRC-APP-003 | 机制端到端 PARTIAL 语义 | 同 §12 | ST-APP-003 |
 <!-- STD_TEMPLATE_EXAMPLE_END -->

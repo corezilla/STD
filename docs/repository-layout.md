@@ -33,11 +33,12 @@
 │   ├── 40_module_design/          # 未采用Owner共置时的模块设计
 │   ├── 50_implementation_design/  # 文件、类、RTL单元等实现级设计
 │   ├── 60_interfaces/             # ICD、接口目录、边界说明和契约索引
-│   ├── 70_verification/           # 测试方案、用例、计划、报告与资产；运行证据随测试保存
-│   │   ├── plans/                 # 验证策略、范围、资源和排期
-│   │   ├── specifications/        # Case、输入、Oracle和覆盖要求
-│   │   ├── procedures/            # 测试环境、步骤和操作方法
-│   │   └── acceptance/            # 客户或项目验收计划与判定标准，报告随测试保存
+│   ├── 70_verification/           # 测试方案、用例、计划、报告与资产；按测试阶段组织，运行证据随测试保存
+│   │   ├── unit/                  # 单元测试阶段（Case 前缀 UT）
+│   │   ├── module/                # 模块测试阶段（Case 前缀 MT）
+│   │   ├── subsystem/             # 子系统/集成测试阶段（Case 前缀 IT）
+│   │   ├── system/                # 系统测试阶段（Case 前缀 ST）
+│   │   └── README.md              # 域总索引：阶段 → 方案/用例/计划/报告/资产落位 + Case ID 前缀表
 │   ├── 80_operations/             # 安装、用户、运维、维护、Bring-up和发布资料
 │   ├── 90_decisions/              # ADR和已批准的重要技术决策
 │   ├── 91_reviews/                # 正式评审包、发现、决定和关闭记录
@@ -265,7 +266,7 @@ hardware/boards/<board>/docs/       # 板卡专属设计、BOM、制造和验证
 - 投资人PPT放 `materials/investors/`，板卡单页放 `materials/products/`。
 - 完整竞品分析放 `docs/15_evaluation/competitive-analysis/`，销售竞品卡放
   `materials/sales/competitive-battlecards/`。
-- `docs/70_verification/` 放测试方案（schemes）、用例（specifications）、测试计划（plans）、测试报告（reports）与测试资产（assets）；可执行测试及其运行证据按测试类型共置，大型证据可存外部数据区。
+- `docs/70_verification/` 按测试阶段（unit/module/subsystem/system）组织测试方案（scheme）、用例（case）、测试计划（plan）、测试报告（report）与测试资产（asset）；可执行测试及其运行证据按测试类型共置，大型证据可存外部数据区。
 - 简单项目可把契约放 `docs/60_interfaces/contracts/`；需要codegen或多域消费时使用顶层
   `interfaces/`，根文档只保留索引。
 - `docs/migration/std-YYYYMMDD/` 和 `docs/98_migration/` 都可作为迁移区，validator不按目录名禁止。
@@ -294,7 +295,7 @@ Module ID、实际源码目录与被测对象，不从目录名猜测设计层�
 
 机器报告（JSON、JUnit XML、HTML、覆盖率）和人工评审结论均由所属测试目录维护；正式报告仍按
 STD报告模板编写，并保存metadata，不因放在tests下而免除文档控制。需要验收/发布评审时引用
-这里的唯一报告，不在 `docs/70_verification/reports/` 再维护副本。
+这里的唯一报告，不在 `docs/70_verification/` 再维护报告副本。
 跨类型结论可以在现有评审包汇总并引用各报告，不重抄原始结果。
 这里的报告指测试执行/验收报告；FPGA综合、布局布线、时序收敛等实现报告仍是独立的工程交付物，
 FPGA 实现报告按项目 tailoring 承接，不把它冒充系统或板上测试报告。
@@ -305,41 +306,63 @@ FPGA 实现报告按项目 tailoring 承接，不把它冒充系统或板上测�
 Case ID、实际结果、判定和证据位置；外部证据记录稳定制品ID/URI、摘要和保留要求，不只写本机临时路径。
 既有项目不自动搬迁历史报告；采用新布局时保留旧引用，避免制造两份权威报告。
 
-#### 4.1.2 系统测试的文件级示例
+#### 4.1.2 按测试阶段组织的文件级示例
 
-以下为虚构软件任务服务的落位示例，不要求项目创建不存在的文件或额外测试框架：
+以下为虚构软件任务服务的落位示例，不要求项目创建不存在的文件或额外测试框架。
+`docs/70_verification/` 按测试阶段（unit/module/subsystem/system）组织，每阶段放方案、用例、计划、
+资产四类文档（scheme/case/plan/asset）；正式报告与运行证据按测试类型共置于 `tests/` 侧（见 4.1.1），
+不在本目录维护报告副本。下面以 unit 与 system 展开，其余阶段同构。
 
 ```text
 docs/70_verification/
-├── schemes/system-test-scheme.md              # 分类与 Case 清单（唯一登记：责任摘要/设计状态）
-├── specifications/system-case-SYS-APP-001.md  # 单 Case 完整设计（一 Case 一文档）
-├── plans/system-test-plan.md                  # 可执行作业指令：Go/No-Go、Step 0 资产就位、逐 Case 序列
-├── reports/system-test-report.md              # 本次执行结论：逐 Case 结果与 Verdict、覆盖复算、Gate 建议
-└── assets/system-test-asset-STORE-TEST.md     # 测试资产契约与自检（替身/时钟/生成器，一资产一文档）
+├── README.md                                    # 域总索引：阶段 → 方案/用例/计划/资产 落位 + Case ID 前缀表
+├── unit/                                        # 单元测试阶段（Case 前缀 UT）
+│   ├── unit-test-scheme.md                      # 方案：分类 + Case 清单（唯一登记，1 份/阶段）
+│   ├── cases/
+│   │   └── UT-M001-001.md                       # 单 Case 完整设计（一 Case 一文档）
+│   ├── unit-test-plan.md                        # 计划：Go/No-Go + ENV 实例分配 + 逐 Case 序列（1 份/阶段）
+│   └── assets/
+│       └── unit-asset-CLK-MOCK.md               # 测试资产契约与自检（替身/时钟/生成器，一资产一文档）
+├── module/                                      # 模块测试阶段（Case 前缀 MT）—— 结构同 unit/
+├── subsystem/                                   # 子系统/集成测试阶段（Case 前缀 IT）—— 结构同 unit/
+└── system/                                      # 系统测试阶段（Case 前缀 ST）
+    ├── system-test-scheme.md                    # 方案：分类 + Case 清单（唯一登记）
+    ├── cases/
+    │   └── ST-APP-001.md                        # 单 Case 完整设计
+    ├── system-test-plan.md                      # 计划：Go/No-Go + ENV 实例分配 + 逐 Case 序列
+    └── assets/
+        └── system-asset-STORE-TEST.md           # 测试资产契约与自检
 tests/
 ├── system/
-│   ├── cases/test_cancel_release.py          # 执行 SYS-APP-001 并检查资源释放
-│   ├── fixtures/task-input.json              # 小型固定输入，不保存实际运行结果
-│   ├── environments/compose.yaml             # 本套测试环境的可执行定义
+│   ├── cases/test_cancel_release.py            # 执行 ST-APP-001 并检查资源释放
+│   ├── fixtures/task-input.json                # 小型固定输入，不保存实际运行结果
+│   ├── environments/compose.yaml               # 本套测试环境的可执行定义
 │   └── reports/run-001/
-│       ├── run-summary.md                    # 本次 Run 记录：命令、结果、证据索引
-│       └── artifacts/                        # 默认不入Git；CI保留或转外部证据库
-│           ├── results.json                 # 各Case的expected、actual和verdict
-│           ├── junit.xml                    # 测试框架输出（适用时）
-│           └── logs/                        # 脱敏日志和诊断输出
+│       ├── system-test-report.md               # 正式 STD 报告：逐 Case 结果与 Verdict、覆盖复算、Gate 建议
+│       └── artifacts/                          # 默认不入Git；CI保留或转外部证据库
+│           ├── results.json                   # 各Case的expected、actual和verdict
+│           ├── junit.xml                      # 测试框架输出（适用时）
+│           └── logs/                          # 脱敏日志和诊断输出
 ├── integration/
-│   ├── cases/test_api_worker.py              # API与Worker的边界联调
-│   └── reports/run-002/                     # 集成测试自己的报告与证据
+│   ├── cases/test_api_worker.py                # 执行 IT-* 边界联调（子系统/集成阶段）
+│   └── reports/run-002/
+│       └── subsystem-test-report.md            # 子系统/集成阶段正式报告
 └── unit/M001/
-    ├── cases/test_task_state.py              # M001内部状态转换的单元测试
-    └── reports/run-003/                     # M001自己的报告与证据
+    ├── cases/test_task_state.py                # 执行 UT-M001-* 单元测试
+    └── reports/run-003/
+        └── unit-test-report.md                 # M001 单元阶段正式报告
 ```
 
 方案、用例、计划和资产同样有同名 metadata，图中省略。链路是：系统要求/V → 方案清单中的
-`SYS-APP-001` → `test_cancel_release.py` 的用例入口 → `run-001` 的实际结果 → 本次报告。
+`ST-APP-001` → `test_cancel_release.py` 的用例入口 → `run-001` 的正式报告与机器证据。
 报告引用既有预期，不为通过测试而修改Oracle；未执行保留NOT_RUN，不能伪造结果。
 不要求每个Case单独建文或每次开发试跑都写正式Markdown报告；保留框架报告即可，正式阶段按需
 形成评审结论。集成测试和模块测试沿用同样关联方法，但测试对象及验证边界不同，局部通过不代表系统通过。
+
+`module` 阶段（MT）与 `unit` 阶段（UT）都针对模块，`tests/` 侧同用 `tests/unit/<module>/`，靠
+Case ID 前缀区分测试阶段；`subsystem` 阶段（IT）对应 `tests/integration/`，`system` 阶段（ST）
+对应 `tests/system/`。客户/项目验收测试的正式计划与判定由 `system` 阶段（ST）承接，或在 tailoring
+中单独设 acceptance 目录。
 
 ### 4.2 文档与工程数据
 
