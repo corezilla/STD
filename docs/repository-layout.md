@@ -286,9 +286,8 @@ hardware/boards/<board>/docs/       # 板卡专属设计、BOM、制造和验证
 设计层级以对象ID和父链为准；一个服务可包含多个模块。每个软件源码根（混合项目中为
 `software/<component>/src/`）有软件子系统时使用`src/<subsystem>/<module>/`，模块直接属于软件
 系统时使用`src/<module>/`。两级占位符是稳定的代码目录名，不用设计ID充当目录名；同一模块
-只保留一处源码。采用集中测试时，单元/模块测试分别使用`tests/unit/`、`tests/module/`，例如
-`tests/module/task-scheduler/`；采用组件共置时使用`software/<component>/tests/unit/`、
-`software/<component>/tests/module/`。
+只保留一处源码。采用集中测试时，单元/模块测试分别使用`tests/unit/`、`tests/module/`；采用
+组件共置时使用`software/<component>/tests/unit/`、`software/<component>/tests/module/`。
 同一测试只选一处维护，不能两边复制。测试目录名须在其Owner内唯一；测试清单或规格须关联
 Module ID、实际源码目录与被测对象，不从目录名猜测设计层级。
 

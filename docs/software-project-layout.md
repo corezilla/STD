@@ -167,10 +167,10 @@ knowledge-base/
 项目规范放在 `docs/00_management/standards/`，其中README.md为强制总索引。
 根README靠前链接总索引，每份规范开头反向链接，详见[项目规范强制索引](project-standards.md)。
 
-- `docs/70_verification/`保存测试方案（schemes）、用例（specifications）与测试计划（plans）；每类测试保存自己的代码与报告，例如 `tests/system/reports/<run-id>/`，不集中到根 `tests/reports/`。
+- `docs/70_verification/`按测试阶段（unit/module/subsystem/system）保存测试方案、用例与测试计划；每类测试保存自己的代码与报告，例如 `tests/system/reports/<run-id>/`，不集中到根 `tests/reports/`。
 - `interfaces/`保存机器可读公共契约；consumer只引用，不复制Schema。
 - 多服务项目的组件内部单元测试默认随组件共置；采用集中测试布局时，也可放在根
-  `tests/unit/<module>/`，但须明确Owner和源码映射。根`tests/`还保存跨Owner契约、集成、系统和验收测试。
+  `tests/unit/`、`tests/module/`，但须明确Owner和源码映射。根`tests/`还保存跨Owner契约、集成、系统和验收测试。
 - `configs/`和`deploy/`不保存token、证书和生产secret。
 - `migrations/`是软件数据/状态迁移，不是文档迁移。
 - `.local/`、`build/`、`dist/`和`.cache/`不进入Git。
@@ -178,9 +178,9 @@ knowledge-base/
   `src/`为起点：有子系统用`src/<subsystem>/<module>/`，没有子系统用`src/<module>/`。
   同一模块只保留一处源码；语言生态需要不同物理路径时，在tailoring中记录到该设计对象的映射。
 
-模块单元测试可集中为 `tests/unit/<module>/`，或随实际服务/应用/库共置为
-`services/<service>/tests/unit/<module>/` 等；各自保留 `reports/<run-id>/`，不复制同一测试。
-`<module>`与源码模块目录名对应，并在测试规格中映射稳定Module ID；同一测试Owner内目录名须唯一。
+模块单元测试可集中为 `tests/unit/`、`tests/module/`，或随实际服务/应用/库共置为
+`services/<service>/tests/unit/`、`services/<service>/tests/module/` 等；各自保留 `reports/<run-id>/`，不复制同一测试。
+测试文件以 Case ID 命名，测试规格中映射稳定 Module ID 与源码目录；同一测试Owner内文件名须唯一。
 混合项目目录中的 `<component>` 指构建/交付单元，不是设计模块；目录须映射实际 Module ID。
 多服务布局中各级 `tests/` 也遵循这套报告归属规则。
 正式Markdown报告和metadata可入Git，机器输出默认放各Run下 `artifacts/` 或CI制品库，
