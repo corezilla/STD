@@ -135,11 +135,11 @@
 ## 7. 自动化位置与状态
 
 <span style="color:#1f6feb"><em>**本节目的**：固定自动化位置与实现状态。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：测试文件与测试函数名（IT-<对象>-<NNN>）；单 Case 执行命令；实现状态 Planned/Implemented；执行与 Verdict 归 Run 报告。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：测试文件（`tests/integration/cases/IT-<对象>-<NNN>.py`，文件名＝Case ID＋语言后缀，与本文档名一致）与测试函数名（描述性）；被本子系统 Case 复用的辅助函数放 `tests/integration/cases/support/`（跨模块工具走 `tests/common/`）；单 Case 执行命令；实现状态 Planned/Implemented；执行与 Verdict 归 Run 报告。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：虚构 IT-DIR-001：harness 并发段。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：可从本文档定位测试代码与命令。</em></span>
 
-- 测试文件 / 测试函数：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">子系统 harness 并发段</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 测试文件 / 测试函数：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">tests/integration/cases/IT-DIR-001.py 的 concurrent_ordering</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 单 Case 执行命令：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">正式 runner：--filter IT-DIR-001</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 实现状态：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">Implemented；执行与 Verdict 归 Run 报告</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 

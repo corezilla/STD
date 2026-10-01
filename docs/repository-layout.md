@@ -339,7 +339,10 @@ docs/70_verification/
     └── STORE-TEST.md                            # 一资产一文档
 tests/
 ├── system/
-│   ├── cases/ST-APP-001.py                     # 执行 ST-APP-001 并检查资源释放
+│   ├── cases/
+│   │   ├── ST-APP-001.py                       # 执行 ST-APP-001 并检查资源释放（文件名＝Case ID＋后缀）
+│   │   └── support/
+│   │       └── helpers.py                      # 本系统 Case 专属辅助函数
 │   ├── fixtures/task-input.json                # 小型固定输入，不保存实际运行结果
 │   ├── environments/compose.yaml               # 本套测试环境的可执行定义
 │   └── reports/run-001/
@@ -349,9 +352,16 @@ tests/
 │           ├── junit.xml                      # 测试框架输出（适用时）
 │           └── logs/                          # 脱敏日志和诊断输出
 ├── integration/
-│   ├── cases/IT-DIR-001.py                     # 执行 IT-DIR-001 边界联调（子系统/集成阶段）
+│   ├── cases/
+│   │   ├── IT-DIR-001.py                       # 执行 IT-DIR-001 边界联调（文件名＝Case ID＋后缀）
+│   │   └── support/
+│   │       └── helpers.py                      # 本子系统 Case 专属辅助函数
 │   └── reports/run-002/
-│       └── subsystem-test-report.md            # 子系统/集成阶段正式报告
+│       ├── subsystem-test-report.md            # 这次 run 的正式 STD 报告
+│       ├── IT-DIR-001.json                     # 逐 Case 结果（文件名＝Case ID）
+│       └── artifacts/                          # 框架产物，默认不入Git
+│           ├── junit.xml
+│           └── logs/
 ├── module/
 │   ├── cases/
 │   │   ├── MT-EXM-002.py                         # 执行 MT-EXM-002 模块测试（文件名＝Case ID＋后缀）
