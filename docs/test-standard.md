@@ -105,10 +105,24 @@ UT → MT → IT → ST
 
 ### 6.4 命名与工件
 
-Case ID 格式 `<阶段前缀>-<对象短名>-<NNN>`，阶段前缀随层固定：`UT`/`MT`/`IT`/`ST`。
+Case ID 格式 `<阶段前缀>-<对象短名>-<NNN>`，阶段前缀随层固定：
 
-`<对象短名>` 取被测对象的正式短名（在对象登记表登记；未登记时用对象 ID）。Case 一文档一 Case，
-Document ID = Case ID；Case 文档与脚本同名（同 stem），脚本文件名 = Case ID 字面 + 语言后缀。
+| 层 | 前缀 | 示例 |
+|---|---|---|
+| 单元测试 | `UT` | `UT-FD-003` |
+| 模块测试 | `MT` | `MT-EXM-002` |
+| 子系统测试 | `IT` | `IT-DIR-001` |
+| 系统测试 | `ST` | `ST-APP-002` |
+
+- `<对象短名>` 取被测对象的正式短名（在对象登记表登记；项目未登记短名时用对象 ID 作 token），
+  须在项目内一致使用并保持可反查映射。
+- `<NNN>` 为三位十进制序号，在所属阶段前缀内从 `001` 顺序追加；Case ID 稳定且唯一，删除保留
+  Retired 记录、编号不复用，前缀不因对象迁移或重命名改变。
+
+Case 一文档一 Case，Document ID = Case ID；Case 文档与脚本文件同名（同 stem）：文档文件名＝
+Case ID 字面＋`.md`，脚本文件名＝Case ID 字面＋语言后缀（如 `MT-EXM-002.md`、`MT-EXM-002.py`），
+按阶段落位 `tests/{unit,module,integration,system}/cases/`；测试函数名用描述性名，由 Case 文档 §7
+记录「文件＋函数」。
 
 方案（scheme）与计划（plan）每阶段一份，无独立前缀，按阶段落位、用文件名
 `<stage>-test-scheme.md` / `<stage>-test-plan.md` 引用。

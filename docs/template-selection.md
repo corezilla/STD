@@ -51,6 +51,8 @@
 | 如何维护和排障 | `operations.maintenance` |
 | 新板卡/系统如何首次上电联调 | `operations.bring-up` |
 
+测试模板族的完整清单、分层与每层职责见[测试规范](test-standard.md)。
+
 ## 2. 分层设计
 
 软件对象的 S01 / M201 / M001 编码、直属模块 0 段及迁移规则见
