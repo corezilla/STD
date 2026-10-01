@@ -183,6 +183,6 @@ knowledge-base/
 测试文件以 Case ID 命名，测试规格中映射稳定 Module ID 与源码目录；同一测试Owner内文件名须唯一。
 混合项目目录中的 `<component>` 指构建/交付单元，不是设计模块；目录须映射实际 Module ID。
 多服务布局中各级 `tests/` 也遵循这套报告归属规则。
-正式Markdown报告和metadata可入Git，机器输出默认放各Run下 `artifacts/` 或CI制品库，
+正式Markdown报告、metadata和逐 Case 结果（`<Case ID>.json`）可入Git，框架机器输出（JUnit/日志）默认放各Run下 `artifacts/` 或CI制品库，
 不要忽略整个报告目录。完整文件样例、Case与Run关联及保留规则见
-[测试目录与报告分工](repository-layout.md#411-按测试类型保存报告)和[系统测试示例](repository-layout.md#412-系统测试的文件级示例)。
+[测试目录与报告分工](repository-layout.md#411-按测试类型保存报告)和[按测试阶段组织示例](repository-layout.md#412-按测试阶段组织的文件级示例)。

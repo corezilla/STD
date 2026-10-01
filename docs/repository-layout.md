@@ -305,8 +305,9 @@ STD报告模板编写，并保存metadata，不因放在tests下而免除文档�
 这里的报告指测试执行/验收报告；FPGA综合、布局布线、时序收敛等实现报告仍是独立的工程交付物，
 FPGA 实现报告按项目 tailoring 承接，不把它冒充系统或板上测试报告。
 
-默认不提交可再生的大型输出、敏感日志或整包运行制品。推荐将机器输出放在
-`reports/<run-id>/artifacts/` 并针对该子目录配置ignore或CI保留策略；不要一概忽略整个
+默认不提交可再生的大型输出、敏感日志或整包运行制品。逐 Case 结果（`<Case ID>.json`）平铺在
+`reports/<run-id>/` 下、随正式报告提交；框架机器输出（JUnit/日志）放在 `reports/<run-id>/artifacts/`
+并针对该子目录配置ignore或CI保留策略；不要一概忽略整个
 `reports/`，否则会漏掉应提交的正式报告及metadata。正式报告记录Run ID、被测commit、环境、
 Case ID、实际结果、判定和证据位置；外部证据记录稳定制品ID/URI、摘要和保留要求，不只写本机临时路径。
 既有项目不自动搬迁历史报告；采用新布局时保留旧引用，避免制造两份权威报告。
@@ -342,9 +343,9 @@ tests/
 │   ├── fixtures/task-input.json                # 小型固定输入，不保存实际运行结果
 │   ├── environments/compose.yaml               # 本套测试环境的可执行定义
 │   └── reports/run-001/
-│       ├── system-test-report.md               # 正式 STD 报告：逐 Case 结果与 Verdict、覆盖复算、Gate 建议
-│       └── artifacts/                          # 默认不入Git；CI保留或转外部证据库
-│           ├── results.json                   # 各Case的expected、actual和verdict
+│       ├── system-test-report.md               # 这次 run 的正式 STD 报告：逐 Case 结果与 Verdict、覆盖复算、Gate 建议
+│       ├── ST-APP-001.json                     # 逐 Case 结果（expected/actual/verdict，文件名＝Case ID）
+│       └── artifacts/                          # 框架产物，默认不入Git；CI保留或转外部证据库
 │           ├── junit.xml                      # 测试框架输出（适用时）
 │           └── logs/                          # 脱敏日志和诊断输出
 ├── integration/
@@ -364,7 +365,11 @@ tests/
     │   └── support/
     │       └── helpers.py                        # 本模块 Case 专属辅助函数
     └── reports/run-003/
-        └── unit-test-report.md                   # 单元阶段正式报告
+        ├── unit-test-report.md                   # 这次 run 的正式 STD 报告
+        ├── UT-FD-003.json                        # 逐 Case 结果（文件名＝Case ID）
+        └── artifacts/                            # 框架产物，默认不入Git
+            ├── junit.xml
+            └── logs/
 ```
 
 方案、用例、计划和资产同样有同名 metadata，图中省略。链路是：系统要求/V → 方案清单中的
