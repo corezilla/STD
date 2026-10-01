@@ -197,7 +197,7 @@
 <span style="color:#1f6feb"><em>**抽象示例**：虚构 IT-DIR：run-<日期>-<序号>。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：从报告任一 Verdict 能定位唯一 Run 与原始证据。</em></span>
 
-- Run ID 规则与证据位置：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">run-YYYYMMDD-NN；tests/subsystem/s01/reports/<run-id>/</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- Run ID 规则与证据位置：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">run-YYYYMMDD-NN；tests/integration/reports/<run-id>/</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 保存内容与脱敏要求：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">组装命令、受控时钟配置、stdout、退出码；无敏感数据</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 8. 报告产出与 Gate 规则

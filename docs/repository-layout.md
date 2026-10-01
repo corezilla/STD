@@ -164,11 +164,14 @@
 │   │   ├── source/                # 软件源码格式、依赖和禁止模式检查
 │   │   ├── rtl/                   # HDL lint、CDC/RDC规则和约束静态检查
 │   │   └── repository/            # 路径、命名、许可证和仓库策略检查
-│   ├── unit/                      # 可在单一模块边界完成的自动化测试
+│   ├── unit/                      # 单元测试（模块内部函数/类），Case 前缀 UT
 │   │   ├── cases/                 # 单元可执行用例，文件名＝Case ID＋语言后缀（如 UT-FD-003.py）
-│   │   │   └── support/           # 本模块 Case 专属辅助函数（构造/断言/局部 mock）；跨模块工具走 tests/common/
-│   │   └── <module-id>/           # 被测模块报告；固件等使用其实际设计对象ID
-│   │       └── reports/           # 该模块测试报告，按Run ID分开
+│   │   │   └── support/           # 本模块 Case 专属辅助函数；跨模块工具走 tests/common/
+│   │   └── reports/               # 单元测试报告，按Run ID分开；模块标识记录在报告内容
+│   ├── module/                    # 模块测试（整模块组装，内部真实、边界替身），Case 前缀 MT
+│   │   ├── cases/                 # 模块可执行用例，文件名＝Case ID＋语言后缀（如 MT-EXM-002.py）
+│   │   │   └── support/           # 本模块 Case 专属辅助函数；跨模块工具走 tests/common/
+│   │   └── reports/               # 模块测试报告，按Run ID分开；模块标识记录在报告内容
 │   ├── contract/                  # ABI、IDL、Schema、寄存器和协议契约测试
 │   │   ├── reports/               # 本类契约测试报告，按Run ID分开
 │   │   ├── api/                   # HTTP、RPC、SDK和命令接口契约测试
@@ -283,8 +286,9 @@ hardware/boards/<board>/docs/       # 板卡专属设计、BOM、制造和验证
 设计层级以对象ID和父链为准；一个服务可包含多个模块。每个软件源码根（混合项目中为
 `software/<component>/src/`）有软件子系统时使用`src/<subsystem>/<module>/`，模块直接属于软件
 系统时使用`src/<module>/`。两级占位符是稳定的代码目录名，不用设计ID充当目录名；同一模块
-只保留一处源码。采用集中测试时，软件模块测试使用`tests/unit/<module>/`，例如
-`tests/unit/task-scheduler/`；采用组件共置时使用`software/<component>/tests/unit/<module>/`。
+只保留一处源码。采用集中测试时，单元/模块测试分别使用`tests/unit/`、`tests/module/`，例如
+`tests/module/task-scheduler/`；采用组件共置时使用`software/<component>/tests/unit/`、
+`software/<component>/tests/module/`。
 同一测试只选一处维护，不能两边复制。测试目录名须在其Owner内唯一；测试清单或规格须关联
 Module ID、实际源码目录与被测对象，不从目录名猜测设计层级。
 
@@ -292,7 +296,7 @@ Module ID、实际源码目录与被测对象，不从目录名猜测设计层�
 
 每类测试有自己的 `reports/`，不建立根 `tests/reports/` 作为所有测试的默认汇总处。
 系统、集成、契约和验收分别使用 `tests/system/reports/`、`tests/integration/reports/`、
-`tests/contract/reports/` 和 `tests/acceptance/reports/`；模块使用 `tests/unit/<module>/reports/`。
+`tests/contract/reports/` 和 `tests/acceptance/reports/`；单元、模块分别使用 `tests/unit/reports/`、`tests/module/reports/`。
 按Run ID分目录，避免并行运行或重跑覆盖旧证据。`cases/`可按框架调整，报告归属不变。
 
 机器报告（JSON、JUnit XML、HTML、覆盖率）和人工评审结论均由所属测试目录维护；正式报告仍按
@@ -348,13 +352,20 @@ tests/
 │   ├── cases/IT-DIR-001.py                     # 执行 IT-DIR-001 边界联调（子系统/集成阶段）
 │   └── reports/run-002/
 │       └── subsystem-test-report.md            # 子系统/集成阶段正式报告
+├── module/
+│   ├── cases/
+│   │   ├── MT-EXM-002.py                         # 执行 MT-EXM-002 模块测试（文件名＝Case ID＋后缀）
+│   │   └── support/
+│   │       └── helpers.py                        # 本模块 Case 专属辅助函数
+│   └── reports/run-004/
+│       └── module-test-report.md                 # 模块阶段正式报告
 └── unit/
     ├── cases/
     │   ├── UT-FD-003.py                          # 执行 UT-FD-003 单元测试（文件名＝Case ID＋后缀）
     │   └── support/
     │       └── helpers.py                        # 本模块 Case 专属辅助函数
-    └── M001/reports/run-003/
-        └── unit-test-report.md                   # M001 单元阶段正式报告
+    └── reports/run-003/
+        └── unit-test-report.md                   # 单元阶段正式报告
 ```
 
 方案、用例、计划和资产同样有同名 metadata，图中省略。链路是：系统要求/V → 方案清单中的
@@ -363,10 +374,10 @@ tests/
 不要求每个Case单独建文或每次开发试跑都写正式Markdown报告；保留框架报告即可，正式阶段按需
 形成评审结论。集成测试和模块测试沿用同样关联方法，但测试对象及验证边界不同，局部通过不代表系统通过。
 
-`unit` 阶段（UT）脚本平铺在 `tests/unit/cases/`，文件名＝Case ID＋语言后缀；`module` 阶段（MT）
-同样针对模块，`tests/` 侧落位待定（暂沿用 `tests/unit/<module>/`）。`subsystem` 阶段（IT）对应
-`tests/integration/`，`system` 阶段（ST）对应 `tests/system/`。客户/项目验收测试的正式计划与判定
-由 `system` 阶段（ST）承接，或在 tailoring 中单独设 acceptance 目录。
+`unit` 阶段（UT）脚本平铺 `tests/unit/cases/`、`module` 阶段（MT）平铺 `tests/module/cases/`，文件名
+均＝Case ID＋语言后缀，报告分别平铺 `tests/unit/reports/`、`tests/module/reports/`（模块标识记录在报告
+内容）。`subsystem` 阶段（IT）对应 `tests/integration/`，`system` 阶段（ST）对应 `tests/system/`。
+客户/项目验收测试的正式计划与判定由 `system` 阶段（ST）承接，或在 tailoring 中单独设 acceptance 目录。
 
 ### 4.2 文档与工程数据
 

@@ -39,8 +39,8 @@
 `<对象>` 取被测对象的命名空间 token（正式短名或对象 ID），项目选定一种后一致使用并保持可反查映射。
 `<NNN>` 为三位十进制序号。Case 一文档一 Case，其 Document ID 与 Case ID 相同；Case 文档本身
 不在 §4 的对象登记表重复登记，责任摘要、分类与优先级以对应 `*-test-scheme` 清单行为准。
-Case 的脚本文件与设计文档同名：脚本文件名＝Case ID 字面＋语言后缀（如 `UT-FD-003.py`），
-单元阶段落位 `tests/unit/cases/`；测试函数名用描述性名，由 Case 文档 §7 记录「文件＋函数」。
+Case 的脚本文件与设计文档同名：脚本文件名＝Case ID 字面＋语言后缀（如 `UT-FD-003.py`、`MT-EXM-002.py`），
+单元阶段落位 `tests/unit/cases/`、模块阶段落位 `tests/module/cases/`；测试函数名用描述性名，由 Case 文档 §7 记录「文件＋函数」。
 
 ## 3. 分配与演进
 

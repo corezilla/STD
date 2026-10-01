@@ -68,8 +68,8 @@
     "tests.subsystem-test-scheme": "docs/70_verification/subsystem",
     "tests.system-test-scheme": "docs/70_verification/system",
     "tests.asset-design": "docs/70_verification/assets",
-    "tests.unit-test-report": "tests/unit",
-    "tests.module-test-report": "tests/unit",
+    "tests.unit-test-report": "tests/unit/reports",
+    "tests.module-test-report": "tests/module/reports",
     "tests.subsystem-test-report": "tests/integration/reports",
     "tests.system-test-report": "tests/system/reports"
   },

@@ -31,8 +31,8 @@ class RegistrationTests(unittest.TestCase):
         if name in DESIGNS:
             return f"docs/70_verification/{stage}/cases"
         return {
-            "unit": "tests/unit",
-            "module": "tests/unit",
+            "unit": "tests/unit/reports",
+            "module": "tests/module/reports",
             "subsystem": "tests/integration/reports",
             "system": "tests/system/reports",
         }[stage]
