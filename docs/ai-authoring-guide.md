@@ -25,7 +25,7 @@
 | [总体系统机制设计](ai-guides/system-mechanism.md) | `design.system-mechanism` |
 | [软件子系统与模块](ai-guides/unit-design.md) | `design.subsystem`、`design.definition` |
 | [软件实现规格设计（ISD）](ai-guides/implementation-design.md) | `design.implementation` |
-| [硬件、制造与板级评审](ai-guides/hardware.md) | `design.hardware`、`hardware.manufacturing`、`hardware.bom`、`review.schematic-pcb`、`review.schematic-pcb-review-checklist` |
+| [硬件、制造与板级评审](ai-guides/hardware.md) | `design.hardware`、`hardware.manufacturing`、`hardware.bom`、`review.schematic-pcb-review-checklist` |
 | [FPGA 程序与实现报告](ai-guides/fpga.md) | `design.fpga` |
 | [工程管理](ai-guides/management.md) | `management.project-plan`、`management.tailoring`、`management.development-plan`、`management.semp`、`management.configuration-plan`、`management.risk-plan`、`management.quality-plan`、`management.safety-plan`、`management.security-plan` |
 | [需求与追溯](ai-guides/requirements.md) | `requirements.stakeholder-needs`、`requirements.conops`、`requirements.specification`、`requirements.traceability` |

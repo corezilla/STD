@@ -39,7 +39,6 @@
     "requirements.stakeholder-needs": "requirements/stakeholder-needs.md",
     "requirements.traceability": "requirements/traceability-matrix.md",
     "review.packet": "review/review-packet.md",
-    "review.schematic-pcb": "review/schematic-pcb-review-checklist.md",
     "tests.asset-design": "tests/asset-design.md",
     "tests.module-case": "tests/module-case.md",
     "tests.module-test-plan": "tests/module-test-plan.md",
@@ -57,7 +56,7 @@
     "tests.unit-test-plan": "tests/unit-test-plan.md",
     "tests.unit-test-report": "tests/unit-test-report.md",
     "tests.unit-test-scheme": "tests/unit-test-scheme.md",
-    "review.tests-code-review-checklist": "review/tests.code-review-checklist.md",
+    "review.tests-code-review-checklist": "review/tests-code-review-checklist.md",
     "review.schematic-pcb-review-checklist": "review/schematic-pcb-review-checklist.md"
   },
   "template_versions": {
@@ -93,7 +92,6 @@
     "contracts.specification": "0.4.0",
     "tests.unit-case": "2.3.2",
     "review.packet": "0.2.0",
-    "review.schematic-pcb": "0.2.0",
     "decisions.adr": "0.2.0",
     "operations.release": "0.2.0",
     "operations.version-description": "0.2.0",

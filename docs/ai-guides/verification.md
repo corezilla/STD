@@ -7,11 +7,11 @@
 
 ## 1. 输入与边界
 
-开始前确认测试类型、被测对象ID和唯一测试目录。计划/规格/规程保存在 `docs/70_verification/`；
+开始前确认测试类型、被测对象ID和唯一测试目录。方案/用例/计划保存在 `docs/70_verification/<stage>/`；
 系统报告在 `tests/system/reports/<run-id>/`，集成报告在 `tests/integration/reports/<run-id>/`，
-模块报告在 `tests/unit/reports/<run-id>/`、`tests/module/reports/<run-id>/` 或Owner共置的同类路径。
+单元报告在 `tests/unit/reports/<run-id>/`、模块报告在 `tests/module/reports/<run-id>/`，或Owner共置的同类路径。
 不要集中到根 `tests/reports/`，也不要在文档目录复制一份正式结论。`component` 表示服务、应用或库
-等构建/交付单元，不等于Module ID；`<module>`使用源码模块目录名，确认代码、测试与Module ID的映射。
+等构建/交付单元，不等于Module ID；Module ID 与源码目录的映射在测试规格中登记，不从目录名推断。
 框架输出与正式报告可共置，正式Markdown报告必须保留metadata；大型或敏感原始输出放Run下的
 `artifacts/` 或受控CI存储，明确摘要和保留要求，不能通过忽略整个reports目录漏交正式文档。
 沿要求/V → Case → 可执行入口 → Run结果 → 报告检查完整性，未运行项保持NOT_RUN，
@@ -35,7 +35,7 @@
 |---|---|---|
 | tests.unit-test-scheme | 单元测试方案：分类与 Case 清单（一来源一 Case 登记、责任摘要） | 清单唯一登记；不写 Case 细节 |
 | tests.unit-case | 单个单元 Case 的完整设计（一 Case 一文档） | 测试脚本唯一依据；不重复方案清单 |
-| tests.unit-test-plan | 单元测试组织（一模块一份，串联单元 Case 文档） | 计划不复制 Case、不预填结果 |
+| tests.unit-test-plan | 单元测试组织（一模块（源码目录）一份，串联单元 Case 文档） | 计划不复制 Case、不预填结果 |
 | tests.module-test-scheme | 模块测试方案：整模块组装层的分类与 Case 清单 | 清单唯一登记 |
 | tests.module-case | 单个模块层 Case 的完整设计（一 Case 一文档） | 内部单元真实、边界替身不证明协议 |
 | tests.module-test-plan | 模块测试组织 | 只索引不复制 Case |

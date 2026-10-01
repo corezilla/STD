@@ -119,8 +119,8 @@ manifest。完整接入规则见 [`docs/adoption.md`](docs/adoption.md)。
 [`docs/repository-layout.md`](docs/repository-layout.md) 给出了完整项目仓库的推荐目录和文档默认落位，
 纯软件项目见 [`docs/software-project-layout.md`](docs/software-project-layout.md)；
 项目可通过 `--output` 沿用既有结构，并在 tailoring 中记录。
-软件源码默认按 `src/<subsystem>/<module>/` 或 `src/<module>/` 组织，模块单元测试按
-`tests/unit/<module>/` 组织；目录名须与稳定 Module ID 建立映射。
+软件源码默认按 `src/<subsystem>/<module>/` 或 `src/<module>/` 组织，模块单元/模块测试按
+`tests/unit/cases/`、`tests/module/cases/` 组织（文件名＝Case ID）；Module ID 在测试规格中映射，不从目录名推断。
 封面、版本状态和 GitHub Review 规则分别见
 [`docs/document-control.md`](docs/document-control.md) 与
 [`docs/github-workflow.md`](docs/github-workflow.md)。

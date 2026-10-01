@@ -68,7 +68,7 @@
 ## 2. 被测入口与前置
 
 <span style="color:#1f6feb"><em>**本节目的**：固定被测入口与前置状态。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：被测入口完整声明；状态型初态必须经公开入口构造，不直改内部状态；fixture/向量引用其版本，不复制字节；替身/夹具/受控时钟等测试资产链接其 `tests.asset-design` 文档，契约以该文档为唯一 authority。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：被测入口完整声明；状态型初态必须经公开入口构造，不直改内部状态；模块层专属：初态若涉及内部单元状态，必须经模块公开入口构造，禁止测试直接触达内部单元/内部字段（整模块无状态时也须显式写「无状态」）；fixture/向量引用其版本，不复制字节；替身/夹具/受控时钟等测试资产链接其 `tests.asset-design` 文档，契约以该文档为唯一 authority。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：虚构 MT-EXM-002：组装后单次调用。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：另一位执行者能独立建立前置。</em></span>
 
@@ -133,7 +133,7 @@
 ## 7. 自动化位置与状态
 
 <span style="color:#1f6feb"><em>**本节目的**：固定自动化位置与实现状态。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：测试文件（`tests/module/cases/MT-<对象>-<NNN>.py`，文件名＝Case ID＋语言后缀，与本文档名一致）与测试函数名（描述性）；被本模块 Case 复用的辅助函数放 `tests/module/cases/support/`（跨模块工具走 `tests/common/`）；单 Case 执行命令；实现状态 Planned/Implemented；执行与 Verdict 归 Run 报告。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：测试文件（`tests/module/cases/MT-<对象>-<NNN>.py`，文件名＝Case ID＋语言后缀，与本文档 Document ID 同 stem）与测试函数名（描述性）；被本模块 Case 复用的辅助函数放可执行 cases 树的 `tests/module/cases/support/`（跨模块工具走 `tests/common/`）；单 Case 执行命令；实现状态 Planned/Implemented；执行与 Verdict 归 Run 报告。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：虚构 MT-EXM-002：validation_precedes_filtering。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：可从本文档定位测试代码与命令。</em></span>
 

@@ -34,14 +34,14 @@
 | BOM、正式料号、替代料和供应风险如何管理 | `hardware.bom` |
 | 两侧如何连接并共同演进 | `interfaces.control` |
 | API、Schema、事件和错误语义 | `contracts.specification` |
-| 某阶段测试测什么、有哪些 Case | `tests.*-test-scheme` |
-| 单个 Case 如何执行（测试脚本依据） | `tests.*-case` |
-| 某阶段测试如何安排 | `tests.*-test-plan` |
+| 某阶段测试测什么、有哪些 Case | `tests.*-test-scheme`（unit/module/subsystem/system 四阶段） |
+| 单个 Case 如何执行（测试脚本依据） | `tests.*-case`（Case 前缀 UT/MT/IT/ST） |
+| 某阶段测试如何安排 | `tests.*-test-plan`（unit/module/subsystem/system 四阶段） |
 | 测试实际发生了什么 | Run 报告（reports/<run-id>/，随测试保存） |
 | 如何进行正式验收 | 验收活动（按项目 tailoring 承接，不在 tests 家族） |
 | FPGA 综合、实现和时序是否收敛 | `design.fpga` §验证章（实现报告随项目 tailoring 承接） |
 | 某个基线能否进入下一阶段 | `review.packet` |
-| 原理图和 PCB 是否可发布 | `review.schematic-pcb` |
+| 原理图和 PCB 是否可发布 | `review.schematic-pcb-review-checklist` |
 | 为什么选择某项方案 | `decisions.adr` |
 | 如何发布、部署、运行、恢复和退役 | `operations.release` |
 | 发布中准确包含什么 | `operations.version-description` |

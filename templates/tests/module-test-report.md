@@ -57,11 +57,11 @@
 
 <span style="color:#1f6feb"><em>**本节目的**：给出一眼可判的总结论。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：本报告覆盖的计划与方案版本、执行范围、结果分布（PASS/FAIL/BLOCKED/INVALID/NOT_RUN 计数）、Gate 达成情况；结论与 §3–§5 明细一致。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 MT-EXM：4 Case 全 PASS。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 MT-EXM：3 Case 全 PASS。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：读者不读明细也知道本轮结论与边界。</em></span>
 
 - 报告范围（计划/方案版本）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">模块计划 MTP-EXM v1.0 / 方案 MTS-EXM v1.0</span><!-- STD_TEMPLATE_EXAMPLE_END -->
-- 结果分布与总结论：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">4 PASS、0 FAIL、0 BLOCKED、0 INVALID、0 NOT_RUN</span><!-- STD_TEMPLATE_EXAMPLE_END -->
+- 结果分布与总结论：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">3 PASS、0 FAIL、0 BLOCKED、0 INVALID、0 NOT_RUN</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - Gate 达成情况：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">接受：分母闭合</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 2. 被测基线与实际环境
@@ -82,16 +82,16 @@
 <span style="color:#1f6feb"><em>**抽象示例**：见下表灰字。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：方案清单每个 Case 有一行；任一行可定位 Run。</em></span>
 
-| Case ID | 执行状态 | Verdict | Run ID / 证据 | 缺陷 / 备注 |
-|---|---|---|---|---|
-| <!-- 引用方案清单 --> | <!-- TODO --> | <!-- TODO --> | <!-- TODO --> | |
+| Case ID | 执行状态 | Verdict | Run ID / 证据 | 副作用 / 清理 | 缺陷 / 备注 |
+|---|---|---|---|---|---|
+| <!-- 引用方案清单 --> | <!-- TODO --> | <!-- TODO --> | <!-- TODO --> | | |
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 <span style="color:#6e7681">**示例（虚构）**：</span>
-<span style="color:#6e7681">| Case ID | 执行状态 | Verdict | Run ID / 证据 | 缺陷 / 备注 |</span>
-<span style="color:#6e7681">|---|---|---|---|---|</span>
-<span style="color:#6e7681">| MT-EXM-002 | 有效 Run | PASS | run-20260929-02 | 校验先于筛选成立 |</span>
-<span style="color:#6e7681">| MT-EXM-001/003/004 | 有效 Run | PASS | run-20260929-01/03/04 | — |</span>
+<span style="color:#6e7681">| Case ID | 执行状态 | Verdict | Run ID / 证据 | 副作用 / 清理 | 缺陷 / 备注 |</span>
+<span style="color:#6e7681">|---|---|---|---|---|---|</span>
+<span style="color:#6e7681">| MT-EXM-002 | — | PASS | run-20260929-02 | 无副作用、无需清理 | 校验先于筛选成立 |</span>
+<span style="color:#6e7681">| MT-EXM-001/003 | — | PASS | run-20260929-01/03 | 无副作用、无需清理 | — |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
 ## 4. 偏差、无效执行与重跑
@@ -115,7 +115,7 @@
 ## 5. 覆盖复算（对照方案分母）
 
 <span style="color:#1f6feb"><em>**本节目的**：对照方案分母复算覆盖。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：方案 §3 每个来源 ID 与其设计验证项（VRC）逐条对照：Case 状态如何变化、Gap 是否关闭、NOT_RUN 保留在哪；除 Verdict 外记录三列——结果已知性（结果是否可独立判定/是否有未知分支）、副作用（Case 执行后是否改变被测状态/调用了哪些外部资源/变更了哪些持久化数据）、清理状态（资源是否已释放/状态是否回滚基线/未清理项是否登记）。覆盖复算以本报告事实为准，不以计划口径代替。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：方案 §3 每个来源 ID 与其设计验证项（VRC）逐条对照：Case 状态如何变化、Gap 是否关闭、NOT_RUN 保留在哪；逐 Case 的副作用与清理状态在 §3 逐 Case 记录。覆盖复算以本报告事实为准，不以计划口径代替。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：虚构 MT-EXM：分母闭合。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：分母每条有着落；未关闭项显式保留。</em></span>
 

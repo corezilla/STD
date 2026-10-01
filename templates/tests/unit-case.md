@@ -133,7 +133,7 @@
 ## 7. 自动化位置与状态
 
 <span style="color:#1f6feb"><em>**本节目的**：固定自动化位置与实现状态。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：测试文件（`tests/unit/cases/UT-<对象>-<NNN>.py`，文件名＝Case ID＋语言后缀，与本文档名一致）与测试函数名（描述性）；被本模块 Case 复用的辅助函数放 `tests/unit/cases/support/`（跨模块工具走 `tests/common/`）；单 Case 执行命令；实现状态 Planned/Implemented；执行与 Verdict 归 Run 报告。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：测试文件（`tests/unit/cases/UT-<对象>-<NNN>.py`，文件名＝Case ID＋语言后缀，与本文档 Document ID 同 stem）与测试函数名（描述性）；被本模块 Case 复用的辅助函数放可执行 cases 树的 `tests/unit/cases/support/`（跨模块工具走 `tests/common/`）；单 Case 执行命令；实现状态 Planned/Implemented；执行与 Verdict 归 Run 报告。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：虚构 UT-FD-003：invalid_header_rejected。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：可从本文档定位测试代码与命令。</em></span>
 

@@ -47,7 +47,6 @@
     "contracts.specification": "docs/60_interfaces/contracts",
     "tests.unit-case": "docs/70_verification/unit/cases",
     "review.packet": "docs/91_reviews",
-    "review.schematic-pcb": "hardware/docs/91_reviews",
     "decisions.adr": "docs/90_decisions",
     "operations.release": "docs/80_operations",
     "operations.version-description": "docs/80_operations/releases",

@@ -51,7 +51,6 @@
     "design.hardware",
     "hardware.manufacturing",
     "hardware.bom",
-    "review.schematic-pcb",
     "review.schematic-pcb-review-checklist"
    ]
   },

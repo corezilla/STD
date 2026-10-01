@@ -60,7 +60,7 @@
 
 <span style="color:#1f6feb"><em>**本节目的**：固定模块层测试活动的范围与构成清单。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：验证对象与不证明什么；构成＝模块方案×1＋Case 文档×N＋单元计划/子系统交接；排除项及 tailoring 依据。</em></span>
-<span style="color:#1f6feb"><em>**抽象示例**：虚构 M101：方案 MTS-EXM v1.0 ＋ Case 文档 MT-EXM-001…004。</em></span>
+<span style="color:#1f6feb"><em>**抽象示例**：虚构 M101：方案 MTS-EXM v1.0 ＋ Case 文档 MT-EXM-001…003。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：读者（含 Agent）能说清验证对象、构成清单和排除项；每个构成项指向方案、Case 文档或具名缺口。</em></span>
 
 | 构成层 | 文档 / 入口（Document ID 或缺口） | 覆盖责任摘要 | 条目状态 |
@@ -75,7 +75,7 @@
 <span style="color:#6e7681">| 构成层 | 文档 / 入口 | 覆盖责任摘要 | 条目状态 |</span>
 <span style="color:#6e7681">|---|---|---|---|</span>
 <span style="color:#6e7681">| 模块方案 ×1 | MTS-EXM v1.0 | 清单与设计状态唯一登记 | Planned |</span>
-<span style="color:#6e7681">| Case 文档 ×4 | MT-EXM-001…004 | 对外行为、校验先于筛选、容量上限 | Planned |</span>
+<span style="color:#6e7681">| Case 文档 ×3 | MT-EXM-001…003 | 对外行为、校验先于筛选、容量上限 | Planned |</span>
 <span style="color:#6e7681">| 单元计划引用 | UTP-EXM | 单元层组织 | Planned |</span>
 <span style="color:#6e7681">| 子系统交接 | STS-DIR 清单 | 宿主并发准入 | Blocked（G-EX-1） |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
@@ -111,7 +111,7 @@
 <span style="color:#6e7681">| 前检项 | 判定事实 | 通过条件 | 不满足时 |</span>
 <span style="color:#6e7681">|---|---|---|---|</span>
 <span style="color:#6e7681">| 方案就绪度 | MTS-EXM v1.0 分母闭合 | 清单无未登记缺口 | Blocked＋缺口 |</span>
-<span style="color:#6e7681">| Case 实现状态 | MT-EXM-001…004 均 Implemented | 全部 Implemented 或登记跳过 | NOT_RUN＋登记 |</span>
+<span style="color:#6e7681">| Case 实现状态 | MT-EXM-001…003 均 Implemented | 全部 Implemented 或登记跳过 | NOT_RUN＋登记 |</span>
 <span style="color:#6e7681">| 环境与工具 | 组装目标构建成功 | harness 可链接运行 | 环境性 Blocked |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
@@ -120,7 +120,7 @@
 <span style="color:#1f6feb"><em>**本节目相**：把方案 §1.7 的环境类型落实为具体的**实例编号**，并分配给具体 Case——同一类型可多套（如多 docker 用于并行），编号与分配是 plan 的责任，Case 只引用编号。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：列出本计划分配的全部 ENV 实例（编号 + 类型 + 具体配置/位置 + Owner + 分配给哪些 Case + 准备时限 + 状态）；ENV 实例类型与方案 §1.7 类型一致；准备失败标 Blocked 并登记缺口，不静默换其他实例。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：见下方灰字——模块层 ENV 实例分配（同一类型多套用于并行/隔离，多 Case 复用同一实例）。</em></span>
-<span style="color:#1f6feb"><em>**完成条件**：每个 §3.1 的 Case 在本表有 ENV 实例；类型一致；准备未完成标 Blocked 并登记缺口，不静默换实例。</em></span>
+<span style="color:#1f6feb"><em>**完成条件**：方案 §3 Case 清单中的每个 Case 在本表有 ENV 实例；类型一致；准备未完成标 Blocked 并登记缺口，不静默换实例。</em></span>
 
 | ENV 实例编号 | 环境类型 | 具体配置/位置 | Owner | 分配给哪些 Case | 准备时限 | 状态 |
 |---|---|---|---|---|---|---|
@@ -141,7 +141,7 @@
 
 <span style="color:#1f6feb"><em>**本节目的**：给执行者（含 Agent）一条从头到尾的作业序列。</em></span>
 
-> 失败处理与收口（在本流程图内统一）：FAIL → 保留首个失败现场 + 保留 Run 证据 + 禁止重跑覆盖原始失败 → 登记缺陷并关联 Case ID；BLOCKED → 标记环境性阻塞 + 整个 §4 流程停止 + 登记缺口 + 不静默换工具链；INVALID → 标记该 Case 注入未命中 + 复现状态与修复状态分开记录 → 不允许仅靠"重跑通过"掩盖；NOT_RUN → 标记未执行 + 登记原因（不在 §3 清单中静默消失）。
+> 失败处理与收口（在本流程图内统一）：FAIL → 保留首个失败现场 + 保留 Run 证据 + 禁止重跑覆盖原始失败 → 登记缺陷并关联 Case ID；BLOCKED → 标记环境性阻塞 + 整个 §5 执行流程停止 + 登记缺口 + 不静默换工具链；INVALID → 标记该 Case 注入未命中 + 复现状态与修复状态分开记录 → 不允许仅靠"重跑通过"掩盖；NOT_RUN → 标记未执行 + 登记原因（不在 §3 清单中静默消失）。
 <span style="color:#1f6feb"><em>**必须写清楚**：按方案清单优先级逐 Case：定位 Case 文档→按其 §2–§7 前检与运行→判定分路（PASS/FAIL/BLOCKED/INVALID 各有明确出口与下一步）→记录 Run→继续；失败不阻断后续 Case，除非环境性阻塞；全部完成后按 §7 生成报告；阶段门——最小真实链→规模控制面→完整业务→恢复/全量回归，不等所有模块写完才集成；Step 0 资产就位——按消费索引构建全部依赖测试资产（tests.asset-design）并运行其自检，自检不过即环境性 Blocked，不进入 Case 执行。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：虚构 MT-EXM：P0 的 002 先行；失败不阻断容量上限组。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：执行者不需要临场发明流程；每个分路有确定下一步。</em></span>
@@ -168,7 +168,7 @@
 <span style="color:#6e7681">| Step | 动作 | 依据 | 产出 |</span>
 <span style="color:#6e7681">|---|---|---|---|</span>
 <span style="color:#6e7681">| 0 | 构建教学 harness 与记录数组生成器并自检 | asset-design：HARNESS-EXM/GEN-EXM | 资产就绪（Verified） |</span>
-<span style="color:#6e7681">| 1 | 读 MTS-EXM v1.0 清单排序 | 方案 §3 | 队列：002→001→003→004 |</span>
+<span style="color:#6e7681">| 1 | 读 MTS-EXM v1.0 清单排序 | 方案 §3 | 队列：002→001→003 |</span>
 <span style="color:#6e7681">| 2 | 逐 Case 定位 Case 文档并前检 | Case 文档 §2–§3 | 实施依据 |</span>
 <span style="color:#6e7681">| 3 | 组装并运行 | Case 文档 §4–§6 | Run 记录 |</span>
 <span style="color:#6e7681">| 4 | 判定分路并登记 | 断言与环境事实 | Verdict 汇入报告 |</span>

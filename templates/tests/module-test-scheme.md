@@ -70,7 +70,7 @@
 <span style="color:#1f6feb"><em>**本节目相**：固定模块层"怎么测"的方法论——单元层测试设计技术比较单一（mock 为主），上游测试常**多方法共存**，需逐一描述与边界。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：测试设计技术（按 Case 家族用哪些——等价类划分/边界值/状态转换/决策表/错误猜测/属性测试/变异测试等，写明对哪些 family 用哪种及不用哪种）；入场标准（设计文档到位、方案清单冻结、Case 实现就绪、替身 Verified、环境齐）；离场标准（分母每条来源有 Case 或缺口、Verdict 齐全、缺口有主、设计变更触发重跑）；自动化策略（哪些进 CI、单 Case 选择入口、断点/重跑规则、flaky 不掩盖根因）。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：见下方灰字——模块层方法（含注入/边界/调用序等具体细节）。</em></span>
-<span style="color:#1f6feb"><em>**完成条件**：每个 §3 Case 行能指出所用方法与环境类型；入场/离场可判定；环境类型与 asset-design 契约对应；无未声明的环境依赖。</em></span>
+<span style="color:#1f6feb"><em>**完成条件**：每个 Case 家族能指出所用方法与环境类型（§3 Case 行经 Case ID 关联到本表/§1.6/§1.7）；入场/离场可判定；环境类型与 asset-design 契约对应；无未声明的环境依赖。</em></span>
 
 | Case 家族 | 测试设计技术 | 环境类型引用 | 自动化与判定规则 |
 |---|---|---|---|
@@ -109,7 +109,7 @@
 <span style="color:#1f6feb"><em>**本节目相**：固定模块层替身的使用，让 §3 清单的替身选择可解释可复核。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：替身决策准则（按所有权/可控性/真实性分类——内部真实/边界 fake/真协议测试实例/容器等）；替身形态（mock/fake/stub/spy 的取舍与代价）；替身保真度——契约与自检归 `tests.asset-design`（一资产一文档），方案与 Case 只引用其 ID 不复制行为；交互断言 vs 返回值断言（优先返回值，必要时断言关键调用序，但不耦合内部实现）；反模式（不 mock 你不拥有的接口、不 mock 值对象/纯数据、不为凑覆盖率而 mock、不过度断言内部细节）；与 §1 边界、§3 Case 清单、`tests.module-case` §2 替身选择一致。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：见下方灰字——模块层替身矩阵。</em></span>
-<span style="color:#1f6feb"><em>**完成条件**：每个 §3 Case 行能指出替身类型与契约文档 ID；替身矩阵与 asset-design 一一对应；反模式逐项被排除并有理由。</em></span>
+<span style="color:#1f6feb"><em>**完成条件**：替身矩阵与 asset-design 一一对应；§3 每个 Case 行经 Case ID 关联到本矩阵可查其替身类型与契约文档 ID；反模式逐项被排除并有理由。</em></span>
 
 | 协作者类型 | 替身形态 | 替身契约文档（tests.asset-design） | 决策理由 |
 |---|---|---|---|
@@ -129,7 +129,7 @@
 
 <span style="color:#1f6feb"><em>**本节目相**：固定本层"在哪类环境上跑"——列出环境**类型**（抽象类别）及其行为/真伪与契约文档（tests.asset-design 或产品规范）；同一类型可多套实例（多 docker 用于并行），具体**实例编号与分配**由 `tests.module-test-plan` §4 编排，Case 在 §2 通过「环境类型 + ENV 实例编号」引用，不在本文档重复描述环境本身。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：见下方灰字——模块层测试环境类型（含契约与用法具体细节）+ 环境拓扑（ENV 类型 → ENV 实例 → 被测对象）。</em></span>
-<span style="color:#1f6feb"><em>**完成条件**：每个 §3 Case 行能指出所用环境类型；类型与 asset-design 契约对应；无未声明的环境依赖。</em></span>
+<span style="color:#1f6feb"><em>**完成条件**：§3 每个 Case 行经 Case ID 关联到本表可查其环境类型；类型与 asset-design 契约对应；无未声明的环境依赖。</em></span>
 
 | 环境类型 | 行为/真伪 | 契约文档 | 在本层用例中的角色 |
 |---|---|---|---|
@@ -142,13 +142,12 @@
 <span style="color:#6e7681">**拓扑**（ENV 类型 → ENV 实例 → 被测对象）：</span>
 | 环境类型 | 行为/真伪 | 契约文档 | 在本层用例中的角色 |
 |---|---|---|---|
-| 真实内部单元（I1/I2/I3） | 真实 | — | 组装后真实调用用例 |
-| · 契约：源码即真实单元 | | · 用法：模块 harness 链接全部内部单元为真实 || 边界 fake（跨子系统接口） | 只代返回值/超时 | FAKE-REG | 跨边界用例 |
+| 真实内部单元（I1/I2/I3） | 真实；模块 harness 链接全部内部单元为真实 | — | 组装后真实调用用例 |
+| 边界 fake（跨子系统接口） | 只代返回值/超时；测试前配置失败/超时，不持 Care 调用外副作用 | FAKE-REG | 跨边界用例 |
 | 网络边界 mock（HTTP server fake / 客户端 fake） | 只代请求/响应/超时 | — | 网络/边界交互用例 |
 | 流式 fake（事件源 / 增量数据流） | 只代事件序列与时序 | — | SSE/流式/事件驱动用例 |
-| · 契约：FAKE-REG 替代跨子系统边界，配置可控 | | · 用法：测试前配置失败/超时；不持 Care 调用外的副作用 || 受控时钟 fake | 单调推进 | HARNESS-EXM-CLOCK | 时间/并发用例 |
-| · 契约：advance(ms) 单调 | | || 冻结向量集 | 真实但固定 | EX-MODULE 冻结集 | 输入/边界用例 |
-| · 契约：固定输入集 | | · 用法：边界测试从冻结集读取 |
+| 受控时钟 fake | 单调推进；advance(ms) 单调 | HARNESS-EXM-CLOCK | 时间/并发用例 |
+| 冻结向量集 | 真实但固定；边界测试从冻结集读取 | EX-MODULE 冻结集 | 输入/边界用例 |
 
 <span style="color:#6e7681">**总体说明**：C++20 模块 harness 直接链接全部内部单元（I1/I2/I3 全真实）；边界 fake 引用 tests.asset-design（FAKE-REG 等）；CI 入口 runner --filter；并行隔离按模块实例+端口+临时目录；缺编译器记 Blocked，不静默换工具链。</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->

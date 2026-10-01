@@ -26,7 +26,7 @@
 │   ├── 40_module_design/         # 包、模块和组件内部设计
 │   ├── 50_implementation_design/ # 类、文件、算法和关键实现单元设计
 │   ├── 60_interfaces/            # 接口目录、ICD和机器契约索引
-│   ├── 70_verification/          # 测试方案、用例与测试计划；报告随测试保存
+│   ├── 70_verification/          # 测试方案、用例与计划；按测试阶段 unit/module/subsystem/system 组织，报告随测试保存
 │   ├── 80_operations/            # 安装、部署、运行、维护和发布手册
 │   ├── 90_decisions/             # ADR和已批准技术决策
 │   ├── 91_reviews/               # 正式设计、代码和发布评审记录
@@ -58,8 +58,12 @@
 │   ├── examples/                 # 用户和开发环境示例配置
 │   └── schemas/                  # 配置字段类型、约束和版本
 ├── tests/                        # 可执行测试、harness、fixture和oracle
-│   ├── unit/                     # 函数、类和小模块隔离测试
-│   │   └── <module>/             # 稳定模块目录名，内含用例与reports/<run-id>/
+│   ├── unit/                     # 单元测试（Case 前缀 UT）
+│   │   ├── cases/                # 单元可执行用例，文件名＝Case ID＋语言后缀
+│   │   └── reports/              # 单元测试报告，按Run ID分开
+│   ├── module/                   # 模块测试（Case 前缀 MT）
+│   │   ├── cases/                # 模块可执行用例，文件名＝Case ID＋语言后缀
+│   │   └── reports/              # 模块测试报告，按Run ID分开
 │   ├── contract/                 # API、Schema、事件和兼容契约测试
 │   │   └── reports/              # 本类报告，按Run ID分开
 │   ├── integration/              # 多模块和外部依赖集成测试
