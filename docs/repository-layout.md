@@ -38,7 +38,8 @@
 │   │   ├── module/                # 模块测试阶段（Case 前缀 MT）
 │   │   ├── subsystem/             # 子系统/集成测试阶段（Case 前缀 IT）
 │   │   ├── system/                # 系统测试阶段（Case 前缀 ST）
-│   │   └── README.md              # 域总索引：阶段 → 方案/用例/计划/报告/资产落位 + Case ID 前缀表
+│   │   ├── assets/                # 测试资产契约与自检（阶段无关，跨阶段复用）
+│   │   └── README.md              # 域总索引：阶段 → 方案/用例/计划 落位 + Case ID 前缀表
 │   ├── 80_operations/             # 安装、用户、运维、维护、Bring-up和发布资料
 │   ├── 90_decisions/              # ADR和已批准的重要技术决策
 │   ├── 91_reviews/                # 正式评审包、发现、决定和关闭记录
@@ -309,29 +310,28 @@ Case ID、实际结果、判定和证据位置；外部证据记录稳定制品I
 #### 4.1.2 按测试阶段组织的文件级示例
 
 以下为虚构软件任务服务的落位示例，不要求项目创建不存在的文件或额外测试框架。
-`docs/70_verification/` 按测试阶段（unit/module/subsystem/system）组织，每阶段放方案、用例、计划、
-资产四类文档（scheme/case/plan/asset）；正式报告与运行证据按测试类型共置于 `tests/` 侧（见 4.1.1），
-不在本目录维护报告副本。下面以 unit 与 system 展开，其余阶段同构。
+`docs/70_verification/` 按测试阶段（unit/module/subsystem/system）组织，每阶段放方案、用例、计划
+三类文档（scheme/case/plan）；测试资产阶段无关、跨阶段复用，集中在 `assets/`；正式报告与运行证据
+按测试类型共置于 `tests/` 侧（见 4.1.1），不在本目录维护报告副本。下面以 unit 与 system 展开，其余阶段同构。
 
 ```text
 docs/70_verification/
-├── README.md                                    # 域总索引：阶段 → 方案/用例/计划/资产 落位 + Case ID 前缀表
+├── README.md                                    # 域总索引：阶段 → 方案/用例/计划 落位 + Case ID 前缀表
 ├── unit/                                        # 单元测试阶段（Case 前缀 UT）
 │   ├── unit-test-scheme.md                      # 方案：分类 + Case 清单（唯一登记，1 份/阶段）
 │   ├── cases/
 │   │   └── UT-M001-001.md                       # 单 Case 完整设计（一 Case 一文档）
-│   ├── unit-test-plan.md                        # 计划：Go/No-Go + ENV 实例分配 + 逐 Case 序列（1 份/阶段）
-│   └── assets/
-│       └── unit-asset-CLK-MOCK.md               # 测试资产契约与自检（替身/时钟/生成器，一资产一文档）
+│   └── unit-test-plan.md                        # 计划：Go/No-Go + ENV 实例分配 + 逐 Case 序列（1 份/阶段）
 ├── module/                                      # 模块测试阶段（Case 前缀 MT）—— 结构同 unit/
 ├── subsystem/                                   # 子系统/集成测试阶段（Case 前缀 IT）—— 结构同 unit/
-└── system/                                      # 系统测试阶段（Case 前缀 ST）
-    ├── system-test-scheme.md                    # 方案：分类 + Case 清单（唯一登记）
-    ├── cases/
-    │   └── ST-APP-001.md                        # 单 Case 完整设计
-    ├── system-test-plan.md                      # 计划：Go/No-Go + ENV 实例分配 + 逐 Case 序列
-    └── assets/
-        └── system-asset-STORE-TEST.md           # 测试资产契约与自检
+├── system/                                      # 系统测试阶段（Case 前缀 ST）
+│   ├── system-test-scheme.md                    # 方案：分类 + Case 清单（唯一登记）
+│   ├── cases/
+│   │   └── ST-APP-001.md                        # 单 Case 完整设计
+│   └── system-test-plan.md                      # 计划：Go/No-Go + ENV 实例分配 + 逐 Case 序列
+└── assets/                                      # 测试资产契约与自检（阶段无关，跨阶段复用）
+    ├── CLK-MOCK.md                              # 一资产一文档（替身/时钟/生成器）
+    └── STORE-TEST.md                            # 一资产一文档
 tests/
 ├── system/
 │   ├── cases/test_cancel_release.py            # 执行 ST-APP-001 并检查资源释放

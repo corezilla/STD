@@ -22,17 +22,28 @@ class RegistrationTests(unittest.TestCase):
         self.catalog = json.loads((ROOT / "templates/catalog.json").read_text())
         self.policy = json.loads((ROOT / "templates/path-policy.json").read_text())
 
+    def _expected_path(self, name):
+        if name == ASSET:
+            return "docs/70_verification/assets"
+        stage = name.split("-")[0]
+        if name in SCHEMES or name in PLANS:
+            return f"docs/70_verification/{stage}"
+        if name in DESIGNS:
+            return f"docs/70_verification/{stage}/cases"
+        return {
+            "unit": "tests/unit",
+            "module": "tests/unit",
+            "subsystem": "tests/integration/reports",
+            "system": "tests/system/reports",
+        }[stage]
+
     def test_all_seventeen_registered_with_paths(self):
         for name in ALL:
             tid = "tests." + name
             self.assertEqual(self.catalog["templates"][tid], "tests/" + name + ".md", tid)
             self.assertIn(tid, self.catalog["template_versions"], tid)
-            kind = ("schemes" if name in SCHEMES else
-                    "specifications" if name in DESIGNS else
-                    "plans" if name in PLANS else
-                    "reports" if name in REPORTS else "assets")
             self.assertEqual(self.policy["default_paths"][tid],
-                             "docs/70_verification/" + kind, tid)
+                             self._expected_path(name), tid)
 
     def test_key_versions(self):
         v = self.catalog["template_versions"]
