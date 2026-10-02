@@ -15,7 +15,9 @@
 | Template Version | `{{template_version}}` |
 <!-- STD_DOCUMENT_COVER_END -->
 
+
 ## 1. 实现目标与输入基线
+
 
 <a id="isd-scope"></a>
 
@@ -81,7 +83,9 @@
 
   <!-- TODO -->
 
+
 ## 2. 既有实现差异（条件章节）
+
 
 <details><summary>编写要求与完成条件</summary>
 
@@ -127,7 +131,9 @@ greenfield 或设计先行且不存在既有实现时，不制造 Current，也�
 
   <!-- PLANNED / IN_PROGRESS / IMPLEMENTED；与 §5、§8–§10 一致 -->
 
+
 ## 3. 文件、内部组件与调用关系
+
 
 <a id="isd-structure"></a>
 
@@ -180,7 +186,9 @@ flowchart LR
 
   <!-- PLANNED / IN_PROGRESS / IMPLEMENTED -->
 
+
 ## 4. 数据结构设计
+
 
 <details><summary>数据分类与示例（模板帮助；不复制到项目正文）</summary>
 
@@ -535,7 +543,9 @@ DecodeResult =
 - **状态、副作用、可重试条件与敏感信息处理**
 - **触发向量、V/Case 与证据状态**
 
+
 ## 5. 接口设计
+
 
 <details><summary>接口分类与示例（模板帮助；不复制到项目正文）</summary>
 
@@ -838,7 +848,9 @@ DecodeResult decode_one(std::span<const std::uint8_t> input) noexcept;
 
   <!-- 合法及拒绝调用、V/Case/Run -->
 
+
 ## 6. 关键流程与算法
+
 
 <a id="isd-algorithms"></a>
 
@@ -941,7 +953,9 @@ flowchart TD
 
   <!-- TODO -->
 
+
 ## 7. 并发、失败、持久化与安全生命周期
+
 
 <a id="isd-lifecycle"></a>
 
@@ -1139,7 +1153,9 @@ schema 演进与拒绝语义为持久化模块必填。先写策略决定，明�
 
   <!-- TODO -->
 
+
 ## 8. 资源、构建与宿主接入
+
 
 <a id="isd-resources"></a>
 
@@ -1210,7 +1226,9 @@ schema 演进与拒绝语义为持久化模块必填。先写策略决定，明�
 
   <!-- TODO -->
 
+
 ## 9. 验证规格与实现任务
+
 
 <a id="isd-verification"></a>
 
@@ -1302,7 +1320,9 @@ EX-ISD/v1，以下全为预期向量，NOT_RUN；同一公开decode_one入口，
 
   <!-- NOT_RUN / PASS / FAIL / BLOCKED + Run ID -->
 
+
 ## 10. 映射、复核与未决项
+
 
 <details><summary>编写要求与完成条件</summary>
 

@@ -27,7 +27,9 @@
 > 外部不可变证据；不要在文档内容中伪造包含自身的 commit hash。
 <!-- STD_DOCUMENT_COVER_END -->
 
+
 ## 1. 范围与基线
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -40,7 +42,9 @@
 
 固定需求、设计、契约、实现和测试的版本或 commit。
 
+
 ## 2. Traceability Matrix
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -55,7 +59,9 @@
 |---|---|---|---|---|---|---|---|
 | <!-- TODO --> | | | | | | | |
 
+
 ## 3. Coverage Rules
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -70,7 +76,9 @@
 - `failed/blocked/invalid/not-run` 不得标成通过。
 - 上游变化必须能找到受影响的下游设计、实现和测试。
 
+
 ## 4. Orphan、Gap 与冲突
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -81,7 +89,9 @@
 完成检查：下游能够分配责任与验证项，冲突或未决定的要求能追到责任人和裁决入口。
 </details>
 
+
 ## 5. Review、冻结与更新记录
+
 
 <details>
 <summary>本节编写建议</summary>

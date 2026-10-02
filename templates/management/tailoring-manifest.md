@@ -27,7 +27,9 @@
 > 外部不可变证据；不要在文档内容中伪造包含自身的 commit hash。
 <!-- STD_DOCUMENT_COVER_END -->
 
+
 ## 1. 适用背景
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -43,7 +45,9 @@
 - 产品类型：software / hardware / firmware / fpga / mixed
 - 安全或业务关键性：<!-- TODO -->
 
+
 ## 2. 启用模板
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -58,7 +62,9 @@
 |---|---|---|---|---|
 | <!-- TODO --> | | | | |
 
+
 ## 3. 裁剪决定
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -73,7 +79,9 @@
 |---|---|---|---|---|---|---|
 | <!-- TODO --> | | | | | | |
 
+
 ## 4. 禁止裁剪项
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -87,7 +95,9 @@
 以下内容若适用，不得无理由删除：authority、接口、状态与数据所有权、失败恢复、安全、
 验证方法、traceability、版本和来源证据。
 
+
 ## 5. Review 与生效
+
 
 <details>
 <summary>本节编写建议</summary>

@@ -53,7 +53,9 @@
 
 <span style="color:#1f6feb"><em>**完成条件**：同一事实只能得到可解释的判定；从任一 Verdict 能追到唯一 Run 与原始证据。</em></span>
 
+
 ## 1. 执行摘要与结论
+
 
 <span style="color:#1f6feb"><em>**本节目的**：给出一眼可判的总结论。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：本报告覆盖的计划与方案版本、执行范围、结果分布（PASS/FAIL/BLOCKED/INVALID/NOT_RUN 计数）、Gate 达成情况；结论与 §3–§5 明细一致。</em></span>
@@ -64,7 +66,9 @@
 - 结果分布与总结论：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">3 PASS、0 FAIL、1 BLOCKED、0 INVALID、0 NOT_RUN</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - Gate 达成情况：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">条件接受：受控时钟故障修复后补跑 IT-DIR-004</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
+
 ## 2. 被测基线与实际环境
+
 
 <span style="color:#1f6feb"><em>**本节目的**：固定实际被测基线与环境，单列偏差。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：实际代码/构建/环境版本与计划基线对照；差异逐条列出；不同基线的结果不合并统计；结果绑定源码/库/配置/环境/checker 版本，相关修改后证据标“待重验”并保留历史，不从旧快照派生当前结论。</em></span>
@@ -75,7 +79,9 @@
 - 环境偏差及影响：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">harness v2→v3：断言输出格式变化，已适配不影响判定</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 证据版本绑定与待重验：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">源码、harness、受控时钟/替身版本绑定；相关修改后标“待重验”</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
+
 ## 3. 逐 Case 执行记录
+
 
 <span style="color:#1f6feb"><em>**本节目的**：逐 Case 汇总执行结果。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：引用方案清单的每个 Case：执行状态、Verdict、Run ID 与证据路径、关联缺陷；NOT_RUN/BLOCKED/INVALID 如实保留；不复制原始输出。</em></span>
@@ -94,7 +100,9 @@
 <span style="color:#6e7681">| IT-DIR-004 | BLOCKED | — | — | 受控时钟模块故障，ENV-3 |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
+
 ## 4. 偏差、无效执行与重跑
+
 
 <span style="color:#1f6feb"><em>**本节目的**：如实记录偏差与无效执行。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：偏离 Case 文档的原因与批准；无效执行（未命中、环境错配）与重跑的新 Run；旧失败保留；偶发失败保留原始 RED，复现状态与修复状态分开记录，无因果证据只能标“未复现/未关闭”。</em></span>
@@ -112,7 +120,9 @@
 <span style="color:#6e7681">| IT-DIR-002 首轮 | 断言脚本读错观察点 | IT-DIR-002 | 修正后重跑 run-20260929-02b；首轮保留为无效 |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
+
 ## 5. 覆盖复算（对照方案分母）
+
 
 <span style="color:#1f6feb"><em>**本节目的**：对照方案分母复算覆盖。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：方案 §3 每个来源 ID 与其设计验证项（VRC）逐条对照：Case 状态如何变化、Gap 是否关闭、NOT_RUN 保留在哪；除 Verdict 外记录三列——结果已知性（结果是否可独立判定/是否有未知分支）、副作用（Case 执行后是否改变被测状态/调用了哪些外部资源/变更了哪些持久化数据）、清理状态（资源是否已释放/状态是否回滚基线/未清理项是否登记）。覆盖复算以本报告事实为准，不以计划口径代替。</em></span>
@@ -132,7 +142,9 @@
 <span style="color:#6e7681">| 系统并发预算 | — | （Gap） | NOT_RUN | G-EX-2 保留 |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
+
 ## 6. 缺陷与残余风险
+
 
 <span style="color:#1f6feb"><em>**本节目的**：失败追到缺陷，残余风险显式。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：每个 FAIL 关联缺陷 ID、严重度、状态与回归 Case；残余风险写触发条件与影响，不写“重试即可”。</em></span>
@@ -142,7 +154,9 @@
 - 缺陷清单（关联 Case 与 Run）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">ENV-3（P1）：受控时钟模块故障，关联 IT-DIR-004，修复中</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 残余风险：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">预算未验证前，系统层不得引用本层并发结论</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
+
 ## 7. Gate 结论与建议
+
 
 <span style="color:#1f6feb"><em>**本节目的**：按计划的 Gate 规则给结论与建议。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：接受/条件接受/拒绝及依据；开放问题与责任方；报告不代替批准决定。</em></span>
@@ -152,7 +166,9 @@
 - Gate 结论（接受/条件接受/拒绝）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">条件接受：ENV-3 修复并补跑 IT-DIR-004</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 开放问题与责任方：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">ENV-3 / 测试平台组 / 本迭代</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
+
 ## 8. 未决项
+
 
 <span style="color:#1f6feb"><em>**本节目的**：未决项有主、有期限。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：逐条登记；无未决项时写经核对的“无”。</em></span>

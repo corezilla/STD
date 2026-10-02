@@ -27,7 +27,9 @@
 > 外部不可变证据；不要在文档内容中伪造包含自身的 commit hash。
 <!-- STD_DOCUMENT_COVER_END -->
 
+
 ## 1. 范围、版本与目标环境
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -38,7 +40,9 @@
 完成检查：值班人员不依赖作者口头解释，也能判断能否开始、何时停止以及如何保存操作证据。
 </details>
 
+
 ## 2. Architecture、Topology 与依赖
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -49,7 +53,9 @@
 完成检查：值班人员不依赖作者口头解释，也能判断能否开始、何时停止以及如何保存操作证据。
 </details>
 
+
 ## 3. Hardware/Software/Firmware Prerequisites
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -60,7 +66,9 @@
 完成检查：值班人员不依赖作者口头解释，也能判断能否开始、何时停止以及如何保存操作证据。
 </details>
 
+
 ## 4. Package、Image、Bitstream 与 Integrity Check
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -71,7 +79,9 @@
 完成检查：值班人员不依赖作者口头解释，也能判断能否开始、何时停止以及如何保存操作证据。
 </details>
 
+
 ## 5. 安装、部署、烧录或装配步骤
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -82,7 +92,9 @@
 完成检查：值班人员不依赖作者口头解释，也能判断能否开始、何时停止以及如何保存操作证据。
 </details>
 
+
 ## 6. 配置、Secret、Certificate 与权限
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -93,7 +105,9 @@
 完成检查：值班人员不依赖作者口头解释，也能判断能否开始、何时停止以及如何保存操作证据。
 </details>
 
+
 ## 7. 数据初始化、Migration 与 Compatibility
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -104,7 +118,9 @@
 完成检查：值班人员不依赖作者口头解释，也能判断能否开始、何时停止以及如何保存操作证据。
 </details>
 
+
 ## 8. Verification、Smoke Test 与 Acceptance
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -115,7 +131,9 @@
 完成检查：值班人员不依赖作者口头解释，也能判断能否开始、何时停止以及如何保存操作证据。
 </details>
 
+
 ## 9. Upgrade、Rollback 与 Disaster Recovery
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -126,7 +144,9 @@
 完成检查：值班人员不依赖作者口头解释，也能判断能否开始、何时停止以及如何保存操作证据。
 </details>
 
+
 ## 10. Uninstall、Cleanup 与交付记录
+
 
 <details>
 <summary>本节编写建议</summary>

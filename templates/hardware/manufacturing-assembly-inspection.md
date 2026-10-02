@@ -27,7 +27,9 @@
 > 外部不可变证据；不要在文档内容中伪造包含自身的 commit hash。
 <!-- STD_DOCUMENT_COVER_END -->
 
+
 ## 1. 产品、Revision、范围与制造基线
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -38,7 +40,9 @@
 完成检查：下游能够据此选择或制作对象，并知道超出限制时如何判退或提交变更。
 </details>
 
+
 ## 2. Applicable Drawings、BOM、工艺和标准
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -49,7 +53,9 @@
 完成检查：下游能够据此选择或制作对象，并知道超出限制时如何判退或提交变更。
 </details>
 
+
 ## 3. Material、器件、来料检验与可追溯性
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -60,7 +66,9 @@
 完成检查：下游能够据此选择或制作对象，并知道超出限制时如何判退或提交变更。
 </details>
 
+
 ## 4. 制造与装配流程
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -75,7 +83,9 @@
 |---|---|---|---|---|---|
 | <!-- TODO --> | | | | | |
 
+
 ## 5. 焊接、清洁、防护和特殊工艺
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -86,7 +96,9 @@
 完成检查：下游能够据此选择或制作对象，并知道超出限制时如何判退或提交变更。
 </details>
 
+
 ## 6. ESD、Safety 与环境控制
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -97,7 +109,9 @@
 完成检查：下游能够据此选择或制作对象，并知道超出限制时如何判退或提交变更。
 </details>
 
+
 ## 7. Inspection、AOI/X-ray、尺寸与电气检查
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -108,7 +122,9 @@
 完成检查：下游能够据此选择或制作对象，并知道超出限制时如何判退或提交变更。
 </details>
 
+
 ## 8. Programming、Calibration 与 Serialization
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -119,7 +135,9 @@
 完成检查：下游能够据此选择或制作对象，并知道超出限制时如何判退或提交变更。
 </details>
 
+
 ## 9. Nonconformance、Rework、Repair 与 Deviation
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -130,7 +148,9 @@
 完成检查：下游能够据此选择或制作对象，并知道超出限制时如何判退或提交变更。
 </details>
 
+
 ## 10. Acceptance、包装、存储、运输和交付记录
+
 
 <details>
 <summary>本节编写建议</summary>

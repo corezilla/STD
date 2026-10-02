@@ -33,7 +33,9 @@ backpressure 和错误路径都要能落到 RTL/约束/测试文件。示例必�
 编写规范见 docs/design-writing-guide.md。
 -->
 
+
 ## 1. 用途、功能与输入冻结
+
 
 <!-- 编写建议：先用可观察的输入、RTL 处理和输出说明这段 FPGA 程序解决什么问题，再固定器件/板卡、接口契约及版本。功能项应能由测试向量判定，而不是只列 block 名；数字目标写清时钟、负载、stall 和拓扑条件。 -->
 
@@ -87,7 +89,9 @@ backpressure 和错误路径都要能落到 RTL/约束/测试文件。示例必�
 | Constraint ID / 上级基线与决定状态 | 适用条件与计量边界 | 继承预算或行为约束 | 可自行选择/不可改变 | 本地落实/内部再分配 | 本地验证与系统组合验证/责任 | 差距/变更影响/证据状态 |
 |---|---|---|---|---|---|---|
 
+
 ## 2. Top-level、模块与实现文件
+
 
 <!-- 编写建议：给出自研 FPGA 程序的顶层 RTL 架构图，框中使用真实 block 名，区分数据、控制、时钟/复位边界。逐 block 写职责、输入输出、所属时钟域、源文件及 Owner；该图不是芯片厂商硬件资源总图。 -->
 
@@ -103,7 +107,9 @@ flowchart LR
 |---|---|---|---|---|---|---|
 | B-001 | `input_queue` | 缓冲并施加 backpressure | core_clk/core_rst_n | AXI-S | `rtl/input_queue.sv` | RTL |
 
+
 ## 3. 数据面端到端流程
+
 
 <!-- 编写建议：用流程/时序图和代表 packet 从输入握手走到输出，逐阶段说明格式变化、buffer、延迟、仲裁和 backpressure。边界向量要覆盖最短/最长包、持续 stall、非法长度及复位中的在途数据；不能只画三块方框。 -->
 
@@ -113,7 +119,9 @@ flowchart LR
 
 说明 packet/transaction 的进入、变换、存储和输出；提供典型和边界示例向量。
 
+
 ## 4. 控制面、CSR 与软件交互
+
 
 <!-- 编写建议：先列 RTL 拥有和引用的 Data/Type ID、CSR/Command/Status/Interface Member ID 及其唯一机器源；每项说明字段/位宽、复位值、访问权限、读写副作用、时钟域、握手和错误指示。驱动将状态转换成系统 Error ID 的边界必须明确，RTL 私有异常不直接冒充公共错误码。 -->
 
@@ -128,7 +136,9 @@ flowchart LR
 | 接口/CSR/信号成员 ID / 上级 Constraint | 机器源 / selector / 基线 | 提供/消费 / RTL模块/端口或未实现 | 软件/板卡承接 | 设计 V → 仿真 Case / 系统组合验证 |
 |---|---|---|---|---|
 
+
 ## 5. 内部协议、状态机和 backpressure
+
 
 <!-- 编写建议：先列模块间 Interface/Member ID、发送/接收端、数据类型、valid/ready 或其他握手、顺序/背压/超时和拒绝条件；已有协议/类型引用固定来源，新增本地信号逐字段定义。接口错误须追到 CSR/事件或上级 Error ID 映射，不止写 `error`。 -->
 
@@ -138,7 +148,9 @@ flowchart LR
 
 明确 valid/ready、ordering、queue depth、arbitration、fence 和资源耗尽行为。
 
+
 ## 6. Clock、Reset 与 CDC/RDC
+
 
 <!-- 编写建议：逐时钟域定义来源、频率范围、复位极性/同步方式、释放顺序和跨域路径；为每条 CDC/RDC 指定具体结构、约束文件与验证证据。说明复位发生于在途传输时的输出有效性及重新准入条件。 -->
 
@@ -146,7 +158,9 @@ flowchart LR
 |---|---|---|---|---|---|
 | core_clk | 300 MHz PLL | sync active-low | host→core | async FIFO | `constraints.xdc` |
 
+
 ## 7. Memory、DMA、buffer 与一致性
+
 
 <!-- 编写建议：从输入速率、最坏 stall 与并发数推导 FIFO/BRAM/外存容量，连同描述符和余量计入上级预算。逐资源说明读写者、地址/对齐、可见顺序、溢出和恢复；DMA 仅在确实存在时填写，不为满足模板虚构。 -->
 
@@ -156,7 +170,9 @@ flowchart LR
 |---|---|---|---|---|---|
 | <!-- TODO --> | | | | | |
 
+
 ## 8. 错误、隔离、恢复与可观测性
+
 
 <!-- 编写建议：从代表故障事实出发，分别写检测点、受影响数据范围、隔离动作、CSR/中断/计数器反馈、恢复前提和数据有效性。错误应能追到驱动或系统公共错误的映射，不能用单一 `error` 信号覆盖所有原因。 -->
 
@@ -164,7 +180,9 @@ flowchart LR
 |---|---|---|---|---|---|
 | malformed packet | header check | drop current packet | ERR_FORMAT + counter | next packet | output absent |
 
+
 ## 9. 资源、频率、延迟、吞吐与功耗预算
+
 
 <!-- 编写建议：按固定器件、工具版本和真实约束推导 LUT/FF/BRAM/DSP、时序、延迟与吞吐目标，区分估算、综合、布局布线和板级测量。每个数值给单位、条件、余量与证据级别；局部 beat/cycle 不等于整机端到端吞吐。 -->
 
@@ -175,13 +193,17 @@ flowchart LR
 注明器件、工具版本、约束、利用率假设和 evidence 等级。关联 §1.1 的 Constraint ID，
 按相同拓扑、负载和计量边界校核内部再分配，区分本地结果与尚待系统验证的预算。
 
+
 ## 10. 软件模型、仿真器与 golden contract
+
 
 <!-- 编写建议：定义模型与 RTL 共同接受的输入格式、输出比较规则、容差/bit-exact 范围及错误向量。说明模型版本和对真实硬件的校准边界；模型与 RTL 同源复制算法时不能把互相一致误当独立正确性证据。 -->
 
 定义共同输入输出、bit-exact/tolerance 规则、错误语义、测试向量和实测校准方式。
 
+
 ## 11. 实现计划与交付物
+
 
 <!-- 编写建议：按接口冻结、核心 RTL、约束、testbench、综合与板级集成的依赖顺序安排任务，每项落到文件/构建目标和可检查完成条件。需要软件或板卡配合的接口评审应前置，不用“完成 FPGA 开发”代替实施步骤。 -->
 
@@ -189,7 +211,9 @@ flowchart LR
 |---:|---|---|---|---|
 | 1 | 输入队列 | `rtl/input_queue.sv`、`tb/input_queue_tb.sv` | interface approved | lint + unit pass |
 
+
 ## 12. Verification 与验收
+
 
 <!-- 编写建议：逐功能、不变量及上级 Constraint ID 给出方法、输入条件、独立 Oracle、责任方和证据位置。区分仿真、formal、CDC/RDC、时序实现与板级联调；一项本地 PASS 不能关闭系统组合或真实负载要求。 -->
 
@@ -203,7 +227,9 @@ flowchart LR
 
 覆盖 lint、CDC/RDC、仿真、formal、综合、实现、时序和板级；未运行不得写 PASS。
 
+
 ## 13. Platform Profile、风险与未决问题
+
 
 <!-- 编写建议：明确器件型号、封装、速度等级、工具链与板卡差异，并记录会改变时序/资源/接口结论的未决事实。每个问题给 Owner、最晚关闭 Gate、所需实测/FAE/评审证据；不要用不明平台参数生成肯定结论。 -->
 

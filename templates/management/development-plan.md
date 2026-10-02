@@ -27,7 +27,9 @@
 > 外部不可变证据；不要在文档内容中伪造包含自身的 commit hash。
 <!-- STD_DOCUMENT_COVER_END -->
 
+
 ## 1. 目标、范围与交付产品
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -40,7 +42,9 @@
 
 注明 software / firmware / FPGA / mixed domain。
 
+
 ## 2. 生命周期模型与开发方法
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -51,7 +55,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 3. 组织、职责和 authority
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -62,7 +68,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 4. 工作分解、里程碑、依赖与资源
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -73,7 +81,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 5. 需求、设计、实现与集成方法
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -84,7 +94,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 6. Coding/RTL/Documentation Standards
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -95,7 +107,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 7. Toolchain、环境、版本与可重复构建
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -106,7 +120,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 8. Review、Verification、Validation 与 Gate
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -117,7 +133,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 9. 配置、变更、问题和缺陷管理
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -128,7 +146,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 10. 安全、质量、供应链与第三方依赖
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -139,7 +159,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 11. 发布、维护、迁移与退役
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -150,7 +172,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 12. 度量、报告、风险与 Tailoring
+
 
 <details>
 <summary>本节编写建议</summary>

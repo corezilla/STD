@@ -27,7 +27,9 @@
 > 外部不可变证据；不要在文档内容中伪造包含自身的 commit hash。
 <!-- STD_DOCUMENT_COVER_END -->
 
+
 ## 1. Security scope、资产与信任边界
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -38,7 +40,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 2. 威胁模型、攻击面与假设
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -49,7 +53,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 3. 身份、认证、授权与最小权限
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -60,7 +66,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 4. Secret、Key、Credential 与轮换
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -71,7 +79,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 5. 数据分类、隐私、加密与隔离
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -82,7 +92,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 6. 软件、Firmware、FPGA、Hardware 和供应链安全
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -93,7 +105,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 7. Secure Build、签名、更新与 Rollback Protection
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -104,7 +118,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 8. Logging、Audit、Detection 与 Incident Response
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -115,7 +131,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 9. Security Verification、Pen Test 与 Evidence
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -126,7 +144,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 10. Vulnerability、Exception、Residual Risk 与 Gate
+
 
 <details>
 <summary>本节编写建议</summary>

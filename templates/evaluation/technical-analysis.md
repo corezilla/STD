@@ -27,7 +27,9 @@
 > 外部不可变证据；不要在文档内容中伪造包含自身的 commit hash。
 <!-- STD_DOCUMENT_COVER_END -->
 
+
 ## 1. 决策问题与目标
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -38,7 +40,9 @@
 完成检查：读者可以按相同前提复算判断，并知道哪些新证据会触发复审。
 </details>
 
+
 ## 2. 范围、边界与当前基线
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -49,7 +53,9 @@
 完成检查：读者可以按相同前提复算判断，并知道哪些新证据会触发复审。
 </details>
 
+
 ## 3. 备选方案与对比维度
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -60,7 +66,9 @@
 完成检查：读者可以按相同前提复算判断，并知道哪些新证据会触发复审。
 </details>
 
+
 ## 4. 方法、数据源与可复现性
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -71,7 +79,9 @@
 完成检查：读者可以按相同前提复算判断，并知道哪些新证据会触发复审。
 </details>
 
+
 ## 5. 假设、单位、拓扑与证据等级
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -83,7 +93,9 @@
 
 对 modeled、simulated、estimated 和 measured 结果明确分类。
 
+
 ## 6. 结果与敏感性
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -94,7 +106,9 @@
 完成检查：读者可以按相同前提复算判断，并知道哪些新证据会触发复审。
 </details>
 
+
 ## 7. 不确定性、限制和反例
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -105,7 +119,9 @@
 完成检查：读者可以按相同前提复算判断，并知道哪些新证据会触发复审。
 </details>
 
+
 ## 8. Trade-off 与建议
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -116,7 +132,9 @@
 完成检查：读者可以按相同前提复算判断，并知道哪些新证据会触发复审。
 </details>
 
+
 ## 9. 验证 Gate 与后续行动
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -127,7 +145,9 @@
 完成检查：读者可以按相同前提复算判断，并知道哪些新证据会触发复审。
 </details>
 
+
 ## 10. 需求、ADR、设计和证据追踪
+
 
 <details>
 <summary>本节编写建议</summary>

@@ -56,7 +56,9 @@
 
 <span style="color:#1f6feb"><em>**完成条件**：任一条目能报出状态、依据与下一步；计划里没有任何执行结论。</em></span>
 
+
 ## 1. 目标、范围与测试构成
+
 
 <span style="color:#1f6feb"><em>**本节目的**：固定单元层测试活动的范围与构成清单。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：验证对象与不证明什么；构成＝方案×1＋Case 文档×N＋模块/契约交接出口；排除项及 tailoring 依据。</em></span>
@@ -80,7 +82,9 @@
 <span style="color:#6e7681">| 契约层交接 | 入口未定义 | wire 互操作 | Blocked（G-EX-1） |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
+
 ## 2. 被测基线与变更重跑范围
+
 
 <span style="color:#1f6feb"><em>**本节目的**：固定单元层基线与变更→重跑映射。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：设计文档与源码、依赖、构建环境版本；哪些变化触发哪些 Case 重跑；重跑生成新 Run 与新报告，不覆盖旧失败。</em></span>
@@ -90,7 +94,9 @@
 - 设计 / 源码 / 依赖基线：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">EX-ISD/v1 修订 2；教学 C++ 目标；无外部依赖</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 变更 → 重跑范围规则：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">decode_one 签名变化→方案重裁＋全部 Case 重跑；私有 helper 重构→受影响 Case 复跑</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
+
 ## 3. 执行前检（Go / No-Go）
+
 
 <span style="color:#1f6feb"><em>**本节目的**：开始执行前逐项 Go/No-Go，全部通过才进入 §4。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：方案就绪度（清单无未登记缺口且版本固定）；Case 实现状态盘点（未 Implemented 的 Case 明确处理）；环境与工具（构建可用、依赖齐、权限具备）；构建接线（干净全量交付构建通过、消费者链接实际交付库、导出/注册项同步）；代码 review 通过（tests.code-review-checklist 全部必查项通过；BLOCKED 项不得进入测试）；测试资产/数据版本对齐（与设计 §13 可冻结资产清单对账）。任一不满足记 Blocked 并登记缺口，不静默降级执行。</em></span>
@@ -115,7 +121,9 @@
 <span style="color:#6e7681">| 环境与工具 | c++ --version 正常、向量集在位 | 构建与运行可用 | 环境性 Blocked，不静默换工具链 |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
+
 ## 4. 环境实例分配（plan 编排）
+
 
 <span style="color:#1f6feb"><em>**本节目相**：把方案 §1.7 的环境类型落实为具体的**实例编号**，并分配给具体 Case——同一类型可多套（如多 docker 用于并行），编号与分配是 plan 的责任，Case 只引用编号。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：列出本计划分配的全部 ENV 实例（编号 + 类型 + 具体配置/位置 + Owner + 分配给哪些 Case + 准备时限 + 状态）；ENV 实例类型与方案 §1.7 类型一致；准备失败标 Blocked 并登记缺口，不静默换其他实例。</em></span>
@@ -137,7 +145,9 @@
 </span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
+
 ## 5. 执行流程（逐 Case 作业序列）
+
 
 <span style="color:#1f6feb"><em>**本节目的**：给执行者（含 Agent）一条从头到尾的作业序列。</em></span>
 
@@ -178,7 +188,9 @@
 - 失败（FAIL）处理路径：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">保留现场与 Run 证据→登记缺陷并关联 Case ID→继续后续 Case；不重跑覆盖原失败</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 阻塞/无效（BLOCKED/INVALID）处理路径：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">BLOCKED（编译器缺失）→环境性阻塞整批停并登记；INVALID（注入未命中/并发未交错）→修 Case 或标无效，不记 PASS</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
+
 ## 6. 环境操作（搭建 / 复位 / 隔离 / 清理）
+
 
 <span style="color:#1f6feb"><em>**本节目的**：环境操作可复现。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：搭建、每 Case 复位、并行隔离键、清理的具体命令或入口；环境不可重建即 Blocked；单环境串行时写清 case 前检查、软复位/重启/驱动恢复阶梯与时限，失败后确认回到基线，不能只 kill 后继续。</em></span>
@@ -189,7 +201,9 @@
 - 隔离键与清理：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">无共享资源；并发 Case join 后才销毁输入</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 复位阶梯与时限（软复位→重启→驱动恢复）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">无外部资源；每 Case 重建输入即复位（无阶梯，教学例）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
+
 ## 7. 证据与 Run 记录规则
+
 
 <span style="color:#1f6feb"><em>**本节目的**：Run 证据规则固定。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：Run ID 命名（对象-时间或序号）、每次 Run 保存的命令/版本/stdout/退出码/种子、保存位置与保留期、脱敏要求；重跑生成新 Run 不覆盖。</em></span>
@@ -199,7 +213,9 @@
 - Run ID 规则与证据位置：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">run-YYYYMMDD-NN；tests/unit/reports/<run-id>/</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 保存内容与脱敏要求：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">命令、编译器版本、源 hash、stdout、退出码；无敏感数据</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
+
 ## 8. 报告产出与 Gate 规则
+
 
 <span style="color:#1f6feb"><em>**本节目的**：定义报告产出与 Gate 规则。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：全部 Case 走完后（或按出口准则提前结束）生成 `tests.unit-test-report` 实例；Gate 建议规则（覆盖闭合或缺口有主、失败分级）在此固定，报告只按规则给建议不越权批准。> 失败降级路径：plan 整体 BLOCKED（环境性）→ 该轮不生成 report 实例，只记缺口与原因；plan 部分 Case 失败 → 仍生成 report（含 FAIL/INVALID 完整记录），后续报告生成失败（new-design 等）→ 不掩盖 FAIL，复现状态与修复状态分开记录。</em></span>
@@ -209,7 +225,9 @@
 - 报告生成时机与模板：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">全部 Case 走完或出口准则触发时生成 tests.unit-test-report</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - Gate 建议规则：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">覆盖闭合或缺口有 Owner/Gate；G-EX-1 关闭前契约场景保留 NOT_RUN</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
+
 ## 9. 责任、排期与风险
+
 
 <span style="color:#1f6feb"><em>**本节目的**：责任到人、风险有触发与缓解出口。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：方案维护、Case 编写、执行、评审的责任人与时间窗；风险写触发条件、影响与缓解，不写“重试即可”。</em></span>
@@ -224,7 +242,9 @@
 <span style="color:#6e7681">方案维护＝模块 Owner / 本迭代；执行＝Agent 按 §4 序列；风险“契约入口未定”缓解＝单元结论先行。</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
+
 ## 10. 未决项
+
 
 <span style="color:#1f6feb"><em>**本节目的**：未决项有主、有期限、有关闭条件。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：逐条登记；无未决项时写经核对的“无”。</em></span>

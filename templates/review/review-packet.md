@@ -27,7 +27,9 @@
 > 外部不可变证据；不要在文档内容中伪造包含自身的 commit hash。
 <!-- STD_DOCUMENT_COVER_END -->
 
+
 ## 1. Review 请求与期望决定
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -50,7 +52,9 @@
 
 > `Review Verdict = ACCEPTED` 不会自动将文档升为 Approved，也不会自动激活 runtime 变更。
 
+
 ## 2. Scope、authority 与 reviewers
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -61,7 +65,9 @@
 完成检查：评审意见可定位、可复现；每项未关闭问题有 Owner、关闭条件和再次审查入口。
 </details>
 
+
 ## 3. 冻结基线
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -74,7 +80,9 @@
 
 列出 repository、commit、文件、版本和 SHA-256。
 
+
 ## 4. 变更摘要与设计理由
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -85,7 +93,9 @@
 完成检查：评审意见可定位、可复现；每项未关闭问题有 Owner、关闭条件和再次审查入口。
 </details>
 
+
 ## 5. Requirement、Design、Contract、Test 对齐
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -96,7 +106,9 @@
 完成检查：评审意见可定位、可复现；每项未关闭问题有 Owner、关闭条件和再次审查入口。
 </details>
 
+
 ## 6. 风险、未决项和不阻塞项
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -107,7 +119,9 @@
 完成检查：评审意见可定位、可复现；每项未关闭问题有 Owner、关闭条件和再次审查入口。
 </details>
 
+
 ## 7. 验证命令与结果
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -120,7 +134,9 @@
 
 分开记录 STD structural validation、项目 contract/schema validation 和 runtime/external dependency evidence。每条记录原始命令、原始退出码、关键输出、artifact 路径和执行 commit。
 
+
 ## 8. Review Checklist
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -138,7 +154,9 @@
 - [ ] traceability 和证据可打开
 - [ ] 未发生静默 fallback 或兼容性扩张
 
+
 ## 9. 决定、条件与签署
+
 
 <details>
 <summary>本节编写建议</summary>

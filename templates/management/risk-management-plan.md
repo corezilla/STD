@@ -27,7 +27,9 @@
 > 外部不可变证据；不要在文档内容中伪造包含自身的 commit hash。
 <!-- STD_DOCUMENT_COVER_END -->
 
+
 ## 1. 目标、范围与风险 appetite
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -38,7 +40,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 2. 角色、authority 与升级机制
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -49,7 +53,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 3. 识别、分析、排序和复审方法
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -60,7 +66,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 4. 评分与阈值
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -73,7 +81,9 @@
 
 定义 likelihood、impact、detectability、时间窗口和聚合规则。
 
+
 ## 5. Risk Register
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -88,7 +98,9 @@
 |---|---|---|---|---:|---|---|---|---|
 | <!-- TODO --> | | | | | | | | |
 
+
 ## 6. Mitigation、Contingency 与 Residual Risk
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -99,7 +111,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 7. 技术、进度、成本、安全和供应风险
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -110,7 +124,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 8. 与 Issue、Assumption、Decision 和 Gate 的关系
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -121,7 +137,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 9. 报告、审计和关闭标准
+
 
 <details>
 <summary>本节编写建议</summary>

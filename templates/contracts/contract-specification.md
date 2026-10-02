@@ -27,7 +27,9 @@
 > 外部不可变证据；不要在文档内容中伪造包含自身的 commit hash。
 <!-- STD_DOCUMENT_COVER_END -->
 
+
 ## 1. Contract scope 与 authority
+
 
 <details>
 <summary>编写建议、规范与示例</summary>
@@ -44,7 +46,9 @@
 
 明确机器可读 contract 和说明文档哪个是字段级权威。
 
+
 ## 2. Operation / Message / Event Catalog
+
 
 <details>
 <summary>编写建议、规范与示例</summary>
@@ -68,7 +72,9 @@
 | 成员 ID / 类别 | 机器源 / selector / 版本/revision/hash | request/response/event/error 类型 ID | 正文稳定锚点 | 下游提供/消费 / 实现 / 设计 V → Case |
 |---|---|---|---|---|
 
+
 ## 3. Request、Response、Event 与数据对象
+
 
 <details>
 <summary>编写建议、规范与示例</summary>
@@ -87,7 +93,9 @@
 
 引用 OpenAPI、JSON Schema、Proto、IDL 或 ABI；禁止只给示例不给约束。
 
+
 ## 4. 状态、错误和 blocker catalog
+
 
 <details>
 <summary>编写建议、规范与示例</summary>
@@ -104,7 +112,9 @@
 
 </details>
 
+
 ## 5. 幂等、并发、事务与一致性
+
 
 <details>
 <summary>编写建议、规范与示例</summary>
@@ -119,7 +129,9 @@
 
 </details>
 
+
 ## 6. Pagination、filter、ordering 与 retention
+
 
 <details>
 <summary>编写建议、规范与示例</summary>
@@ -134,7 +146,9 @@
 
 </details>
 
+
 ## 7. 身份、权限、Secret 与多项目隔离
+
 
 <details>
 <summary>编写建议、规范与示例</summary>
@@ -149,7 +163,9 @@
 
 </details>
 
+
 ## 8. 版本、兼容性与迁移
+
 
 <details>
 <summary>编写建议、规范与示例</summary>
@@ -166,7 +182,9 @@
 
 绑定消费方的实际 version/revision/hash；ID 不变不等于兼容。字段改名、枚举/错误变化、删除和替代对照旧基线逐项记录，废弃 ID 不回收，多 backend 分别迁移和验证。
 
+
 ## 9. Positive/Negative fixture 与 validator
+
 
 <details>
 <summary>编写建议、规范与示例</summary>
@@ -181,7 +199,9 @@
 
 </details>
 
+
 ## 10. Requirement → Contract → Test traceability
+
 
 <details>
 <summary>编写建议、规范与示例</summary>
@@ -199,7 +219,9 @@
 | 需求/Constraint | 规则/成员 ID | 设计 V | 承接方/backend | Case / 环境 | Run/状态/缺口 |
 |---|---|---|---|---|---|
 
+
 ## 11. Activation Gate 与未决项
+
 
 <details>
 <summary>编写建议、规范与示例</summary>

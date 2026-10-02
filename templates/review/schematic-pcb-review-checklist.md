@@ -27,7 +27,9 @@
 > 外部不可变证据；不要在文档内容中伪造包含自身的 commit hash。
 <!-- STD_DOCUMENT_COVER_END -->
 
+
 ## 1. Review scope、Revision、Inputs 与 Reviewers
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -38,7 +40,9 @@
 完成检查：评审意见可定位、可复现；每项未关闭问题有 Owner、关闭条件和再次审查入口。
 </details>
 
+
 ## 2. Schematic Checklist
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -55,7 +59,9 @@
 - [ ] 器件 P/N、封装、NC/DNI 和未用引脚处理明确
 - [ ] Test point、debug、measurement 和 bring-up 能力充分
 
+
 ## 3. PCB Stack-up、Placement 与 Routing Checklist
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -72,7 +78,9 @@
 - [ ] BGA breakout、器件 keepout、机械和装配间距可制造
 - [ ] DFM/DFT、panelization、fiducial 和测试点满足生产要求
 
+
 ## 4. SI/PI、Thermal、Mechanical 与 EMC Evidence
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -83,7 +91,9 @@
 完成检查：评审意见可定位、可复现；每项未关闭问题有 Owner、关闭条件和再次审查入口。
 </details>
 
+
 ## 5. BOM、Supply、Lifecycle 与 Alternate Review
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -94,7 +104,9 @@
 完成检查：评审意见可定位、可复现；每项未关闭问题有 Owner、关闭条件和再次审查入口。
 </details>
 
+
 ## 6. Issue Log
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -109,7 +121,9 @@
 |---|---|---|---|---|---|
 | <!-- TODO --> | | | | | |
 
+
 ## 7. Review Decision 与 Release Gate
+
 
 <details>
 <summary>本节编写建议</summary>

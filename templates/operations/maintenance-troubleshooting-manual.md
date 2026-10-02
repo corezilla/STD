@@ -27,7 +27,9 @@
 > 外部不可变证据；不要在文档内容中伪造包含自身的 commit hash。
 <!-- STD_DOCUMENT_COVER_END -->
 
+
 ## 1. 范围、版本、安全与维护权限
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -38,7 +40,9 @@
 完成检查：值班人员不依赖作者口头解释，也能判断能否开始、何时停止以及如何保存操作证据。
 </details>
 
+
 ## 2. System Health、Indicators 与 Diagnostic Entry
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -49,7 +53,9 @@
 完成检查：值班人员不依赖作者口头解释，也能判断能否开始、何时停止以及如何保存操作证据。
 </details>
 
+
 ## 3. Preventive Maintenance
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -60,7 +66,9 @@
 完成检查：值班人员不依赖作者口头解释，也能判断能否开始、何时停止以及如何保存操作证据。
 </details>
 
+
 ## 4. Symptom → Cause → Action Matrix
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -75,7 +83,9 @@
 |---|---|---|---|---|
 | <!-- TODO --> | | | | |
 
+
 ## 5. Software、Firmware、FPGA 与 Hardware Diagnostics
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -86,7 +96,9 @@
 完成检查：值班人员不依赖作者口头解释，也能判断能否开始、何时停止以及如何保存操作证据。
 </details>
 
+
 ## 6. Replace、Repair、Reflash、Reconfigure 与 Calibration
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -97,7 +109,9 @@
 完成检查：值班人员不依赖作者口头解释，也能判断能否开始、何时停止以及如何保存操作证据。
 </details>
 
+
 ## 7. Data Protection、Backup 与 Recovery
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -108,7 +122,9 @@
 完成检查：值班人员不依赖作者口头解释，也能判断能否开始、何时停止以及如何保存操作证据。
 </details>
 
+
 ## 8. Known Issues、Workaround 与 Prohibited Actions
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -119,7 +135,9 @@
 完成检查：值班人员不依赖作者口头解释，也能判断能否开始、何时停止以及如何保存操作证据。
 </details>
 
+
 ## 9. Post-maintenance Verification 与 Service Record
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -130,7 +148,9 @@
 完成检查：值班人员不依赖作者口头解释，也能判断能否开始、何时停止以及如何保存操作证据。
 </details>
 
+
 ## 10. Escalation、RMA、Log Package 与 Closure
+
 
 <details>
 <summary>本节编写建议</summary>

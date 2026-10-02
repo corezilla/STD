@@ -33,13 +33,17 @@
 编写规范见 docs/design-writing-guide.md。
 -->
 
+
 ## 1. 用途、范围与 authority
+
 
 <!-- 编写建议：先说明本文解释哪些对象的业务含义、哪些歧义会影响实现，以及唯一 Schema/IDL 的路径和固定版本。数据字典是阅读视图，不改写机器字段；用一条真实业务事件说明这些对象何时产生和何时失效。 -->
 
 说明谁生产和消费这些数据、解决什么歧义，以及对应机器契约的位置。
 
+
 ## 2. 命名、单位与通用规则
+
 
 <!-- 编写建议：只列全篇反复使用且具有约束力的命名、单位、时间、编码和未知值规则，注明每条规则的来源与适用范围。例子中的容量必须区分 GB 与 GiB；不同边界使用不同单位时写明转换和舍入方法。 -->
 
@@ -49,7 +53,9 @@
 | 容量 | 明确 SI 或 binary unit | `512 GiB` |
 | ID | 稳定、不可复用 | `doc_01H...` |
 
+
 ## 3. 数据结构设计
+
 
 <details>
 <summary>本章编写建议</summary>
@@ -667,7 +673,9 @@ InspectionError {
 
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
+
 ## 4. 跨结构身份、键与关联
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -678,7 +686,9 @@ InspectionError {
 
 </details>
 
+
 ## 5. 跨结构数据流与投影
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -689,7 +699,9 @@ InspectionError {
 
 </details>
 
+
 ## 6. 编码、布局与兼容边界
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -700,7 +712,9 @@ InspectionError {
 
 </details>
 
+
 ## 7. 跨结构实例与验证追踪
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -711,7 +725,9 @@ InspectionError {
 
 </details>
 
+
 ## 8. 实现映射与变更计划
+
 
 <details>
 <summary>本节编写建议</summary>

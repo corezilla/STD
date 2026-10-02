@@ -27,7 +27,9 @@
 > 外部不可变证据；不要在文档内容中伪造包含自身的 commit hash。
 <!-- STD_DOCUMENT_COVER_END -->
 
+
 ## 1. 质量目标、范围与适用标准
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -38,7 +40,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 2. 组织独立性、职责与 authority
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -49,7 +53,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 3. Process、Product 与 Evidence Assurance
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -60,7 +66,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 4. 文档、需求、设计和代码/RTL Review
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -71,7 +79,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 5. Verification、Validation 与 Test Assurance
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -82,7 +92,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 6. Supplier、器件、工具和第三方质量
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -93,7 +105,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 7. Nonconformance、Defect、CAPA 与 Waiver
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -104,7 +118,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 8. 配置审计、发布审计与记录保留
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -115,7 +131,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 9. Metrics、抽查、报告和 Gate
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -126,7 +144,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 10. Tailoring 与改进
+
 
 <details>
 <summary>本节编写建议</summary>

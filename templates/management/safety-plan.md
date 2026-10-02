@@ -27,7 +27,9 @@
 > 外部不可变证据；不要在文档内容中伪造包含自身的 commit hash。
 <!-- STD_DOCUMENT_COVER_END -->
 
+
 ## 1. Safety scope、目标与适用法规
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -38,7 +40,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 2. Safety roles、独立性与 authority
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -49,7 +53,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 3. Hazard Identification and Analysis
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -64,7 +70,9 @@
 |---|---|---|---|---|---|---|
 | <!-- TODO --> | | | | | | |
 
+
 ## 4. Safety Requirements 与 Architecture Controls
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -75,7 +83,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 5. Fault、Failure、FMEA/FTA 与安全状态
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -86,7 +96,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 6. Hardware、Software、Firmware 和操作安全
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -97,7 +109,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 7. Safety Verification、Evidence 与 Case
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -108,7 +122,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 8. Incident、变更影响与残余风险接受
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -119,7 +135,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 9. 生命周期 Gate、签署与记录保留
+
 
 <details>
 <summary>本节编写建议</summary>

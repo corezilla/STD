@@ -15,7 +15,9 @@
 | Template Version | `{{template_version}}` |
 <!-- STD_DOCUMENT_COVER_END -->
 
+
 ## 1. 单元摘要：为什么存在
+
 
 <details>
 <summary>本节编写建议、规范与示例</summary>
@@ -130,7 +132,9 @@
 
 <!-- 记录后解释主要约束如何组合满足上级输入，定位正文和证据；不要复制完整系统设计或机器契约。 -->
 
+
 ## 2. 需求、功能与验收条件
+
 
 <details>
 <summary>本节编写建议、规范与示例</summary>
@@ -175,7 +179,9 @@
 
   <!-- TODO -->
 
+
 ## 3. UI、CLI、服务端点或设备操作面
+
 
 <details>
 <summary>本节编写建议、规范与示例</summary>
@@ -222,7 +228,9 @@
 
   <!-- TODO -->
 
+
 ## 4. 外部边界与依赖
+
 
 <details>
 <summary>本节编写建议、规范与示例</summary>
@@ -280,7 +288,9 @@ DIR 的已有调用方拥有 request 及 records；M101 借用只读输入并产
 
   <!-- TODO -->
 
+
 ## 5. 内部结构与实现位置
+
 
 <details>
 <summary>本节编写建议、规范与示例</summary>
@@ -465,7 +475,9 @@ order 按既定规则排序并构造独立结果。四个源文件是同一 M101
 
   <!-- TODO -->
 
+
 ## 6. 数据结构设计
+
 
 <details>
 <summary>本节编写建议、规范与示例</summary>
@@ -1289,7 +1301,9 @@ InspectionError {
 
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
+
 ## 7. 主流程与数据流
+
 
 <details>
 <summary>本节编写建议、规范与示例</summary>
@@ -1353,7 +1367,9 @@ I1 直接产生 index=2 的 INVALID_INPUT，不能因其类别不匹配而绕过
 |---|---|---|---|---|
 | 1 | <!-- TODO --> | | | |
 
+
 ## 8. 关键算法与业务规则
+
 
 <details>
 <summary>本节编写建议、规范与示例</summary>
@@ -1449,7 +1465,9 @@ R-ORDER 是外部可观察规则，归并仅是本地实现选择；换等价算
 
   <!-- TODO -->
 
+
 ## 9. 接口设计
+
 
 <details>
 <summary>本节编写建议、规范与示例</summary>
@@ -1721,7 +1739,9 @@ submit_inspection(
 
   <!-- 正常及拒绝调用、V/Case/Run -->
 
+
 ## 10. 并发、失败与恢复
+
 
 <details>
 <summary>本节编写建议、规范与示例</summary>
@@ -1835,7 +1855,9 @@ flowchart TD
 
   <!-- TODO -->
 
+
 ## 11. 安全、权限与可观测性
+
 
 <details>
 <summary>本节编写建议、规范与示例</summary>
@@ -1854,7 +1876,9 @@ flowchart TD
 
 <!-- 在此写入本节设计正文。 -->
 
+
 ## 12. 容量、性能与运行限制
+
 
 <details>
 <summary>本节编写建议、规范与示例</summary>
@@ -1908,7 +1932,9 @@ flowchart TD
 
   <!-- TODO / NOT_RUN -->
 
+
 ## 13. 实现步骤与文件清单
+
 
 <details>
 <summary>本节编写建议、规范与示例</summary>
@@ -1980,7 +2006,9 @@ flowchart TD
 
   <!-- TODO -->
 
+
 ## 14. 测试与验收
+
 
 <details>
 <summary>本节编写建议、规范与示例</summary>
@@ -2080,7 +2108,9 @@ VRC-M101-001/C1 用固定 [a1,b2] 判顺序；VRC-M101-004/C7-C8 检查并发不
 
   <!-- TODO -->
 
+
 ## 15. 风险、未决问题与引用
+
 
 <details>
 <summary>本节编写建议、规范与示例</summary>

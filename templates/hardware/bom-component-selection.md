@@ -27,7 +27,9 @@
 > 外部不可变证据；不要在文档内容中伪造包含自身的 commit hash。
 <!-- STD_DOCUMENT_COVER_END -->
 
+
 ## 1. 产品 Variant、Revision 与 BOM authority
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -38,7 +40,9 @@
 完成检查：下游能够据此选择或制作对象，并知道超出限制时如何判退或提交变更。
 </details>
 
+
 ## 2. BOM
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -53,7 +57,9 @@
 |---|---|---|---|---|---:|---|---|
 | <!-- TODO --> | | | | | | | |
 
+
 ## 3. 关键器件选型依据
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -66,7 +72,9 @@
 
 记录电气/机械/热需求、derating、qualification、封装和工具支持。
 
+
 ## 4. Supply、Lead Time、MOQ、Cost 与 Lifecycle Risk
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -77,7 +85,9 @@
 完成检查：下游能够据此选择或制作对象，并知道超出限制时如何判退或提交变更。
 </details>
 
+
 ## 5. Alternate、Second Source 与 Compatibility Gate
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -88,7 +98,9 @@
 完成检查：下游能够据此选择或制作对象，并知道超出限制时如何判退或提交变更。
 </details>
 
+
 ## 6. Compliance、Material Declaration 与 Counterfeit Control
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -99,7 +111,9 @@
 完成检查：下游能够据此选择或制作对象，并知道超出限制时如何判退或提交变更。
 </details>
 
+
 ## 7. Firmware/FPGA/Driver Compatibility
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -110,7 +124,9 @@
 完成检查：下游能够据此选择或制作对象，并知道超出限制时如何判退或提交变更。
 </details>
 
+
 ## 8. Approved Vendor、Quote Evidence 与变更历史
+
 
 <details>
 <summary>本节编写建议</summary>

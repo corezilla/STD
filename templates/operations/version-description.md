@@ -27,7 +27,9 @@
 > 外部不可变证据；不要在文档内容中伪造包含自身的 commit hash。
 <!-- STD_DOCUMENT_COVER_END -->
 
+
 ## 1. Release identity、日期与状态
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -38,7 +40,9 @@
 完成检查：值班人员不依赖作者口头解释，也能判断能否开始、何时停止以及如何保存操作证据。
 </details>
 
+
 ## 2. Included Configuration Items
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -53,7 +57,9 @@
 |---|---|---|---|---|
 | <!-- TODO --> | | | | |
 
+
 ## 3. 新功能、修复与行为变化
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -64,7 +70,9 @@
 完成检查：值班人员不依赖作者口头解释，也能判断能否开始、何时停止以及如何保存操作证据。
 </details>
 
+
 ## 4. Breaking Change、Migration 与 Deprecation
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -75,7 +83,9 @@
 完成检查：值班人员不依赖作者口头解释，也能判断能否开始、何时停止以及如何保存操作证据。
 </details>
 
+
 ## 5. Known Issues、限制与 Workaround
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -86,7 +96,9 @@
 完成检查：值班人员不依赖作者口头解释，也能判断能否开始、何时停止以及如何保存操作证据。
 </details>
 
+
 ## 6. Build、Package、Bitstream、BOM 与 Provenance
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -97,7 +109,9 @@
 完成检查：值班人员不依赖作者口头解释，也能判断能否开始、何时停止以及如何保存操作证据。
 </details>
 
+
 ## 7. Verification、Security、License 与 Release Evidence
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -108,7 +122,9 @@
 完成检查：值班人员不依赖作者口头解释，也能判断能否开始、何时停止以及如何保存操作证据。
 </details>
 
+
 ## 8. Install/Upgrade/Rollback Reference
+
 
 <details>
 <summary>本节编写建议</summary>

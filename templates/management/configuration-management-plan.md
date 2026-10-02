@@ -27,7 +27,9 @@
 > 外部不可变证据；不要在文档内容中伪造包含自身的 commit hash。
 <!-- STD_DOCUMENT_COVER_END -->
 
+
 ## 1. 范围、目标与 CM authority
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -38,7 +40,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 2. Configuration Item Registry
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -53,7 +57,9 @@
 |---|---|---|---|---|---|
 | <!-- TODO --> | | | | | |
 
+
 ## 3. Baseline、版本、标签和命名规则
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -64,7 +70,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 4. Change Request、评估、批准与实施
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -75,7 +83,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 5. 状态记录、审计与 traceability
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -86,7 +96,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 6. Branch、Build、Release 和 Artifact 保留
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -97,7 +109,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 7. Hardware Revision、BOM、Firmware 与校准数据一致性
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -108,7 +122,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 8. Supplier、第三方组件与许可证
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -119,7 +135,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 9. Access Control、备份和恢复
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -130,7 +148,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 10. CM Review、度量和异常处理
+
 
 <details>
 <summary>本节编写建议</summary>

@@ -27,7 +27,9 @@
 > 外部不可变证据；不要在文档内容中伪造包含自身的 commit hash。
 <!-- STD_DOCUMENT_COVER_END -->
 
+
 ## 1. 接口目的、范围与双方 authority
+
 
 <details>
 <summary>编写建议、规范与示例</summary>
@@ -42,7 +44,9 @@
 
 </details>
 
+
 ## 2. 接口注册表
+
 
 <details>
 <summary>编写建议、规范与示例</summary>
@@ -66,7 +70,9 @@
 | 接口族#成员 ID / 类别 | 机器源 / selector / 版本/revision/hash | 正文 Document ID / 版本 / 稳定锚点 | 编目范围/缺口 | 下游提供/消费 / 模块 / 设计 V / Case |
 |---|---|---|---|---|
 
+
 ## 3. 传输与物理边界
+
 
 <details>
 <summary>编写建议、规范与示例</summary>
@@ -83,7 +89,9 @@
 
 按需描述 function call、HTTP、message、file、PCIe、AXI、pin、connector 或 mechanical datum。
 
+
 ## 4. 数据、命令与 Schema
+
 
 <details>
 <summary>编写建议、规范与示例</summary>
@@ -102,7 +110,9 @@
 
 逐对象保留完整机器源阅读视图及类型/字段 ID，给类型、单位、范围、必填/默认/null、条件有效性、数组计数及兼容；真实二进制 ABI 才补 endianness/alignment。标准接口注明标准号/版本/适用部分和项目绑定，不能仅贴标准链接。
 
+
 ## 5. 状态机、顺序和时序
+
 
 <details>
 <summary>编写建议、规范与示例</summary>
@@ -117,7 +127,9 @@
 
 </details>
 
+
 ## 6. 错误、timeout、重试、幂等和恢复
+
 
 <details>
 <summary>编写建议、规范与示例</summary>
@@ -134,7 +146,9 @@
 
 </details>
 
+
 ## 7. 并发、流控、容量与性能
+
 
 <details>
 <summary>编写建议、规范与示例</summary>
@@ -149,7 +163,9 @@
 
 </details>
 
+
 ## 8. 安全、身份、权限和隔离
+
 
 <details>
 <summary>编写建议、规范与示例</summary>
@@ -164,7 +180,9 @@
 
 </details>
 
+
 ## 9. 版本协商、兼容矩阵与弃用
+
 
 <details>
 <summary>编写建议、规范与示例</summary>
@@ -179,7 +197,9 @@
 
 </details>
 
+
 ## 10. Contract fixture、验证与证据
+
 
 <details>
 <summary>编写建议、规范与示例</summary>
@@ -197,7 +217,9 @@
 | 成员/规则 → 设计 V | 提供/消费与 backend | Case / 所需环境 | 实现/运行状态 | Run/证据或缺口 |
 |---|---|---|---|---|
 
+
 ## 11. 未决项与双方批准
+
 
 <details>
 <summary>编写建议、规范与示例</summary>

@@ -54,7 +54,9 @@
 
 <span style="color:#1f6feb"><em>**完成条件**：本 Case 能报出实现状态，且沿 Case ID 可追到方案清单行与 Run 报告。</em></span>
 
+
 ## 1. Case 概述与责任
+
 
 <span style="color:#1f6feb"><em>**本节目的**：把方案清单里这行责任摘要展开成可实施的边界。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：Case ID、来源 ID、设计验证项、分类与优先级引用方案清单行；要测什么、明确不测什么；本 Case 的失败意味着什么。</em></span>
@@ -65,7 +67,9 @@
 - 要测什么（责任展开）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">两个并发请求经 run_batch 提交，各自完整返回或按准入规则 Busy，输入不变</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 明确不测什么 / 失败含义：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">不测系统并发预算与跨子系统业务流；失败含义＝准入或快照语义破坏</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
+
 ## 2. 被测入口与前置
+
 
 <span style="color:#1f6feb"><em>**本节目的**：固定被测入口与前置状态。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：被测入口完整声明；状态型初态必须经公开入口构造，不直改内部状态；fixture/向量引用其版本，不复制字节；替身/夹具/受控时钟等测试资产链接其 `tests.asset-design` 文档，契约以该文档为唯一 authority。</em></span>
@@ -82,7 +86,9 @@
 - 环境类型 + ENV 实例编号（引用 tests.subsystem-test-plan §4 分配）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">冻结构造记录与并发请求脚本（方案冻结集 v1.0）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 依赖的测试资产（tests.asset-design 文档）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">CLK-DIR 受控时钟 / FAKE-REG 注册 fake（契约与自检见 asset 文档）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
+
 ## 3. 输入构造
+
 
 <span style="color:#1f6feb"><em>**本节目的**：逐参数固定输入。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：每个参数的类型、取值、构造方法; stream/time-domain mock 设置（流式/事件驱动/SSE 用例）：用例 §2 的 fake 须提供 advance(time_ms) / emit(event) / drain() 接口；测试代码 §4 用 advance 推进时间、用 emit 触发事件；用例 §5 用 drain() 后判断言 (避免 sleep 真实时钟)。；冻结值或生成规则；非法与边界值的取舍理由；规模（数量、分页、复杂度）与时间域（wall/CPU、观测开销）按目标预算写清。</em></span>
@@ -93,7 +99,9 @@
 - 边界/非法取值及理由：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">并发提交＝真实线程＋join；同上限串行对照见 IT-DIR-004</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 规模 / 时间域（数量、分页、复杂度、观测开销）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">并发上限 1 请求；排队等待以受控时钟计量（wall 时间域）</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
+
 ## 4. 执行步骤与观察点
+
 
 <span style="color:#1f6feb"><em>**本节目的**：固定动作序列与观察点。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：按序写动作与观察对象（公开返回、公开查询、权威记录、边界替身调用序）；替身调用序可断言但不证明真实协议。；执行超时与中断（单 Case 单线程超时（默认 30s，可调）+ 替身调用次数上限（默认 1000 次，超限视为 Invalid 而非 Pass）+ 观察点轮询间隔（默认 10ms，单点等待不超过 5s）；FAKE 注入未命中或超时视为该 Case 失败；Case 内中断不应改变被测全局状态、需用 RAII 风格恢复/或回滚到基线）。</em></span>
@@ -110,7 +118,9 @@
 | 3 | 查询公开状态 | 占用数回落为 0 |</span>
 <!-- STD_TEMPLATE_EXAMPLE_END -->
 
+
 ## 5. 独立 Oracle 与预期结果
+
 
 <span style="color:#1f6feb"><em>**本节目的**：固定独立 Oracle 与互斥预期。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：Expected 由独立来源或可手算规则推导，不得调用被测实现复算；输出互斥（成功/各错误分支无第三态）；允许误差或精确比较方法；数值/模型输出分项判据——reference 重复性、真实输入回放、整模型比较分别判定，误差门限来自目标算法要求而非统一常数；判据语义以设计验证项（VRC）为唯一权威，本文细化为可执行断言但不改写，冲突回溯设计修订。</em></span>
@@ -122,7 +132,9 @@
 - 独立 Oracle 来源与推导：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">DIR 准入规则＋人工判定，不调用被测实现复算</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 互斥预期（成功 / 各错误分支）：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">两请求各自完整结果，或第二个 Busy；无第三态；输入不变</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
+
 ## 6. 错误路径、副作用与清理
+
 
 <span style="color:#1f6feb"><em>**本节目的**：固定错误路径、副作用与清理。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：每个错误出口的触发与表现；副作用断言（输入不变、无半成品、资源释放）；清理与失败现场保留。</em></span>
@@ -132,7 +144,9 @@
 - 错误出口与表现：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">Busy 出口＝可判定错误，不静默丢弃</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 - 副作用断言与清理：<!-- TODO --><!-- STD_TEMPLATE_EXAMPLE_BEGIN --><span style="color:#6e7681">请求结束后无残留会话；临时目录按隔离键清理</span><!-- STD_TEMPLATE_EXAMPLE_END -->
 
+
 ## 7. 自动化位置与状态
+
 
 <span style="color:#1f6feb"><em>**本节目的**：固定自动化位置与实现状态。</em></span>
 <span style="color:#1f6feb"><em>**必须写清楚**：测试文件（`tests/integration/cases/IT-<对象>-<NNN>.py`，文件名＝Case ID＋语言后缀，与本文档 Document ID 同 stem）与测试函数名（描述性）；被本子系统 Case 复用的辅助函数放可执行 cases 树的 `tests/integration/cases/support/`（跨模块工具走 `tests/common/`）；单 Case 执行命令；实现状态 Planned/Implemented；执行与 Verdict 归 Run 报告。</em></span>

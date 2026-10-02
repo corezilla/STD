@@ -27,7 +27,9 @@
 > 外部不可变证据；不要在文档内容中伪造包含自身的 commit hash。
 <!-- STD_DOCUMENT_COVER_END -->
 
+
 ## 1. Board/System Revision、目标与安全边界
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -38,7 +40,9 @@
 完成检查：值班人员不依赖作者口头解释，也能判断能否开始、何时停止以及如何保存操作证据。
 </details>
 
+
 ## 2. Required Equipment、Firmware、Bitstream 与 Fixture
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -49,7 +53,9 @@
 完成检查：值班人员不依赖作者口头解释，也能判断能否开始、何时停止以及如何保存操作证据。
 </details>
 
+
 ## 3. Visual、BOM、Assembly 与 Resistance Pre-check
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -60,7 +66,9 @@
 完成检查：值班人员不依赖作者口头解释，也能判断能否开始、何时停止以及如何保存操作证据。
 </details>
 
+
 ## 4. Power Rail Bring-up Sequence
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -75,7 +83,9 @@
 |---|---|---:|---|---|---|
 | <!-- TODO --> | | | | | |
 
+
 ## 5. Clock、Reset、Boot、JTAG 和 Programming
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -86,7 +96,9 @@
 完成检查：值班人员不依赖作者口头解释，也能判断能否开始、何时停止以及如何保存操作证据。
 </details>
 
+
 ## 6. Interface、Memory、PCIe/Network 与 Peripheral Check
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -97,7 +109,9 @@
 完成检查：值班人员不依赖作者口头解释，也能判断能否开始、何时停止以及如何保存操作证据。
 </details>
 
+
 ## 7. Firmware/FPGA/Driver Integration
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -108,7 +122,9 @@
 完成检查：值班人员不依赖作者口头解释，也能判断能否开始、何时停止以及如何保存操作证据。
 </details>
 
+
 ## 8. Functional、Performance、Thermal 与 Stability Check
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -119,7 +135,9 @@
 完成检查：值班人员不依赖作者口头解释，也能判断能否开始、何时停止以及如何保存操作证据。
 </details>
 
+
 ## 9. Failure Isolation、Abort Limit 与 Recovery
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -130,7 +148,9 @@
 完成检查：值班人员不依赖作者口头解释，也能判断能否开始、何时停止以及如何保存操作证据。
 </details>
 
+
 ## 10. Calibration、Serialization、Evidence 与 Release Gate
+
 
 <details>
 <summary>本节编写建议</summary>

@@ -27,7 +27,9 @@
 > 外部不可变证据；不要在文档内容中伪造包含自身的 commit hash。
 <!-- STD_DOCUMENT_COVER_END -->
 
+
 ## 1. Review scope、Revision、Inputs 与 Reviewers
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -38,7 +40,9 @@
 完成检查：评审意见可定位、可复现；每项未关闭问题有 Owner、关闭条件和再次审查入口。
 </details>
 
+
 ## 2. Naming、Public Contract 与上游契约一致性
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -59,7 +63,9 @@
 - [ ] 资源所有权/调用顺序与设计 §8 调用链一致
 - [ ] 单元测试 Case 列表与方案 §3 VRC 对账（每个 VRC 至少一条对应 Case）
 
+
 ## 3. Error handling、错误路径与边界
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -78,7 +84,9 @@
 - [ ] 错误返回路径**不**改变已提交的副作用（roll-forward 风险）
 - [ ] panic/异常后残留不再写到调外部接口（assertion 失败不调用外部 API）
 
+
 ## 4. Resource、Concurrency 与副作用清理
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -97,7 +105,9 @@
 - [ ] 全局/单例状态在多线程/多进程下的可重入性
 - [ ] 资源泄漏的 finally 路径存在（即使正常路径也走到 finally）
 
+
 ## 5. Security 与敏感路径
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -116,7 +126,9 @@
 - [ ] 跨接口调用不暴露内部权限范围
 - [ ] 失败路径不留下可被重试绕过的半资源
 
+
 ## 6. Testability、可观察性与下游测试钩子
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -135,7 +147,9 @@
 - [ ] 测试 Case 与本 review 同一基线 commit（不是后续 fix 后再补 Case）
 - [ ] 并发竞态可由代码 + 测试 case 主动重放
 
+
 ## 7. Issue Log
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -150,7 +164,9 @@
 |---|---|---|---|---|---|---|
 | <!-- TODO --> | | | | | | |
 
+
 ## 8. Review Decision 与 Test Gate
+
 
 <details>
 <summary>本节编写建议</summary>

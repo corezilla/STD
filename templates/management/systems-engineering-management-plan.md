@@ -27,7 +27,9 @@
 > 外部不可变证据；不要在文档内容中伪造包含自身的 commit hash。
 <!-- STD_DOCUMENT_COVER_END -->
 
+
 ## 1. SEMP 目的、范围与项目背景
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -38,7 +40,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 2. 技术组织、职责、authority 与接口
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -49,7 +53,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 3. 生命周期、技术阶段和评审 Gate
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -60,7 +66,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 4. Stakeholder Needs 与 Requirements Management
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -71,7 +79,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 5. Architecture、Design 与 Logical Decomposition
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -82,7 +92,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 6. Interface、Configuration 与 Technical Data Management
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -93,7 +105,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 7. Integration、Verification、Validation 与 Transition
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -104,7 +118,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 8. Decision Analysis、Trade Study 与 Technical Risk
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -115,7 +131,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 9. Technical Budgets、Measures、Margins 与 Assessment
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -126,7 +144,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 10. Modeling、Simulation、Digital Artifacts 与 Toolchain
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -137,7 +157,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 11. Supplier、跨项目和软硬件协同管理
+
 
 <details>
 <summary>本节编写建议</summary>
@@ -148,7 +170,9 @@
 完成检查：读者应能据此确定下一步由谁在何时做什么、用什么证据判断完成；未决事项写明 Owner、最晚关闭 Gate 和引用。
 </details>
 
+
 ## 12. Tailoring、合规映射与持续改进
+
 
 <details>
 <summary>本节编写建议</summary>
