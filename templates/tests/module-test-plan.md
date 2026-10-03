@@ -125,14 +125,14 @@
 ## 4. 环境实例分配（plan 编排）
 
 
-<span style="color:#1f6feb"><em>**本节目相**：把方案 §1.7 的环境类型落实为具体的**实例编号**，并分配给具体 Case——同一类型可多套（如多 docker 用于并行），编号与分配是 plan 的责任，Case 只引用编号。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：列出本计划分配的全部 ENV 实例（编号 + 类型 + 具体配置/位置 + Owner + 分配给哪些 Case + 准备时限 + 状态）；ENV 实例类型与方案 §1.7 类型一致；准备失败标 Blocked 并登记缺口，不静默换其他实例。</em></span>
+<span style="color:#1f6feb"><em>**本节目相**：把方案 §4 的环境类型落实为具体的**实例编号**，并分配给具体 Case——同一类型可多套（如多 docker 用于并行），编号与分配是 plan 的责任，Case 只引用编号。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：列出本计划分配的全部 ENV 实例（编号 + 类型 + 具体配置/位置 + Owner + 分配给哪些 Case + 准备时限 + 状态）；ENV 实例类型与方案 §4 类型一致；准备失败标 Blocked 并登记缺口，不静默换其他实例。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：见下方灰字——模块层 ENV 实例分配（同一类型多套用于并行/隔离，多 Case 复用同一实例）。</em></span>
-<span style="color:#1f6feb"><em>**完成条件**：方案 §3 Case 清单中的每个 Case 在本表有 ENV 实例；类型一致；准备未完成标 Blocked 并登记缺口，不静默换实例。</em></span>
+<span style="color:#1f6feb"><em>**完成条件**：方案 §6 Case 清单中的每个 Case 在本表有 ENV 实例；类型一致；准备未完成标 Blocked 并登记缺口，不静默换实例。</em></span>
 
 | ENV 实例编号 | 环境类型 | 具体配置/位置 | Owner | 分配给哪些 Case | 准备时限 | 状态 |
 |---|---|---|---|---|---|---|
-| <!-- TODO：如 ENV-1、ENV-2 --> | <!-- 类型（引用方案 §1.7） --> | <!-- TODO --> | <!-- TODO --> | <!-- Case ID 范围 --> | <!-- TODO --> | <!-- Blocked/Ready --> |
+| <!-- TODO：如 ENV-1、ENV-2 --> | <!-- 类型（引用方案 §4） --> | <!-- TODO --> | <!-- TODO --> | <!-- Case ID 范围 --> | <!-- TODO --> | <!-- Blocked/Ready --> |
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 <span style="color:#6e7681">**示例（虚构；模块层 ENV 实例）**：</span>
@@ -178,7 +178,7 @@
 <span style="color:#6e7681">| Step | 动作 | 依据 | 产出 |</span>
 <span style="color:#6e7681">|---|---|---|---|</span>
 <span style="color:#6e7681">| 0 | 构建教学 harness 与记录数组生成器并自检 | asset-design：HARNESS-EXM/GEN-EXM | 资产就绪（Verified） |</span>
-<span style="color:#6e7681">| 1 | 读 MTS-EXM v1.0 清单排序 | 方案 §3 | 队列：002→001→003 |</span>
+<span style="color:#6e7681">| 1 | 读 MTS-EXM v1.0 清单排序 | 方案 §6 | 队列：002→001→003 |</span>
 <span style="color:#6e7681">| 2 | 逐 Case 定位 Case 文档并前检 | Case 文档 §2–§3 | 实施依据 |</span>
 <span style="color:#6e7681">| 3 | 组装并运行 | Case 文档 §4–§6 | Run 记录 |</span>
 <span style="color:#6e7681">| 4 | 判定分路并登记 | 断言与环境事实 | Verdict 汇入报告 |</span>

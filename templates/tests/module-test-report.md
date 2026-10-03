@@ -125,13 +125,13 @@
 
 
 <span style="color:#1f6feb"><em>**本节目的**：对照方案分母复算覆盖。</em></span>
-<span style="color:#1f6feb"><em>**必须写清楚**：方案 §3 每个来源 ID 与其设计验证项（VRC）逐条对照：Case 状态如何变化、Gap 是否关闭、NOT_RUN 保留在哪；逐 Case 的副作用与清理状态在 §3 逐 Case 记录。覆盖复算以本报告事实为准，不以计划口径代替。</em></span>
+<span style="color:#1f6feb"><em>**必须写清楚**：方案 §6 每个来源 ID 与其设计验证项（VRC）逐条对照：Case 状态如何变化、Gap 是否关闭、NOT_RUN 保留在哪；逐 Case 的副作用与清理状态在 §3 逐 Case 记录。覆盖复算以本报告事实为准，不以计划口径代替。</em></span>
 <span style="color:#1f6feb"><em>**抽象示例**：虚构 MT-EXM：分母闭合。</em></span>
 <span style="color:#1f6feb"><em>**完成条件**：分母每条有着落；未关闭项显式保留。</em></span>
 
 | 方案来源 ID | 设计验证项 ID | Case ID | 报告状态 | 剩余缺口 |
 |---|---|---|---|
-| <!-- 对照方案 §3 清单逐条复算 --> | | | |
+| <!-- 对照方案 §6 清单逐条复算 --> | | | |
 
 <!-- STD_TEMPLATE_EXAMPLE_BEGIN -->
 <span style="color:#6e7681">**示例（虚构）**：</span>
